@@ -24,7 +24,7 @@ const Home: FC<{}> = (): JSX.Element => {
             <div className="main-wrapper">
                 <Head>
                     <title>
-                        'Yellow DeFi - Discover WEB 3.0 Internet of Finance',
+                        Yellow DeFi - Discover WEB 3.0 Internet of Finance
                     </title>
                     <meta
                         name="description"

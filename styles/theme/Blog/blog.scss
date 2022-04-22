@@ -1,0 +1,68 @@
+.blog-wrapper {
+  h2 {
+    a {
+      color: var(--ifm-font-color-base);
+
+      &:hover {
+        color: var(--ifm-link-color);
+      }
+    }
+  }
+
+  a {
+    &:hover {
+      --docusaurus-tag-list-border: var(--ifm-color-primary);
+    }
+
+    b:hover {
+      border-bottom: 2px solid var(--ifm-color-primary);
+      padding-bottom: 2px;
+    }
+  }
+
+  .thin-scrollbar {
+    overflow-y: unset;
+
+    li {
+      a {
+        color: var(--ifm-menu-color);
+      }
+    }
+  }
+
+  aside {
+    display: block;
+    width: var(--doc-sidebar-width);
+    margin-top: calc(-1 * var(--ifm-navbar-height));
+    border-right: 1px solid var(--ifm-toc-border-color);
+    will-change: width;
+    transition: width var(--ifm-transition-fast) ease;
+    clip-path: inset(0);
+
+    div {
+      display: flex;
+      flex-direction: column;
+      max-height: 100vh;
+      height: 100%;
+      position: sticky;
+      top: 0;
+      width: var(--doc-sidebar-width);
+      transition: opacity 50ms ease;
+    }
+  }
+
+  .fluidMedia {
+    position: relative;
+    padding-bottom: 56.25%;
+    height: 0;
+    overflow: hidden;
+  }
+
+  .fluidMedia iframe {
+    position: absolute;
+    top: 0; 
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+}
