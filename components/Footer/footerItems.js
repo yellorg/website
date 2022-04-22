@@ -1,13 +1,13 @@
 export const FOOTER_ITEMS = {
     logo: {
         alt: 'Yellow Chain',
-        src: '/img/logo-white.svg',
+        src: '/images/logo-white.svg',
     },
     socials: [
-        { src: '/img/icons/reddit.svg', to: 'https://www.reddit.com/r/YellowDeFi/' },
-        { src: '/img/icons/twitter-white.svg', to: 'https://twitter.com/yellow_defi' },
-        { src: '/img/icons/medium.svg', to: 'https://medium.com/yellow-blog' },
-        { src: '/img/icons/telegram-white.svg', to: 'https://t.me/yellow_org' },
+        { src: '/images/icons/reddit.svg', to: 'https://www.reddit.com/r/YellowDeFi/' },
+        { src: '/images/icons/twitter-white.svg', to: 'https://twitter.com/yellow_defi' },
+        { src: '/images/icons/medium.svg', to: 'https://medium.com/yellow-blog' },
+        { src: '/images/icons/telegram-white.svg', to: 'https://t.me/yellow_org' },
     ],
     links: [
         {

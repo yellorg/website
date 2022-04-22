@@ -1,0 +1,254 @@
+/* stylelint-disable docusaurus/copyright-header */
+/**
+ * Any CSS included here will be global. The classic template
+ * bundles Infima by default. Infima is a CSS framework designed to
+ * work well for content-centric websites.
+ */
+
+@import "./theme.scss";
+@import "./typography.scss";
+@import "./components.scss";
+
+/* You can override the default Infima variables here. */
+:root {
+  --primary-cta-layer-color: #FFFFFF;
+  --primary-cta-color-80: #FCD000;
+  --primary-cta-color-90: #F8C100;
+  --dark-background-color: #101010;
+  --secondary-control-color-40: #FDE057;
+  --secondary-control-color-60: #FCD000;
+  --secondary-control-color-90: #ECAA00;
+  --secondary-control-layer-color-40: #A79442;
+  --secondary-control-layer-color-60: #000000;
+  --secondary-control-layer-color-90: #000000;
+  --text-color-00: #FFFFFF;
+  --text-color-10: #EBEBEB;
+  --text-color-60: #737373;
+  --text-color-70: #585858;
+  --text-color-90: #272727;
+  --text-color-100: #090909;
+  --system-blue-60: #2563EB;
+  --neutral-control-layer-color-10: #F8F8F8;
+  --neutral-control-layer-color-30: #AAAAAA;
+  --neutral-control-layer-color-70: #2C2C2C;
+  --neutral-control-layer-color-80: #000000;
+  --divider-color-20: #DCDCDC;
+
+  --ifm-color-primary: #FCD000;
+  --ifm-link-color: var(--system-blue-60);
+  --ifm-link-hover-decoration: none;
+  --ifm-color-primary-dark: rgb(33, 175, 144);
+  --ifm-color-primary-darker: rgb(31, 165, 136);
+  --ifm-color-primary-darkest: rgb(26, 136, 112);
+  --ifm-color-primary-light: rgb(70, 203, 174);
+  --ifm-color-primary-lighter: rgb(102, 212, 189);
+  --ifm-color-primary-lightest: rgb(146, 224, 208);
+  --ifm-color-secondary: var(--text-color-100);
+  --ifm-font-color-base: var(--text-color-100);
+  --ifm-heading-color: var(--text-color-100);
+
+  --ifm-navbar-background-color: var(--ifm-color-primary);
+  --ifm-navbar-link-color: #272727;
+  --ifm-navbar-link-hover-color: #272727;
+  --ifm-navbar-item-padding-horizontal: 0px;
+
+  --ifm-footer-link-color: var(--text-color-00);
+  --footer-background-color: var(--dark-background-color);
+  --footer-color: var(--text-color-60);
+
+  --ifm-menu-color: var(--text-color-90);
+  --ifm-menu-color-active: var(--text-color-100);
+  --ifm-color-emphasis-600: var(--text-color-90);
+
+  --layout-width: 1272px;
+  --ifm-container-width-xl: calc(var(--layout-width) + (var(--ifm-spacing-horizontal) * 2));
+  --landing-block-padding: 132px;
+  --ifm-navbar-height: 62px;
+}
+
+.docusaurus-highlight-code-line {
+  background-color: rgba(0, 0, 0, 0.1);
+  display: block;
+  margin: 0 calc(-1 * var(--ifm-pre-padding));
+  padding: 0 var(--ifm-pre-padding);
+}
+
+html[data-theme='dark'] .docusaurus-highlight-code-line {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+html[data-theme='dark'] {
+  --ifm-heading-color: var(--text-color-00);
+  --ifm-font-color-base: var(--text-color-00);
+  --ifm-menu-color: var(--text-color-00);
+  --ifm-menu-color-active: var(--text-color-00);
+
+  --ifm-color-emphasis-600: var(--text-color-90);
+}
+
+@media screen and (max-width: 966px) {
+  :root {
+    --landing-block-padding: 72px;
+  }
+}
+
+a:not(
+  .button,
+  .avatar__photo,
+  .theme-edit-this-page,
+  .navbar__link,
+  .navbar__brand,
+  .menu__link,
+  .table-of-contents__link,
+  .hash-link,
+  .pagination-nav__link,
+  .footer__link-item,
+  .announcement__link-item,
+  [class^="skipToContent_"],
+  [class^="tag_"],
+  [class*="docusaurus"]
+) {
+  width: max-content;
+  position: relative;
+
+  &:after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    transform: scaleX(0);
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: var(--secondary-control-color-60);
+    transform-origin: bottom right;
+    transition: transform 0.25s ease-out;
+  }
+
+  &:hover:after {
+    transform: scaleX(1);
+    transform-origin: bottom left;
+  }
+}
+
+.section {
+  padding: var(--landing-block-padding) 0;
+
+  &-title {
+    margin-bottom: 36px;
+  }
+
+  &-text {
+    margin-bottom: 48px;
+  }
+
+  &__center {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    max-width: 982px;
+    min-width: min-content;
+    margin: 0 auto;
+
+    > * {
+      text-align: center;
+    }
+
+    &-img {
+      margin-bottom: 48px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-gap: 24px;
+    }
+  }
+
+  &__yellow {
+    background-color: var(--primary-cta-color-80);
+  }
+
+  &__grey {
+    background-color: var(--neutral-control-layer-color-10);
+  }
+
+  &__dark {
+    background-color: var(--dark-background-color);
+    --ifm-heading-color: var(--text-color-00);
+
+    > * {
+      color: var(--text-color-00);
+    }
+  }
+
+  &__main-img {
+    width: initial !important;
+  }
+
+  .highlight {
+    background-color: var(--primary-cta-color-80);
+    color: var(--secondary-control-layer-color-60);
+    padding: 3px 14px;
+    border-radius: 2px;
+    margin-bottom: 18px;
+    display: block;
+    width: max-content;
+  }
+
+  a {
+    .arrow-right {
+      border: solid var(--ifm-link-color);
+      border-width: 0 2px 2px 0;
+      display: inline-block;
+      padding: 2px;
+      margin-bottom: 1px;
+      transform: rotate(-45deg);
+      -webkit-transform: rotate(-45deg);
+    }
+  }
+
+  .yellow {
+    color: var(--primary-cta-color-80);
+  }
+
+  .grey {
+    color: var(--text-color-10);
+  }
+
+  .mb-12 {
+    margin-bottom: 12px;
+  }
+
+  .mb-24 {
+    margin-bottom: 12px;
+  }
+}
+
+@media screen and (min-width: 1440px) {
+  .section__main-img {
+    max-width: initial;
+  }
+}
+
+@media screen and (min-width: 2000px) {
+  .section__main-img {
+    max-width: 100%;
+  }
+}
+
+@media screen and (max-width: 966px) {
+  .section {
+    &__center {
+      width: 100%;
+
+      &-img {
+        grid-template-columns: repeat(2, 1fr);
+        grid-gap: 18px;
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 426px) and (max-width: 996px) {
+  .section__main-img {
+    max-width: 100%;
+  }
+}

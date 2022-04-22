@@ -12,7 +12,7 @@ const CustomArrow = (props: any) => {
     const { className, style, onClick } = props;
     return (
         <div className={className} style={{ ...style }} onClick={onClick}>
-            <img src={"/img/icons/chevron.svg"} />
+            <img src={"/images/icons/chevron.svg"} />
         </div>
     );
 };

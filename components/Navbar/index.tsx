@@ -74,7 +74,7 @@ export const Navbar = () => {
                     <a className="navbar__brand" href="/">
                         <div className="navbar__logo">
                             <img
-                                src="/img/logo.svg"
+                                src="/images/logo.svg"
                                 alt="Yellow ttetst Chain"
                                 className="themedImage themedImage--light"
                             />
@@ -101,7 +101,7 @@ export const Navbar = () => {
                     <a className="navbar__brand" href="/">
                         <div className="navbar__logo">
                             <img
-                                src="/img/logo.svg"
+                                src="/images/logo.svg"
                                 alt="Yellow ttetst Chain"
                                 className="themedImage themedImage--light"
                             />

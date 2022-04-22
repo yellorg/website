@@ -24,9 +24,9 @@ export const Roadmap = () => {
 
                     <div className="col col--6">
                         <LazyLoadImage className="section__main-img"
-                            srcSet={`${'/img/components/roadmap_mobile.svg'} 339w,
-                                    ${'/img/components/roadmap.png'} 682w,
-                                    ${'/img/components/roadmap_2x.png'} 1362w`}
+                            srcSet={`${'/images/components/roadmap_mobile.svg'} 339w,
+                                    ${'/images/components/roadmap.png'} 682w,
+                                    ${'/images/components/roadmap_2x.png'} 1362w`}
                             sizes="(max-width: 425px) 339px, (max-width: 2000px) 682px, 1364px"
                             effect="blur"
                             threshold={200}

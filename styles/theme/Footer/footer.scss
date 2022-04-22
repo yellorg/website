@@ -1,0 +1,34 @@
+.footer {
+  background-color: var(--footer-background-color);
+  color: var(--footer-color);
+  padding-top: 36px;
+  padding-bottom: 18px;
+
+  &__logo {
+    margin-top: 0;
+    width: 137px;
+  }
+
+  &__text {
+    color: var(--text-color-00);
+  }
+
+  &__socials a {
+    margin-right: 12px;
+  }
+
+  &__title {
+    @extend .subtitle-2-18-700;
+    color: var(--primary-cta-color-90);
+  }
+
+  &__link-item {
+    color: var(--text-color-00);
+    @extend .body-1-16-400;
+  }
+
+  &__overview {
+    max-width: 440px !important;
+    padding-right: 45px !important;
+  }
+}

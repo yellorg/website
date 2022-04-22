@@ -8,7 +8,7 @@ import useMediaQuery from '../../hooks/useMediaQuery';
 const ACTIVE_GRADIENT = 'linear-gradient(0deg, #090909 0%, rgba(9, 9, 9, 0) 100%)';
 
 const buildImagePath = (image: string) => {
-    return `/img/photos/${image || 'anonymous.png'}`;
+    return `/images/photos/${image || 'anonymous.png'}`;
 }
 
 export const Team = () => {
@@ -81,7 +81,7 @@ export const Team = () => {
                                         style={buildStyle(id, i.image)}
                                         className="grid__item"
                                     >
-                                        {i.link ? <img className="mb-24 grid__item-icon" src={'/img/icons/linkedin.svg'} /> : null}
+                                        {i.link ? <img className="mb-24 grid__item-icon" src={'/images/icons/linkedin.svg'} /> : null}
                                         <div className="grid__item-text">
                                             <p className="body-1-16-700">{i.name}</p>
                                             <p className="captions-12-600">{i.position}</p>

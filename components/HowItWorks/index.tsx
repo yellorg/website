@@ -37,9 +37,9 @@ export const HowItWorks: React.FC = () => {
 
                     <div className="col col--6">
                         <LazyLoadImage className="section__main-img"
-                            srcSet={`${'/img/components/how_it_works_mobile.png'} 339w,
-                                    ${'/img/components/how_it_works.png'} 624w,
-                                    ${'/img/components/how_it_works_2x.png'} 1248w`}
+                            srcSet={`${'/images/components/how_it_works_mobile.png'} 339w,
+                                    ${'/images/components/how_it_works.png'} 624w,
+                                    ${'/images/components/how_it_works_2x.png'} 1248w`}
                             sizes="(max-width: 425px) 339px, (max-width: 2000px) 624px, 1248px"
                             effect="blur"
                             threshold={200}

@@ -3,22 +3,22 @@ import { LazyLoadImage } from 'react-lazy-load-image-component';
 
 const blocks = [
     {
-        src: '/img/icons/liquidity.svg',
+        src: '/images/icons/liquidity.svg',
         title: 'Liquidity',
         text: 'Our technology is unlocking the liquidity of different blockchains and exchanges to the network of Nodes.',
     },
     {
-        src: '/img/icons/security.svg',
+        src: '/images/icons/security.svg',
         title: 'Security',
         text: 'We use state channel protocols that give off-chain performance while relying on the security of blockchain technology.',
     },
     {
-        src: '/img/icons/speed.svg',
+        src: '/images/icons/speed.svg',
         title: 'Speed',
         text: 'Thanks to strategy embedding technology that enables Ultra HFT, Nodes can sell slots for embedded strategy.',
     },
     {
-        src: '/img/icons/compliance.svg',
+        src: '/images/icons/compliance.svg',
         title: 'Compliance',
         text: 'While keeping our network decentralized, we provide tools for Nodes to become compliant with their local regulation.',
     },
@@ -31,9 +31,9 @@ export const YellowNetwork: React.FC = () => {
                 <div className="row">
                     <div className="col col--6">
                     <LazyLoadImage className="section__main-img"
-                        srcSet={`${'/img/components/xln_mobile.png'} 339w,
-                                ${'/img/components/xln.png'} 624w,
-                                ${'/img/components/xln_2x.png'} 1248w`}
+                        srcSet={`${'/images/components/xln_mobile.png'} 339w,
+                                ${'/images/components/xln.png'} 624w,
+                                ${'/images/components/xln_2x.png'} 1248w`}
                         sizes="(max-width: 425px) 339px, (max-width: 2000px) 624px, 1248px"
                         effect="blur"
                         threshold={200}
