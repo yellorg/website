@@ -1,0 +1,36 @@
+.xln {
+  h4 {
+    margin-bottom: 18px;
+  }
+
+  .blocks {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-row-gap: 30px;
+    grid-column-gap: 20px;
+    margin-top: 44px;
+
+    .icon-block {
+      max-width: 310px;
+      min-width: min-content;
+      display: flex;
+      flex-direction: column;
+      text-align: left;
+
+      &__img {
+        width: 42px;
+        margin-bottom: 7px;
+      }
+
+      &__title {
+        margin-bottom: 7px;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 966px) {
+  .xln .blocks {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}

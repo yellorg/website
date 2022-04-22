@@ -1,0 +1,33 @@
+.how-it-works {
+  &.section {
+    padding-top: 185px;
+    padding-bottom: 80px;
+  }
+
+  &__list {
+    margin-top: -18px;
+  }
+
+  .section__main-img {
+    position: relative;
+    bottom: 55px;
+  }
+
+  @media screen and (max-width: 996px) {
+    &.section {
+      padding: var(--landing-block-padding) 0;
+    }
+
+    .section__main-img {
+      bottom: 0;
+      top: 40px;
+    }
+  }
+
+  @media screen and (max-width: 425px) {
+    .section__main-img {
+      margin-top: 50px;
+      position: initial;
+    }
+  }
+}

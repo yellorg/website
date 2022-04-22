@@ -1,0 +1,37 @@
+.tokenomics {
+  padding-top: 25px;
+
+  h4 {
+    margin-bottom: 34px;
+  }
+
+  .section__main-img {
+    position: relative;
+    bottom: 47px;
+  }
+
+  &__utilities-list {
+    margin: 20px 0;
+  }
+
+  .button {
+    margin-top: 36px;
+  }
+
+  @media screen and (max-width: 1440px) {
+    .section__main-img {
+      bottom: -55px;
+    }
+  }
+
+  @media screen and (max-width: 996px) {
+    padding-top: 0;
+  }
+
+  @media screen and (max-width: 425px) {
+    .section__main-img {
+      margin-top: 40px;
+      position: initial;
+    }
+  }
+}

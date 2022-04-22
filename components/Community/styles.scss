@@ -1,0 +1,48 @@
+.community {
+  &__socials {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    width: 100%;
+
+    &-item {
+      align-items: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 30px;
+      background-color: var(--secondary-control-color-40);
+      border-radius: 4px;
+      flex-grow: 1;
+      height: 256px;
+      max-width: 408px;
+
+      img {
+        height: 72px;
+        width: 72px;
+      }
+    }
+  }
+
+  @media screen and (max-width: 425px) {
+    &__socials {
+      flex-wrap: wrap;
+      &-item {
+        height: 150px;
+
+        img {
+          height: 56px;
+          width: 56px;
+        }
+
+        .button {
+          width: 80%;
+
+          .button__inner {
+            padding: 6px 16px;
+          }
+        }
+      }
+    }
+  }
+}

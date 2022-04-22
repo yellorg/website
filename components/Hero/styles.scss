@@ -1,0 +1,54 @@
+.hero {
+  &__text {
+    text-align: left;
+    color: var(--text-color-100);
+  }
+
+  &__description {
+    margin: 36px 0;
+  }
+
+  &__banner {
+    padding: 42px 0 89px 0;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  &__buttons {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+
+    .button {
+      &__inner {
+        padding: 6px 18px;
+      }
+
+      &::after {
+        background-color: var(--secondary-control-color-90);
+      }
+    }
+  }
+
+  &-left {
+    width: 100%;
+    position: relative;
+    padding-top: 75px;
+    max-width: 625px;
+  }
+
+  @media screen and (max-width: 996px) {
+    .row {
+      flex-direction: column-reverse;
+    }
+
+    &-left {
+      padding-top: 20px;
+    }
+
+    &__banner {
+      padding-top: 15px;
+    }
+  }
+}
