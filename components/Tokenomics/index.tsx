@@ -45,9 +45,9 @@ export const Tokenomics: React.FC = () => {
 
                     <div className="col col--6">
                         <LazyLoadImage className="section__main-img"
-                            srcSet={`${'/img/components/tokenomics_pie_chart_mobile.png'} 339w,
-                                    ${'/img/components/tokenomics_pie_chart.png'} 623w,
-                                    ${'/img/components/tokenomics_pie_chart_2x.png'} 1244w`}
+                            srcSet={`${'/images/components/tokenomics_pie_chart_mobile.png'} 339w,
+                                    ${'/images/components/tokenomics_pie_chart.png'} 623w,
+                                    ${'/images/components/tokenomics_pie_chart_2x.png'} 1244w`}
                             sizes="(max-width: 425px) 339px, (max-width: 2000px) 623px, 1244px"
                             effect="blur"
                             threshold={200}

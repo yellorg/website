@@ -1,6 +1,6 @@
 import React from 'react';
 
-const LinkedinIcon = () => <img src={'/img/icons/linkedin-rounded-grey.svg'} />;
+const LinkedinIcon = () => <img src={'/images/icons/linkedin-rounded-grey.svg'} />;
 
 export const MEMBERS = [
     {

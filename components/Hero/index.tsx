@@ -32,7 +32,7 @@ export const Hero: React.FC = () => {
                                 {/* <Link href="https://twitter.com/yellow_defi">
                                     <a className="button button--outline button--secondary">
                                         <span className="button__inner">
-                                            <img src={'/img/icons/twitter.svg'} className="button__icon-left" />
+                                            <img src={'/images/icons/twitter.svg'} className="button__icon-left" />
                                             Follow Us
                                         </span>
                                     </a>
@@ -42,14 +42,14 @@ export const Hero: React.FC = () => {
                     </div>
                     <div className="col col--5 hero-img">
                     <Image
-                        src={"/img/hero_2x.png"}
+                        src={"/images/hero_2x.png"}
                         width={1032}
                         height={1032}
                         layout="responsive"
                     />
-                    {/* <img srcSet={`${'/img/hero_mobile.png'} 339w,
-                                ${'/img/hero.png'} 516w,
-                                ${'/img/hero_2x.png'} 1032w`}
+                    {/* <img srcSet={`${'/images/hero_mobile.png'} 339w,
+                                ${'/images/hero.png'} 516w,
+                                ${'/images/hero_2x.png'} 1032w`}
                         sizes="(max-width: 425px) 339px, (max-width: 2000px) 516px, 1032px"
                         className='inline'
                     /> */}

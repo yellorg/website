@@ -10,7 +10,7 @@ export const Community = () => {
 
                     <div className="community__socials">
                         <div className="community__socials-item">
-                            <img src={"/img/icons/twitter-black.svg"} />
+                            <img src={"/images/icons/twitter-black.svg"} />
 
                             <Link href="https://twitter.com/yellow_defi">
                                 <a className="button button--outline button--secondary button--shadow-secondary">
@@ -20,7 +20,7 @@ export const Community = () => {
                         </div>
 
                         <div className="community__socials-item">
-                            <img src={"/img/icons/telegram-black.svg"} />
+                            <img src={"/images/icons/telegram-black.svg"} />
 
                             <Link href="https://t.me/yellow_org">
                                 <a className="button button--outline button--secondary button--shadow-secondary">
@@ -30,7 +30,7 @@ export const Community = () => {
                         </div>
 
                         <div className="community__socials-item">
-                            <img src={"/img/icons/reddit-black.svg"} />
+                            <img src={"/images/icons/reddit-black.svg"} />
 
                             <Link href="https://www.reddit.com/r/YellowDeFi/">
                                 <a className="button button--outline button--secondary button--shadow-secondary">
