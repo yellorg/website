@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 
 const blocks = [
@@ -38,7 +39,14 @@ export const FeaturesOfYellow: React.FC = () => {
             <div className="container features">
                 <div className="row section__center">
                     <div className="section-title">
-                        <img className="overview__logo" src={'/images/logo-black.svg'} />
+                        <Image
+                            src="/images/logo-black.svg"
+                            alt="overview"
+                            className="themedImage themedImage--light"
+                            width={208}
+                            height={65}
+                            layout='responsive'
+                        />
                         <h4>Exchange Features</h4>
                     </div>
                     <div className="blocks">

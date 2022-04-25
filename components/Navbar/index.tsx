@@ -1,5 +1,6 @@
 import classnames from 'classnames';
 import Link from 'next/link';
+import Image from 'next/image';
 import React from 'react';
 import IconClose from '../IconClose';
 import IconMenu from '../IconMenu';
@@ -74,10 +75,13 @@ export const Navbar = () => {
                     <Link href="/" >
                         <a className="navbar__brand">
                             <div className="navbar__logo">
-                                <img
+                                <Image
                                     src="/images/logo.svg"
                                     alt="Yellow ttetst Chain"
                                     className="themedImage themedImage--light"
+                                    width={143}
+                                    height={44.69}
+                                    layout='responsive'
                                 />
                             </div>
                         </a>
@@ -103,10 +107,13 @@ export const Navbar = () => {
                     <Link href="/" >
                         <a className="navbar__brand">
                             <div className="navbar__logo">
-                                <img
+                                <Image
                                     src="/images/logo.svg"
                                     alt="Yellow ttetst Chain"
                                     className="themedImage themedImage--light"
+                                    width={143}
+                                    height={44.69}
+                                    layout='responsive'
                                 />
                             </div>
                         </a>

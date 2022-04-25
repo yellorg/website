@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 
 const blocks = [
     {
@@ -34,14 +35,30 @@ export const WhatsYellow: React.FC = () => {
                 <div className="row section__center">
                     <div className="section-title">
                         <h4>What is</h4>
-                        <img className="overview__logo" src={'/images/logo-white.svg'} />
+                        <div className='overview__logo'>
+                            <Image
+                                src="/images/logo-white.svg"
+                                alt="Yellow"
+                                width={208}
+                                height={65}
+                                layout='responsive'
+                            />
+                        </div>
                         <h4>?</h4>
                     </div>
                     <div className="blocks">
                         {blocks.map(i => {
                             return (
                                 <div key={i.src} className="icon-block">
-                                    <img className="icon-block__img" src={i.src} />
+                                    <div className="icon-block__img">
+                                        <Image
+                                            src={i.src}
+                                            alt="Yellow ttetst Chain"
+                                            width={41}
+                                            height={42}
+                                            layout='responsive'
+                                        />
+                                    </div>
                                     <p className="subtitle-2-18-600 icon-block__text">{i.text}</p>
                                 </div>
                             );

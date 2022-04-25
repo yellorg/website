@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import Image from 'next/image';
 
 export const Community = () => {
     return (
@@ -10,7 +11,13 @@ export const Community = () => {
 
                     <div className="community__socials">
                         <div className="community__socials-item">
-                            <img src={"/images/icons/twitter-black.svg"} />
+                            <Image
+                                src="/images/icons/twitter-black.svg"
+                                alt="twitter"
+                                width={72}
+                                height={72}
+                                layout='fixed'
+                            />
 
                             <Link href="https://twitter.com/yellow_defi">
                                 <a className="button button--outline button--secondary button--shadow-secondary">
@@ -20,7 +27,13 @@ export const Community = () => {
                         </div>
 
                         <div className="community__socials-item">
-                            <img src={"/images/icons/telegram-black.svg"} />
+                            <Image
+                                src="/images/icons/telegram-black.svg"
+                                alt="telegram"
+                                width={72}
+                                height={69}
+                                layout='fixed'
+                            />
 
                             <Link href="https://t.me/yellow_org">
                                 <a className="button button--outline button--secondary button--shadow-secondary">
@@ -30,7 +43,13 @@ export const Community = () => {
                         </div>
 
                         <div className="community__socials-item">
-                            <img src={"/images/icons/reddit-black.svg"} />
+                            <Image
+                                src="/images/icons/reddit-black.svg"
+                                alt="reddit"
+                                width={72}
+                                height={72}
+                                layout='fixed'
+                            />
 
                             <Link href="https://www.reddit.com/r/YellowDeFi/">
                                 <a className="button button--outline button--secondary button--shadow-secondary">

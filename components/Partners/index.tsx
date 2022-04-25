@@ -2,6 +2,7 @@ import React from "react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import Slider, { LazyLoadTypes } from "react-slick";
 import Link from "next/link";
+import Image from 'next/image';
 import { PARTNERS } from "./constants";
 
 const CustomDot = () => {
@@ -11,8 +12,14 @@ const CustomDot = () => {
 const CustomArrow = (props: any) => {
     const { className, style, onClick } = props;
     return (
-        <div className={className} style={{ ...style }} onClick={onClick}>
-            <img src={"/images/icons/chevron.svg"} />
+        <div className={className} style={{display:"flex", justifyContent:"center", alignItems:"center"}} onClick={onClick}>
+            <Image
+                src="/images/icons/chevron.svg"
+                alt="Yellow ttetst Chain"
+                width={10}
+                height={14}
+                layout='fixed'
+            />
         </div>
     );
 };
@@ -25,7 +32,7 @@ const SLIDER_SETTINGS = {
     slidesToShow: 4,
     slidesToScroll: 1,
     lazyLoad: "progressive" as LazyLoadTypes,
-    nextArrow: <CustomArrow />,
+    nextArrow: <CustomArrow style={{display:"flex", justifyContent:"center", alignItems:"center"}} />,
     prevArrow: <CustomArrow />,
     responsive: [
         {

@@ -43,6 +43,7 @@ export const Hero: React.FC = () => {
                     <div className="col col--5 hero-img">
                     <Image
                         src={"/images/hero_2x.png"}
+                        alt="yellow-cover"
                         width={1032}
                         height={1032}
                         layout="responsive"

@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 
 const blocks = [
@@ -51,7 +52,15 @@ export const YellowNetwork: React.FC = () => {
                             {blocks.map(i => {
                                 return (
                                     <div key={i.title} className="icon-block">
-                                        <img className="icon-block__img" src={i.src} />
+                                        <div className="icon-block__img">
+                                            <Image
+                                                src={i.src}
+                                                alt="Yellow ttetst Chain"
+                                                width={42}
+                                                height={43}
+                                                layout='responsive'
+                                            />
+                                        </div>
                                         <div className="subtitle-1-20-600 icon-block__title">{i.title}</div>
                                         <p className="icon-block__text body-2-14-500">{i.text}</p>
                                     </div>

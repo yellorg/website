@@ -18,7 +18,7 @@ export const Footer = () => {
                 />
             </div>
         );
-    }, [FOOTER_ITEMS]);
+    }, []);
 
     const renderSocials = React.useMemo(() => {
         const { socials } = FOOTER_ITEMS;
@@ -33,6 +33,7 @@ export const Footer = () => {
                             >
                                 <Image
                                     src={social.src}
+                                    alt="social"
                                     loading="lazy"
                                     width={24}
                                     height={24}
@@ -43,7 +44,7 @@ export const Footer = () => {
                 })}
             </div>
         );
-    }, [FOOTER_ITEMS]);
+    }, []);
 
     const renderLinkItems = (items: any) => {
         return (
@@ -106,7 +107,7 @@ export const Footer = () => {
                 })}
             </>
         );
-    }, [FOOTER_ITEMS]);
+    }, []);
 
     return (
         <footer className="footer footer--dark">

@@ -1,6 +1,15 @@
 import React from 'react';
+import Image from 'next/image';
 
-const LinkedinIcon = () => <img src={'/images/icons/linkedin-rounded-grey.svg'} />;
+const LinkedinIcon = () => (
+	<Image
+		src="/images/icons/linkedin-rounded-grey.svg"
+		alt="linkedin"
+		width={24}
+		height={24}
+		layout="responsive"
+	/>
+);
 
 export const MEMBERS = [
     {

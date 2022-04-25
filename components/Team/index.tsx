@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { LazyLoadImage, LazyLoadComponent } from 'react-lazy-load-image-component';
 
 import { MEMBERS, TEAM_HEADLINERS } from './members';
@@ -81,7 +82,18 @@ export const Team = () => {
                                         style={buildStyle(id, i.image)}
                                         className="grid__item"
                                     >
-                                        {i.link ? <img className="mb-24 grid__item-icon" src={'/images/icons/linkedin.svg'} /> : null}
+                                        {i.link ?
+                                            <div className='mb-24 grid__item-icon'>
+                                                <Image
+                                                    src="/images/icons/linkedin.svg"
+                                                    alt="linkedin"
+                                                    width={24}
+                                                    height={24}
+                                                    layout='fixed'
+                                                />
+                                            </div>
+                                            : null
+                                        }
                                         <div className="grid__item-text">
                                             <p className="body-1-16-700">{i.name}</p>
                                             <p className="captions-12-600">{i.position}</p>
