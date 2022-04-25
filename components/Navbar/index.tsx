@@ -26,7 +26,7 @@ export const Navbar = () => {
                 </Link>
             );
         });
-    }, [NAV_ITEMS]);
+    }, []);
 
     const renderMobileNavItems = React.useMemo(() => {
         return NAV_ITEMS.map((n, i) => {
@@ -52,7 +52,7 @@ export const Navbar = () => {
                 </li>
             );
         });
-    }, [NAV_ITEMS]);
+    }, []);
 
     const cnNav = classnames('navbar navbar--fixed-top', {
         'navbar-sidebar--show': showSidebar,
@@ -71,15 +71,17 @@ export const Navbar = () => {
                     >
                         <IconMenu />
                     </button>
-                    <a className="navbar__brand" href="/">
-                        <div className="navbar__logo">
-                            <img
-                                src="/images/logo.svg"
-                                alt="Yellow ttetst Chain"
-                                className="themedImage themedImage--light"
-                            />
-                        </div>
-                    </a>
+                    <Link href="/" >
+                        <a className="navbar__brand">
+                            <div className="navbar__logo">
+                                <img
+                                    src="/images/logo.svg"
+                                    alt="Yellow ttetst Chain"
+                                    className="themedImage themedImage--light"
+                                />
+                            </div>
+                        </a>
+                    </Link>
                     {renderNavItems}
                 </div>
                 <div className="navbar__items navbar__items--right">
@@ -98,15 +100,17 @@ export const Navbar = () => {
             ></div>
             <div className="navbar-sidebar">
                 <div className="navbar-sidebar__brand">
-                    <a className="navbar__brand" href="/">
-                        <div className="navbar__logo">
-                            <img
-                                src="/images/logo.svg"
-                                alt="Yellow ttetst Chain"
-                                className="themedImage themedImage--light"
-                            />
-                        </div>
-                    </a>
+                    <Link href="/" >
+                        <a className="navbar__brand">
+                            <div className="navbar__logo">
+                                <img
+                                    src="/images/logo.svg"
+                                    alt="Yellow ttetst Chain"
+                                    className="themedImage themedImage--light"
+                                />
+                            </div>
+                        </a>
+                    </Link>
                     <button
                         type="button"
                         className="clean-btn navbar-sidebar__close"
