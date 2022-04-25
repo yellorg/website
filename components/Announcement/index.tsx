@@ -23,7 +23,7 @@ export const Announcement: React.FC<AnnouncementProps> = ({
                         We are creating a new version of Yellow and launching
                         the Yellow token.
                     </span>
-                    <Link href="https://www.yellow.org/docs/token/token-overview">
+                    <Link href="https://docs.yellow.org">
                         <a className="announcement__link-item">Learn more</a>
                     </Link>
                 </div>

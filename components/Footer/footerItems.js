@@ -15,19 +15,19 @@ export const FOOTER_ITEMS = {
             items: [
                 {
                     label: 'Introduction',
-                    to: '/docs/overview/what-is-yellow',
+                    to: 'https://docs.yellow.org',
                 },
                 {
                     label: 'Vision',
-                    to: '/docs/overview/vision',
+                    to: 'https://docs.yellow.org',
                 },
                 {
                     label: 'Architecture',
-                    to: '/docs/network/architecture',
+                    to: 'https://docs.yellow.org',
                 },
                 {
                     label: 'Tokenomics',
-                    to: '/docs/token/token-overview',
+                    to: 'https://docs.yellow.org',
                 },
             ],
         },

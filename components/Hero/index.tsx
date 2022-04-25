@@ -19,7 +19,7 @@ export const Hero: React.FC = () => {
                                         <span className="button__inner">Tokenomics</span>
                                     </a>
                                 </Link>
-                                <Link href="https://yellow.org/docs/overview/what-is-yellow">
+                                <Link href="https://docs.yellow.org">
                                     <a className="button button--secondary margin-right--md">
                                         <span className="button__inner">Technology</span>
                                     </a>

@@ -32,7 +32,7 @@ export const Tokenomics: React.FC = () => {
                             </ul>
 
                             <div>
-                                <Link href="https://yellow.org/docs/token/token-overview">
+                                <Link href="https://docs.yellow.org">
                                     <a className="button button--outline button--secondary button--shadow-secondary button--wide">
                                         <span className="button__inner">
                                             Learn more

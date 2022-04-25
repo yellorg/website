@@ -52,7 +52,7 @@ export const Footer = () => {
                     const isExternal = item.hasOwnProperty('href');
                     return (
                         <li key={i} className="footer__item">
-                            <Link href={isExternal ? item.href : `https://www.yellow.org${item.to}`}>
+                            <Link href={isExternal ? item.href : item.to}>
                                 {isExternal ? (
                                     <a
                                         target="_blank"

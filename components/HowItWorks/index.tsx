@@ -26,7 +26,7 @@ export const HowItWorks: React.FC = () => {
                             <li>Close channel and Withdraw</li>
                         </ul>
 
-                        <Link href="https://yellow.org/docs/overview/what-is-yellow-network">
+                        <Link href="https://docs.yellow.org">
                             <a className="button button--outline button--secondary button--wide">
                                 <span className="button__inner">
                                     Learn More

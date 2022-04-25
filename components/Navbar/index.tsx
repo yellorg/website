@@ -87,7 +87,7 @@ export const Navbar = () => {
                 <div className="navbar__items navbar__items--right">
                     <a
                         className="button button--secondary margin-right--md"
-                        href="https://yellow.org/docs/overview/what-is-yellow"
+                        href="https://docs.yellow.org"
                     >
                         <span className="button__inner">Litepaper</span>
                     </a>
