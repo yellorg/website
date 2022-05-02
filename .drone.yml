@@ -1,0 +1,23 @@
+---
+name: Build & Deploy
+kind: pipeline
+type: docker
+
+steps:
+  - name: Docker build
+    image: plugins/docker:20
+    pull: if-not-exists
+    environment:
+      DOCKER_BUILDKIT: 1
+    settings:
+      username:
+        from_secret: quay_username
+      password:
+        from_secret: quay_password
+      repo:
+        from_secret: quay_repo
+      tags: yellorg-${DRONE_GIT_COMMIT:0:7}
+      registry: quay.io
+    when:
+      branch:
+        - master
