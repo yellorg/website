@@ -1,0 +1,18 @@
+fullnameOverride: ${HELM_RELEASE}
+imagePullSecrets:
+  - name: ${PULL_SECRET_NAME}
+
+image:
+  repository: quay.io/openware/opendax-frontend
+
+ingress:
+  annotations:
+    cert-manager.io/issuer: zerossl-prod
+  hosts:
+    - host: ${HELM_HOST}
+      paths:
+        - /
+  tls:
+    - secretName: ${HELM_RELEASE}-tls
+      hosts:
+        - ${HELM_HOST}
