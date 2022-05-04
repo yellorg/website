@@ -2,6 +2,9 @@
 
 set -e
 
+echo $KUBECONFIG_B64 | base64 -d > $KUBECONFIG
+chmod 0600 $KUBECONFIG
+
 envsubst values.yaml.tpl > values.yaml
 
 if [ -n "PULL_SECRET_B64" ]; then

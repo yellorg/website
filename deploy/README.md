@@ -12,6 +12,6 @@ The following env vars have to be set for the deployment to work:
 |`HELM_CHART`|repo/website|Helm chart name|
 |`HELM_VERSION`|1.0.0|[Optional] Helm chart version|
 |`HELM_NAMESPACE`|websites|Target K8s namespace|
-|`HELM_HOST`|www.example.com|Target hostname|
+|`DOMAIN`|www.example.com|Target hostname|
 
 After that's done, feel free to run `install.sh` locally or in a CI environment to get a functional deployment.

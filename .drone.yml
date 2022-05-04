@@ -18,6 +18,38 @@ steps:
         from_secret: quay_repo
       tags: yellorg-${DRONE_GIT_COMMIT:0:7}
       registry: quay.io
-    when:
-      branch:
-        - master
+
+  - name: Helm Deploy
+    image: alpine/helm:3.8.2
+    environment:
+      KUBECONF:
+        from_secret: kubeconfig_b64
+      KUBECONFIG: /root/.kubeconfig
+      KUBECONFIG_B64:
+        from_secret: kubeconfig_b64
+      QUAY_USER:
+        from_secret: quay_username
+      QUAY_PASS:
+        from_secret: quay_password
+      QUAY_REPO:
+        from_secret: quay_repo
+      PULL_SECRET_NAME:
+        from_secret: pull_secret_name
+      PULL_SECRET_B64:
+        from_secret: pull_secret_b64
+      HELM_RELEASE:
+        from_secret: helm_release
+      HELM_CHART:
+        from_secret: helm_chart
+      HELM_NAMESPACE:
+        from_secret: helm_namespace
+      DOMAIN:
+        from_secret: domain
+    commands:
+      - ./deploy/install.sh
+
+trigger:
+  event:
+    - push
+  branch:
+    - master
