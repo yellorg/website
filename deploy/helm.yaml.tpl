@@ -1,9 +1,10 @@
-fullnameOverride: ${HELM_RELEASE}
+image:
+  repository: quay.io/openware/website
+
 imagePullSecrets:
   - name: ${PULL_SECRET_NAME}
 
-image:
-  repository: quay.io/openware/opendax-frontend
+fullnameOverride: ${HELM_RELEASE}
 
 ingress:
   annotations:
@@ -16,3 +17,6 @@ ingress:
     - secretName: ${HELM_RELEASE}-tls
       hosts:
         - ${HELM_HOST}
+
+service:
+  port: 80

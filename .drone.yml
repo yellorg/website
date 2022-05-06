@@ -14,10 +14,34 @@ steps:
         from_secret: quay_username
       password:
         from_secret: quay_password
-      repo:
-        from_secret: quay_repo
+      repo: quay.io/openware/website
       tags: yellorg-${DRONE_GIT_COMMIT:0:7}
       registry: quay.io
-    when:
-      branch:
-        - master
+
+  - name: Save Git SHA
+    image: alpine/git:v2.32.0
+    pull: if-not-exists
+    commands:
+      - echo yellorg-${DRONE_GIT_COMMIT:0:7} > .tags
+
+  - name: Deploy website
+    image: alpine/helm:3.4.2
+    environment:
+      KUBECONF:
+        from_secret: kubeconfig_b64
+      KUBECONFIG: /root/.kubeconfig
+      PULL_SECRET_NAME: openware-quay
+      HELM_RELEASE: yellorg
+      HELM_CHART: openware/landing
+      HELM_VERSION: 0.1.2
+      HELM_NAMESPACE: yellow-org
+      HELM_HOST: yellow.org
+
+    commands:
+      - ./deploy/install.sh
+
+trigger:
+  event:
+    - push
+  branch:
+    - master
