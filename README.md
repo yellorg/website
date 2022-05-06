@@ -1,8 +1,17 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Deploy
+## One-click run
 
 [![Run on Google Cloud](https://deploy.cloud.run/button.svg)](https://deploy.cloud.run/?git_repo=https://github.com/yellorg/website.git)
+
+## Deployment to K8s
+
+To deploy the component to K8s, you should do the following:
+
+1. Install Helm
+2. Export all the env-vars
+3. Run `deploy/install.sh`
+4. Enjoy
 
 ## Getting Started
 

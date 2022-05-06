@@ -1,0 +1,65 @@
+---
+name: Build & Deploy
+kind: pipeline
+type: docker
+
+steps:
+  - name: Save Git SHA
+    image: alpine:3.14
+    pull: if-not-exists
+    commands:
+      - echo yellorg-${DRONE_COMMIT:0:7} > .tags
+
+  - name: Docker build
+    image: plugins/docker:20
+    pull: if-not-exists
+    environment:
+      DOCKER_BUILDKIT: 1
+    settings:
+      username:
+        from_secret: quay_username
+      password:
+        from_secret: quay_password
+      repo:
+        from_secret: quay_repo
+      registry: quay.io
+
+  - name: Helm Deploy
+    image: alpine/helm:3.8.2
+    environment:
+      KUBECONF:
+        from_secret: kubeconfig_b64
+      KUBECONFIG: /root/.kubeconfig
+      KUBECONFIG_B64:
+        from_secret: kubeconfig_b64
+      QUAY_USER:
+        from_secret: quay_username
+      QUAY_PASS:
+        from_secret: quay_password
+      QUAY_REPO:
+        from_secret: quay_repo
+      PULL_SECRET_NAME:
+        from_secret: pull_secret_name
+      PULL_SECRET_B64:
+        from_secret: pull_secret_b64
+      HELM_RELEASE:
+        from_secret: helm_release
+      HELM_CHART:
+        from_secret: helm_chart
+      HELM_VERSION:
+        from_secret: helm_version
+      HELM_NAMESPACE:
+        from_secret: helm_namespace
+      DOMAIN:
+        from_secret: domain
+      SVC_PORT:
+        from_secret: svc_port
+    commands:
+      - apk add gettext
+      - ./deploy/install.sh
+
+trigger:
+  event:
+    - push
+  branch:
+    - master
