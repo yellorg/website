@@ -11,19 +11,18 @@ export const HowItWorks: React.FC = () => {
                         <span className="highlight">Architecture</span>
                         <h4 className="section-title">How does it work?</h4>
                         <p className="section-text--smaller subtitle-2-18-700">
-                            Yellow Network is built on the Layer-3 scaling solution that
-                            utilizes state channel technology. That makes it
-                            possible to use high-performance centralized
+                            Yellow Network is the Layer-3 scaling solution that utilizes state channels technology.
+                            That makes it possible to use high-performance centralized
                             matching with trustless funds management.
                             <br /><br />
-                            General user flow:
+                            Functionality:
                         </p>
 
                         <ul className="section-text subtitle-2-18-700 how-it-works__list">
-                            <li>Create account</li>
-                            <li>Open channel and Deposit</li>
-                            <li>Trade and Transfer</li>
-                            <li>Close channel and Withdraw</li>
+                            <li>MetaMask Sign In</li>
+                            <li>Deposit / Withdraw</li>
+                            <li>Spot Trading</li>
+                            <li>Broker Admin Panel</li>
                         </ul>
 
                         <Link href="https://docs.yellow.org">

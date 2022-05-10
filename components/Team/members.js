@@ -13,22 +13,34 @@ const LinkedinIcon = () => (
 
 export const MEMBERS = [
     {
-        name: "Mariia Bohinska",
-        position: "Deputy COO",
-        link: "https://www.linkedin.com/in/maria-boginska-977a4a99/",
-        image: "1.jpg",
+        name: "Bakhtiyar Mamedov",
+        position: "Chief financial officer",
+        link: "https://www.linkedin.com/in/bakhtiyar-mamedov-2175329/",
+        image: "Bakhtiyar.jpg",
     },
     {
-        name: "Eugene Makarenko",
-        position: "CEO of Attirer",
-        link: "https://www.linkedin.com/in/eugene-makarenko/",
-        image: "2.jpg",
+        name: "Jeff Smith",
+        position: "VP of Product",
+        link: "",
+        image: "Jeff.jpeg",
     },
     {
-        name: "Valentyn Shatravenko",
-        position: "Cloud Team Lead",
-        link: "https://www.linkedin.com/in/valentine-shatravenko-7b9a70130/",
-        image: "3.jpg",
+        name: "Anastasiia Bobeshko",
+        position: "Head of Marketing",
+        link: "https://www.linkedin.com/in/anastasiiabobeshko/",
+        image: "Anastasiia.jpg",
+    },
+    {
+        name: "Stanislav Liutenko",
+        position: "Sales Manager",
+        link: "https://www.linkedin.com/in/liutenkos/",
+        image: "30.jpg",
+    },
+    {
+        name: "Steve Vansimpsen",
+        position: "Risk Manager",
+        link: "https://www.linkedin.com/in/steve-vansimpsen-465982101/",
+        image: "Steve.jpg",
     },
     {
         name: "Oleksandr Koliadych",
@@ -43,28 +55,46 @@ export const MEMBERS = [
         image: "5.jpg",
     },
     {
+        name: "Mariia Bohinska",
+        position: "Deputy COO",
+        link: "https://www.linkedin.com/in/maria-boginska-977a4a99/",
+        image: "1.jpg",
+    },
+    {
+        name: "Valentyn Shatravenko",
+        position: "Cloud Team Lead",
+        link: "https://www.linkedin.com/in/valentine-shatravenko-7b9a70130/",
+        image: "3.jpg",
+    },
+    {
+        name: "Ivan Osypchuk",
+        position: "Business Analyst",
+        link: "",
+        image: "23.jpg",
+    },
+    {
+        name: "Hoan My Tran",
+        position: "Account Manager",
+        link: "https://www.linkedin.com/in/hoan-my-tran/",
+        image: "33.jpg",
+    },
+    {
         name: "Viktor Yatskin",
         position: "Product Manager",
         link: "https://www.linkedin.com/in/viktor-yatskin-b1b797160/",
         image: "6.jpg",
     },
     {
+        name: "Eugene Makarenko",
+        position: "CEO of Attirer",
+        link: "https://www.linkedin.com/in/eugene-makarenko/",
+        image: "2.jpg",
+    },
+    {
         name: "Nicolas Caiserman",
         position: "Product Manager",
         link: "https://www.linkedin.com/in/nicolascaiserman/",
         image: "7.jpg",
-    },
-    {
-        name: "Julia Osadcha",
-        position: "Front-end Team Lead",
-        link: "https://www.linkedin.com/in/julia-osadcha-61b883174/",
-        image: "8.jpg",
-    },
-    {
-        name: "Adrien Boiron",
-        position: "BizDev",
-        link: "https://www.linkedin.com/in/adrien-boiron-645a271a4/",
-        image: "9.jpg",
     },
     {
         name: "Yevhen Treiher",
@@ -83,12 +113,6 @@ export const MEMBERS = [
         position: "QA / Lead",
         link: "https://www.linkedin.com/in/pkucherekno/",
         image: "12.jpg",
-    },
-    {
-        name: "Elena Prymushko",
-        position: "Office manager",
-        link: "",
-        image: "13.jpg",
     },
     {
         name: "Sean Lee",
@@ -121,28 +145,10 @@ export const MEMBERS = [
         image: "19.jpg",
     },
     {
-        name: "Andriy Kushniruk",
-        position: "Software Engineer",
+        name: "Andrii Kushniruk",
+        position: "Team Lead",
         link: "https://www.linkedin.com/in/akushniruk/",
         image: "20.jpg",
-    },
-    {
-        name: "Elena Klimenko",
-        position: "Executive Assistant",
-        link: "https://www.linkedin.com/in/elena-klimenko-12679253/",
-        image: "21.jpg",
-    },
-    {
-        name: "Uliana Redkina",
-        position: "Content Production Manager",
-        link: "https://www.linkedin.com/in/uliana-redkina-185263218/",
-        image: "22.jpg",
-    },
-    {
-        name: "Ivan Osypchuk",
-        position: "Business Analyst",
-        link: "",
-        image: "23.jpg",
     },
     {
         name: "Zhanna Kravchuk",
@@ -163,12 +169,6 @@ export const MEMBERS = [
         image: "28.jpg",
     },
     {
-        name: "Stanislav Liutenko",
-        position: "Sales Manager",
-        link: "https://www.linkedin.com/in/liutenkos/",
-        image: "30.jpg",
-    },
-    {
         name: "Aleksandr Khlopiachyi",
         position: "Software Engineer",
         link: "https://www.linkedin.com/in/oleksandr-khlopiachyi-46218a148/",
@@ -179,12 +179,6 @@ export const MEMBERS = [
         position: "Software Engineer",
         link: "https://www.linkedin.com/in/nadia-chumak-574239151/",
         image: "32.jpg",
-    },
-    {
-        name: "Hoan My Tran",
-        position: "Account Manager",
-        link: "https://www.linkedin.com/in/hoan-my-tran/",
-        image: "33.jpg",
     },
     {
         name: "Stanislav Borisov",
@@ -265,7 +259,7 @@ export const TEAM_HEADLINERS = [
         name: "Alexis Yellow",
         position: "Executive Chairman",
         description:
-            "Alexis is a strategist, innovator, engineer, and brilliant mentor with extensive result-driven project handling experience - from launching rockets to kickstarting flourishing business venues.",
+            "Alexis started his career in avionics before moving to the European Space Center, where he worked on software surrounding Ariane space rockets. He later co-founded market maker GSR and became a crypto investor and Blockchain opinion leader. For the last years, Alexis has made it his mission to support emerging crypto and blockchain projects, founding Yellow to bring the Blockchain communities together.",
         photo: "Alexis.png",
         socials: [
             { img: <LinkedinIcon />, link: "https://www.linkedin.com/in/sirkia/" },
@@ -275,7 +269,7 @@ export const TEAM_HEADLINERS = [
         name: "Louis Bellet",
         position: "CEO",
         description:
-            "Louis is a genius system architect, avid entrepreneur, and experienced leader of IT projects from startup to enterprise-grade, implementing strategies and workflows that streamline business objectives.",
+            "Louis is a software architect and serial entrepreneur in the fintech, crypto & blockchain spaces. For the past ten years, he has been hands-on in the crypto industry, founding Openware, the world's leading crypto exchange software provider. Now, with Yellow, Louis plans to solve the problem of fragmented liquidity and make Blockchain more accessible and secure for the public.",
         photo: "Louis.png",
         socials: [
             { img: <LinkedinIcon />, link: "https://www.linkedin.com/in/louisbellet/" },
@@ -285,7 +279,7 @@ export const TEAM_HEADLINERS = [
         name: "Camille Meulien",
         position: "CTO - Architect",
         description:
-            "Camille is a master of Agile and Lean software development, High-Traffic and Big Data engineering guru, focused on aligning efficient technical solutions with business goals.",
+            "As a software architect, Camille is a known authority in the FinTech development circles. He has over 15 years of experience in FinTech security, distributed systems, Big Data, and high-traffic systems. He is a problem-solver and highly skilled in aligning technical solutions with business goals.",
         photo: "Camille.png",
         socials: [{ img: <LinkedinIcon />, link: "https://www.linkedin.com/in/camillemeulien/" }],
     },
@@ -293,7 +287,7 @@ export const TEAM_HEADLINERS = [
         name: "Sergii Kashchenko",
         position: "COO",
         description:
-            "Sergii is a technology adept and inspiring leader, delivering excellence in business workflows by highlighting and empowering talent to create a strong team culture.",
+            "Ex-R&D Director of Bitfury and startup COO/Co-Founder with 16 years track record of engineering leadership in software companies. With Bitfury, Sergii implemented processes for efficient and transparent project delivery of the ASIC miner products. As a COO, he executed a strategic startup transformation and achieved 216% YoY revenue growth. Holds an Executive MBA degree from London Business School.",
         photo: "Sergii.png",
         socials: [{ img: <LinkedinIcon />, link: "https://www.linkedin.com/in/kashchenko/" }],
     },

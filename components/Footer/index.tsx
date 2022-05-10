@@ -165,7 +165,7 @@ export const Footer = () => {
                         <ul className="footer__items">
                             <li className="footer__item">
                                 <a
-                                    href="https://twitter.com/yellow_defi"
+                                    href="https://twitter.com/Yellow"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="footer__link-item"
