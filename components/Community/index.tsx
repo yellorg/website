@@ -7,7 +7,7 @@ export const Community = () => {
         <div className="section section__yellow community">
             <div className="container">
                 <div className="row section__center">
-                    <h4 className="section-title">Community</h4>
+                    <h4 className="section-title">Join the Community of Yellowians!</h4>
 
                     <div className="community__socials">
                         <div className="community__socials-item">
@@ -19,7 +19,7 @@ export const Community = () => {
                                 layout='fixed'
                             />
 
-                            <Link href="https://twitter.com/yellow_defi">
+                            <Link href="https://twitter.com/Yellow">
                                 <a className="button button--outline button--secondary button--shadow-secondary">
                                     <span className="button__inner">Follow on Twitter</span>
                                 </a>

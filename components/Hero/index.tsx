@@ -11,7 +11,7 @@ export const Hero: React.FC = () => {
                         <div className="hero-left">
                             <h4 className="hero__text">Franchising trading businesses</h4>
                             <p className="h8 hero__text hero__description">
-                                Yellow is revolutionazing crypto exchanges. We are building the next-gen global network of Web3 financial exchanges, using state-channel technology.
+                                Yellow is a Layer-3 decentralized Broker Creating Network powered by state channels used for communicating and trading between brokers and aggregating liquidity of connected nodes.
                             </p>
                             <div className="hero__buttons">
                                 <Link href="#tokenomics">
@@ -29,7 +29,7 @@ export const Hero: React.FC = () => {
                                         <span className="button__inner">Investors</span>
                                     </a>
                                 </Link>
-                                {/* <Link href="https://twitter.com/yellow_defi">
+                                {/* <Link href="https://twitter.com/Yellow">
                                     <a className="button button--outline button--secondary">
                                         <span className="button__inner">
                                             <img src={'/images/icons/twitter.svg'} className="button__icon-left" />

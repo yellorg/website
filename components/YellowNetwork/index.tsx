@@ -6,22 +6,22 @@ const blocks = [
     {
         src: '/images/icons/liquidity.svg',
         title: 'Liquidity',
-        text: 'Our technology is unlocking the liquidity of different blockchains and exchanges to the network of Nodes.',
+        text: 'Our technology is unlocking the liquidity of different blockchains and exchanges to the network of nodes.',
     },
     {
         src: '/images/icons/security.svg',
         title: 'Security',
-        text: 'We use state channel protocols that give off-chain performance while relying on the security of blockchain technology.',
+        text: 'We use state channel protocols that give an off-chain performance while relying on the security of blockchain technology.',
     },
     {
         src: '/images/icons/speed.svg',
         title: 'Speed',
-        text: 'Thanks to strategy embedding technology that enables Ultra HFT, Nodes can sell slots for embedded strategy.',
+        text: 'Thanks to strategy embedding technology that enables ultra HFT, nodes can sell slots for embedded strategy.',
     },
     {
         src: '/images/icons/compliance.svg',
         title: 'Compliance',
-        text: 'While keeping our network decentralized, we provide tools for Nodes to become compliant with their local regulation.',
+        text: 'While keeping our network decentralized, we provide tools for nodes to become compliant with their local regulation.',
     },
 ];
 
@@ -44,9 +44,8 @@ export const YellowNetwork: React.FC = () => {
                         <span className="highlight">Core Technology</span>
                         <h4 className="section-title">Yellow Network</h4>
                         <p className="section-text--smaller subtitle-2-18-600">
-                            Broker Nodes (exchanges) connect to the P2P Network using a unified communication protocol. The main target of
-                            the Network is to interconnect different blockchains unlocking access to liquidity with the layer of
-                            decentralized exchanges.
+                            Exchanges, brokers, and trading firms connect to the P2P network using a unified communication protocol.
+                            The main target of the network is to interconnect all blockchains unlocking access to liquidity for truly decentralized and ultra-high-speed trading.
                         </p>
                         <div className="blocks">
                             {blocks.map(i => {
