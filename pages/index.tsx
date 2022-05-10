@@ -47,10 +47,6 @@ const Home: FC<{}> = (): JSX.Element => {
                 </div>
             </div>
             <Footer />
-            <Announcement
-                show={showAnnouncement}
-                handleToggleShow={() => setShowAnnouncement(!showAnnouncement)}
-            />
         </div>
     );
 };

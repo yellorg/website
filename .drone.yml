@@ -56,7 +56,7 @@ steps:
         from_secret: svc_port
     commands:
       - apk add gettext
-      - ./deploy/install.sh
+      - ./.deploy/install.sh
 
 trigger:
   event:

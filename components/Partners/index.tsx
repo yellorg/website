@@ -61,7 +61,7 @@ const SLIDER_SETTINGS = {
 
 export const Partners = () => {
     return (
-        <div className="section partners">
+        <div className="section partners" id="partners">
             <div className="container">
                 <h4 className="section-title">
                     Strategic Partners & Integrations

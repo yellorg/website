@@ -3,5 +3,5 @@ export const NAV_ITEMS = [
     {to: '/#tokenomics', label: 'Token'},
     {to: '/#roadmap', label: 'Roadmap'},
     {to: '/#team', label: 'Team'},
-    {to: '/blog', label: 'Blog'},
+    {to: '/#partners', label: 'Partners'},
 ]

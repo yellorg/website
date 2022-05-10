@@ -91,9 +91,9 @@ export const Navbar = () => {
                 <div className="navbar__items navbar__items--right">
                     <a
                         className="button button--secondary margin-right--md"
-                        href="https://docs.yellow.org"
+                        href="https://docs.yellow.org/whitepaper"
                     >
-                        <span className="button__inner">Litepaper</span>
+                        <span className="button__inner">Whitepaper</span>
                     </a>
                 </div>
             </div>

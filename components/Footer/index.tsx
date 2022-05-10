@@ -137,7 +137,7 @@ export const Footer = () => {
                             <li className="footer__item">
                                 <a
                                     className="footer__link-item"
-                                    href="/docs/overview/vision"
+                                    href="https://docs.yellow.org/"
                                 >
                                     Vision
                                 </a>
@@ -145,7 +145,7 @@ export const Footer = () => {
                             <li className="footer__item">
                                 <a
                                     className="footer__link-item"
-                                    href="/docs/network/architecture"
+                                    href="https://docs.yellow.org/network-architecture"
                                 >
                                     Architecture
                                 </a>
@@ -153,7 +153,7 @@ export const Footer = () => {
                             <li className="footer__item">
                                 <a
                                     className="footer__link-item"
-                                    href="/docs/token/token-overview"
+                                    href="https://docs.yellow.org/business-model/token-utility"
                                 >
                                     Tokenomics
                                 </a>
@@ -241,13 +241,13 @@ export const Footer = () => {
                         <div className="footer__title">More</div>
                         <ul className="footer__items">
                             <li className="footer__item">
-                                <a className="footer__link-item" href="/blog">
+                                <a className="footer__link-item" href="https://docs.yellow.org/business-model/token-utility">
                                     Blog
                                 </a>
                             </li>
                             <li className="footer__item">
                                 <a
-                                    href="https://github.com/openware/opendax"
+                                    href="https://github.com/yellorg"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="footer__link-item"
