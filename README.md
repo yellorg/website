@@ -10,7 +10,7 @@ To deploy the component to K8s, you should do the following:
 
 1. Install Helm
 2. Export all the env-vars
-3. Run `deploy/install.sh`
+3. Run `.deploy/install.sh`
 4. Enjoy
 
 ## Getting Started
