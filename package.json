@@ -9,6 +9,9 @@
     "start": "next start",
     "lint": "next lint"
   },
+  "workspaces": [
+    "contracts"
+  ],
   "dependencies": {
     "classnames": "^2.3.1",
     "infima": "^0.2.0-alpha.37",
