@@ -1,0 +1,83 @@
+.duckies-hero {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 93px;
+    padding-bottom: 200px;
+
+    @media screen and (max-width: 425px) {
+        flex-direction: column;
+        padding-top: 42px;
+    }
+
+    &__info {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+
+        &-selebration {
+            display: flex;
+            justify-content: flex-start;
+
+            @media screen and (max-width: 425px) {
+                justify-content: center;
+                margin-bottom: 10px;
+
+                svg {
+                    height: 90px;
+                    width: 90px;
+                }
+            }
+        }
+
+        &-received {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            word-wrap: break-word;
+            font-size: 60px;
+            line-height: 64px;
+            font-weight: bolder;
+            font-family: var(--ifm-heading-font-family);
+
+            @media screen and (max-width: 425px) {
+                font-size: 48px;
+                line-height: 52px;
+                text-align: center;
+                justify-content: center;
+                padding-bottom: 36px;
+            }
+
+            &-message {
+                color: var(--text-color-00);
+
+                @media screen and (max-width: 425px) {
+                    color: var(--text-color-100);
+                }
+            }
+
+            &-amount {
+                color: var(--text-color-100);
+                display: flex;
+
+
+                @media screen and (max-width: 425px) {
+                    flex-direction: column;
+                    align-items: center;
+                    word-wrap: break-word;
+                }
+
+                span {
+                    margin-right: 36px;
+
+                    @media screen and (max-width: 425px) {
+                        margin-right: 0;
+                    }
+                }
+
+                svg {
+                    margin-bottom: -4px;
+                }
+            }
+        }
+    }
+}

@@ -222,6 +222,10 @@ a:not(
   }
 }
 
+.duckies {
+  background-color: var(--ifm-color-primary);
+}
+
 @media screen and (min-width: 1440px) {
   .section__main-img {
     max-width: initial;
