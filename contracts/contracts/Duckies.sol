@@ -19,7 +19,11 @@ contract Duckies is Initializable, ERC20CappedUpgradeable, PausableUpgradeable, 
     // Affiliate Payouts
     uint16[] public _payouts;
 
+    // Participants
+    mapping(string => mapping(address => bool)) private _participants;
+
     struct Message {
+        string id;
         address ref;
         uint32 amt;
     }
@@ -114,12 +118,20 @@ contract Duckies is Initializable, ERC20CappedUpgradeable, PausableUpgradeable, 
         bytes32 messageHash = getMessageHash(_message);
         bytes32 ethSignedMessageHash = getEthSignedMessageHash(messageHash);
 
-        if (recover(ethSignedMessageHash, _sig) == _issuer) {
-            if (_message.ref != address(0) && _referrers[msg.sender] == address(0)) {
-                _referrers[msg.sender] = _message.ref;
-            }
-            _mintReward(_message.amt);
+        require(recover(ethSignedMessageHash, _sig) == _issuer);
+
+        if (_message.ref != address(0)) {
+            require(_referrers[msg.sender] == address(0));
+            require(msg.sender != _message.ref);
+
+            _referrers[msg.sender] = _message.ref;
+        } else {
+            require(!_participants[_message.id][msg.sender], "Account already got the reward");
+
+            _participants[_message.id][msg.sender] = true;
         }
+
+        _mintReward(_message.amt);
     }
 
     function getMessageHash(Message memory _message) public pure returns (bytes32)

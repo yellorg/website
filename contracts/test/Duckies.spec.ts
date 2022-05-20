@@ -1,5 +1,5 @@
 import type { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
-import { expect } from "chai";
+import { expect, assert } from "chai";
 import type { Contract } from "ethers";
 import { ethers, upgrades } from "hardhat";
 
@@ -61,10 +61,11 @@ describe("Duckies", function () {
     const message = {
       ref: ref.address,
       amt: 100,
+      id: 'message1',
     };
 
     expect(await duckies.getMessageHash(message)).to.equal(
-      "0x7cf83b7b2c339e15c12e41e24d8520dcdbd1546198bfa357628822ca12c4f6f6"
+      "0xfe784ddb2327d4f1409d24be7b4df0b5ba49d1fd9c7ed0522c92d7a846782d61"
     );
     expect(await duckies.getMessageHash(message)).to.have.length(66);
   });
@@ -76,11 +77,12 @@ describe("Duckies", function () {
     const message = {
       ref: ref.address,
       amt: 100,
+      id: 'message1',
     };
     const messageHash = await duckies.getMessageHash(message);
 
     expect(await duckies.getEthSignedMessageHash(messageHash)).to.be.equal(
-      "0x9f5be0224a999fb70cd8f51cae4357b55f683d3f466d705dbe5b07516f80e87b"
+      "0x01e7d7df69c89dc65068d0fd761ad035eef585e1c68fb8127e3c25db7ea4e62b"
     );
     expect(await duckies.getEthSignedMessageHash(messageHash)).to.have.length(
       66
@@ -95,6 +97,7 @@ describe("Duckies", function () {
     const message = {
       ref: ref.address,
       amt: 100,
+      id: 'message1',
     };
     const messageHash = await duckies.getMessageHash(message);
     const ethSignedMessageHash = await duckies.getEthSignedMessageHash(
@@ -130,6 +133,7 @@ describe("Duckies", function () {
     const messageAccountZero = {
       ref: accounts[0].address,
       amt: 30000,
+      id: 'message0',
     };
     const messageAccountZeroHash = await duckies.getMessageHash(
       messageAccountZero
@@ -142,24 +146,18 @@ describe("Duckies", function () {
     await duckies
       .connect(accounts[1])
       .reward(messageAccountZero, signatureAccountZero);
-    const balanceAccountOneStageOne = await duckies.balanceOf(
-      accounts[1].address
-    );
-    expect(balanceAccountOneStageOne).to.be.equal(
-      String(messageAccountZero.amt)
-    );
 
-    const balanceAccountZeroStageOne = await duckies.balanceOf(
-      accounts[0].address
-    );
-    expect(balanceAccountZeroStageOne).to.be.equal(
-      String((messageAccountZero.amt * payoutRefOne) / 100)
-    );
+    const balanceAccountOneStageOne = await duckies.balanceOf(accounts[1].address);
+    expect(balanceAccountOneStageOne).to.be.equal(messageAccountZero.amt);
+
+    const balanceAccountZeroStageOne = await duckies.balanceOf(accounts[0].address);
+    expect(balanceAccountZeroStageOne).to.be.equal((messageAccountZero.amt * payoutRefOne) / 100);
 
     // preparing message and signature for second account
     const messageAccountOne = {
       ref: accounts[1].address,
       amt: 20000,
+      id: 'message1',
     };
     const messageAccountOneHash = await duckies.getMessageHash(
       messageAccountOne
@@ -172,37 +170,21 @@ describe("Duckies", function () {
     await duckies
       .connect(accounts[2])
       .reward(messageAccountOne, signatureAccountOne);
-    const balanceAccountTwoStageTwo = await duckies.balanceOf(
-      accounts[2].address
-    );
-    expect(balanceAccountTwoStageTwo).to.be.equal(
-      String(messageAccountOne.amt)
-    );
 
-    const balanceAccountOneStageTwo = await duckies.balanceOf(
-      accounts[1].address
-    );
-    expect(balanceAccountOneStageTwo).to.be.equal(
-      String(
-        +balanceAccountOneStageOne +
-          (messageAccountOne.amt * payoutRefOne) / 100
-      )
-    );
+    const balanceAccountTwoStageTwo = await duckies.balanceOf(accounts[2].address);
+    expect(balanceAccountTwoStageTwo).to.be.equal(messageAccountOne.amt);
 
-    const balanceAccountZeroStageTwo = await duckies.balanceOf(
-      accounts[0].address
-    );
-    expect(balanceAccountZeroStageTwo).to.be.equal(
-      String(
-        +balanceAccountZeroStageOne +
-          (messageAccountOne.amt * payoutRefTwo) / 100
-      )
-    );
+    const balanceAccountOneStageTwo = await duckies.balanceOf(accounts[1].address);
+    expect(balanceAccountOneStageTwo).to.be.equal(+balanceAccountOneStageOne + (messageAccountOne.amt * payoutRefOne) / 100);
+
+    const balanceAccountZeroStageTwo = await duckies.balanceOf(accounts[0].address);
+    expect(balanceAccountZeroStageTwo).to.be.equal(+balanceAccountZeroStageOne + (messageAccountOne.amt * payoutRefTwo) / 100);
 
     // preparing message and signature for third account
     const messageAccountTwo = {
       ref: accounts[2].address,
       amt: 10000,
+      id: 'message2',
     };
     const messageAccountTwoHash = await duckies.getMessageHash(
       messageAccountTwo
@@ -215,47 +197,24 @@ describe("Duckies", function () {
     await duckies
       .connect(accounts[3])
       .reward(messageAccountTwo, signatureAccountTwo);
-    const balanceAccountThreeStageThree = await duckies.balanceOf(
-      accounts[3].address
-    );
-    expect(balanceAccountThreeStageThree).to.be.equal(
-      String(messageAccountTwo.amt)
-    );
 
-    const balanceAccountTwoStageThree = await duckies.balanceOf(
-      accounts[2].address
-    );
-    expect(balanceAccountTwoStageThree).to.be.equal(
-      String(
-        +balanceAccountTwoStageTwo +
-          (messageAccountTwo.amt * payoutRefOne) / 100
-      )
-    );
+    const balanceAccountThreeStageThree = await duckies.balanceOf(accounts[3].address);
+    expect(balanceAccountThreeStageThree).to.be.equal(messageAccountTwo.amt);
 
-    const balanceAccountOneStageThree = await duckies.balanceOf(
-      accounts[1].address
-    );
-    expect(balanceAccountOneStageThree).to.be.equal(
-      String(
-        +balanceAccountOneStageTwo +
-          (messageAccountTwo.amt * payoutRefTwo) / 100
-      )
-    );
+    const balanceAccountTwoStageThree = await duckies.balanceOf(accounts[2].address);
+    expect(balanceAccountTwoStageThree).to.be.equal(+balanceAccountTwoStageTwo + (messageAccountTwo.amt * payoutRefOne) / 100);
 
-    const balanceAccountZeroStageThree = await duckies.balanceOf(
-      accounts[0].address
-    );
-    expect(balanceAccountZeroStageThree).to.be.equal(
-      String(
-        +balanceAccountZeroStageTwo +
-          (messageAccountTwo.amt * payoutRefThree) / 100
-      )
-    );
+    const balanceAccountOneStageThree = await duckies.balanceOf(accounts[1].address);
+    expect(balanceAccountOneStageThree).to.be.equal(+balanceAccountOneStageTwo + (messageAccountTwo.amt * payoutRefTwo) / 100);
+
+    const balanceAccountZeroStageThree = await duckies.balanceOf(accounts[0].address);
+    expect(balanceAccountZeroStageThree).to.be.equal(+balanceAccountZeroStageTwo + (messageAccountTwo.amt * payoutRefThree) / 100);
 
     // preparing message and signature for fourth account
     const messageAccountThree = {
       ref: accounts[3].address,
       amt: 5000,
+      id: 'message3',
     };
     const messageAccountThreeHash = await duckies.getMessageHash(
       messageAccountThree
@@ -268,57 +227,27 @@ describe("Duckies", function () {
     await duckies
       .connect(accounts[4])
       .reward(messageAccountThree, signatureAccountThree);
-    const balanceAccountFourStageFour = await duckies.balanceOf(
-      accounts[4].address
-    );
-    expect(balanceAccountFourStageFour).to.be.equal(
-      String(messageAccountThree.amt)
-    );
 
-    const balanceAccountThreeStageFour = await duckies.balanceOf(
-      accounts[3].address
-    );
-    expect(balanceAccountThreeStageFour).to.be.equal(
-      String(
-        +balanceAccountThreeStageThree +
-          (messageAccountThree.amt * payoutRefOne) / 100
-      )
-    );
+    const balanceAccountFourStageFour = await duckies.balanceOf(accounts[4].address);
+    expect(balanceAccountFourStageFour).to.be.equal(messageAccountThree.amt);
 
-    const balanceAccountTwoStageFour = await duckies.balanceOf(
-      accounts[2].address
-    );
-    expect(balanceAccountTwoStageFour).to.be.equal(
-      String(
-        +balanceAccountTwoStageThree +
-          (messageAccountThree.amt * payoutRefTwo) / 100
-      )
-    );
+    const balanceAccountThreeStageFour = await duckies.balanceOf(accounts[3].address);
+    expect(balanceAccountThreeStageFour).to.be.equal(+balanceAccountThreeStageThree + (messageAccountThree.amt * payoutRefOne) / 100);
 
-    const balanceAccountOneStageFour = await duckies.balanceOf(
-      accounts[1].address
-    );
-    expect(balanceAccountOneStageFour).to.be.equal(
-      String(
-        +balanceAccountOneStageThree +
-          (messageAccountThree.amt * payoutRefThree) / 100
-      )
-    );
+    const balanceAccountTwoStageFour = await duckies.balanceOf(accounts[2].address);
+    expect(balanceAccountTwoStageFour).to.be.equal(+balanceAccountTwoStageThree + (messageAccountThree.amt * payoutRefTwo) / 100);
 
-    const balanceAccountZeroStageFour = await duckies.balanceOf(
-      accounts[0].address
-    );
-    expect(balanceAccountZeroStageFour).to.be.equal(
-      String(
-        +balanceAccountZeroStageThree +
-          (messageAccountThree.amt * payoutRefFour) / 100
-      )
-    );
+    const balanceAccountOneStageFour = await duckies.balanceOf(accounts[1].address);
+    expect(balanceAccountOneStageFour).to.be.equal(+balanceAccountOneStageThree + (messageAccountThree.amt * payoutRefThree) / 100);
+
+    const balanceAccountZeroStageFour = await duckies.balanceOf(accounts[0].address);
+    expect(balanceAccountZeroStageFour).to.be.equal(+balanceAccountZeroStageThree + (messageAccountThree.amt * payoutRefFour) / 100);
 
     // preparing message and signature for fifth account
     const messageAccountFour = {
       ref: accounts[4].address,
       amt: 5000,
+      id: 'message4',
     };
     const messageAccountFourHash = await duckies.getMessageHash(
       messageAccountFour
@@ -331,57 +260,142 @@ describe("Duckies", function () {
     await duckies
       .connect(accounts[5])
       .reward(messageAccountFour, signatureAccountFour);
+
     const balanceAccountFifth = await duckies.balanceOf(accounts[5].address);
     expect(balanceAccountFifth).to.be.equal(String(messageAccountFour.amt));
 
-    const balanceAccountFourStageFive = await duckies.balanceOf(
-      accounts[4].address
-    );
-    expect(balanceAccountFourStageFive).to.be.equal(
-      String(
-        +balanceAccountFourStageFour +
-          (messageAccountFour.amt * payoutRefOne) / 100
-      )
-    );
+    const balanceAccountFourStageFive = await duckies.balanceOf(accounts[4].address);
+    expect(balanceAccountFourStageFive).to.be.equal(+balanceAccountFourStageFour + (messageAccountFour.amt * payoutRefOne) / 100);
 
-    const balanceAccountThreeStageFive = await duckies.balanceOf(
-      accounts[3].address
-    );
-    expect(balanceAccountThreeStageFive).to.be.equal(
-      String(
-        +balanceAccountThreeStageFour +
-          (messageAccountFour.amt * payoutRefTwo) / 100
-      )
-    );
+    const balanceAccountThreeStageFive = await duckies.balanceOf(accounts[3].address);
+    expect(balanceAccountThreeStageFive).to.be.equal(+balanceAccountThreeStageFour + (messageAccountFour.amt * payoutRefTwo) / 100);
 
-    const balanceAccountTwoStageFive = await duckies.balanceOf(
-      accounts[2].address
-    );
-    expect(balanceAccountTwoStageFive).to.be.equal(
-      String(
-        +balanceAccountTwoStageFour +
-          (messageAccountFour.amt * payoutRefThree) / 100
-      )
-    );
+    const balanceAccountTwoStageFive = await duckies.balanceOf(accounts[2].address);
+    expect(balanceAccountTwoStageFive).to.be.equal(+balanceAccountTwoStageFour + (messageAccountFour.amt * payoutRefThree) / 100);
 
-    const balanceAccountOneStageFive = await duckies.balanceOf(
-      accounts[1].address
-    );
-    expect(balanceAccountOneStageFive).to.be.equal(
-      String(
-        +balanceAccountOneStageFour +
-          (messageAccountFour.amt * payoutRefFour) / 100
-      )
-    );
+    const balanceAccountOneStageFive = await duckies.balanceOf(accounts[1].address);
+    expect(balanceAccountOneStageFive).to.be.equal(+balanceAccountOneStageFour + (messageAccountFour.amt * payoutRefFour) / 100);
 
-    const balanceAccountZeroStageFive = await duckies.balanceOf(
-      accounts[0].address
+    const balanceAccountZeroStageFive = await duckies.balanceOf(accounts[0].address);
+    expect(balanceAccountZeroStageFive).to.be.equal(+balanceAccountZeroStageFour + (messageAccountFour.amt * payoutRefFive) / 100);
+  });
+
+  it("should prevent getting award twice or more times", async function () {
+    const { duckies }: TestContext = this as any;
+    // eslint-disable-next-line no-unused-vars
+    const [_owner, signer, ...accounts] = await ethers.getSigners();
+    const provider = ethers.provider;
+    const signerAccount = signer.address;
+
+    const message = {
+      ref: accounts[0].address,
+      amt: 30000,
+      id: 'message',
+    };
+    const messageHash = await duckies.getMessageHash(
+      message
     );
-    expect(balanceAccountZeroStageFive).to.be.equal(
-      String(
-        +balanceAccountZeroStageFour +
-          (messageAccountFour.amt * payoutRefFive) / 100
-      )
-    );
+    const signature = await provider.send("personal_sign", [
+      messageHash,
+      signerAccount,
+    ]);
+
+    await duckies
+      .connect(accounts[1])
+      .reward(message, signature);
+
+    const balance = await duckies.balanceOf(accounts[1].address);
+    expect(balance).to.be.equal(message.amt);
+
+    try {
+      await duckies
+      .connect(accounts[1])
+      .reward(message, signature);
+
+      assert(false);
+    } catch (error) {
+      assert(error); // checks the presence of error
+    }
+
+    const balanceAfterSecondAttempt = await duckies.balanceOf(accounts[1].address);
+    expect(balanceAfterSecondAttempt).to.be.equal(message.amt);
+  });
+
+  it("account[0] cannot send reward with ref account[0]", async function () {
+    const { duckies }: TestContext = this as any;
+    // eslint-disable-next-line no-unused-vars
+    const [_owner, signer, ...accounts] = await ethers.getSigners();
+    const provider = ethers.provider;
+    const signerAccount = signer.address;
+
+    const messageOne = {
+      ref: accounts[0].address,
+      amt: 1000,
+      id: 'messageOne',
+    };
+    const messageHash = await duckies.getMessageHash(messageOne);
+    const signature = await provider.send("personal_sign", [messageHash, signerAccount]);
+
+    const balanceAccountZero = await duckies.balanceOf(accounts[0].address);
+    expect(balanceAccountZero).to.be.equal(0);
+
+    // account[0] cannot send reward with ref account[0]
+    try {
+      await duckies.connect(accounts[0]).reward(messageOne, signature);
+
+      assert(false);
+    } catch (error) {
+      assert(error); // checks the presence of error
+    }
+
+    const balanceAccountZeroAfterRewardCall = await duckies.balanceOf(accounts[0].address);
+    expect(balanceAccountZeroAfterRewardCall).to.be.equal(0);
+  });
+
+  it("account[1] can get reward with ref account[0]", async function () {
+    const { duckies }: TestContext = this as any;
+    // eslint-disable-next-line no-unused-vars
+    const [_owner, signer, ...accounts] = await ethers.getSigners();
+    const provider = ethers.provider;
+    const signerAccount = signer.address;
+    const payoutRefOne = await duckies._payouts(0);
+
+    const messageOne = {
+      ref: accounts[0].address,
+      amt: 1000,
+      id: 'messageOne',
+    };
+    const messageHash = await duckies.getMessageHash(messageOne);
+    const signature = await provider.send("personal_sign", [messageHash, signerAccount]);
+
+    // account[1] can send reward with ref account[0]
+    const balanceAccountOne = await duckies.balanceOf(accounts[1].address);
+    expect(balanceAccountOne).to.be.equal(0);
+
+    try {
+      await duckies.connect(accounts[1]).reward(messageOne, signature);
+
+      assert(true);
+    } catch (error) {
+      assert(false);
+    }
+
+    const balanceAccountOneAfterRewardCall = await duckies.balanceOf(accounts[1].address);
+    expect(balanceAccountOneAfterRewardCall).to.be.equal(messageOne.amt);
+
+    const balanceZeroAfterSuccessfulReferalCall = await duckies.balanceOf(accounts[0].address);
+    expect(balanceZeroAfterSuccessfulReferalCall).to.be.equal(messageOne.amt * payoutRefOne / 100);
+
+    // account[1] cannot send another reward call if it already has a referrer
+    try {
+      await duckies.connect(accounts[1]).reward(messageOne, signature);
+
+      assert(false);
+    } catch (error) {
+      assert(error); // checks the presence of error
+    }
+
+    const balanceOneAfterRepeatedReferalCall = await duckies.balanceOf(accounts[1].address);
+    expect(balanceOneAfterRepeatedReferalCall).to.be.equal(messageOne.amt);
   });
 });
