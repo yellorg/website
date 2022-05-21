@@ -1,3 +1,117 @@
 .duckies-redeem {
+  margin-top: 142px;
 
+  &__header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 36px;
+
+    &-title {
+      font-weight: 700;
+      font-size: 60px;
+      line-height: 64px;
+      color: var(--text-color-100);
+      font-family: var(--ifm-heading-font-family);
+      text-align: center;
+    }
+
+    &-subtitle{
+      font-weight: 600;
+      font-size: 24px;
+      line-height: 32px;
+      letter-spacing: 0.15px;
+      color: var(--text-color-100);
+      font-family: var(--font-family-h8);
+      text-align: center;
+    }
+  }
+
+  &__slider {
+    padding-bottom: 180px;
+
+    .slick-slider {
+      width: 102%;
+      left: -1%;
+    }
+
+    .slick-dots {
+      bottom: -40px;
+
+      li {
+        width: initial;
+
+        &.slick-active span {
+          width: 24px;
+          background-color: #090909;
+          border: none;
+        }
+      }
+    }
+
+    .slider-item {
+      border-radius: 4px;
+      position: relative;
+    }
+
+    .slider-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border: 1px solid #8E8E8E;
+      border-radius: 8px;
+      transition: .2s;
+
+      &:hover {
+        border-color: #000;
+      }
+    }
+
+    .slick-arrow {
+      width: 28px;
+      height: 28px;
+      background-color: var(--primary-cta-color-80);
+      border-radius: 4px;
+
+      &:hover {
+        background-color: var(--primary-cta-color-80);
+      }
+
+      &::before {
+        content: ''
+      }
+
+      &.slick-prev {
+        left: -32px;
+
+        img {
+          transform: rotate(180deg);
+        }
+      }
+
+      &.slick-next {
+       right: -33px;
+
+        img {
+          left: 1px;
+        }
+      }
+
+      &.slick-disabled {
+        filter: grayscale(1);
+        opacity: 0.2;
+      }
+    }
+
+    .slider-item {
+      padding-right: 14px;
+      padding-left: 14px;
+
+      &__logo {
+        border-radius: 4px;
+        box-shadow: -4px 5px var(--text-color-100);
+      }
+    }
+  }
 }
