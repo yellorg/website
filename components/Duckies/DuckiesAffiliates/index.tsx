@@ -105,7 +105,7 @@ export const DuckiesAffiliates = () => {
     }, [affiliateLevels]);
 
     return (
-        <div className="duckies-affiliates container">
+        <div className="duckies-affiliates">
             <div className="duckies-affiliates__row">
                 <div className="duckies-affiliates__row-info">
                     <div className="table">

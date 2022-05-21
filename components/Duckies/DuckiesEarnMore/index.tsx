@@ -1,6 +1,4 @@
 import React from 'react';
-import { FacebookShareButton } from 'react-share';
-
 
 export const DuckiesEarnMore = () => {
     const socials = [
@@ -143,7 +141,7 @@ export const DuckiesEarnMore = () => {
 
 
     return (
-        <div className="duckies-earn-more container">
+        <div className="duckies-earn-more">
             <div className="duckies-earn-more__header">
                 <div className="duckies-earn-more__header-title">
                     Earn more

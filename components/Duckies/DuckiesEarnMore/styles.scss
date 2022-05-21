@@ -1,9 +1,11 @@
 .duckies-earn-more {
-  margin-top: 174px;
+  padding: 0 var(--ifm-spacing-horizontal);
+  margin: 0 auto;
 
-  @media screen and (max-width: 833px) {
-    padding: 0;
-  }
+  @media screen and (max-width: 862px) {
+    padding-left: 0;
+    padding-right: 0;
+}
 
   &__header {
     display: flex;

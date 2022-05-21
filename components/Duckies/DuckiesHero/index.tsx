@@ -3,7 +3,7 @@ import { LazyLoadImage } from 'react-lazy-load-image-component';
 
 export const DuckiesHero = () => {
     return (
-        <div className="duckies-hero container">
+        <div className="duckies-hero">
             <div className="duckies-hero__info">
                 <div className="duckies-hero__info-selebration">
                     <LazyLoadImage className="section__main-img"

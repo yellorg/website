@@ -1,8 +1,10 @@
 .duckies-hero {
+    padding: 0 var(--ifm-spacing-horizontal);
+    margin: 0 auto;
     display: flex;
     justify-content: space-between;
     padding-top: 93px;
-    padding-bottom: 200px;
+    padding-bottom: 168px;
 
     @media screen and (max-width: 768px) {
         flex-direction: column;

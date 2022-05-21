@@ -1,6 +1,12 @@
 .duckies-affiliates {
+    padding: 0 var(--ifm-spacing-horizontal);
+    margin: 0 auto;
+    padding-top: 32px;
+    padding-bottom: 174px;
+
     @media screen and (max-width: 862px) {
-        padding: 0;
+        padding-left: 0;
+        padding-right: 0;
     }
 
     &__row {
