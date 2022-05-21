@@ -75,7 +75,7 @@ export const DuckiesAffiliates = () => {
                 </div>
             );
         });
-    }, [affiliateLevels]);
+    }, []);
 
     const renderBounties = React.useMemo(() => {
         return bounties.map((bounty: any, index: number) => {
@@ -102,7 +102,7 @@ export const DuckiesAffiliates = () => {
                 </div>
             );
         });
-    }, [affiliateLevels]);
+    }, []);
 
     return (
         <div className="duckies-affiliates">
