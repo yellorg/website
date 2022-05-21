@@ -1,0 +1,218 @@
+.duckies-hero {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 93px;
+    padding-bottom: 200px;
+    @media screen and (max-width: 425px) {
+        flex-direction: column;
+        padding-top: 42px;
+    }
+    &__info {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+
+        @media screen and (max-width: 425px) {
+            margin-bottom: 60px;
+        }
+
+        &-selebration {
+            display: flex;
+            justify-content: flex-start;
+            @media screen and (max-width: 425px) {
+                justify-content: center;
+                margin-bottom: 10px;
+                svg {
+                    height: 90px;
+                    width: 90px;
+                }
+            }
+        }
+        &-received {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            word-wrap: break-word;
+            font-size: 3.75rem;
+            line-height: 4rem;
+            font-weight: bolder;
+            font-family: var(--ifm-heading-font-family);
+            @media screen and (max-width: 425px) {
+                font-size: 3rem;
+                line-height: 3.25rem;
+                text-align: center;
+                justify-content: center;
+                padding-bottom: 36px;
+            }
+            &-message {
+                color: var(--text-color-00);
+                @media screen and (max-width: 425px) {
+                    color: var(--text-color-100);
+                }
+            }
+            &-amount {
+                color: var(--text-color-100);
+                display: flex;
+                @media screen and (max-width: 425px) {
+                    flex-direction: column;
+                    align-items: center;
+                    word-wrap: break-word;
+                }
+                span {
+                    margin-right: 36px;
+                    @media screen and (max-width: 425px) {
+                        margin-right: 0;
+                    }
+                }
+                svg {
+                    margin-bottom: -4px;
+                }
+            }
+        }
+        &-buttons {
+            display: flex;
+            margin-top: 32px;
+            @media screen and (max-width: 425px) {
+                flex-direction: column;
+            }
+            .button__inner {
+                font-size: 24px;
+                line-height: 32px;
+                padding: 16px;
+            }
+            &-claim {
+                margin-right: 24px;
+                @media screen and (max-width: 425px) {
+                    margin-right: 0;
+                    width: 100%;
+                }
+            }
+            &-earn {
+                @media screen and (max-width: 425px) {
+                    margin-top: 12px;
+                    width: 100%;
+                }
+            }
+        }
+    }
+
+    &__icons {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+
+        &-balance {
+            padding: 16px;
+            border-radius: 50%;
+            width: 18.75rem;
+            height: 18.75rem;
+            background-color: var(--primary-cta-color-10);
+            z-index: 10;
+            border: 1px solid var(--neutral-control-layer-color-80);
+            box-shadow: -5px 5px var(--secondary-control-color-90);
+
+            @media screen and (max-width: 425px) {
+                width: 300px;
+                height: 300px;
+            }
+
+            &-body {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                vertical-align: middle;
+                border-radius: 50%;
+                height: 100%;
+                background-color: var(--primary-cta-color-10);
+                border: 1px solid var(--primary-cta-color-90);
+                z-index: 10;
+
+                &-content {
+                    &-title {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        margin-bottom: 12px;
+
+                        &-name {
+                            font-size: 1.875rem;
+                            line-height: 2.5rem;
+                            text-transform: uppercase;
+                            font-weight: bolder;
+                        }
+
+                        &-icon {
+                            display: flex;
+                            vertical-align: middle;
+
+                            svg {
+                                cursor: pointer;
+                            }
+                        }
+                    }
+
+                    .button__inner {
+                        padding: 6px 18px;
+                    }
+                }
+            }
+        }
+
+        &-duck {
+            padding: 10px;
+            border-radius: 50%;
+            width: 11rem;
+            height: 11rem;
+            background-color: var(--primary-cta-color-20);
+            margin-top: -1.5rem;
+            margin-left: -4.875rem;
+            z-index: 9;
+            position: relative;
+            box-shadow: -5px 5px var(--secondary-control-color-90);
+
+            @media screen and (max-width: 425px) {
+                position: absolute;
+                width: 96px;
+                height: 96px;
+                margin-left: 14.75rem;
+                margin-top: -2.5rem;
+                padding: 6px;
+            }
+
+            &-body {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                vertical-align: middle;
+                border-radius: 50%;
+                height: 100%;
+                border: 1px solid var(--primary-cta-color-90);
+
+                .lazy-load-image-background {
+                    display: flex;
+                    align-items: center;
+                    vertical-align: middle;
+                    padding-top: 12px;
+
+                    @media screen and (max-width: 425px) {
+                        padding-top: 8px;
+                    }
+
+                    img {
+                        width: 155px;
+
+                        @media screen and (max-width: 425px) {
+                            width: 86px;
+                        }
+                    }
+                }
+                // &-img {
+                //     display: flex;
+                //     align-items: center;
+                //     vertical-align
+                // }
+            }
+        }
+    }
+}

@@ -1,6 +1,5 @@
 import Head from 'next/head';
 import React, { FC } from 'react';
-import { Announcement } from '../components/Announcement';
 import { Community } from '../components/Community';
 import { FeaturesOfYellow } from '../components/FeaturesOfYellow';
 import { Footer } from '../components/Footer';
@@ -13,11 +12,8 @@ import { Team } from '../components/Team';
 import { Tokenomics } from '../components/Tokenomics';
 import { WhatsYellow } from '../components/WhatsYellow';
 import { YellowNetwork } from '../components/YellowNetwork';
-// import { appTitle } from '../libs/page';
 
 const Home: FC<{}> = (): JSX.Element => {
-    const [showAnnouncement, setShowAnnouncement] = React.useState<boolean>(true);
-
     return (
         <div className="flex flex-col min-h-full">
             <Navbar />

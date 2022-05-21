@@ -12,6 +12,8 @@
 /* You can override the default Infima variables here. */
 :root {
   --primary-cta-layer-color: #FFFFFF;
+  --primary-cta-color-10: #FFFAE3;
+  --primary-cta-color-20: #FFF5C7;
   --primary-cta-color-80: #FCD000;
   --primary-cta-color-90: #F8C100;
   --dark-background-color: #101010;
@@ -220,6 +222,10 @@ a:not(
   .mb-24 {
     margin-bottom: 12px;
   }
+}
+
+.duckies {
+  background-color: var(--ifm-color-primary);
 }
 
 @media screen and (min-width: 1440px) {

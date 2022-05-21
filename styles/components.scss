@@ -10,6 +10,14 @@
 @import "../components/Community/styles.scss";
 @import "../components/IconExternalLink/styles.scss";
 @import "../components/Announcement//styles.scss";
-@import 'react-lazy-load-image-component/src/effects/blur.css';
+
+@import "../components/Duckies/DuckiesAffiliates/styles.scss";
+@import "../components/Duckies/DuckiesEarnMore/styles.scss";
+@import "../components/Duckies/DuckiesHero/styles.scss";
+@import "../components/Duckies/DuckiesRedeem/styles.scss";
+
+@import "react-lazy-load-image-component/src/effects/blur.css";
 @import "slick-carousel/slick/slick.css";
 @import "slick-carousel/slick/slick-theme.css";
+
+
