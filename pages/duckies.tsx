@@ -22,14 +22,12 @@ const Home: FC<{}> = (): JSX.Element => {
                         content="Yellow DeFi is a new generation hybrid technology cryptocurrency exchange combining the best of decentralized and centralized performance."
                     />
                 </Head>
-                <div className="duckies">
-                    <main className="flex">
-                        <DuckiesHero />
-                        <DuckiesAffiliates />
-                        <DuckiesEarnMore />
-                        <DuckiesRedeem />
-                    </main>
-                </div>
+                <main className="duckies container">
+                    <DuckiesHero />
+                    <DuckiesAffiliates />
+                    <DuckiesEarnMore />
+                    <DuckiesRedeem />
+                </main>
             </div>
             <Footer />
         </div>

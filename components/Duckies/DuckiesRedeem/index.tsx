@@ -27,12 +27,26 @@ const SLIDER_SETTINGS = {
     dots: true,
     infinite: false,
     speed: 500,
-    slidesToShow: 7,
+    slidesToShow: 5,
     slidesToScroll: 1,
     lazyLoad: "progressive" as LazyLoadTypes,
     nextArrow: <CustomArrow style={{display:"flex", justifyContent:"center", alignItems:"center"}} />,
     prevArrow: <CustomArrow />,
     responsive: [
+        {
+            breakpoint: 1920,
+            settings: {
+                slidesToShow: 5,
+                arrows: false,
+            },
+        },
+        {
+            breakpoint: 1920,
+            settings: {
+                slidesToShow: 4,
+                arrows: false,
+            },
+        },
         {
             breakpoint: 1440,
             settings: {
@@ -70,7 +84,7 @@ const NFT_LIST = [
 
 export const DuckiesRedeem = () => {
     return (
-        <div className="duckies-redeem container">
+        <div className="duckies-redeem">
             <div className="duckies-redeem__header">
                 <div className="duckies-redeem__header-title">
                     Redeem

@@ -229,6 +229,28 @@ a:not(
 
 .duckies {
   background-color: var(--ifm-color-primary);
+
+  &.container {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  &-hero {
+    background-image: url('/images/components/duckies/heroBg.png');
+    background-repeat: no-repeat;
+    background-attachment: local;
+    background-position: bottom;
+  }
+
+  &-affiliates {
+    background-color: var(--secondary-control-color-90);
+    background-image: url('/images/components/duckies/affiliateBg.png');
+    background-repeat: repeat-x;
+    background-attachment: local;
+    background-position: bottom;
+  }
 }
 
 @media screen and (min-width: 1440px) {
