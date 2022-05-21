@@ -3,23 +3,25 @@
     justify-content: space-between;
     padding-top: 93px;
     padding-bottom: 200px;
-    @media screen and (max-width: 425px) {
+
+    @media screen and (max-width: 768px) {
         flex-direction: column;
         padding-top: 42px;
     }
+
     &__info {
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
 
-        @media screen and (max-width: 425px) {
+        @media screen and (max-width: 768px) {
             margin-bottom: 60px;
         }
 
         &-selebration {
             display: flex;
             justify-content: flex-start;
-            @media screen and (max-width: 425px) {
+            @media screen and (max-width: 768px) {
                 justify-content: center;
                 margin-bottom: 10px;
                 svg {
@@ -28,6 +30,7 @@
                 }
             }
         }
+
         &-received {
             display: flex;
             flex-direction: column;
@@ -37,30 +40,38 @@
             line-height: 4rem;
             font-weight: bolder;
             font-family: var(--ifm-heading-font-family);
-            @media screen and (max-width: 425px) {
-                font-size: 3rem;
-                line-height: 3.25rem;
-                text-align: center;
+
+            @media screen and (max-width: 1200px) {
+                font-size: 2.5rem;
+                line-height: 3rem;
+            }
+
+            @media screen and (max-width: 768px) {
                 justify-content: center;
+                text-align: center;
                 padding-bottom: 36px;
             }
+
+            @media screen and (max-width: 425px) {
+                font-size: 2.5rem;
+                line-height: 3rem;
+            }
+
             &-message {
-                color: var(--text-color-00);
-                @media screen and (max-width: 425px) {
-                    color: var(--text-color-100);
-                }
+                color: var(--text-color-100);
             }
             &-amount {
                 color: var(--text-color-100);
                 display: flex;
-                @media screen and (max-width: 425px) {
+
+                @media screen and (max-width: 768px) {
                     flex-direction: column;
                     align-items: center;
                     word-wrap: break-word;
                 }
                 span {
                     margin-right: 36px;
-                    @media screen and (max-width: 425px) {
+                    @media screen and (max-width: 768px) {
                         margin-right: 0;
                     }
                 }
@@ -82,12 +93,21 @@
             }
             &-claim {
                 margin-right: 24px;
+
+                @media screen and (max-width: 768px) {
+                    width: 50%;
+                }
+
                 @media screen and (max-width: 425px) {
                     margin-right: 0;
                     width: 100%;
                 }
             }
             &-earn {
+                @media screen and (max-width: 768px) {
+                    width: 50%;
+                }
+
                 @media screen and (max-width: 425px) {
                     margin-top: 12px;
                     width: 100%;
@@ -95,11 +115,14 @@
             }
         }
     }
-
     &__icons {
         display: flex;
-        justify-content: center;
+        justify-content: flex-end;
         width: 100%;
+
+        @media screen and (max-width: 768px) {
+            justify-content: center;
+        }
 
         &-balance {
             padding: 16px;
@@ -110,12 +133,10 @@
             z-index: 10;
             border: 1px solid var(--neutral-control-layer-color-80);
             box-shadow: -5px 5px var(--secondary-control-color-90);
-
-            @media screen and (max-width: 425px) {
+            @media screen and (max-width: 768px) {
                 width: 300px;
                 height: 300px;
             }
-
             &-body {
                 display: flex;
                 flex-direction: column;
@@ -127,38 +148,32 @@
                 background-color: var(--primary-cta-color-10);
                 border: 1px solid var(--primary-cta-color-90);
                 z-index: 10;
-
                 &-content {
                     &-title {
                         display: flex;
                         justify-content: space-between;
                         align-items: center;
                         margin-bottom: 12px;
-
                         &-name {
                             font-size: 1.875rem;
                             line-height: 2.5rem;
                             text-transform: uppercase;
                             font-weight: bolder;
                         }
-
                         &-icon {
                             display: flex;
                             vertical-align: middle;
-
                             svg {
                                 cursor: pointer;
                             }
                         }
                     }
-
                     .button__inner {
                         padding: 6px 18px;
                     }
                 }
             }
         }
-
         &-duck {
             padding: 10px;
             border-radius: 50%;
@@ -170,8 +185,7 @@
             z-index: 9;
             position: relative;
             box-shadow: -5px 5px var(--secondary-control-color-90);
-
-            @media screen and (max-width: 425px) {
+            @media screen and (max-width: 768px) {
                 position: absolute;
                 width: 96px;
                 height: 96px;
@@ -179,7 +193,6 @@
                 margin-top: -2.5rem;
                 padding: 6px;
             }
-
             &-body {
                 display: flex;
                 align-items: center;
@@ -188,30 +201,21 @@
                 border-radius: 50%;
                 height: 100%;
                 border: 1px solid var(--primary-cta-color-90);
-
                 .lazy-load-image-background {
                     display: flex;
                     align-items: center;
                     vertical-align: middle;
                     padding-top: 12px;
-
-                    @media screen and (max-width: 425px) {
+                    @media screen and (max-width: 768px) {
                         padding-top: 8px;
                     }
-
                     img {
                         width: 155px;
-
-                        @media screen and (max-width: 425px) {
+                        @media screen and (max-width: 768px) {
                             width: 86px;
                         }
                     }
                 }
-                // &-img {
-                //     display: flex;
-                //     align-items: center;
-                //     vertical-align
-                // }
             }
         }
     }

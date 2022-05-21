@@ -25,6 +25,7 @@
   --secondary-control-layer-color-90: #000000;
   --text-color-00: #FFFFFF;
   --text-color-10: #EBEBEB;
+  --text-color-50: #5E6367;
   --text-color-60: #737373;
   --text-color-70: #585858;
   --text-color-90: #272727;
@@ -66,6 +67,8 @@
   --ifm-container-width-xl: calc(var(--layout-width) + (var(--ifm-spacing-horizontal) * 2));
   --landing-block-padding: 132px;
   --ifm-navbar-height: 62px;
+
+  --duckies-border-color: #B5B5B5;
 }
 
 .docusaurus-highlight-code-line {
