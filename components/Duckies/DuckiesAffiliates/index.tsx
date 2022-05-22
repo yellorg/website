@@ -106,21 +106,23 @@ export const DuckiesAffiliates = () => {
 
     return (
         <div className="duckies-affiliates">
-            <div className="duckies-affiliates__row">
-                <div className="duckies-affiliates__row-info">
-                    <div className="table">
-                        <div className="table-title">
-                            Affiliates
+            <div className="container">
+                <div className="duckies-affiliates__row">
+                    <div className="duckies-affiliates__row-info">
+                        <div className="table">
+                            <div className="table-title">
+                                Affiliates
+                            </div>
+                            {renderAffiliateLevels}
                         </div>
-                        {renderAffiliateLevels}
                     </div>
-                </div>
-                <div className="duckies-affiliates__row-bounties">
-                    <div className="table">
-                        <div className="table-title">
-                            Recent Bounties
+                    <div className="duckies-affiliates__row-bounties">
+                        <div className="table">
+                            <div className="table-title">
+                                Recent Bounties
+                            </div>
+                            {renderBounties}
                         </div>
-                        {renderBounties}
                     </div>
                 </div>
             </div>

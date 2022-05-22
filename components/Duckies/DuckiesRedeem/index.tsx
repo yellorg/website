@@ -27,28 +27,14 @@ const SLIDER_SETTINGS = {
     dots: true,
     infinite: false,
     speed: 500,
-    slidesToShow: 5,
+    slidesToShow: 3,
     slidesToScroll: 1,
     lazyLoad: "progressive" as LazyLoadTypes,
     nextArrow: <CustomArrow style={{display:"flex", justifyContent:"center", alignItems:"center"}} />,
     prevArrow: <CustomArrow />,
     responsive: [
         {
-            breakpoint: 1920,
-            settings: {
-                slidesToShow: 5,
-                arrows: false,
-            },
-        },
-        {
-            breakpoint: 1920,
-            settings: {
-                slidesToShow: 4,
-                arrows: false,
-            },
-        },
-        {
-            breakpoint: 1440,
+            breakpoint: 1240,
             settings: {
                 slidesToShow: 3,
                 arrows: false,
@@ -85,27 +71,29 @@ const NFT_LIST = [
 export const DuckiesRedeem = () => {
     return (
         <div className="duckies-redeem">
-            <div className="duckies-redeem__header">
-                <div className="duckies-redeem__header-title">
-                    Redeem
+            <div className="container">
+                <div className="duckies-redeem__header">
+                    <div className="duckies-redeem__header-title">
+                        Redeem
+                    </div>
+                    <div className="duckies-redeem__header-subtitle">
+                        Exchange your duckies for valuable gifts and rare NFTs
+                    </div>
                 </div>
-                <div className="duckies-redeem__header-subtitle">
-                    Exchange your duckies for valuable gifts and rare NFTs
+                <div className="duckies-redeem__slider">
+                    <Slider {...SLIDER_SETTINGS}>
+                        {NFT_LIST.map((imgSrc, i) => (
+                            <div key={i} className="slider-item">
+                                <LazyLoadImage
+                                    src={imgSrc}
+                                    effect="blur"
+                                    threshold={200}
+                                    className="slider-item__logo"
+                                />
+                            </div>
+                        ))}
+                    </Slider>
                 </div>
-            </div>
-            <div className="duckies-redeem__slider">
-                <Slider {...SLIDER_SETTINGS}>
-                    {NFT_LIST.map((imgSrc, i) => (
-                        <div key={i} className="slider-item">
-                            <LazyLoadImage
-                                src={imgSrc}
-                                effect="blur"
-                                threshold={200}
-                                className="slider-item__logo"
-                            />
-                        </div>
-                    ))}
-                </Slider>
             </div>
         </div>
     );
