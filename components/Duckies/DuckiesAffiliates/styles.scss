@@ -4,9 +4,20 @@
     padding-top: 32px;
     padding-bottom: 174px;
 
+    @media screen and (min-width: 768px) {
+        .container {
+            display: flex;
+        }
+    }
+
     @media screen and (max-width: 862px) {
         padding-left: 0;
         padding-right: 0;
+
+        .container {
+            padding-left: 0;
+            padding-right: 0;
+        }
     }
 
     &__row {

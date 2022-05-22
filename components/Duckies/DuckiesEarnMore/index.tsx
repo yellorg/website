@@ -141,32 +141,34 @@ export const DuckiesEarnMore = () => {
 
     return (
         <div className="duckies-earn-more">
-            <div className="duckies-earn-more__header">
-                <div className="duckies-earn-more__header-title">
-                    Earn more
+            <div className="container">
+                <div className="duckies-earn-more__header">
+                    <div className="duckies-earn-more__header-title">
+                        Earn more
+                    </div>
+                    <div className="duckies-earn-more__header-subtitle">
+                        Share to recruit friends to grow your network
+                    </div>
                 </div>
-                <div className="duckies-earn-more__header-subtitle">
-                    Share to recruit friends to grow your network
-                </div>
-            </div>
-            <div className="duckies-earn-more__body">
-                <div className="duckies-earn-more__body-link">
-                    <div className="duckies-earn-more__body-link-input">
-                        <div className="duckies-earn-more__body-link-input-value">
-                            http://www.yellow.org/duckies/k4Dkk54jk6o3nogfnGNGgj2jm6j7x7h3j7
+                <div className="duckies-earn-more__body">
+                    <div className="duckies-earn-more__body-link">
+                        <div className="duckies-earn-more__body-link-input">
+                            <div className="duckies-earn-more__body-link-input-value">
+                                http://www.yellow.org/duckies/k4Dkk54jk6o3nogfnGNGgj2jm6j7x7h3j7
+                            </div>
+                        </div>
+                        <div className="button button--outline button--secondary button--shadow-secondary">
+                            <span className="button__inner">
+                                <svg width="20" height="24" viewBox="0 0 20 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M8.60019 0.800049C7.0538 0.800049 5.8002 2.05365 5.8002 3.60005V14.8C5.8002 16.3464 7.0538 17.6 8.60019 17.6H17.0002C18.5466 17.6 19.8002 16.3464 19.8002 14.8V6.97995C19.8002 6.23734 19.5052 5.52515 18.9801 5.00005L15.6002 1.62015C15.0751 1.09505 14.3629 0.800049 13.6203 0.800049H8.60019Z" fill="black"/>
+                                    <path d="M0.200195 9.20005C0.200195 7.65365 1.4538 6.40005 3.0002 6.40005V20.4001H14.2002C14.2002 21.9464 12.9466 23.2001 11.4002 23.2001H3.0002C1.4538 23.2001 0.200195 21.9464 0.200195 20.4001V9.20005Z" fill="black"/>
+                                </svg>
+                            </span>
                         </div>
                     </div>
-                    <div className="button button--outline button--secondary button--shadow-secondary">
-                        <span className="button__inner">
-                            <svg width="20" height="24" viewBox="0 0 20 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M8.60019 0.800049C7.0538 0.800049 5.8002 2.05365 5.8002 3.60005V14.8C5.8002 16.3464 7.0538 17.6 8.60019 17.6H17.0002C18.5466 17.6 19.8002 16.3464 19.8002 14.8V6.97995C19.8002 6.23734 19.5052 5.52515 18.9801 5.00005L15.6002 1.62015C15.0751 1.09505 14.3629 0.800049 13.6203 0.800049H8.60019Z" fill="black"/>
-                                <path d="M0.200195 9.20005C0.200195 7.65365 1.4538 6.40005 3.0002 6.40005V20.4001H14.2002C14.2002 21.9464 12.9466 23.2001 11.4002 23.2001H3.0002C1.4538 23.2001 0.200195 21.9464 0.200195 20.4001V9.20005Z" fill="black"/>
-                            </svg>
-                        </span>
+                    <div className="duckies-earn-more__body-social">
+                        {renderSocials}
                     </div>
-                </div>
-                <div className="duckies-earn-more__body-social">
-                    {renderSocials}
                 </div>
             </div>
         </div>
