@@ -15,6 +15,7 @@ contract Duckies is Initializable, ERC20CappedUpgradeable, PausableUpgradeable, 
 
     // Affiliate Tree
     mapping(address => address) private _referrers;
+    mapping(address => address[]) private _affiliates;
 
     // Affiliate Payouts
     uint16[] public _payouts;
@@ -125,6 +126,7 @@ contract Duckies is Initializable, ERC20CappedUpgradeable, PausableUpgradeable, 
             require(msg.sender != _message.ref);
 
             _referrers[msg.sender] = _message.ref;
+            _affiliates[_message.ref].push(msg.sender);
         } else {
             require(!_participants[_message.id][msg.sender], "Account already got the reward");
 
@@ -163,5 +165,22 @@ contract Duckies is Initializable, ERC20CappedUpgradeable, PausableUpgradeable, 
             s := mload(add(_sig, 64))
             v := byte(0, mload(add(_sig, 96)))
         }
+    }
+
+    function getReferrersCount() public view returns (uint8[5] memory)  {
+        return getReferrersCountByLevel(msg.sender, 1, [0, 0, 0, 0, 0]);
+    }
+
+    function getReferrersCountByLevel(address currentAccount, uint16 level, uint8[5] memory count) private view returns (uint8[5] memory) {
+        if (level <= 5) {
+            address[] memory affiliates = _affiliates[currentAccount];
+            count[level - 1] += uint8(affiliates.length);
+
+            for (uint i = 0; i < affiliates.length; i++) {
+                getReferrersCountByLevel(affiliates[i], level + 1, count);
+            }
+        }
+
+        return count;
     }
 }
