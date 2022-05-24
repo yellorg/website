@@ -398,4 +398,158 @@ describe("Duckies", function () {
     const balanceOneAfterRepeatedReferalCall = await duckies.balanceOf(accounts[1].address);
     expect(balanceOneAfterRepeatedReferalCall).to.be.equal(messageOne.amt);
   });
+
+  it("should correctly return affiliates of account", async function () {
+    const { duckies }: TestContext = this as any;
+    // eslint-disable-next-line no-unused-vars
+    const [_owner, signer, ...accounts] = await ethers.getSigners();
+    const provider = ethers.provider;
+    const signerAccount = signer.address;
+
+    // first level
+    const messageOne = {
+      ref: accounts[0].address,
+      amt: 1000,
+      id: 'messageOne',
+    };
+    const messageHash = await duckies.getMessageHash(messageOne);
+    const signatureOne = await provider.send("personal_sign", [messageHash, signerAccount]);
+
+    await duckies.connect(accounts[1]).reward(messageOne, signatureOne);
+    expect(await duckies.connect(accounts[0]).getReferrersCount()).to.be.eql([1, 0, 0, 0, 0]);
+
+    await duckies.connect(accounts[2]).reward(messageOne, signatureOne);
+    expect(await duckies.connect(accounts[0]).getReferrersCount()).to.be.eql([2, 0, 0, 0, 0]);
+
+    // second level
+    const messageTwo = {
+      ref: accounts[1].address,
+      amt: 1000,
+      id: 'messageOne',
+    };
+    const messageTwoHash = await duckies.getMessageHash(messageTwo);
+    const signatureTwo = await provider.send("personal_sign", [messageTwoHash, signerAccount]);
+
+    await duckies.connect(accounts[3]).reward(messageTwo, signatureTwo);
+    expect(await duckies.connect(accounts[1]).getReferrersCount()).to.be.eql([1, 0, 0, 0, 0]);
+    expect(await duckies.connect(accounts[0]).getReferrersCount()).to.be.eql([2, 1, 0, 0, 0]);
+
+    await duckies.connect(accounts[4]).reward(messageTwo, signatureTwo);
+    expect(await duckies.connect(accounts[1]).getReferrersCount()).to.be.eql([2, 0, 0, 0, 0]);
+    expect(await duckies.connect(accounts[0]).getReferrersCount()).to.be.eql([2, 2, 0, 0, 0]);
+
+    await duckies.connect(accounts[5]).reward(messageTwo, signatureTwo);
+    expect(await duckies.connect(accounts[1]).getReferrersCount()).to.be.eql([3, 0, 0, 0, 0]);
+    expect(await duckies.connect(accounts[0]).getReferrersCount()).to.be.eql([2, 3, 0, 0, 0]);
+
+    // third level
+    const messageThree = {
+      ref: accounts[5].address,
+      amt: 1000,
+      id: 'messageOne',
+    };
+    const messageThreeHash = await duckies.getMessageHash(messageThree);
+    const signatureThree = await provider.send("personal_sign", [messageThreeHash, signerAccount]);
+
+    await duckies.connect(accounts[6]).reward(messageThree, signatureThree);
+    expect(await duckies.connect(accounts[5]).getReferrersCount()).to.be.eql([1, 0, 0, 0, 0]);
+    expect(await duckies.connect(accounts[1]).getReferrersCount()).to.be.eql([3, 1, 0, 0, 0]);
+    expect(await duckies.connect(accounts[0]).getReferrersCount()).to.be.eql([2, 3, 1, 0, 0]);
+
+    // fourth level
+    const messageFour = {
+      ref: accounts[6].address,
+      amt: 1000,
+      id: 'messageOne',
+    };
+    const messageFourHash = await duckies.getMessageHash(messageFour);
+    const signatureFour = await provider.send("personal_sign", [messageFourHash, signerAccount]);
+
+    await duckies.connect(accounts[7]).reward(messageFour, signatureFour);
+    expect(await duckies.connect(accounts[6]).getReferrersCount()).to.be.eql([1, 0, 0, 0, 0]);
+    expect(await duckies.connect(accounts[5]).getReferrersCount()).to.be.eql([1, 1, 0, 0, 0]);
+    expect(await duckies.connect(accounts[1]).getReferrersCount()).to.be.eql([3, 1, 1, 0, 0]);
+    expect(await duckies.connect(accounts[0]).getReferrersCount()).to.be.eql([2, 3, 1, 1, 0]);
+
+    await duckies.connect(accounts[8]).reward(messageFour, signatureFour);
+    expect(await duckies.connect(accounts[6]).getReferrersCount()).to.be.eql([2, 0, 0, 0, 0]);
+    expect(await duckies.connect(accounts[5]).getReferrersCount()).to.be.eql([1, 2, 0, 0, 0]);
+    expect(await duckies.connect(accounts[1]).getReferrersCount()).to.be.eql([3, 1, 2, 0, 0]);
+    expect(await duckies.connect(accounts[0]).getReferrersCount()).to.be.eql([2, 3, 1, 2, 0]);
+
+    await duckies.connect(accounts[9]).reward(messageFour, signatureFour);
+    expect(await duckies.connect(accounts[6]).getReferrersCount()).to.be.eql([3, 0, 0, 0, 0]);
+    expect(await duckies.connect(accounts[5]).getReferrersCount()).to.be.eql([1, 3, 0, 0, 0]);
+    expect(await duckies.connect(accounts[1]).getReferrersCount()).to.be.eql([3, 1, 3, 0, 0]);
+    expect(await duckies.connect(accounts[0]).getReferrersCount()).to.be.eql([2, 3, 1, 3, 0]);
+
+    await duckies.connect(accounts[10]).reward(messageFour, signatureFour);
+    expect(await duckies.connect(accounts[6]).getReferrersCount()).to.be.eql([4, 0, 0, 0, 0]);
+    expect(await duckies.connect(accounts[5]).getReferrersCount()).to.be.eql([1, 4, 0, 0, 0]);
+    expect(await duckies.connect(accounts[1]).getReferrersCount()).to.be.eql([3, 1, 4, 0, 0]);
+    expect(await duckies.connect(accounts[0]).getReferrersCount()).to.be.eql([2, 3, 1, 4, 0]);
+
+    // fifth level
+    const messageFive = {
+      ref: accounts[10].address,
+      amt: 1000,
+      id: 'messageOne',
+    };
+    const messageFiveHash = await duckies.getMessageHash(messageFive);
+    const signatureFive = await provider.send("personal_sign", [messageFiveHash, signerAccount]);
+
+    await duckies.connect(accounts[11]).reward(messageFive, signatureFive);
+    expect(await duckies.connect(accounts[10]).getReferrersCount()).to.be.eql([1, 0, 0, 0, 0]);
+    expect(await duckies.connect(accounts[6]).getReferrersCount()).to.be.eql([4, 1, 0, 0, 0]);
+    expect(await duckies.connect(accounts[5]).getReferrersCount()).to.be.eql([1, 4, 1, 0, 0]);
+    expect(await duckies.connect(accounts[1]).getReferrersCount()).to.be.eql([3, 1, 4, 1, 0]);
+    expect(await duckies.connect(accounts[0]).getReferrersCount()).to.be.eql([2, 3, 1, 4, 1]);
+
+    await duckies.connect(accounts[12]).reward(messageFive, signatureFive);
+    expect(await duckies.connect(accounts[10]).getReferrersCount()).to.be.eql([2, 0, 0, 0, 0]);
+    expect(await duckies.connect(accounts[6]).getReferrersCount()).to.be.eql([4, 2, 0, 0, 0]);
+    expect(await duckies.connect(accounts[5]).getReferrersCount()).to.be.eql([1, 4, 2, 0, 0]);
+    expect(await duckies.connect(accounts[1]).getReferrersCount()).to.be.eql([3, 1, 4, 2, 0]);
+    expect(await duckies.connect(accounts[0]).getReferrersCount()).to.be.eql([2, 3, 1, 4, 2]);
+
+    await duckies.connect(accounts[13]).reward(messageFive, signatureFive);
+    expect(await duckies.connect(accounts[10]).getReferrersCount()).to.be.eql([3, 0, 0, 0, 0]);
+    expect(await duckies.connect(accounts[6]).getReferrersCount()).to.be.eql([4, 3, 0, 0, 0]);
+    expect(await duckies.connect(accounts[5]).getReferrersCount()).to.be.eql([1, 4, 3, 0, 0]);
+    expect(await duckies.connect(accounts[1]).getReferrersCount()).to.be.eql([3, 1, 4, 3, 0]);
+    expect(await duckies.connect(accounts[0]).getReferrersCount()).to.be.eql([2, 3, 1, 4, 3]);
+
+    await duckies.connect(accounts[14]).reward(messageFive, signatureFive);
+    expect(await duckies.connect(accounts[10]).getReferrersCount()).to.be.eql([4, 0, 0, 0, 0]);
+    expect(await duckies.connect(accounts[6]).getReferrersCount()).to.be.eql([4, 4, 0, 0, 0]);
+    expect(await duckies.connect(accounts[5]).getReferrersCount()).to.be.eql([1, 4, 4, 0, 0]);
+    expect(await duckies.connect(accounts[1]).getReferrersCount()).to.be.eql([3, 1, 4, 4, 0]);
+    expect(await duckies.connect(accounts[0]).getReferrersCount()).to.be.eql([2, 3, 1, 4, 4]);
+
+    await duckies.connect(accounts[15]).reward(messageFive, signatureFive);
+    expect(await duckies.connect(accounts[10]).getReferrersCount()).to.be.eql([5, 0, 0, 0, 0]);
+    expect(await duckies.connect(accounts[6]).getReferrersCount()).to.be.eql([4, 5, 0, 0, 0]);
+    expect(await duckies.connect(accounts[5]).getReferrersCount()).to.be.eql([1, 4, 5, 0, 0]);
+    expect(await duckies.connect(accounts[1]).getReferrersCount()).to.be.eql([3, 1, 4, 5, 0]);
+    expect(await duckies.connect(accounts[0]).getReferrersCount()).to.be.eql([2, 3, 1, 4, 5]);
+
+
+    // sixth level
+    const messageSix = {
+      ref: accounts[15].address,
+      amt: 1000,
+      id: 'messageOne',
+    };
+    const messageSixHash = await duckies.getMessageHash(messageSix);
+    const signatureSix = await provider.send("personal_sign", [messageSixHash, signerAccount]);
+
+    await duckies.connect(accounts[16]).reward(messageSix, signatureSix);
+    expect(await duckies.connect(accounts[15]).getReferrersCount()).to.be.eql([1, 0, 0, 0, 0]);
+    expect(await duckies.connect(accounts[10]).getReferrersCount()).to.be.eql([5, 1, 0, 0, 0]);
+    expect(await duckies.connect(accounts[6]).getReferrersCount()).to.be.eql([4, 5, 1, 0, 0]);
+    expect(await duckies.connect(accounts[5]).getReferrersCount()).to.be.eql([1, 4, 5, 1, 0]);
+    expect(await duckies.connect(accounts[1]).getReferrersCount()).to.be.eql([3, 1, 4, 5, 1]);
+    expect(await duckies.connect(accounts[0]).getReferrersCount()).to.be.eql([2, 3, 1, 4, 5]);
+
+  });
 });
