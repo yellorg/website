@@ -1,8 +1,86 @@
-import React from 'react';
+import { UnsupportedChainIdError } from '@web3-react/core'
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
+import MetaMaskOnboarding from '@metamask/onboarding';
+import type { ProviderWhitelist } from '../../../hooks/useDApp';
+import useDApp from '../../../hooks/useDApp';
+import useWallet from '../../../hooks/useWallet';
+import { shortenHex } from '../../../libs/utils';
+import { useENSName } from '../../../hooks/useENSName';
 
 export const DuckiesHero = () => {
+    const [isMetaMaskInstalled, setMetaMaskInstalled] = useState<boolean>(false);
+
+    const { connectWithProvider } = useDApp();
+    const { active, account, chain } = useWallet();
+    const ENSName = useENSName(account);
+
+    const onboarding = useRef<MetaMaskOnboarding>();
+
+    const handleConnectWallet = useCallback(
+        async (provider: ProviderWhitelist) => {
+            // Metamask exposes experimental methods under 'ethereum._metamask' property.
+            // 'ethereum._metamask.isUnlocked' may be removed or changed without warning.
+            // There is no other stable solution to detect Metamask 'unlocked' status right now.
+            // Details: https://docs.metamask.io/guide/ethereum-provider.html#ethereum-metamask-isunlocked
+            // Future breaking changes can be found here https://medium.com/metamask
+            const isMetamaskUnlocked = await (window as any)?.ethereum._metamask?.isUnlocked();
+
+            if (!isMetamaskUnlocked) {
+                console.warn('alerts.message.wallet.metamask.locked');
+            }
+
+            connectWithProvider(provider).then(() => {
+                console.log('removeConnectWalletAlert');
+            }).catch(async (error) => {
+                if (
+                    error instanceof UnsupportedChainIdError &&
+                    !error
+                        .toString()
+                        .includes('Supported chain ids are: undefined')
+                ) {
+                    console.log('success');
+                } else {
+                    console.error('handleConnectWallet: sign error');
+                }
+            })
+        },
+        [connectWithProvider],
+    )
+
+    useEffect(() => {
+        onboarding.current = new MetaMaskOnboarding();
+        setMetaMaskInstalled(MetaMaskOnboarding.isMetaMaskInstalled());
+    }, [])
+
+    const handleMetamask = (isMetaMaskInstalled: boolean, id: ProviderWhitelist) => {
+        if (isMetaMaskInstalled || id !== 'Injected' ) {
+            handleConnectWallet(id);
+        } else {
+            onboarding.current?.startOnboarding();
+        }   
+    }
+
+    const renderMetamaskAccount = () => {
+        return (
+            <div className="flex items-center text-base font-bold text-gray-700 group-hover:text-gray-900">
+                <span>
+                    {ENSName || `${shortenHex(account, 4)}`}
+                </span>
+                {chain && (
+                    <div className="ml-1 px-2 py-1 text-xs font-medium uppercase rounded-full bg-secondary-cta-color-10 text-secondary-cta-color-90">{chain.network}</div>
+                )}
+            </div>
+        );
+    }
+
+    const renderMetamaskButton = () => (
+        <div onClick={() => handleMetamask(isMetaMaskInstalled, 'Injected')} className="button button--outline button--secondary button--shadow-secondary">
+            <span className="button__inner">{isMetaMaskInstalled ? 'Connect Metamask' : 'Install Metamask'}</span>
+        </div>
+    )
+
     return (
         <div className="duckies-hero">
             <div className="container">
@@ -50,9 +128,7 @@ export const DuckiesHero = () => {
                                         </svg>
                                     </div>
                                 </div>
-                                <div className="button button--outline button--secondary button--shadow-secondary">
-                                    <span className="button__inner">Connect Metamask</span>
-                                </div>
+                                {active ? renderMetamaskAccount() : renderMetamaskButton()}
                             </div>
                         </div>
                     </div>

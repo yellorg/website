@@ -1,4 +1,4 @@
-export default {
+export const appConfig = {
   appName: 'Openware DApp Boilerplate',
   blockchain: {
     supportedChainIds: [

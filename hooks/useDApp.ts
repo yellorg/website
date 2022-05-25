@@ -4,8 +4,8 @@ import { InjectedConnector } from '@web3-react/injected-connector'
 import { WalletConnectConnector } from '@web3-react/walletconnect-connector'
 import type { ethers } from 'ethers'
 import { useCallback, useMemo } from 'react'
-import appConfig from '../configs/app'
-import chains from '../configs/chains'
+import { appConfig } from '../config/app'
+import chains from '../config/chains'
 
 const { supportedChainIds } = appConfig.blockchain
 
@@ -42,7 +42,6 @@ export const connectorsByProvider: {
       infuraId: process.env.NEXT_PUBLIC_INFURA_ID,
       bridge: 'https://bridge.walletconnect.org',
       qrcode: true,
-      pollingInterval: 10000,
     }),
     preConnect() {
       const connector = this.connector as WalletConnectConnector
