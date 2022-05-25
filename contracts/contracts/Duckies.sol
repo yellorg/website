@@ -11,7 +11,7 @@ contract Duckies is Initializable, ERC20CappedUpgradeable, PausableUpgradeable, 
     address private _issuer;
 
     // Maximum Supply
-    uint256 private constant _MAX_SUPPLY = 888000000000000;
+    uint256 private constant _MAX_SUPPLY = 888000000000;
 
     // Affiliate Tree
     mapping(address => address) private _referrers;
@@ -42,7 +42,7 @@ contract Duckies is Initializable, ERC20CappedUpgradeable, PausableUpgradeable, 
 
         _issuer = issuer;
         setPayouts([500, 125, 80, 50, 20]);
-        _mint(msg.sender, 44400000000000 * 10 ** decimals());
+        _mint(msg.sender, 44400000000 * 10 ** decimals());
     }
 
     /**
