@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 
 export const DuckiesHero = () => {
@@ -26,9 +27,13 @@ export const DuckiesHero = () => {
                         <div className="duckies-hero__info-buttons-claim button button--outline button--secondary button--shadow-secondary">
                             <span className="button__inner">Claim your reward</span>
                         </div>
-                        <div className="duckies-hero__info-buttons-earn button button--secondary button--shadow-secondary">
-                            <span className="button__inner">Earn more</span>
-                        </div>
+                        <Link href="#earn-more">
+                            <a className="duckies-hero__info-buttons-earn button button--secondary button--shadow-secondary">
+                                <span className="button__inner">
+                                    Earn more
+                                </span>
+                            </a>
+                        </Link>
                     </div>
                 </div>
                 <div className="duckies-hero__icons">
