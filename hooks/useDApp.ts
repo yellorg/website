@@ -43,13 +43,7 @@ export const connectorsByProvider: {
       bridge: 'https://bridge.walletconnect.org',
       qrcode: true,
     }),
-    preConnect() {
-      const connector = this.connector as WalletConnectConnector
-      // clean WalletConnect provider cache
-      if (connector.walletConnectProvider?.wc?.uri) {
-        connector.walletConnectProvider = undefined
-      }
-    },
+    preConnect() {},
     postDisconnect() {
       const connector = this.connector as WalletConnectConnector
       connector.walletConnectProvider?.disconnect()
