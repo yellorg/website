@@ -86,10 +86,11 @@
         &-social {
             display: flex;
             align-items: center;
+            padding: 8px 0;
             max-width: 100%;
             overflow-x: auto;
             @media screen and (max-width: 833px) {
-                padding: 0 var(--ifm-spacing-horizontal);
+                padding: 8px var(--ifm-spacing-horizontal);
             }
             &-icon {
                 width: 48px;
