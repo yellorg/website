@@ -140,7 +140,7 @@ export const DuckiesEarnMore = () => {
     }, [socials]);
 
     return (
-        <div className="duckies-earn-more">
+        <div className="duckies-earn-more" id="earn-more">
             <div className="container">
                 <div className="duckies-earn-more__header">
                     <div className="duckies-earn-more__header-title">
