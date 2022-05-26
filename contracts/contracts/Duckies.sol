@@ -11,7 +11,7 @@ contract Duckies is Initializable, ERC20CappedUpgradeable, PausableUpgradeable, 
     address private _issuer;
 
     // Maximum Supply
-    uint256 private constant _MAX_SUPPLY = 888000000000;
+    uint256 private constant _MAX_SUPPLY = 88800000000000;
 
     // Affiliate Tree
     mapping(address => address) private _referrers;
@@ -42,7 +42,7 @@ contract Duckies is Initializable, ERC20CappedUpgradeable, PausableUpgradeable, 
 
         _issuer = issuer;
         setPayouts([500, 125, 80, 50, 20]);
-        _mint(msg.sender, 44400000000 * 10 ** decimals());
+        _mint(msg.sender, 44400000000000 * 10 ** decimals());
     }
 
     /**
@@ -83,6 +83,14 @@ contract Duckies is Initializable, ERC20CappedUpgradeable, PausableUpgradeable, 
         _payouts = payouts;
     }
 
+    function _beforeTokenTransfer(address from, address to, uint256 amount)
+        internal
+        whenNotPaused
+        override
+    {
+        super._beforeTokenTransfer(from, to, amount);
+    }
+
     /**
      * @dev Mint referral rewards.
      *
@@ -104,14 +112,6 @@ contract Duckies is Initializable, ERC20CappedUpgradeable, PausableUpgradeable, 
             _mint(currentAddress, mintingAmount);
             currentAddress = _referrers[currentAddress];
         }
-    }
-
-    function _beforeTokenTransfer(address from, address to, uint256 amount)
-        internal
-        whenNotPaused
-        override
-    {
-        super._beforeTokenTransfer(from, to, amount);
     }
 
     function reward(Message memory _message, bytes memory _sig) public
@@ -167,17 +167,21 @@ contract Duckies is Initializable, ERC20CappedUpgradeable, PausableUpgradeable, 
         }
     }
 
-    function getReferrersCount() public view returns (uint8[5] memory)  {
-        return getReferrersCountByLevel(msg.sender, 1, [0, 0, 0, 0, 0]);
+    function getPayouts() public view returns (uint16[] memory) {
+        return _payouts;
     }
 
-    function getReferrersCountByLevel(address currentAccount, uint16 level, uint8[5] memory count) private view returns (uint8[5] memory) {
+    function getAffiliatesCount() public view returns (uint8[5] memory)  {
+        return getAffiliatesCountByLevel(msg.sender, 1, [0, 0, 0, 0, 0]);
+    }
+
+    function getAffiliatesCountByLevel(address currentAccount, uint16 level, uint8[5] memory count) private view returns (uint8[5] memory) {
         if (level <= 5) {
             address[] memory affiliates = _affiliates[currentAccount];
             count[level - 1] += uint8(affiliates.length);
 
             for (uint i = 0; i < affiliates.length; i++) {
-                getReferrersCountByLevel(affiliates[i], level + 1, count);
+                getAffiliatesCountByLevel(affiliates[i], level + 1, count);
             }
         }
 

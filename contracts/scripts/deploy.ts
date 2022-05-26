@@ -14,7 +14,7 @@ async function main() {
 
   const Duckies = await ethers.getContractFactory("Duckies");
 
-  const token = await upgrades.deployProxy(Duckies);
+  const token = await upgrades.deployProxy(Duckies, ['0x4eB9a8C69F33676b6681109Cbf1B57F589e12cc0']);
 
   await token.deployed();
   console.log("Token deployed to:", token.address);

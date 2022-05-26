@@ -1,6 +1,21 @@
 import React from 'react';
+import useWallet from '../../../hooks/useWallet';
+import { useRouter } from 'next/router';
+import { isBrowser } from '../../../helpers/isBrowser';
 
 export const DuckiesEarnMore = () => {
+    const [shareableLink, setShareableLink] = React.useState<string>('');
+    const [shareableLinkPrefix, setShareableLinkPrefix] = React.useState('');
+
+
+    React.useEffect(() => {
+        if (isBrowser()) {
+            setShareableLinkPrefix(`${window.location.origin}/link/`);
+        }
+    }, [isBrowser()]);
+
+    const { active, account } = useWallet();
+
     const socials = React.useMemo(() => {
         return [
             (
@@ -124,6 +139,19 @@ export const DuckiesEarnMore = () => {
         ];
     }, []);
 
+    React.useEffect(() => {
+        if (active && account && !shareableLink) {
+            getSharableLink(account);
+        }
+    }, [active, account]);
+
+    const getSharableLink = React.useCallback(async (account: string) => {
+        const response = await fetch(`/api/shareable-link?address=${account}`);
+
+        const data = await response.json();
+        setShareableLink(data.token);
+    }, []);
+
     const renderSocials = React.useMemo(() => {
         return socials.map((social: any, index: number) => {
             return (
@@ -154,7 +182,7 @@ export const DuckiesEarnMore = () => {
                     <div className="duckies-earn-more__body-link">
                         <div className="duckies-earn-more__body-link-input">
                             <div className="duckies-earn-more__body-link-input-value">
-                                http://www.yellow.org/duckies/k4Dkk54jk6o3nogfnGNGgj2jm6j7x7h3j7
+                                {`${shareableLinkPrefix}${shareableLink}`}
                             </div>
                         </div>
                         <div className="button button--outline button--secondary button--shadow-secondary">

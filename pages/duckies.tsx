@@ -8,7 +8,6 @@ import { DuckiesEarnMore} from '../components/Duckies/DuckiesEarnMore';
 import { DuckiesRedeem} from '../components/Duckies/DuckiesRedeem';
 import { Web3ReactProvider } from '@web3-react/core';
 import { ethers } from 'ethers';
-import type { AppProps } from 'next/app';
 
 const getLibrary = (provider: any): ethers.providers.Web3Provider => {
     const library = new ethers.providers.Web3Provider(provider, 'any');
@@ -17,7 +16,7 @@ const getLibrary = (provider: any): ethers.providers.Web3Provider => {
     return library;
 };
 
-const Home: FC<{}> = (): JSX.Element => {
+const Duckies: FC<{}> = (): JSX.Element => {
     return (
         <Web3ReactProvider getLibrary={getLibrary}>
             <div className="flex flex-col min-h-full">
@@ -45,4 +44,4 @@ const Home: FC<{}> = (): JSX.Element => {
     );
 };
 
-export default Home;
+export default Duckies;

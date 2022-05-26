@@ -6,53 +6,86 @@ import MetaMaskOnboarding from '@metamask/onboarding';
 import type { ProviderWhitelist } from '../../../hooks/useDApp';
 import useDApp from '../../../hooks/useDApp';
 import useWallet from '../../../hooks/useWallet';
-import { shortenHex } from '../../../libs/utils';
+import { shortenHex } from '../../../utils/utils';
 import { useENSName } from '../../../hooks/useENSName';
 import { DuckiesConnectorModalWindow } from '../DuckiesConnectModalWindow';
+import { useEagerConnect } from '../../../hooks/useEagerConnect';
+import useDuckiesContract from '../../../hooks/useDuckiesContract';
+import jwt from 'jsonwebtoken';
 
 export const DuckiesHero = () => {
     const [isMetaMaskInstalled, setMetaMaskInstalled] = useState<boolean>(false);
     const [isOpenConnect, setIsOpenConnect] = useState<boolean>(false);
+    const [balance, setBalance] = useState<number | undefined>(undefined);
+    const [message, setMessage] = useState<any>(undefined);
+    const [sig, setSig] = useState<string>('');
 
+    const duckiesContract = useDuckiesContract();
     const { connectWithProvider } = useDApp();
-    const { active, account, chain } = useWallet();
+    const { active, account, chain, signer } = useWallet();
     const ENSName = useENSName(account);
+    const triedToEagerConnect = useEagerConnect();
+
+    const jwtPrivateKey = process.env.NEXT_PUBLIC_JWT_PRIVATE_KEY || '';
 
     const onboarding = useRef<MetaMaskOnboarding>();
 
     useEffect(() => {
+        const token = localStorage.getItem('referral_token');
+
+        if (token) {
+            const decoded = jwt.verify(token, jwtPrivateKey);
+
+            setMessage((decoded as any).message);
+            setSig((decoded as any).sig);
+        }
+    }, []);
+
+    const getBalance = React.useCallback(async() => {
+        if (account) {
+            const balance = (await duckiesContract?.balanceOf(account)).toString();
+
+            setBalance(balance);
+        }
+    }, [account, duckiesContract]);
+
+    useEffect(() => {
         if (active && account) {
-            setIsOpenConnect(false)
+            setIsOpenConnect(false);
+
+            getBalance();
         }
     }, [active, account]);
 
     const handleConnectWallet = useCallback(
         async (provider: ProviderWhitelist) => {
-            // Metamask exposes experimental methods under 'ethereum._metamask' property.
-            // 'ethereum._metamask.isUnlocked' may be removed or changed without warning.
-            // There is no other stable solution to detect Metamask 'unlocked' status right now.
-            // Details: https://docs.metamask.io/guide/ethereum-provider.html#ethereum-metamask-isunlocked
-            // Future breaking changes can be found here https://medium.com/metamask
-            const isMetamaskUnlocked = await (window as any)?.ethereum._metamask?.isUnlocked();
+            if (!triedToEagerConnect) {
+                // Metamask exposes experimental methods under 'ethereum._metamask' property.
+                // 'ethereum._metamask.isUnlocked' may be removed or changed without warning.
+                // There is no other stable solution to detect Metamask 'unlocked' status right now.
+                // Details: https://docs.metamask.io/guide/ethereum-provider.html#ethereum-metamask-isunlocked
+                // Future breaking changes can be found here https://medium.com/metamask
+                const isMetamaskUnlocked = await (window as any)?.ethereum._metamask?.isUnlocked();
 
-            if (!isMetamaskUnlocked) {
-                console.warn('alerts.message.wallet.metamask.locked');
-            }
-
-            connectWithProvider(provider).then(() => {
-                console.log('removeConnectWalletAlert');
-            }).catch(async (error) => {
-                if (
-                    error instanceof UnsupportedChainIdError &&
-                    !error
-                        .toString()
-                        .includes('Supported chain ids are: undefined')
-                ) {
-                    console.log('success');
-                } else {
-                    console.error('handleConnectWallet: sign error');
+                if (!isMetamaskUnlocked) {
+                    console.warn('alerts.message.wallet.metamask.locked');
                 }
-            })
+
+                connectWithProvider(provider).then(() => {
+                    console.log('removeConnectWalletAlert');
+                }).catch(async (error) => {
+                    if (
+                        error instanceof UnsupportedChainIdError &&
+                        !error
+                            .toString()
+                            .includes('Supported chain ids are: undefined')
+                    ) {
+                        console.log('success');
+                    } else {
+                        console.error('handleConnectWallet: sign error');
+                    }
+                })
+            }
         },
         [connectWithProvider],
     )
@@ -68,7 +101,7 @@ export const DuckiesHero = () => {
             setMetaMaskInstalled(false)
         } else {
             onboarding.current?.startOnboarding();
-        }   
+        }
     }
 
     const renderMetamaskAccount = () => {
@@ -80,6 +113,9 @@ export const DuckiesHero = () => {
                 {chain && (
                     <div className="ml-1 px-2 py-1 text-xs font-medium uppercase rounded-full bg-secondary-cta-color-10 text-secondary-cta-color-90">{chain.network}</div>
                 )}
+                {balance && (
+                    <div className="ml-1 px-2 py-1 text-xs font-medium uppercase rounded-full bg-secondary-cta-color-10 text-secondary-cta-color-90">{balance}</div>
+                )}
             </div>
         );
     }
@@ -89,14 +125,19 @@ export const DuckiesHero = () => {
             <span className="button__inner">{isMetaMaskInstalled ? 'Connect Metamask' : 'Install Metamask'}</span>
         </div>
     );
-    
-    const handleClaimReward = () => {
+
+    const handleClaimReward = React.useCallback(async () => {
         if (!active) {
             setIsOpenConnect(true);
         } else {
-            console.log('claim logic')
+            try {
+                console.log('claim logic');
+                localStorage.removeItem('referral_token');
+            } catch (error) {
+                console.error(error);
+            }
         }
-    }
+    }, [active, message, sig, signer]);
 
     return (
         <>

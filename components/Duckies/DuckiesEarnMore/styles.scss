@@ -2,7 +2,6 @@
     padding: 0 var(--ifm-spacing-horizontal);
     margin: 0 auto;
     padding-top: 100px;
-
     @media screen and (max-width: 862px) {
         padding-left: 0;
         padding-right: 0;
@@ -80,6 +79,7 @@
                     font-weight: 700;
                     font-family: var(--font-family-link);
                     letter-spacing: 0.15px;
+                    white-space: nowrap;
                 }
             }
         }
