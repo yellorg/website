@@ -11,19 +11,35 @@ import { useENSName } from '../../../hooks/useENSName';
 import { DuckiesConnectorModalWindow } from '../DuckiesConnectModalWindow';
 import { useEagerConnect } from '../../../hooks/useEagerConnect';
 import useDuckiesContract from '../../../hooks/useDuckiesContract';
+import jwt from 'jsonwebtoken';
 
 export const DuckiesHero = () => {
     const [isMetaMaskInstalled, setMetaMaskInstalled] = useState<boolean>(false);
     const [isOpenConnect, setIsOpenConnect] = useState<boolean>(false);
     const [balance, setBalance] = useState<number | undefined>(undefined);
+    const [message, setMessage] = useState<any>(undefined);
+    const [sig, setSig] = useState<string>('');
 
     const duckiesContract = useDuckiesContract();
     const { connectWithProvider } = useDApp();
-    const { active, account, chain } = useWallet();
+    const { active, account, chain, signer } = useWallet();
     const ENSName = useENSName(account);
     const triedToEagerConnect = useEagerConnect();
 
+    const jwtPrivateKey = process.env.NEXT_PUBLIC_JWT_PRIVATE_KEY || '';
+
     const onboarding = useRef<MetaMaskOnboarding>();
+
+    useEffect(() => {
+        const token = localStorage.getItem('referral_token');
+
+        if (token) {
+            const decoded = jwt.verify(token, jwtPrivateKey);
+
+            setMessage((decoded as any).message);
+            setSig((decoded as any).sig);
+        }
+    }, []);
 
     const getBalance = React.useCallback(async() => {
         if (account) {
@@ -110,13 +126,18 @@ export const DuckiesHero = () => {
         </div>
     );
 
-    const handleClaimReward = () => {
+    const handleClaimReward = React.useCallback(async () => {
         if (!active) {
             setIsOpenConnect(true);
         } else {
-            console.log('claim logic')
+            try {
+                console.log('claim logic');
+                localStorage.removeItem('referral_token');
+            } catch (error) {
+                console.error(error);
+            }
         }
-    };
+    }, [active, message, sig, signer]);
 
     return (
         <>
