@@ -1,4 +1,6 @@
 import React from 'react';
+import useDuckiesContract from '../../../hooks/useDuckiesContract';
+import useWallet from '../../../hooks/useWallet';
 
 const affiliateLevels = [
     {
@@ -57,25 +59,47 @@ const bounties = [
 ];
 
 export const DuckiesAffiliates = () => {
+    const [affiliates, setAffiliates] = React.useState<number[]>([0, 0, 0, 0, 0]);
+    const [payouts, setPayouts] = React.useState<number[]>([]);
+
+    const duckiesContract = useDuckiesContract();
+    const { active, account } = useWallet();
+
+    const getAffiliatesAndPayouts = React.useCallback(async() => {
+        if (account) {
+            const affiliatesCount = await duckiesContract?.getAffiliatesCount();
+            const payoutsCommission = await duckiesContract?.getPayouts();
+
+            setAffiliates(affiliatesCount);
+            setPayouts(payoutsCommission);
+        }
+    }, [account, duckiesContract]);
+
+    React.useEffect(() => {
+        if (active && account) {
+            getAffiliatesAndPayouts();
+        }
+    }, [active, account]);
+
     const renderAffiliateLevels = React.useMemo(() => {
-        return affiliateLevels.map((level: any, index: number) => {
+        return affiliates.map((affiliateCount: number, index: number) => {
             return (
                 <div className="table-row" key={`affiliate-${index}`}>
                     <div className="table-row-key">
                         <div className="table-row-key-title">
-                            Level {level.id}
+                            Level {index}
                         </div>
                         <div className="table-row-key-subtitle">
-                            {level.commission}% commission
+                            {payouts && payouts[index] ? `${payouts[index]}% commission` : ''}
                         </div>
                     </div>
                     <div className="table-row-value">
-                        {level.count}
+                        {affiliateCount}
                     </div>
                 </div>
             );
         });
-    }, []);
+    }, [affiliates, payouts]);
 
     const renderBounties = React.useMemo(() => {
         return bounties.map((bounty: any, index: number) => {
