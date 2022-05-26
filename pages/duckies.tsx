@@ -16,7 +16,7 @@ const getLibrary = (provider: any): ethers.providers.Web3Provider => {
     return library;
 };
 
-const Home: FC<{}> = (): JSX.Element => {
+const Duckies: FC<{}> = (): JSX.Element => {
     return (
         <Web3ReactProvider getLibrary={getLibrary}>
             <div className="flex flex-col min-h-full">
@@ -44,4 +44,4 @@ const Home: FC<{}> = (): JSX.Element => {
     );
 };
 
-export default Home;
+export default Duckies;
