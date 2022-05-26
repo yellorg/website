@@ -8,7 +8,6 @@ import { DuckiesEarnMore} from '../components/Duckies/DuckiesEarnMore';
 import { DuckiesRedeem} from '../components/Duckies/DuckiesRedeem';
 import { Web3ReactProvider } from '@web3-react/core';
 import { ethers } from 'ethers';
-import type { AppProps } from 'next/app';
 
 const getLibrary = (provider: any): ethers.providers.Web3Provider => {
     const library = new ethers.providers.Web3Provider(provider, 'any');
