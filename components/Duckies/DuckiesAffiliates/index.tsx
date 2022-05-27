@@ -63,11 +63,11 @@ export const DuckiesAffiliates = () => {
     const [payouts, setPayouts] = React.useState<number[]>([]);
 
     const duckiesContract = useDuckiesContract();
-    const { active, account } = useWallet();
+    const { active, account, signer } = useWallet();
 
     const getAffiliatesAndPayouts = React.useCallback(async() => {
-        if (account) {
-            const affiliatesCount = await duckiesContract?.getAffiliatesCount();
+        if (account && signer) {
+            const affiliatesCount = await duckiesContract?.connect(signer).getAffiliatesCount();
             const payoutsCommission = await duckiesContract?.getPayouts();
 
             setAffiliates(affiliatesCount);

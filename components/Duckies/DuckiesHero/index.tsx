@@ -21,7 +21,7 @@ export const DuckiesHero = () => {
     const [sig, setSig] = useState<string>('');
 
     const duckiesContract = useDuckiesContract();
-    const { connectWithProvider } = useDApp();
+    const { connectWithProvider, disconnect } = useDApp();
     const { active, account, chain, signer } = useWallet();
     const ENSName = useENSName(account);
     const triedToEagerConnect = useEagerConnect();
@@ -37,7 +37,7 @@ export const DuckiesHero = () => {
             const decoded = jwt.verify(token, jwtPrivateKey);
 
             setMessage((decoded as any).message);
-            setSig((decoded as any).sig);
+            setSig((decoded as any).sig.signature);
         }
     }, []);
 
@@ -104,6 +104,10 @@ export const DuckiesHero = () => {
         }
     }
 
+    const handleDisconnect = React.useCallback(() => {
+        disconnect();
+    }, []);
+
     const renderMetamaskAccount = () => {
         return (
             <div className="flex items-center text-base font-bold text-gray-700 group-hover:text-gray-900">
@@ -116,6 +120,7 @@ export const DuckiesHero = () => {
                 {balance && (
                     <div className="ml-1 px-2 py-1 text-xs font-medium uppercase rounded-full bg-secondary-cta-color-10 text-secondary-cta-color-90">{balance}</div>
                 )}
+                <div onClick={handleDisconnect}>logout</div>
             </div>
         );
     }
@@ -130,11 +135,14 @@ export const DuckiesHero = () => {
         if (!active) {
             setIsOpenConnect(true);
         } else {
-            try {
-                console.log('claim logic');
-                localStorage.removeItem('referral_token');
-            } catch (error) {
-                console.error(error);
+            if (signer) {
+                try {
+                    const tx = await duckiesContract?.connect(signer).reward(message, sig, { gasLimit: 500000 });
+                    const result = await tx.wait();
+                    localStorage.removeItem('referral_token');
+                } catch (error) {
+                    console.error(error);
+                }
             }
         }
     }, [active, message, sig, signer]);
