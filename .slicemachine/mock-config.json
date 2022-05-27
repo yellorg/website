@@ -1,0 +1,12 @@
+{
+  "_cts": {
+    "bounties": {}
+  },
+  "slices": {
+    "Bounty": {
+      "default": {
+        "primary": {}
+      }
+    }
+  }
+}
