@@ -62,15 +62,16 @@ describe("Duckies", function () {
       ref: ref.address,
       amt: 100,
       id: 'message1',
+      blockExpiration: 20,
     };
 
     expect(await duckies.getMessageHash(message)).to.equal(
-      "0xfe784ddb2327d4f1409d24be7b4df0b5ba49d1fd9c7ed0522c92d7a846782d61"
+      "0xaa58a14d9221a4bb8051dfd02ead3812edeb0c30b3e20e22b4165c018f1244b6"
     );
     expect(await duckies.getMessageHash(message)).to.have.length(66);
   });
 
-  it("Should successfully convert messageHas to eth signed message hash", async function () {
+  it("Should successfully convert messageHash to eth signed message hash", async function () {
     const { duckies }: TestContext = this as any;
     const [ref] = await ethers.getSigners();
 
@@ -78,11 +79,12 @@ describe("Duckies", function () {
       ref: ref.address,
       amt: 100,
       id: 'message1',
+      blockExpiration: 20,
     };
     const messageHash = await duckies.getMessageHash(message);
 
     expect(await duckies.getEthSignedMessageHash(messageHash)).to.be.equal(
-      "0x01e7d7df69c89dc65068d0fd761ad035eef585e1c68fb8127e3c25db7ea4e62b"
+      "0x6767e3300cef4491d5c3b54033296e873b96251bdd3b4e0c846fb4d3a4b024cd"
     );
     expect(await duckies.getEthSignedMessageHash(messageHash)).to.have.length(
       66
@@ -98,6 +100,7 @@ describe("Duckies", function () {
       ref: ref.address,
       amt: 100,
       id: 'message1',
+      blockExpiration: 20,
     };
     const messageHash = await duckies.getMessageHash(message);
     const ethSignedMessageHash = await duckies.getEthSignedMessageHash(
@@ -134,6 +137,7 @@ describe("Duckies", function () {
       ref: accounts[0].address,
       amt: 30000,
       id: 'message0',
+      blockExpiration: 20,
     };
     const messageAccountZeroHash = await duckies.getMessageHash(
       messageAccountZero
@@ -158,6 +162,7 @@ describe("Duckies", function () {
       ref: accounts[1].address,
       amt: 20000,
       id: 'message1',
+      blockExpiration: 20,
     };
     const messageAccountOneHash = await duckies.getMessageHash(
       messageAccountOne
@@ -185,6 +190,7 @@ describe("Duckies", function () {
       ref: accounts[2].address,
       amt: 10000,
       id: 'message2',
+      blockExpiration: 20,
     };
     const messageAccountTwoHash = await duckies.getMessageHash(
       messageAccountTwo
@@ -215,6 +221,7 @@ describe("Duckies", function () {
       ref: accounts[3].address,
       amt: 5000,
       id: 'message3',
+      blockExpiration: 20,
     };
     const messageAccountThreeHash = await duckies.getMessageHash(
       messageAccountThree
@@ -248,6 +255,7 @@ describe("Duckies", function () {
       ref: accounts[4].address,
       amt: 5000,
       id: 'message4',
+      blockExpiration: 20,
     };
     const messageAccountFourHash = await duckies.getMessageHash(
       messageAccountFour
@@ -291,6 +299,7 @@ describe("Duckies", function () {
       ref: accounts[0].address,
       amt: 30000,
       id: 'message',
+      blockExpiration: 20,
     };
     const messageHash = await duckies.getMessageHash(
       message
@@ -332,6 +341,7 @@ describe("Duckies", function () {
       ref: accounts[0].address,
       amt: 1000,
       id: 'messageOne',
+      blockExpiration: 20,
     };
     const messageHash = await duckies.getMessageHash(messageOne);
     const signature = await provider.send("personal_sign", [messageHash, signerAccount]);
@@ -364,6 +374,7 @@ describe("Duckies", function () {
       ref: accounts[0].address,
       amt: 1000,
       id: 'messageOne',
+      blockExpiration: 50,
     };
     const messageHash = await duckies.getMessageHash(messageOne);
     const signature = await provider.send("personal_sign", [messageHash, signerAccount]);
@@ -411,6 +422,7 @@ describe("Duckies", function () {
       ref: accounts[0].address,
       amt: 1000,
       id: 'messageOne',
+      blockExpiration: 50,
     };
     const messageHash = await duckies.getMessageHash(messageOne);
     const signatureOne = await provider.send("personal_sign", [messageHash, signerAccount]);
@@ -426,6 +438,7 @@ describe("Duckies", function () {
       ref: accounts[1].address,
       amt: 1000,
       id: 'messageOne',
+      blockExpiration: 50,
     };
     const messageTwoHash = await duckies.getMessageHash(messageTwo);
     const signatureTwo = await provider.send("personal_sign", [messageTwoHash, signerAccount]);
@@ -447,6 +460,7 @@ describe("Duckies", function () {
       ref: accounts[5].address,
       amt: 1000,
       id: 'messageOne',
+      blockExpiration: 50,
     };
     const messageThreeHash = await duckies.getMessageHash(messageThree);
     const signatureThree = await provider.send("personal_sign", [messageThreeHash, signerAccount]);
@@ -461,6 +475,7 @@ describe("Duckies", function () {
       ref: accounts[6].address,
       amt: 1000,
       id: 'messageOne',
+      blockExpiration: 50,
     };
     const messageFourHash = await duckies.getMessageHash(messageFour);
     const signatureFour = await provider.send("personal_sign", [messageFourHash, signerAccount]);
@@ -494,6 +509,7 @@ describe("Duckies", function () {
       ref: accounts[10].address,
       amt: 1000,
       id: 'messageOne',
+      blockExpiration: 50,
     };
     const messageFiveHash = await duckies.getMessageHash(messageFive);
     const signatureFive = await provider.send("personal_sign", [messageFiveHash, signerAccount]);
@@ -539,6 +555,7 @@ describe("Duckies", function () {
       ref: accounts[15].address,
       amt: 1000,
       id: 'messageOne',
+      blockExpiration: 50,
     };
     const messageSixHash = await duckies.getMessageHash(messageSix);
     const signatureSix = await provider.send("personal_sign", [messageSixHash, signerAccount]);
