@@ -12,6 +12,13 @@
       "description": "Bounty",
       "primary": {},
       "items": {
+        "fid": {
+          "type": "Text",
+          "config": {
+            "label": "Field ID",
+            "placeholder": ""
+          }
+        },
         "title": {
           "type": "Text",
           "config": {
@@ -27,7 +34,7 @@
           }
         },
         "value": {
-          "type": "Text",
+          "type": "Number",
           "config": {
             "label": "Value",
             "placeholder": ""

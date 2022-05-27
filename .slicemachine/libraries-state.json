@@ -20,6 +20,13 @@
               "description": "Bounty",
               "primary": {},
               "items": {
+                "fid": {
+                  "type": "Text",
+                  "config": {
+                    "label": "Field ID",
+                    "placeholder": ""
+                  }
+                },
                 "title": {
                   "type": "Text",
                   "config": {
@@ -35,7 +42,7 @@
                   }
                 },
                 "value": {
-                  "type": "Text",
+                  "type": "Number",
                   "config": {
                     "label": "Value",
                     "placeholder": ""
@@ -53,24 +60,28 @@
             "slice_type": "bounty",
             "items": [
               {
-                "title": "deploy viral architectures",
-                "description": "disintermediate turn-key action-items",
-                "value": "harness collaborative applications"
+                "fid": "drive e-business metrics",
+                "title": "iterate cross-platform communities",
+                "description": "target revolutionary action-items",
+                "value": 8098
               },
               {
-                "title": "brand magnetic architectures",
-                "description": "enhance end-to-end e-tailers",
-                "value": "optimize efficient deliverables"
+                "fid": "envisioneer viral relationships",
+                "title": "evolve proactive initiatives",
+                "description": "iterate scalable paradigms",
+                "value": 2786
               },
               {
-                "title": "orchestrate dynamic infrastructures",
-                "description": "disintermediate plug-and-play interfaces",
-                "value": "target strategic deliverables"
+                "fid": "syndicate front-end relationships",
+                "title": "incentivize one-to-one vortals",
+                "description": "recontextualize dot-com mindshare",
+                "value": 3088
               },
               {
-                "title": "streamline real-time partnerships",
-                "description": "extend bleeding-edge architectures",
-                "value": "brand sexy ROI"
+                "fid": "target 24/7 ROI",
+                "title": "orchestrate value-added ROI",
+                "description": "recontextualize interactive partnerships",
+                "value": 8602
               }
             ],
             "primary": {}
@@ -80,7 +91,13 @@
           "fileName": "index",
           "extension": "js"
         },
-        "screenshotPaths": {}
+        "screenshotPaths": {
+          "default": {
+            "path": "/Users/jeng/works/yellow/yellorg/website/.slicemachine/assets/slices/Bounty/default/preview.png",
+            "width": 800,
+            "height": 323
+          }
+        }
       }
     }
   }
