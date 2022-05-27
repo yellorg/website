@@ -1,5 +1,5 @@
 import { UnsupportedChainIdError } from '@web3-react/core'
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import Link from 'next/link';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import MetaMaskOnboarding from '@metamask/onboarding';
@@ -12,9 +12,10 @@ import { DuckiesConnectorModalWindow } from '../DuckiesConnectModalWindow';
 import { useEagerConnect } from '../../../hooks/useEagerConnect';
 import useDuckiesContract from '../../../hooks/useDuckiesContract';
 import jwt from 'jsonwebtoken';
+import { appConfig } from '../../../config/app';
 
 export const DuckiesHero = () => {
-    const [isMetaMaskInstalled, setMetaMaskInstalled] = useState<boolean>(false);
+    const [isMetaMaskInstalled, setMetaMaskInstalled] = useState<boolean>(true);
     const [isOpenConnect, setIsOpenConnect] = useState<boolean>(false);
     const [balance, setBalance] = useState<number | undefined>(undefined);
     const [message, setMessage] = useState<any>(undefined);
@@ -41,6 +42,14 @@ export const DuckiesHero = () => {
         }
     }, []);
 
+    const supportedChain = useMemo(() => {
+        return appConfig.blockchain.supportedChainIds.includes(chain?.chainId ?? -1)
+    }, [chain])
+
+    const isReady = useMemo(() => {
+        return supportedChain && triedToEagerConnect && active && account
+    }, [supportedChain, triedToEagerConnect, active, account])
+
     const getBalance = React.useCallback(async() => {
         if (account) {
             const balance = (await duckiesContract?.balanceOf(account)).toString();
@@ -50,44 +59,44 @@ export const DuckiesHero = () => {
     }, [account, duckiesContract]);
 
     useEffect(() => {
-        if (active && account) {
+        if (isReady) {
             setIsOpenConnect(false);
 
             getBalance();
         }
-    }, [active, account]);
+    }, [isReady]);
 
     const handleConnectWallet = useCallback(
         async (provider: ProviderWhitelist) => {
-            if (!triedToEagerConnect) {
-                // Metamask exposes experimental methods under 'ethereum._metamask' property.
-                // 'ethereum._metamask.isUnlocked' may be removed or changed without warning.
-                // There is no other stable solution to detect Metamask 'unlocked' status right now.
-                // Details: https://docs.metamask.io/guide/ethereum-provider.html#ethereum-metamask-isunlocked
-                // Future breaking changes can be found here https://medium.com/metamask
-                const isMetamaskUnlocked = await (window as any)?.ethereum._metamask?.isUnlocked();
+            if (!triedToEagerConnect) return
 
-                if (!isMetamaskUnlocked) {
-                    console.warn('alerts.message.wallet.metamask.locked');
-                }
+            // Metamask exposes experimental methods under 'ethereum._metamask' property.
+            // 'ethereum._metamask.isUnlocked' may be removed or changed without warning.
+            // There is no other stable solution to detect Metamask 'unlocked' status right now.
+            // Details: https://docs.metamask.io/guide/ethereum-provider.html#ethereum-metamask-isunlocked
+            // Future breaking changes can be found here https://medium.com/metamask
+            const isMetamaskUnlocked = await (window as any)?.ethereum._metamask?.isUnlocked();
 
-                connectWithProvider(provider).then(() => {
-                    console.log('removeConnectWalletAlert');
-                }).catch(async (error) => {
-                    if (
-                        error instanceof UnsupportedChainIdError &&
-                        !error
-                            .toString()
-                            .includes('Supported chain ids are: undefined')
-                    ) {
-                        console.log('success');
-                    } else {
-                        console.error('handleConnectWallet: sign error');
-                    }
-                })
+            if (!isMetamaskUnlocked) {
+                console.warn('alerts.message.wallet.metamask.locked');
             }
+
+            connectWithProvider(provider).then(() => {
+                console.log('removeConnectWalletAlert');
+            }).catch(async (error) => {
+                if (
+                    error instanceof UnsupportedChainIdError &&
+                    !error
+                        .toString()
+                        .includes('Supported chain ids are: undefined')
+                ) {
+                    console.log('success');
+                } else {
+                    console.error('handleConnectWallet: sign error');
+                }
+            })
         },
-        [connectWithProvider],
+        [connectWithProvider, triedToEagerConnect],
     )
 
     useEffect(() => {
@@ -96,9 +105,8 @@ export const DuckiesHero = () => {
     }, [])
 
     const handleMetamask = (isMetaMaskInstalled: boolean, id: ProviderWhitelist) => {
-        if (isMetaMaskInstalled || id !== 'Injected' ) {
+        if (isMetaMaskInstalled) {
             handleConnectWallet(id);
-            setMetaMaskInstalled(false)
         } else {
             onboarding.current?.startOnboarding();
         }
@@ -195,7 +203,7 @@ export const DuckiesHero = () => {
                                             </svg>
                                         </div>
                                     </div>
-                                    {active ? renderMetamaskAccount() : renderMetamaskButton()}
+                                    {isReady ? renderMetamaskAccount() : renderMetamaskButton()}
                                 </div>
                             </div>
                         </div>
@@ -212,7 +220,7 @@ export const DuckiesHero = () => {
                 </div>
             </div>
             <DuckiesConnectorModalWindow
-                bodyContent={active ? <div>Claim logic</div> : renderMetamaskButton()}
+                bodyContent={isReady ? <div>Claim logic</div> : renderMetamaskButton()}
                 headerContent="Connect Wallet"
                 isOpen={isOpenConnect}
                 setIsOpen={setIsOpenConnect}
