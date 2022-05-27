@@ -8,6 +8,7 @@ import { DuckiesEarnMore} from '../components/Duckies/DuckiesEarnMore';
 import { DuckiesRedeem} from '../components/Duckies/DuckiesRedeem';
 import { Web3ReactProvider } from '@web3-react/core';
 import { ethers } from 'ethers';
+import { createClient } from '../prismicio'
 
 const getLibrary = (provider: any): ethers.providers.Web3Provider => {
     const library = new ethers.providers.Web3Provider(provider, 'any');
@@ -16,7 +17,17 @@ const getLibrary = (provider: any): ethers.providers.Web3Provider => {
     return library;
 };
 
-const Duckies: FC<{}> = (): JSX.Element => {
+export async function getStaticProps({ previewData }: any) {
+  const client = createClient({ previewData })
+  const bounties = await client.getSingle('bounties')
+
+  return {
+    props: { bounties }
+  }
+}
+
+
+const Duckies: FC<{}> = ({ bounties }: any): JSX.Element => {
     return (
         <Web3ReactProvider getLibrary={getLibrary}>
             <div className="flex flex-col min-h-full">
@@ -33,7 +44,7 @@ const Duckies: FC<{}> = (): JSX.Element => {
                     </Head>
                     <main className="duckies container">
                         <DuckiesHero />
-                        <DuckiesAffiliates />
+                        <DuckiesAffiliates bounties={bounties} />
                         <DuckiesEarnMore />
                         <DuckiesRedeem />
                     </main>

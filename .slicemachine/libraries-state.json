@@ -1,0 +1,87 @@
+{
+  "slices": {
+    "components": {
+      "bounty": {
+        "library": "slices",
+        "id": "bounty",
+        "name": "Bounty",
+        "description": "Bounty",
+        "model": {
+          "id": "bounty",
+          "type": "SharedSlice",
+          "name": "Bounty",
+          "description": "Bounty",
+          "variations": [
+            {
+              "id": "default",
+              "name": "Default",
+              "docURL": "...",
+              "version": "sktwi1xtmkfgx8626",
+              "description": "Bounty",
+              "primary": {},
+              "items": {
+                "title": {
+                  "type": "Text",
+                  "config": {
+                    "label": "Title",
+                    "placeholder": ""
+                  }
+                },
+                "description": {
+                  "type": "Text",
+                  "config": {
+                    "label": "Description",
+                    "placeholder": ""
+                  }
+                },
+                "value": {
+                  "type": "Text",
+                  "config": {
+                    "label": "Value",
+                    "placeholder": ""
+                  }
+                }
+              },
+              "imageUrl": "https://images.prismic.io/slice-machine/621a5ec4-0387-4bc5-9860-2dd46cbc07cd_default_ss.png?auto=compress,format"
+            }
+          ]
+        },
+        "mocks": {
+          "default": {
+            "variation": "default",
+            "name": "Default",
+            "slice_type": "bounty",
+            "items": [
+              {
+                "title": "deploy viral architectures",
+                "description": "disintermediate turn-key action-items",
+                "value": "harness collaborative applications"
+              },
+              {
+                "title": "brand magnetic architectures",
+                "description": "enhance end-to-end e-tailers",
+                "value": "optimize efficient deliverables"
+              },
+              {
+                "title": "orchestrate dynamic infrastructures",
+                "description": "disintermediate plug-and-play interfaces",
+                "value": "target strategic deliverables"
+              },
+              {
+                "title": "streamline real-time partnerships",
+                "description": "extend bleeding-edge architectures",
+                "value": "brand sexy ROI"
+              }
+            ],
+            "primary": {}
+          }
+        },
+        "meta": {
+          "fileName": "index",
+          "extension": "js"
+        },
+        "screenshotPaths": {}
+      }
+    }
+  }
+}
