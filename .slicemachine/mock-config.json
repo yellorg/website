@@ -5,7 +5,8 @@
   "slices": {
     "Bounty": {
       "default": {
-        "primary": {}
+        "primary": {},
+        "items": {}
       }
     }
   }
