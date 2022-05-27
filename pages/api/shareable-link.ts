@@ -13,7 +13,7 @@ const generateShareableLinkWithRef = async (ref: string) => {
     const provider = new ethers.providers.JsonRpcProvider(process.env.NEXT_PUBLIC_INFURA_ID);
 
     const rewardMessage = {
-        id: '1',
+        id: 'referral',
         ref,
         amt: 10000,
     };

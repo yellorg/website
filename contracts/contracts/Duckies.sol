@@ -114,6 +114,7 @@ contract Duckies is Initializable, ERC20CappedUpgradeable, PausableUpgradeable, 
         }
     }
 
+    // reward method is used to retriave the reward from invitation link or claim the bounty for some bounty task
     function reward(Message memory _message, bytes memory _sig) public
     {
         bytes32 messageHash = getMessageHash(_message);
