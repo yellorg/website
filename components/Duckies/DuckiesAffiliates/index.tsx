@@ -3,68 +3,18 @@ import useDuckiesContract from '../../../hooks/useDuckiesContract';
 import useWallet from '../../../hooks/useWallet';
 import PrismicSliceZone from '../../PrismicSliceZone';
 
-const affiliateLevels = [
-    {
-        id: 1,
-        commission: '500',
-        count: 23,
-    },
-    {
-        id: 2,
-        commission: '125',
-        count: 23,
-    },
-    {
-        id: 3,
-        commission: '50',
-        count: 23,
-    },
-    {
-        id: 4,
-        commission: '20',
-        count: 23,
-    },
-    {
-        id: 5,
-        commission: '10',
-        count: 23,
-    },
-];
+interface DuckiesAffiliatesProps {
+    bounties: any;
+}
 
-const bounties = [
-    {
-        title: 'Recruit 25 Affiliates level 1',
-        subtitle: 'With more friends you recruit',
-        value: '70,000',
-    },
-    {
-        title: 'Comment this Tweet',
-        subtitle: 'React & Bootstrap Framework',
-        value: '135,000',
-    },
-    {
-        title: 'Design your pixel art Ducky',
-        subtitle: 'Bootstrap Framework',
-        value: '1,230,000',
-    },
-    {
-        title: 'Create a DAO for your affiliates',
-        subtitle: 'Tailwind, React',
-        value: '440,000',
-    },
-    {
-        title: 'Clap on this medium article',
-        subtitle: 'Vue Js, Tailwind',
-        value: '1,394 ',
-    },
-];
-
-export const DuckiesAffiliates = ({ bounties }: any) => {
+export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({ bounties }: DuckiesAffiliatesProps) => {
     const [affiliates, setAffiliates] = React.useState<number[]>([0, 0, 0, 0, 0]);
     const [payouts, setPayouts] = React.useState<number[]>([]);
 
     const duckiesContract = useDuckiesContract();
     const { active, account, signer } = useWallet();
+
+    console.log(bounties);
 
     const getAffiliatesAndPayouts = React.useCallback(async() => {
         if (account && signer) {

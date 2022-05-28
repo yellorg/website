@@ -18,15 +18,16 @@ const getLibrary = (provider: any): ethers.providers.Web3Provider => {
     return library;
 };
 
-export async function getStaticProps({ previewData }: any) {
-  const client = createClient({ previewData })
-  const bounties = await client.getSingle('bounties')
+export const getStaticProps = async ({ previewData }: any) => {
+    const client = createClient({ previewData });
+    const bounties = await client.getSingle('bounties');
 
-  return {
-    props: { bounties }
-  }
-}
-
+    return {
+        props: {
+            bounties,
+        },
+    };
+};
 
 const Duckies: FC<{}> = ({ bounties }: any): JSX.Element => {
     return (
