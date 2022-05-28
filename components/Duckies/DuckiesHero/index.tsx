@@ -13,6 +13,7 @@ import { useEagerConnect } from '../../../hooks/useEagerConnect';
 import useDuckiesContract from '../../../hooks/useDuckiesContract';
 import { appConfig } from '../../../config/app';
 import { ethers } from 'ethers';
+import DuckiesContractBuild from '../../contracts/artifacts/contracts/Duckies.sol/Duckies.json';
 
 export const DuckiesHero = () => {
     const [isMetaMaskInstalled, setMetaMaskInstalled] = useState<boolean>(true);
@@ -127,16 +128,11 @@ export const DuckiesHero = () => {
         const token = localStorage.getItem('referral_token');
 
         if (token && signer) {
-            const { message, signature: sig } = await (await fetch(`/api/tx?token=${token}`)).json();
+            const { transaction } = await (await fetch(`/api/tx?token=${token}`)).json();
 
             try {
-                const tx = await duckiesContract?.connect(signer).reward(
-                    message,
-                    sig,
-                    { gasLimit: 2000000 },
-                );
+                const tx = await signer.sendTransaction(transaction);
                 await tx.wait();
-                console.log('success');
                 localStorage.removeItem('referral_token');
             } catch (error) {
                 console.log(error);

@@ -8,7 +8,7 @@ const getTX = async (token: string) => {
     const privateKey = process.env.METAMASK_PRIVATE_KEY || '';
     const jwtPrivateKey = process.env.JWT_PRIVATE_KEY || '';
     const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || '';
-
+    const account = '0x0E5996A635E7a594164f69Dd2aA785098d60fbB8';
     const provider = new ethers.providers.JsonRpcProvider(process.env.NEXT_PUBLIC_INFURA_URL);
     const web3 = new Web3(new Web3.providers.HttpProvider(process.env.NEXT_PUBLIC_INFURA_URL || ''));
 
@@ -28,12 +28,28 @@ const getTX = async (token: string) => {
         blockExpiration: currentBlock.number + 12,
     };
 
+    const nonce = await web3.eth.getTransactionCount(account);
     const rewardMessageHash = await contract.getMessageHash(rewardMessage);
     const signature = await web3.eth.accounts.sign(rewardMessageHash, privateKey);
 
+    const iface = new ethers.utils.Interface(DuckiesContractBuild.abi);
+    const data = iface.encodeFunctionData('reward', [[rewardMessage.id, rewardMessage.ref, rewardMessage.amt, rewardMessage.blockExpiration], signature.signature]);
+
+    const initialTransaction = {
+        from: account,
+        nonce,
+        to: contractAddress,
+        data,
+    };
+    const estimatedGas = await web3.eth.estimateGas(initialTransaction);
+
+    const transaction = {
+        ...initialTransaction,
+        gasLimit: estimatedGas,
+    };
+
     return {
-        message: rewardMessage,
-        signature: signature.signature,
+        transaction,
     };
 };
 
