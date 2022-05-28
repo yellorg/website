@@ -27,6 +27,7 @@ contract Duckies is Initializable, ERC20CappedUpgradeable, PausableUpgradeable, 
         string id;
         address ref;
         uint32 amt;
+        uint256 blockExpiration;
     }
 
     /// @custom:oz-upgrades-unsafe-allow constructor
@@ -120,6 +121,7 @@ contract Duckies is Initializable, ERC20CappedUpgradeable, PausableUpgradeable, 
         bytes32 messageHash = getMessageHash(_message);
         bytes32 ethSignedMessageHash = getEthSignedMessageHash(messageHash);
 
+        require(block.number <= _message.blockExpiration, "Message is expired");
         require(recover(ethSignedMessageHash, _sig) == _issuer);
 
         if (_message.ref != address(0)) {

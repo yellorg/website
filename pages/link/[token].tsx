@@ -1,6 +1,5 @@
 import React from 'react';
 import { useRouter } from 'next/router';
-import jwt from 'jsonwebtoken';
 
 interface DuckiesLinkProps {
     token: string;
@@ -25,36 +24,23 @@ const DuckiesLink: React.FC<DuckiesLinkProps> = ({ token, redirectToHome }: Duck
 };
 
 export const getServerSideProps = async (context: any) => {
-    const jwtPrivateKey = process.env.NEXT_PUBLIC_JWT_PRIVATE_KEY || '';
     const { params: { token }} = context;
 
-    try {
-        const verifyJWT = jwt.verify(token, jwtPrivateKey);
-        if (verifyJWT) {
-            return {
-                props: {
-                    token,
-                    redirectToHome: false,
-                },
-            };
-        }
-
+    if (token) {
         return {
             props: {
-                redirectToHome: true,
-                token: '',
-            },
-        };
-    } catch (error) {
-        return {
-            props: {
-                redirectToHome: true,
-                token: '',
-            },
+                token,
+                redirectToHome: false,
+            }
         };
     }
 
-
+    return {
+        props: {
+            redirectToHome: true,
+            token: '',
+        },
+    };
 };
 
 export default DuckiesLink;

@@ -88,7 +88,7 @@ export const DuckiesAffiliates = ({ bounties }: any) => {
                 <div className="table-row" key={`affiliate-${index}`}>
                     <div className="table-row-key">
                         <div className="table-row-key-title">
-                            Level {index}
+                            Level {index + 1}
                         </div>
                         <div className="table-row-key-subtitle">
                             {payouts && payouts[index] ? `${payouts[index]}% commission` : ''}

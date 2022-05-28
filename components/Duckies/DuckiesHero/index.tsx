@@ -11,15 +11,14 @@ import { useENSName } from '../../../hooks/useENSName';
 import { DuckiesConnectorModalWindow } from '../DuckiesConnectModalWindow';
 import { useEagerConnect } from '../../../hooks/useEagerConnect';
 import useDuckiesContract from '../../../hooks/useDuckiesContract';
-import jwt from 'jsonwebtoken';
 import { appConfig } from '../../../config/app';
+import { ethers } from 'ethers';
+import DuckiesContractBuild from '../../contracts/artifacts/contracts/Duckies.sol/Duckies.json';
 
 export const DuckiesHero = () => {
     const [isMetaMaskInstalled, setMetaMaskInstalled] = useState<boolean>(true);
     const [isOpenConnect, setIsOpenConnect] = useState<boolean>(false);
     const [balance, setBalance] = useState<number | undefined>(undefined);
-    const [message, setMessage] = useState<any>(undefined);
-    const [sig, setSig] = useState<string>('');
 
     const duckiesContract = useDuckiesContract();
     const { connectWithProvider, disconnect } = useDApp();
@@ -27,29 +26,15 @@ export const DuckiesHero = () => {
     const ENSName = useENSName(account);
     const triedToEagerConnect = useEagerConnect();
 
-    const jwtPrivateKey = process.env.NEXT_PUBLIC_JWT_PRIVATE_KEY || '';
-
     const onboarding = useRef<MetaMaskOnboarding>();
-
-    useEffect(() => {
-        const token = localStorage.getItem('referral_token');
-
-        if (token) {
-            const decoded = jwt.verify(token, jwtPrivateKey);
-
-            setMessage((decoded as any).message);
-            setSig((decoded as any).sig.signature);
-        }
-    }, []);
-
     const supportedChain = useMemo(() => {
-        return appConfig.blockchain.supportedChainIds.includes(chain?.chainId ?? -1)
-    }, [chain])
+        return appConfig.blockchain.supportedChainIds.includes(chain?.chainId ?? -1);
+    }, [chain]);
 
     const isReady = useMemo(() => {
-        return supportedChain && triedToEagerConnect && active && account
-    }, [supportedChain, triedToEagerConnect, active, account])
-
+        return supportedChain && triedToEagerConnect && active && account;
+    }, [supportedChain, triedToEagerConnect, active, account]);
+;
     const getBalance = React.useCallback(async() => {
         if (account) {
             const balance = (await duckiesContract?.balanceOf(account)).toString();
@@ -140,20 +125,30 @@ export const DuckiesHero = () => {
     );
 
     const handleClaimReward = React.useCallback(async () => {
+        const token = localStorage.getItem('referral_token');
+
+        if (token && signer) {
+            const { transaction } = await (await fetch(`/api/tx?token=${token}`)).json();
+
+            try {
+                const tx = await signer.sendTransaction(transaction);
+                await tx.wait();
+                localStorage.removeItem('referral_token');
+            } catch (error) {
+                console.log(error);
+            }
+        }
+    }, [duckiesContract, signer]);
+
+    const handleClick = React.useCallback(async () => {
         if (!active) {
             setIsOpenConnect(true);
         } else {
             if (signer) {
-                try {
-                    const tx = await duckiesContract?.connect(signer).reward(message, sig, { gasLimit: 500000 });
-                    const result = await tx.wait();
-                    localStorage.removeItem('referral_token');
-                } catch (error) {
-                    console.error(error);
-                }
+                handleClaimReward();
             }
         }
-    }, [active, message, sig, signer]);
+    }, [active, signer, handleClaimReward]);
 
     return (
         <>
@@ -177,7 +172,7 @@ export const DuckiesHero = () => {
                             </div>
                         </div>
                         <div className="duckies-hero__info-buttons">
-                            <div onClick={handleClaimReward} className="duckies-hero__info-buttons-claim button button--outline button--secondary button--shadow-secondary">
+                            <div onClick={handleClick} className="duckies-hero__info-buttons-claim button button--outline button--secondary button--shadow-secondary">
                                 <span className="button__inner">Claim your reward</span>
                             </div>
                             <Link href="#earn-more">

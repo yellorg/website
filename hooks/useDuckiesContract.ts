@@ -8,7 +8,7 @@ export default function useDuckiesContract() {
     const { chain, signer } = useWallet();
 
     const provider = useMemo(() => {
-        return new ethers.providers.JsonRpcProvider(process.env.NEXT_PUBLIC_INFURA_ID);
+        return new ethers.providers.JsonRpcProvider(process.env.NEXT_PUBLIC_INFURA_URL);
     }, [chain]);
 
     const duckiesContract = useContract(
