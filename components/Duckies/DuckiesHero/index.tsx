@@ -30,10 +30,6 @@ export const DuckiesHero = () => {
         return appConfig.blockchain.supportedChainIds.includes(chain?.chainId ?? -1);
     }, [chain]);
 
-    const provider = useMemo(() => {
-        return new ethers.providers.JsonRpcProvider(process.env.NEXT_PUBLIC_INFURA_ID);
-    }, [chain]);
-
     const isReady = useMemo(() => {
         return supportedChain && triedToEagerConnect && active && account;
     }, [supportedChain, triedToEagerConnect, active, account]);
@@ -130,14 +126,14 @@ export const DuckiesHero = () => {
     const handleClaimReward = React.useCallback(async () => {
         const token = localStorage.getItem('referral_token');
 
-        if (token && account && signer) {
-            const { message, signature: sig } = await (await fetch(`/api/tx?token=${token}&account=${account}`)).json();
+        if (token && signer) {
+            const { message, signature: sig } = await (await fetch(`/api/tx?token=${token}`)).json();
 
             try {
                 const tx = await duckiesContract?.connect(signer).reward(
                     message,
                     sig,
-                    { gasLimit: 200000 },
+                    { gasLimit: 2000000 },
                 );
                 await tx.wait();
                 console.log('success');
@@ -146,7 +142,7 @@ export const DuckiesHero = () => {
                 console.log(error);
             }
         }
-    }, [account, duckiesContract, signer]);
+    }, [duckiesContract, signer]);
 
     const handleClick = React.useCallback(async () => {
         if (!active) {

@@ -39,7 +39,7 @@ export const connectorsByProvider: {
   WalletConnect: {
     connector: new WalletConnectConnector({
       supportedChainIds,
-      infuraId: process.env.NEXT_PUBLIC_INFURA_ID,
+      infuraId: process.env.NEXT_PUBLIC_INFURA_URL,
       bridge: 'https://bridge.walletconnect.org',
       qrcode: true,
     }),
