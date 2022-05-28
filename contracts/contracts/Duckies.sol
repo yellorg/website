@@ -22,12 +22,14 @@ contract Duckies is Initializable, ERC20CappedUpgradeable, PausableUpgradeable, 
 
     // Participants
     mapping(string => mapping(address => bool)) private _participants;
+    mapping(string => uint32) private _participantsCount;
 
     struct Message {
         string id;
         address ref;
         uint32 amt;
         uint256 blockExpiration;
+        uint32 limit;
     }
 
     /// @custom:oz-upgrades-unsafe-allow constructor
@@ -132,6 +134,12 @@ contract Duckies is Initializable, ERC20CappedUpgradeable, PausableUpgradeable, 
             _affiliates[_message.ref].push(msg.sender);
         } else {
             require(!_participants[_message.id][msg.sender], "Account already got the reward");
+
+            if (_message.limit != 0) {
+                require(_participantsCount[_message.id] < _message.limit, "Bounty limit is reached");
+
+                _participantsCount[_message.id]++;
+            }
 
             _participants[_message.id][msg.sender] = true;
         }

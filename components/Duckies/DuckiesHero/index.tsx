@@ -122,7 +122,7 @@ export const DuckiesHero = () => {
         </div>
     );
 
-    const handleClaimReward = React.useCallback(async (token: string) => {
+    const handleClaimReferralReward = React.useCallback(async (token: string) => {
         if (signer && account) {
             const { transaction } = await (await fetch(`/api/txReferralHash?token=${token}&account=${account}`)).json();
 
@@ -134,12 +134,12 @@ export const DuckiesHero = () => {
                 console.log(error);
             }
         }
-    }, [duckiesContract, signer, account]);
+    }, [signer, account]);
 
-    const handleClaimBounty = React.useCallback(async (token: string) => {
+    const handleClaimBountyReward = React.useCallback(async (token: string) => {
         if (signer && account) {
             const { transaction } = await (await fetch(`/api/txBountyHash?token=${token}&account=${account}`)).json();
-
+            console.log(transaction);
             try {
                 const tx = await signer.sendTransaction(transaction);
                 await tx.wait();
@@ -148,7 +148,7 @@ export const DuckiesHero = () => {
                 console.log(error);
             }
         }
-    }, [duckiesContract, signer, account]);
+    }, [signer, account]);
 
 
     const handleClick = React.useCallback(async () => {
@@ -158,18 +158,18 @@ export const DuckiesHero = () => {
             if (signer) {
                 const referralToken = localStorage.getItem('referral_token');
                 if (referralToken) {
-                    handleClaimReward(referralToken);
+                    handleClaimReferralReward(referralToken);
                 } else {
                     const bountyToken = localStorage.getItem('bounty_token');
 
                     if (bountyToken) {
-                        handleClaimBounty(bountyToken);
+                        handleClaimBountyReward(bountyToken);
                     }
                 }
 
             }
         }
-    }, [active, signer, handleClaimReward]);
+    }, [active, signer, handleClaimReferralReward, handleClaimBountyReward]);
 
     return (
         <>

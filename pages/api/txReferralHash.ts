@@ -12,10 +12,6 @@ const getRefferalTransactionObject = async (token: string, account: string) => {
     const provider = new ethers.providers.JsonRpcProvider(process.env.NEXT_PUBLIC_INFURA_URL);
     const web3 = new Web3(new Web3.providers.HttpProvider(process.env.NEXT_PUBLIC_INFURA_URL || ''));
 
-    console.log('private key', privateKey);
-    console.log('jwtPrivateKey', jwtPrivateKey);
-    console.log('contractAddress', contractAddress);
-
     const decodedJWT = jwt.verify(token, jwtPrivateKey);
     const contract = new ethers.Contract(
         contractAddress,
@@ -46,7 +42,7 @@ const getRefferalTransactionObject = async (token: string, account: string) => {
         to: contractAddress,
         data,
     };
-    console.log(initialTransaction);
+
     const estimatedGas = await web3.eth.estimateGas(initialTransaction);
 
     const transaction = {

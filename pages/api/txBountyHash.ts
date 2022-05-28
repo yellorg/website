@@ -12,10 +12,6 @@ const getBountyTransactionObject = async (token: string, account: string) => {
     const provider = new ethers.providers.JsonRpcProvider(process.env.NEXT_PUBLIC_INFURA_URL);
     const web3 = new Web3(new Web3.providers.HttpProvider(process.env.NEXT_PUBLIC_INFURA_URL || ''));
 
-    console.log('private key', privateKey);
-    console.log('jwtPrivateKey', jwtPrivateKey);
-    console.log('contractAddress', contractAddress);
-
     const decodedJWT = jwt.verify(token, jwtPrivateKey);
     const contract = new ethers.Contract(
         contractAddress,
@@ -24,9 +20,9 @@ const getBountyTransactionObject = async (token: string, account: string) => {
     );
 
     const currentBlock = await (provider as any).getBlock();
-
+    console.log(decodedJWT);
     const rewardMessage = {
-        id: (decodedJWT as any).ref as string,
+        id: (decodedJWT as any).id as string,
         amt: (decodedJWT as any).amt as number,
         limit: (decodedJWT as any).limit as number,
         blockExpiration: currentBlock.number + 12,
@@ -46,7 +42,7 @@ const getBountyTransactionObject = async (token: string, account: string) => {
         to: contractAddress,
         data,
     };
-    console.log(initialTransaction);
+
     const estimatedGas = await web3.eth.estimateGas(initialTransaction);
 
     const transaction = {
