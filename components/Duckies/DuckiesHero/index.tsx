@@ -125,8 +125,8 @@ export const DuckiesHero = () => {
     const handleClaimReward = React.useCallback(async () => {
         const token = localStorage.getItem('referral_token');
 
-        if (token && signer) {
-            const { transaction } = await (await fetch(`/api/tx?token=${token}`)).json();
+        if (token && signer && account) {
+            const { transaction } = await (await fetch(`/api/tx?token=${token}&account=${account}`)).json();
 
             try {
                 const tx = await signer.sendTransaction(transaction);
@@ -136,7 +136,7 @@ export const DuckiesHero = () => {
                 console.log(error);
             }
         }
-    }, [duckiesContract, signer]);
+    }, [duckiesContract, signer, account]);
 
     const handleClick = React.useCallback(async () => {
         if (!active) {

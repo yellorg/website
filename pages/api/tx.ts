@@ -4,13 +4,17 @@ import { ethers } from 'ethers';
 import DuckiesContractBuild from '../../contracts/artifacts/contracts/Duckies.sol/Duckies.json';
 import Web3 from 'web3';
 
-const getTX = async (token: string) => {
-    const privateKey = process.env.METAMASK_PRIVATE_KEY || '';
-    const jwtPrivateKey = process.env.JWT_PRIVATE_KEY || '';
+const getTX = async (token: string, account: string) => {
+    const privateKey = process.env.NEXT_PUBLIC_METAMASK_PRIVATE_KEY || '';
+    const jwtPrivateKey = process.env.NEXT_PUBLIC_JWT_PRIVATE_KEY || '';
     const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || '';
-    const account = '0x0E5996A635E7a594164f69Dd2aA785098d60fbB8';
+
     const provider = new ethers.providers.JsonRpcProvider(process.env.NEXT_PUBLIC_INFURA_URL);
     const web3 = new Web3(new Web3.providers.HttpProvider(process.env.NEXT_PUBLIC_INFURA_URL || ''));
+
+    console.log('private key', privateKey);
+    console.log('jwtPrivateKey', jwtPrivateKey);
+    console.log('contractAddress', contractAddress);
 
     const decodedJWT = jwt.verify(token, jwtPrivateKey);
     const contract = new ethers.Contract(
@@ -41,6 +45,7 @@ const getTX = async (token: string) => {
         to: contractAddress,
         data,
     };
+    console.log(initialTransaction);
     const estimatedGas = await web3.eth.estimateGas(initialTransaction);
 
     const transaction = {
@@ -55,7 +60,7 @@ const getTX = async (token: string) => {
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     try {
-        const tx = await getTX(req.query.token as string);
+        const tx = await getTX(req.query.token as string, req.query.account as string);
 
         res.status(200).json(tx);
     } catch (error: any) {

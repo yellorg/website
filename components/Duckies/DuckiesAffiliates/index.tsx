@@ -14,8 +14,6 @@ export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({ bounties }
     const duckiesContract = useDuckiesContract();
     const { active, account, signer } = useWallet();
 
-    console.log(bounties);
-
     const getAffiliatesAndPayouts = React.useCallback(async() => {
         if (account && signer) {
             const affiliatesCount = await duckiesContract?.connect(signer).getAffiliatesCount();

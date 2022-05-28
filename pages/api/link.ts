@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import jwt from 'jsonwebtoken';
 
 const generateJWTWithRef = (ref: string) => {
-    const jwtPrivateKey = process.env.JWT_PRIVATE_KEY || '';
+    const jwtPrivateKey = process.env.NEXT_PUBLIC_JWT_PRIVATE_KEY || '';
 
     const payload = {
         ref,
