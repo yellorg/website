@@ -12,8 +12,6 @@ import { DuckiesConnectorModalWindow } from '../DuckiesConnectModalWindow';
 import { useEagerConnect } from '../../../hooks/useEagerConnect';
 import useDuckiesContract from '../../../hooks/useDuckiesContract';
 import { appConfig } from '../../../config/app';
-import { ethers } from 'ethers';
-import DuckiesContractBuild from '../../contracts/artifacts/contracts/Duckies.sol/Duckies.json';
 
 export const DuckiesHero = () => {
     const [isMetaMaskInstalled, setMetaMaskInstalled] = useState<boolean>(true);
