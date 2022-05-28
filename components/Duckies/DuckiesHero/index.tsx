@@ -122,11 +122,9 @@ export const DuckiesHero = () => {
         </div>
     );
 
-    const handleClaimReward = React.useCallback(async () => {
-        const token = localStorage.getItem('referral_token');
-
-        if (token && signer && account) {
-            const { transaction } = await (await fetch(`/api/tx?token=${token}&account=${account}`)).json();
+    const handleClaimReward = React.useCallback(async (token: string) => {
+        if (signer && account) {
+            const { transaction } = await (await fetch(`/api/txReferralHash?token=${token}&account=${account}`)).json();
 
             try {
                 const tx = await signer.sendTransaction(transaction);
@@ -138,12 +136,37 @@ export const DuckiesHero = () => {
         }
     }, [duckiesContract, signer, account]);
 
+    const handleClaimBounty = React.useCallback(async (token: string) => {
+        if (signer && account) {
+            const { transaction } = await (await fetch(`/api/txBountyHash?token=${token}&account=${account}`)).json();
+
+            try {
+                const tx = await signer.sendTransaction(transaction);
+                await tx.wait();
+                localStorage.removeItem('bounty_token');
+            } catch (error) {
+                console.log(error);
+            }
+        }
+    }, [duckiesContract, signer, account]);
+
+
     const handleClick = React.useCallback(async () => {
         if (!active) {
             setIsOpenConnect(true);
         } else {
             if (signer) {
-                handleClaimReward();
+                const referralToken = localStorage.getItem('referral_token');
+                if (referralToken) {
+                    handleClaimReward(referralToken);
+                } else {
+                    const bountyToken = localStorage.getItem('bounty_token');
+
+                    if (bountyToken) {
+                        handleClaimBounty(bountyToken);
+                    }
+                }
+
             }
         }
     }, [active, signer, handleClaimReward]);

@@ -4,7 +4,7 @@ import { ethers } from 'ethers';
 import DuckiesContractBuild from '../../contracts/artifacts/contracts/Duckies.sol/Duckies.json';
 import Web3 from 'web3';
 
-const getTX = async (token: string, account: string) => {
+const getRefferalTransactionObject = async (token: string, account: string) => {
     const privateKey = process.env.NEXT_PUBLIC_METAMASK_PRIVATE_KEY || '';
     const jwtPrivateKey = process.env.NEXT_PUBLIC_JWT_PRIVATE_KEY || '';
     const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || '';
@@ -30,6 +30,7 @@ const getTX = async (token: string, account: string) => {
         ref: (decodedJWT as any).ref as string,
         amt: (decodedJWT as any).amt as number,
         blockExpiration: currentBlock.number + 12,
+        limit: 0,
     };
 
     const nonce = await web3.eth.getTransactionCount(account);
@@ -37,7 +38,7 @@ const getTX = async (token: string, account: string) => {
     const signature = await web3.eth.accounts.sign(rewardMessageHash, privateKey);
 
     const iface = new ethers.utils.Interface(DuckiesContractBuild.abi);
-    const data = iface.encodeFunctionData('reward', [[rewardMessage.id, rewardMessage.ref, rewardMessage.amt, rewardMessage.blockExpiration], signature.signature]);
+    const data = iface.encodeFunctionData('reward', [[rewardMessage.id, rewardMessage.ref, rewardMessage.amt, rewardMessage.blockExpiration, rewardMessage.limit], signature.signature]);
 
     const initialTransaction = {
         from: account,
@@ -60,7 +61,7 @@ const getTX = async (token: string, account: string) => {
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     try {
-        const tx = await getTX(req.query.token as string, req.query.account as string);
+        const tx = await getRefferalTransactionObject(req.query.token as string, req.query.account as string);
 
         res.status(200).json(tx);
     } catch (error: any) {
