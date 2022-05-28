@@ -109,7 +109,7 @@ export const DuckiesEarnMore = () => {
 
     React.useEffect(() => {
         if (isBrowser()) {
-            setShareableLinkPrefix(`${window.location.origin}/link/`);
+            setShareableLinkPrefix(`${window.location.origin}/invite/`);
         }
     }, [isBrowser()]);
 
