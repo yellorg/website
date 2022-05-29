@@ -135,6 +135,10 @@ export const DuckiesEarnMore = () => {
         });
     }, [socials]);
 
+    const handleCopy = React.useCallback((value: string) => {
+        navigator.clipboard.writeText(value);
+    }, []);
+
     return (
         <div className="duckies-earn-more" id="earn-more">
             <div className="container">
@@ -153,7 +157,7 @@ export const DuckiesEarnMore = () => {
                                 {`${shareableLinkPrefix}${shareableLink}`}
                             </div>
                         </div>
-                        <div className="button button--outline button--secondary button--shadow-secondary">
+                        <div onClick={() => handleCopy(`${shareableLinkPrefix}${shareableLink}`)} className="button button--outline button--secondary button--shadow-secondary">
                             <span className="button__inner">
                                 <svg width="20" height="24" viewBox="0 0 20 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M8.60019 0.800049C7.0538 0.800049 5.8002 2.05365 5.8002 3.60005V14.8C5.8002 16.3464 7.0538 17.6 8.60019 17.6H17.0002C18.5466 17.6 19.8002 16.3464 19.8002 14.8V6.97995C19.8002 6.23734 19.5052 5.52515 18.9801 5.00005L15.6002 1.62015C15.0751 1.09505 14.3629 0.800049 13.6203 0.800049H8.60019Z" fill="black"/>
