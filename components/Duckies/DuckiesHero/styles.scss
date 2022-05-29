@@ -5,6 +5,79 @@
     padding-top: 93px;
     padding-bottom: 168px;
 
+    &__tooltip {
+        position: absolute;
+        background: #fff;
+        box-shadow: 0 6px 36px rgb(0, 0, 0, 0.24);
+        display: flex;
+        min-width: fit-content;
+        top: 120px;
+        z-index: 100;
+        height: fit-content;
+        display: flex;
+        flex-flow: column;
+        padding: 20px 24px;
+        left: 0;
+        border-radius: 2px;
+
+        &-balance {
+            display: flex;
+            align-items: center;
+        }
+    
+        &-header {
+            font-size: 18px !important;
+            line-height: 18px !important;
+            padding-bottom: 20px;
+            margin-bottom: 0px !important;
+            font-weight: bold;
+        }
+
+        &-box {
+            &-title {
+                font-size: 14px;
+                font-weight: bold;
+            }
+
+            &-balance {
+                margin-left: 3px;
+                display: flex;
+                align-items: center;
+
+                svg {
+                    margin-left: 4px;
+                }
+            }
+        }
+    }
+
+    &__balance {
+        display: flex;
+        flex-flow: column;
+
+        &-address {
+            font-size: 14px;
+            color: var(--neutral-control-layer-color-50);
+        }
+
+        &-amount {
+            font-weight: bold;
+            font-size: 20px;
+            line-height: 20px;
+            display: flex;
+            align-items: center;
+
+            svg {
+                margin-left: 8px;
+            }
+        }
+
+        &-logout {
+            margin-top: 12px;
+            margin-right: 0px !important;
+        }
+    }
+
     @media screen and (min-width: 816px) {
         .container {
             display: flex;
@@ -77,7 +150,7 @@
                     word-wrap: break-word;
                 }
                 span {
-                    margin-right: 36px;
+                    margin-right: 18px;
                     @media screen and (max-width: 816px) {
                         margin-right: 0;
                     }
@@ -126,6 +199,7 @@
         display: flex;
         justify-content: flex-end;
         width: 100%;
+        position: relative;
 
         @media screen and (max-width: 816px) {
             justify-content: center;
@@ -170,6 +244,8 @@
                         &-icon {
                             display: flex;
                             vertical-align: middle;
+                            margin-left: 8px;
+
                             svg {
                                 cursor: pointer;
                             }
@@ -224,6 +300,12 @@
                     }
                 }
             }
+        }
+    }
+
+    @media screen and (max-width: 768px) {
+        .duckies-hero__icons-balance-body-content-title-icon {
+            display: none;
         }
     }
 }
