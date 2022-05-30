@@ -29,12 +29,15 @@ describe("Duckies", function () {
     expect(await duckies.symbol()).to.equal("DUCKZ");
   });
 
-  it("Should verify that totalSupply is 44400000000000000000000000000000", async function () {
+  it("Should verify that totalSupply is 444000000000", async function () {
     const { duckies }: TestContext = this as any;
     const [ref] = await ethers.getSigners();
-    const balance = await duckies.balanceOf(ref.address);
 
-    expect(balance).to.equal("44400000000000000000000000000000");
+    const balance = await duckies.balanceOf(ref.address);
+    const decimals = await duckies.decimals();
+
+    expect(decimals).to.be.equal(2);
+    expect(balance).to.equal(444000000000 * 10 ** decimals);
   });
 
   it("Should successfully get initial payouts and set payouts", async function () {
