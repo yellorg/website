@@ -135,6 +135,7 @@ contract Duckies is Initializable, ERC20CappedUpgradeable, PausableUpgradeable, 
         if (_message.ref != address(0)) {
             require(_referrers[msg.sender] == address(0));
             require(msg.sender != _message.ref);
+            require(isAccountPresentInReferrers(msg.sender, _message.ref));
 
             _referrers[msg.sender] = _message.ref;
             _affiliates[_message.ref].push(msg.sender);
@@ -147,6 +148,22 @@ contract Duckies is Initializable, ERC20CappedUpgradeable, PausableUpgradeable, 
         }
 
         _mintReward(_message.amt);
+    }
+
+    function isAccountPresentInReferrers(address targetAccount, address refAccount) private view returns (bool) {
+        bool notPresent = true;
+        address bufAccount = refAccount;
+
+        for (uint8 i = 0; i < 5; i++) {
+            if (_referrers[bufAccount] == targetAccount) {
+                notPresent = false;
+                break;
+            }
+
+            bufAccount = _referrers[bufAccount];
+        }
+
+        return notPresent;
     }
 
     function getMessageHash(Message memory _message) public pure returns (bytes32)

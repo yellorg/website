@@ -2,74 +2,79 @@
   "manifestVersion": "3.2",
   "admin": {
     "address": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
-    "txHash": "0x4d98b57cf95665613070876e8f7819532b8f5776e776cd872dbf0ca4b68d9c01"
+    "txHash": "0x50dc79099cf03f8cfe8daaa3859089e3e05e99d46fea3d70b22b5866dbc73a50"
   },
   "proxies": [
     {
       "address": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
-      "txHash": "0xa2beb5153f9237ef69642e78bb608d6f1b11f5f05ca61740e22155bbc504ea50",
+      "txHash": "0x8031d0196e2b2d9e870d416e4486e8aed0083501f635603d7e9f25ecd75cf02b",
       "kind": "transparent"
     },
     {
       "address": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
-      "txHash": "0xdeb4b3ede1c6c91d8e0cbbd18dc1302048664fd214204d27fc4da0d6c6a0db69",
+      "txHash": "0xe543cae20810d51d1f72269738fe8938a82e1cbbbf3bc61dbd4b2b40a4e5a95a",
       "kind": "transparent"
     },
     {
       "address": "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9",
-      "txHash": "0x65b30364f1ec59e821b370f24f62e9d15d5fe33f15aae8a221df62c7b1632312",
+      "txHash": "0xdc3fd2fe77af1e8528263905659ca7bd454258a5b8722f66275c341dff3577e7",
       "kind": "transparent"
     },
     {
       "address": "0x0165878A594ca255338adfa4d48449f69242Eb8F",
-      "txHash": "0xa2f031eb05b206d2735c89794d782f741453ee352c8d7deef607ecee3654ff12",
+      "txHash": "0x65f03b2db0f3d9902de7910390523a4e2d19f55ef898fd953f3dd6cea64072b3",
       "kind": "transparent"
     },
     {
       "address": "0xa513E6E4b8f2a923D98304ec87F64353C4D5C853",
-      "txHash": "0x4245bd4cdfd94774d44a366b89ce94bf881b036a3059ed6049e9305fb0b41249",
+      "txHash": "0xb780580bb2a3db382368f7d8fc122b8730baf1371242f64261726bfdee8d2f26",
       "kind": "transparent"
     },
     {
       "address": "0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6",
-      "txHash": "0xb1d61b6182d0784fee162a9d4aa98392da6f626806141c356d43ffae0f18083f",
+      "txHash": "0x82f8316def349fed0b5e1341ab35db43e305450794284598f958febf84bd4218",
       "kind": "transparent"
     },
     {
       "address": "0x8A791620dd6260079BF849Dc5567aDC3F2FdC318",
-      "txHash": "0xa6f509d523922d7cf427922361510cae77a76d1a5cda7187b0246d8203b743d0",
+      "txHash": "0xff5d86bfca137ed46a1ed2843875dc12dada7e098d30731ab547278c2bef4c20",
       "kind": "transparent"
     },
     {
       "address": "0x610178dA211FEF7D417bC0e6FeD39F05609AD788",
-      "txHash": "0x36327f00d2be5626325cedddb8cba7563ad752515b5d11de389723bb912f992c",
+      "txHash": "0x9b2b9d6dd75b37fa8579a12f316e5cb4130991f06b774b6d89eb8198b8b9fc22",
       "kind": "transparent"
     },
     {
       "address": "0xB7f8BC63BbcaD18155201308C8f3540b07f84F5e",
-      "txHash": "0xc0a83fc3d49bc012af3b4d66d0c1c61480c8c40ed0803a69aa139ae9e23f3a76",
+      "txHash": "0x2d7b5b61659b8af1624a749a5f741a6043d9efdd2eb89dd48af459c54cc4d15d",
       "kind": "transparent"
     },
     {
       "address": "0xA51c1fc2f0D1a1b8494Ed1FE312d7C3a78Ed91C0",
-      "txHash": "0xb7b59728ecc29256a9f27a2aa0f95bde186a7906fd5799944a2c7cd91d142634",
+      "txHash": "0x2ccfb195beba70b85da2eb3ac09edf61e121011483a9c9037cab0c266076ea6f",
       "kind": "transparent"
     },
     {
       "address": "0x0DCd1Bf9A1b36cE34237eEaFef220932846BCD82",
-      "txHash": "0xc66cd405bb9020781653a13a8a61dea79bea3a881ebffcdc7a93defc78dbd475",
+      "txHash": "0xf501b563a4bd4991fb3ebd5c10e5edcc47bbce29a34a0715b600806c83afcf0d",
       "kind": "transparent"
     },
     {
       "address": "0x9A676e781A523b5d0C0e43731313A708CB607508",
-      "txHash": "0x550566f7e873000fa80b45ff29b0c4720ed21a841431ff46bdd263c442bac037",
+      "txHash": "0xfa5b6b3f42a0524958e3684ff90a57cf121b04df1cd74e4e35d67cda3d7108b8",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x0B306BF915C4d645ff596e518fAf3F9669b97016",
+      "txHash": "0x62ddb5148f4eae3f39b3bd622a7cd0231b41c809b965b81df5dbaf49aeafa504",
       "kind": "transparent"
     }
   ],
   "impls": {
-    "7a729679691f61ac6a22d041d07b4fac51545500429ebfa61f017e9fd79bb584": {
+    "a03cafdd403744b15b3840ecd7931ae9e2fd7c5053865ce1972c22466d4b5d4c": {
       "address": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
-      "txHash": "0x7ddf32db315184846f4d1e40df114013f402457a385c422787f6049a0c097ef2",
+      "txHash": "0x9ad2368c7fd0466be69817991f647900c37dae4a7089d64f3f8a0ecafa742464",
       "layout": {
         "storage": [
           {
@@ -207,7 +212,7 @@
             "slot": "253",
             "type": "t_mapping(t_address,t_address)",
             "contract": "Duckies",
-            "src": "contracts/Duckies.sol:17"
+            "src": "contracts/Duckies.sol:20"
           },
           {
             "label": "_affiliates",
@@ -215,7 +220,7 @@
             "slot": "254",
             "type": "t_mapping(t_address,t_array(t_address)dyn_storage)",
             "contract": "Duckies",
-            "src": "contracts/Duckies.sol:18"
+            "src": "contracts/Duckies.sol:21"
           },
           {
             "label": "_payouts",
@@ -223,15 +228,15 @@
             "slot": "255",
             "type": "t_array(t_uint16)dyn_storage",
             "contract": "Duckies",
-            "src": "contracts/Duckies.sol:21"
+            "src": "contracts/Duckies.sol:24"
           },
           {
-            "label": "_participants",
+            "label": "_bounty",
             "offset": 0,
             "slot": "256",
-            "type": "t_mapping(t_string_memory_ptr,t_mapping(t_address,t_bool))",
+            "type": "t_mapping(t_address,t_mapping(t_string_memory_ptr,t_uint16))",
             "contract": "Duckies",
-            "src": "contracts/Duckies.sol:24"
+            "src": "contracts/Duckies.sol:27"
           }
         ],
         "types": {
@@ -271,20 +276,20 @@
             "label": "mapping(address => address[])",
             "numberOfBytes": "32"
           },
-          "t_mapping(t_address,t_bool)": {
-            "label": "mapping(address => bool)",
-            "numberOfBytes": "32"
-          },
           "t_mapping(t_address,t_mapping(t_address,t_uint256))": {
             "label": "mapping(address => mapping(address => uint256))",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_mapping(t_string_memory_ptr,t_uint16))": {
+            "label": "mapping(address => mapping(string => uint16))",
             "numberOfBytes": "32"
           },
           "t_mapping(t_address,t_uint256)": {
             "label": "mapping(address => uint256)",
             "numberOfBytes": "32"
           },
-          "t_mapping(t_string_memory_ptr,t_mapping(t_address,t_bool))": {
-            "label": "mapping(string => mapping(address => bool))",
+          "t_mapping(t_string_memory_ptr,t_uint16)": {
+            "label": "mapping(string => uint16)",
             "numberOfBytes": "32"
           },
           "t_string_memory_ptr": {
