@@ -1,6 +1,7 @@
 import { UnsupportedChainIdError } from '@web3-react/core'
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import MetaMaskOnboarding from '@metamask/onboarding';
 import type { ProviderWhitelist } from '../../../hooks/useDApp';
@@ -49,7 +50,7 @@ export const DuckiesHero = () => {
 
             getBalance();
         }
-    }, [isReady]);
+    }, [isReady, getBalance]);
 
     const handleConnectWallet = useCallback(
         async (provider: ProviderWhitelist) => {
@@ -99,7 +100,7 @@ export const DuckiesHero = () => {
 
     const handleDisconnect = React.useCallback(() => {
         disconnect();
-    }, []);
+    }, [disconnect]);
 
     const renderMetamaskAccount = () => {
         return (
@@ -144,7 +145,7 @@ export const DuckiesHero = () => {
                 console.log(error);
             }
         }
-    }, [duckiesContract, signer, account]);
+    }, [signer, account]);
 
     const handleClick = React.useCallback(async () => {
         if (!active) {
@@ -174,7 +175,7 @@ export const DuckiesHero = () => {
                             </div>
                             <div className="duckies-hero__info-received-amount">
                                 <span>+10,000,000</span>
-                                <img src="/images/duckies.svg" alt="DUCKIES" />
+                                <Image src="/images/duckies.svg" alt="DUCKIES" />
                             </div>
                         </div>
                         <div className="duckies-hero__info-buttons">
@@ -229,7 +230,7 @@ export const DuckiesHero = () => {
                                                             </svg>
                                                         </span>
                                                     </div>
-                                                </div>    
+                                                </div>
                                             }
                                         </div>
                                     </div>

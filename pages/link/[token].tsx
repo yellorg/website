@@ -18,6 +18,7 @@ const DuckiesLink: React.FC<DuckiesLinkProps> = ({ token, redirectToHome }: Duck
             localStorage.setItem('referral_token', token);
             router.push('/duckies');
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return null;

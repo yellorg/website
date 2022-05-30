@@ -22,13 +22,13 @@ export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({ bounties }
             setAffiliates(affiliatesCount);
             setPayouts(payoutsCommission);
         }
-    }, [account, duckiesContract]);
+    }, [account, duckiesContract, signer]);
 
     React.useEffect(() => {
         if (active && account) {
             getAffiliatesAndPayouts();
         }
-    }, [active, account]);
+    }, [active, account, getAffiliatesAndPayouts]);
 
     const renderAffiliateLevels = React.useMemo(() => {
         return affiliates.map((affiliateCount: number, index: number) => {

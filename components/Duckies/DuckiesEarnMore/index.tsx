@@ -12,8 +12,16 @@ import {
 export const DuckiesEarnMore = () => {
     const [shareableLink, setShareableLink] = React.useState<string>('');
     const [shareableLinkPrefix, setShareableLinkPrefix] = React.useState('');
+    const isBrowserDefined = isBrowser();
 
     const { active, account } = useWallet();
+
+    const getSharableLink = React.useCallback(async (account: string) => {
+        const response = await fetch(`/api/link?address=${account}`);
+
+        const data = await response.json();
+        setShareableLink(data.token);
+    }, []);
 
     const socials = React.useMemo(() => {
         return [
@@ -105,20 +113,14 @@ export const DuckiesEarnMore = () => {
         if (active && account) {
             getSharableLink(account);
         }
-    }, [active, account]);
+    }, [active, account, getSharableLink]);
 
     React.useEffect(() => {
-        if (isBrowser()) {
+        if (isBrowserDefined) {
             setShareableLinkPrefix(`${window.location.origin}/link/`);
         }
-    }, [isBrowser()]);
+    }, [isBrowserDefined]);
 
-    const getSharableLink = React.useCallback(async (account: string) => {
-        const response = await fetch(`/api/link?address=${account}`);
-
-        const data = await response.json();
-        setShareableLink(data.token);
-    }, []);
 
     const renderSocials = React.useMemo(() => {
         return socials.map((social: any, index: number) => {
