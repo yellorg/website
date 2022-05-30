@@ -63,10 +63,11 @@ describe("Duckies", function () {
       amt: 100,
       id: 'message1',
       blockExpiration: 20,
+      limit: 0,
     };
 
     expect(await duckies.getMessageHash(message)).to.equal(
-      "0xaa58a14d9221a4bb8051dfd02ead3812edeb0c30b3e20e22b4165c018f1244b6"
+      "0x270832bdd0fd3e9051b55f984454047dc60d47e4feff00bf7cc8e0fd7071387c"
     );
     expect(await duckies.getMessageHash(message)).to.have.length(66);
   });
@@ -80,11 +81,12 @@ describe("Duckies", function () {
       amt: 100,
       id: 'message1',
       blockExpiration: 20,
+      limit: 0,
     };
     const messageHash = await duckies.getMessageHash(message);
 
     expect(await duckies.getEthSignedMessageHash(messageHash)).to.be.equal(
-      "0x6767e3300cef4491d5c3b54033296e873b96251bdd3b4e0c846fb4d3a4b024cd"
+      "0x46bf4edfe3d2e9f2bf3074d6eeaadb4828165ce055efa2fde0816068eef0f8f1"
     );
     expect(await duckies.getEthSignedMessageHash(messageHash)).to.have.length(
       66
@@ -101,6 +103,7 @@ describe("Duckies", function () {
       amt: 100,
       id: 'message1',
       blockExpiration: 20,
+      limit: 0,
     };
     const messageHash = await duckies.getMessageHash(message);
     const ethSignedMessageHash = await duckies.getEthSignedMessageHash(
@@ -138,6 +141,7 @@ describe("Duckies", function () {
       amt: 30000,
       id: 'message0',
       blockExpiration: 20,
+      limit: 0,
     };
     const messageAccountZeroHash = await duckies.getMessageHash(
       messageAccountZero
@@ -163,6 +167,7 @@ describe("Duckies", function () {
       amt: 20000,
       id: 'message1',
       blockExpiration: 20,
+      limit: 0,
     };
     const messageAccountOneHash = await duckies.getMessageHash(
       messageAccountOne
@@ -191,6 +196,7 @@ describe("Duckies", function () {
       amt: 10000,
       id: 'message2',
       blockExpiration: 20,
+      limit: 0,
     };
     const messageAccountTwoHash = await duckies.getMessageHash(
       messageAccountTwo
@@ -222,6 +228,7 @@ describe("Duckies", function () {
       amt: 5000,
       id: 'message3',
       blockExpiration: 20,
+      limit: 0,
     };
     const messageAccountThreeHash = await duckies.getMessageHash(
       messageAccountThree
@@ -256,6 +263,7 @@ describe("Duckies", function () {
       amt: 5000,
       id: 'message4',
       blockExpiration: 20,
+      limit: 0,
     };
     const messageAccountFourHash = await duckies.getMessageHash(
       messageAccountFour
@@ -300,6 +308,7 @@ describe("Duckies", function () {
       amt: 30000,
       id: 'message',
       blockExpiration: 20,
+      limit: 0,
     };
     const messageHash = await duckies.getMessageHash(
       message
@@ -342,6 +351,7 @@ describe("Duckies", function () {
       amt: 1000,
       id: 'messageOne',
       blockExpiration: 20,
+      limit: 0,
     };
     const messageHash = await duckies.getMessageHash(messageOne);
     const signature = await provider.send("personal_sign", [messageHash, signerAccount]);
@@ -375,6 +385,7 @@ describe("Duckies", function () {
       amt: 1000,
       id: 'messageOne',
       blockExpiration: 50,
+      limit: 0,
     };
     const messageHash = await duckies.getMessageHash(messageOne);
     const signature = await provider.send("personal_sign", [messageHash, signerAccount]);
@@ -423,6 +434,7 @@ describe("Duckies", function () {
       amt: 1000,
       id: 'messageOne',
       blockExpiration: 50,
+      limit: 0,
     };
     const messageHash = await duckies.getMessageHash(messageOne);
     const signatureOne = await provider.send("personal_sign", [messageHash, signerAccount]);
@@ -439,6 +451,7 @@ describe("Duckies", function () {
       amt: 1000,
       id: 'messageOne',
       blockExpiration: 50,
+      limit: 0,
     };
     const messageTwoHash = await duckies.getMessageHash(messageTwo);
     const signatureTwo = await provider.send("personal_sign", [messageTwoHash, signerAccount]);
@@ -461,6 +474,7 @@ describe("Duckies", function () {
       amt: 1000,
       id: 'messageOne',
       blockExpiration: 50,
+      limit: 0,
     };
     const messageThreeHash = await duckies.getMessageHash(messageThree);
     const signatureThree = await provider.send("personal_sign", [messageThreeHash, signerAccount]);
@@ -476,6 +490,7 @@ describe("Duckies", function () {
       amt: 1000,
       id: 'messageOne',
       blockExpiration: 50,
+      limit: 0,
     };
     const messageFourHash = await duckies.getMessageHash(messageFour);
     const signatureFour = await provider.send("personal_sign", [messageFourHash, signerAccount]);
@@ -510,6 +525,7 @@ describe("Duckies", function () {
       amt: 1000,
       id: 'messageOne',
       blockExpiration: 50,
+      limit: 0,
     };
     const messageFiveHash = await duckies.getMessageHash(messageFive);
     const signatureFive = await provider.send("personal_sign", [messageFiveHash, signerAccount]);
@@ -556,6 +572,7 @@ describe("Duckies", function () {
       amt: 1000,
       id: 'messageOne',
       blockExpiration: 50,
+      limit: 0,
     };
     const messageSixHash = await duckies.getMessageHash(messageSix);
     const signatureSix = await provider.send("personal_sign", [messageSixHash, signerAccount]);
@@ -574,5 +591,43 @@ describe("Duckies", function () {
     const { duckies }: TestContext = this as any;
 
     expect(await duckies.getPayouts()).to.be.eql([500, 125, 80, 50, 20]);
+  });
+
+  it("should allow receive the bounty limited times", async function () {
+    const { duckies }: TestContext = this as any;
+
+    const [_owner, signer, ...accounts] = await ethers.getSigners();
+    const provider = ethers.provider;
+    const signerAccount = signer.address;
+
+    const message = {
+      ref: '0x0000000000000000000000000000000000000000',
+      amt: 1000,
+      id: 'message',
+      blockExpiration: 100,
+      limit: 3,
+    };
+
+    const messageHash = await duckies.getMessageHash(message);
+    const signature = await provider.send("personal_sign", [messageHash, signerAccount]);
+
+    await duckies.connect(accounts[1]).reward(message, signature);
+    expect(await duckies.balanceOf(accounts[1].address)).to.be.equal(1000);
+
+    await duckies.connect(accounts[1]).reward(message, signature);
+    expect(await duckies.balanceOf(accounts[1].address)).to.be.equal(2000);
+
+    await duckies.connect(accounts[1]).reward(message, signature);
+    expect(await duckies.balanceOf(accounts[1].address)).to.be.equal(3000);
+
+    try {
+      await duckies.connect(accounts[1]).reward(message, signature);
+
+      assert(false);
+    } catch (error) {
+      assert(error);
+    } finally {
+      expect(await duckies.balanceOf(accounts[1].address)).to.be.equal(3000);
+    }
   });
 });
