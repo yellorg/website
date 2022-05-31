@@ -4,7 +4,6 @@
     justify-content: space-between;
     padding-top: 93px;
     padding-bottom: 168px;
-
     &__tooltip {
         position: absolute;
         background: #fff;
@@ -19,12 +18,10 @@
         padding: 20px 24px;
         left: 0;
         border-radius: 2px;
-
         &-balance {
             display: flex;
             align-items: center;
         }
-    
         &-header {
             font-size: 18px !important;
             line-height: 18px !important;
@@ -32,76 +29,63 @@
             margin-bottom: 0px !important;
             font-weight: bold;
         }
-
         &-box {
             &-title {
                 font-size: 14px;
                 font-weight: bold;
             }
-
             &-balance {
                 margin-left: 3px;
                 display: flex;
                 align-items: center;
-
                 svg {
                     margin-left: 4px;
                 }
             }
         }
     }
-
     &__balance {
         display: flex;
         flex-flow: column;
-
         &-address {
             font-size: 14px;
             color: var(--neutral-control-layer-color-50);
         }
-
         &-amount {
             font-weight: bold;
             font-size: 20px;
             line-height: 20px;
             display: flex;
             align-items: center;
-
             svg {
                 margin-left: 8px;
             }
         }
-
         &-logout {
             margin-top: 12px;
             margin-right: 0px !important;
         }
     }
-
-    @media screen and (min-width: 816px) {
+    @media screen and (min-width: 872px) {
         .container {
             display: flex;
         }
     }
-
-    @media screen and (max-width: 816px) {
+    @media screen and (max-width: 871px) {
         flex-direction: column;
         padding-top: 42px;
     }
-
     &__info {
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
-
-        @media screen and (max-width: 816px) {
+        @media screen and (max-width: 871px) {
             margin-bottom: 60px;
         }
-
         &-selebration {
             display: flex;
             justify-content: flex-start;
-            @media screen and (max-width: 816px) {
+            @media screen and (max-width: 871px) {
                 justify-content: center;
                 margin-bottom: 10px;
                 svg {
@@ -110,53 +94,64 @@
                 }
             }
         }
-
         &-received {
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
             word-wrap: break-word;
-            font-size: 3.75rem;
-            line-height: 4rem;
-            font-weight: bolder;
-            font-family: var(--ifm-heading-font-family);
 
             @media screen and (max-width: 1200px) {
                 font-size: 2.5rem;
                 line-height: 3rem;
             }
-
-            @media screen and (max-width: 816px) {
+            @media screen and (max-width: 871px) {
                 justify-content: center;
                 text-align: center;
                 padding-bottom: 36px;
             }
-
             @media screen and (max-width: 425px) {
                 font-size: 2.5rem;
                 line-height: 3rem;
             }
-
             &-message {
                 color: var(--text-color-100);
+                font-size: 3.75rem;
+                line-height: 4rem;
+                font-weight: bolder;
+                font-family: var(--ifm-heading-font-family);
             }
             &-amount {
                 color: var(--text-color-100);
                 display: flex;
+                align-items: center;
+                width: 100%;
 
-                @media screen and (max-width: 816px) {
-                    flex-direction: column;
-                    align-items: center;
-                    word-wrap: break-word;
+                @media screen and (max-width: 871px) {
+                    justify-content: center;
                 }
-                span {
+
+                @media screen and (max-width: 572px) {
+                    flex-direction: column;
+                }
+
+                &-value {
+                    font-size: 3.75rem;
+                    line-height: 4rem;
+                    font-weight: bolder;
+                    font-family: var(--ifm-heading-font-family);
                     margin-right: 18px;
-                    @media screen and (max-width: 816px) {
+
+                    // @media screen and (max-width: 572px) {
+                    //     display
+                    // }
+                }
+
+                &-image {
+                    display: flex;
+
+                    @media screen and (max-width: 871px) {
                         margin-right: 0;
                     }
-                }
-                svg {
-                    margin-bottom: -4px;
                 }
             }
         }
@@ -173,21 +168,18 @@
             }
             &-claim {
                 margin-right: 24px;
-
-                @media screen and (max-width: 816px) {
+                @media screen and (max-width: 871px) {
                     width: 50%;
                 }
-
                 @media screen and (max-width: 572px) {
                     margin-right: 0;
                     width: 100%;
                 }
             }
-            &-earn a {
-                @media screen and (max-width: 816px) {
+            &-earn {
+                @media screen and (max-width: 871px) {
                     width: 50%;
                 }
-
                 @media screen and (max-width: 572px) {
                     margin-top: 12px;
                     width: 100%;
@@ -200,11 +192,9 @@
         justify-content: flex-end;
         width: 100%;
         position: relative;
-
-        @media screen and (max-width: 816px) {
+        @media screen and (max-width: 871px) {
             justify-content: center;
         }
-
         &-balance {
             padding: 16px;
             border-radius: 50%;
@@ -214,7 +204,7 @@
             z-index: 10;
             border: 1px solid var(--neutral-control-layer-color-80);
             box-shadow: -5px 5px var(--secondary-control-color-90);
-            @media screen and (max-width: 816px) {
+            @media screen and (max-width: 871px) {
                 width: 300px;
                 height: 300px;
             }
@@ -245,7 +235,6 @@
                             display: flex;
                             vertical-align: middle;
                             margin-left: 8px;
-
                             svg {
                                 cursor: pointer;
                             }
@@ -302,7 +291,6 @@
             }
         }
     }
-
     @media screen and (max-width: 768px) {
         .duckies-hero__icons-balance-body-content-title-icon {
             display: none;

@@ -8,7 +8,7 @@ const CustomDot = () => {
 };
 
 const CustomArrow = (props: any) => {
-    const { className, style, onClick } = props;
+    const { className, onClick } = props;
     return (
         <div className={className} style={{display:"flex", justifyContent:"center", alignItems:"center"}} onClick={onClick}>
             <Image
