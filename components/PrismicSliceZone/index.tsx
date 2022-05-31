@@ -1,6 +1,6 @@
 import React from 'react';
 import { SliceZone } from '@prismicio/react';
-import { components } from '../../slices';
+import { components } from '../Duckies/Bounty';
 
 interface SliceZoneProps {
     slices: any[];

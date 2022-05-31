@@ -1,0 +1,31 @@
+.cr-bounty {
+  &-row {
+    background: #FFFAE3;
+  }
+
+  &-column {
+    &-amount {
+      display: flex;
+      align-items: center;
+      justify-content: end;
+      width: 140px;
+    }
+  
+    &-status {
+      padding-right: 10px;
+    }
+  }
+
+  &-claimed,
+  &-processing {
+    font-size: 16px;
+  }
+
+  &-processing {
+    color: #EFB008;
+  }
+
+  &-claimed {
+    color: #00632B;
+  }
+}

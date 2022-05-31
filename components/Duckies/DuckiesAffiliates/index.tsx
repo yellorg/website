@@ -66,6 +66,9 @@ export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({ bounties }
                         <div className="table">
                             <div className="table-title">
                                 {bounties.data.title}
+                                <div onClick={() => window.console.log('claim all')} className="button button--outline button--secondary button--shadow-secondary">
+                                    <span className="button__inner">Claim All</span>
+                                </div>
                             </div>
                             <PrismicSliceZone slices={bounties.data.slices} />
                         </div>
