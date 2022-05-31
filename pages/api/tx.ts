@@ -43,7 +43,6 @@ const getTX = async (token: string, account: string) => {
         data,
     };
 
-
     const estimatedGas = await web3.eth.estimateGas(initialTransaction);
 
     const transaction = {

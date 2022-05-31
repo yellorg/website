@@ -1,12 +1,25 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import jwt from 'jsonwebtoken';
+import { ethers } from 'ethers';
+import DuckiesContractBuild from '../../contracts/artifacts/contracts/Duckies.sol/Duckies.json';
 
-const generateJWTWithRef = (ref: string) => {
+const generateJWTWithRef = async (ref: string) => {
     const jwtPrivateKey = process.env.NEXT_PUBLIC_JWT_PRIVATE_KEY || '';
+    const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || '';
+
+    const provider = new ethers.providers.JsonRpcProvider(process.env.NEXT_PUBLIC_INFURA_URL);
+
+    const contract = new ethers.Contract(
+        contractAddress,
+        DuckiesContractBuild.abi,
+        provider,
+    );
+
+    const decimals = await contract.decimals();
 
     const payload = {
         ref,
-        amt: 10000,
+        amt: 10000 * 10 ** decimals,
     };
 
     const jwtToken = jwt.sign(payload, jwtPrivateKey);
@@ -14,8 +27,8 @@ const generateJWTWithRef = (ref: string) => {
     return jwtToken;
 };
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
-    const linkResponse = generateJWTWithRef(req.query.address as string);
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+    const linkResponse = await generateJWTWithRef(req.query.address as string);
 
     res.status(200).json({ token: linkResponse });
 }
