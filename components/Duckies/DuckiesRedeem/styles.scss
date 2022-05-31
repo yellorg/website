@@ -1,32 +1,116 @@
 .duckies-redeem {
   padding: 0 var(--ifm-spacing-horizontal);
   margin: 0 auto;
-  margin-top: 142px;
+  margin-top: 74px;
 
-  &__header {
+  &__block {
     display: flex;
-    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    margin-bottom: 36px;
+    margin-bottom: 74px;
+    width: 100%;
 
-    &-title {
-      font-weight: 700;
-      font-size: 60px;
-      line-height: 64px;
-      color: var(--text-color-100);
-      font-family: var(--ifm-heading-font-family);
-      text-align: center;
+    @media screen and (max-width: 676px) {
+      flex-direction: column;
     }
 
-    &-subtitle{
-      font-weight: 600;
-      font-size: 24px;
-      line-height: 32px;
-      letter-spacing: 0.15px;
-      color: var(--text-color-100);
-      font-family: var(--font-family-h8);
-      text-align: center;
+    &-info {
+      display:flex;
+      width: 100%;
+      max-width: 50%;
+      flex-direction: column;
+
+      @media screen and (max-width: 851px) {
+        max-width: 100%;
+      }
+
+      &-header {
+        display: flex;
+        justify-content: flex-start;
+        flex-direction: column;
+
+        &-name {
+          color: var(--text-color-100);
+          font-weight: 700;
+          font-size: 1.125rem;
+          line-height: 1.5rem;
+          margin-bottom: 12px;
+
+          &-content {
+            display: block;
+            width: fit-content;
+            background-color: var(--secondary-control-color-90);
+            padding: 4px 14px;
+            font-family: var(--font-family-subtitle-400);
+          }
+        }
+
+        &-title {
+          color: var(--text-color-100);
+          font-size: 3.75rem;
+          line-height: 4rem;
+          font-weight: 700;
+          margin-bottom: 12px;
+          font-family: var(--font-family-h8);
+        }
+
+        &-subtitle {
+          color: var(--text-color-100);
+          font-weight: 600;
+          font-size: 1.25rem;
+          line-height: 1.75rem;
+          margin-bottom: 36px;
+          font-family: var(--font-family-subtitle-400);
+        }
+      }
+
+      &-content {
+        display: flex;
+        flex-direction: column;
+
+        &-row {
+          display: flex;
+          width: 100%;
+          flex-direction: row;
+
+          @media screen and (max-width: 851px) {
+            flex-direction: column;
+          }
+
+          &-item {
+            display: flex;
+            font-size: 1.5rem;
+            line-height: 2rem;
+            width: 100%;
+            max-width: 50%;
+            margin-bottom: 36px;
+            letter-spacing: 0.15px;
+            padding-right: 58px;
+            flex-direction: column;
+            font-family: var(--font-family-h8);
+
+            @media screen and (max-width: 851px) {
+              max-width: 100%;
+            }
+
+            &-line {
+              width: 48px;
+              height: 4px;
+              background-color: var(--secondary-control-color-90);
+              margin-bottom: 8px;
+            }
+          }
+        }
+      }
+    }
+
+    &-duckies {
+      display:flex;
+      width: 100%;
+      max-width: 50%;
+
+      @media screen and (max-width: 851px) {
+        max-width: 100%;
+      }
     }
   }
 
