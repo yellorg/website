@@ -39,6 +39,20 @@
             "label": "Value",
             "placeholder": ""
           }
+        },
+        "limit": {
+          "type": "Number",
+          "config": {
+            "label": "Limit",
+            "placeholder": ""
+          }
+        },
+        "triggerPhrase": {
+          "type": "Text",
+          "config": {
+            "label": "Trigger Phrase",
+            "placeholder": ""
+          }
         }
       },
       "imageUrl": "https://images.prismic.io/slice-machine/621a5ec4-0387-4bc5-9860-2dd46cbc07cd_default_ss.png?auto=compress,format"
