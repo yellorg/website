@@ -143,10 +143,9 @@ contract Duckies is Initializable, ERC20CappedUpgradeable, PausableUpgradeable, 
             if (_message.limit != 0) {
                 require(_bounty[msg.sender][_message.id] < _message.limit, "Limit of this bounty is exceeded");
             }
-
-            _bounty[msg.sender][_message.id]++;
         }
 
+        _bounty[msg.sender][_message.id]++;
         _mintReward(_message.amt);
     }
 
