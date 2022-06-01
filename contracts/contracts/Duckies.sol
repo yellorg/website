@@ -217,4 +217,8 @@ contract Duckies is Initializable, ERC20CappedUpgradeable, PausableUpgradeable, 
 
         return count;
     }
+
+    function getAccountBountyLimit(string memory bountyID) public view returns (uint16) {
+        return _bounty[msg.sender][bountyID];
+    }
 }

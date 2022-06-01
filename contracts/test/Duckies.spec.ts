@@ -633,4 +633,33 @@ describe("Duckies", function () {
       expect(await duckies.balanceOf(accounts[1].address)).to.be.equal(3000);
     }
   });
+
+  it("should return count of claimed rewards of specific bounty for user", async function() {
+    const { duckies }: TestContext = this as any;
+
+    const [_owner, signer, ...accounts] = await ethers.getSigners();
+    const provider = ethers.provider;
+    const signerAccount = signer.address;
+
+    const message = {
+      ref: '0x0000000000000000000000000000000000000000',
+      amt: 1000,
+      id: 'message',
+      blockExpiration: 100,
+      limit: 3,
+    };
+
+    let countOfReceivedBounty = await duckies.connect(accounts[1]).getAccountBountyLimit(message.id);
+    expect(countOfReceivedBounty).to.be.equal(0);
+
+    const messageHash = await duckies.getMessageHash(message);
+    const signature = await provider.send("personal_sign", [messageHash, signerAccount]);
+
+    await duckies.connect(accounts[1]).reward(message, signature);
+    expect(await duckies.balanceOf(accounts[1].address)).to.be.equal(1000);
+
+    countOfReceivedBounty = await duckies.connect(accounts[1]).getAccountBountyLimit(message.id);
+    expect(countOfReceivedBounty).to.be.equal(1);
+
+  });
 });
