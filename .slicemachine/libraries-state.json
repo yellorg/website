@@ -47,6 +47,20 @@
                     "label": "Value",
                     "placeholder": ""
                   }
+                },
+                "limit": {
+                  "type": "Number",
+                  "config": {
+                    "label": "Limit",
+                    "placeholder": ""
+                  }
+                },
+                "triggerPhrase": {
+                  "type": "Text",
+                  "config": {
+                    "label": "Trigger Phrase",
+                    "placeholder": ""
+                  }
                 }
               },
               "imageUrl": "https://images.prismic.io/slice-machine/621a5ec4-0387-4bc5-9860-2dd46cbc07cd_default_ss.png?auto=compress,format"
@@ -60,28 +74,44 @@
             "slice_type": "bounty",
             "items": [
               {
-                "fid": "drive e-business metrics",
-                "title": "iterate cross-platform communities",
-                "description": "target revolutionary action-items",
-                "value": 8098
+                "fid": "exploit web-enabled e-services",
+                "title": "recontextualize cutting-edge applications",
+                "description": "embrace proactive synergies",
+                "value": 1424,
+                "limit": 3004,
+                "triggerPhrase": "leverage wireless web services"
               },
               {
-                "fid": "envisioneer viral relationships",
-                "title": "evolve proactive initiatives",
-                "description": "iterate scalable paradigms",
-                "value": 2786
+                "fid": "leverage compelling paradigms",
+                "title": "implement distributed action-items",
+                "description": "aggregate 24/7 models",
+                "value": 5780,
+                "limit": 1872,
+                "triggerPhrase": "redefine cutting-edge paradigms"
               },
               {
-                "fid": "syndicate front-end relationships",
-                "title": "incentivize one-to-one vortals",
-                "description": "recontextualize dot-com mindshare",
-                "value": 3088
+                "fid": "reintermediate web-enabled web services",
+                "title": "matrix wireless interfaces",
+                "description": "morph extensible schemas",
+                "value": 822,
+                "limit": 3321,
+                "triggerPhrase": "scale holistic experiences"
               },
               {
-                "fid": "target 24/7 ROI",
-                "title": "orchestrate value-added ROI",
-                "description": "recontextualize interactive partnerships",
-                "value": 8602
+                "fid": "enhance bricks-and-clicks niches",
+                "title": "unleash synergistic infomediaries",
+                "description": "cultivate intuitive technologies",
+                "value": 3350,
+                "limit": 451,
+                "triggerPhrase": "strategize clicks-and-mortar partnerships"
+              },
+              {
+                "fid": "engineer cross-platform platforms",
+                "title": "matrix ubiquitous initiatives",
+                "description": "implement best-of-breed e-markets",
+                "value": 1786,
+                "limit": 8244,
+                "triggerPhrase": "transform transparent e-services"
               }
             ],
             "primary": {}
@@ -95,7 +125,7 @@
           "default": {
             "path": "/Users/jeng/works/yellow/yellorg/website/.slicemachine/assets/slices/Bounty/default/preview.png",
             "width": 800,
-            "height": 323
+            "height": 404
           }
         }
       }
