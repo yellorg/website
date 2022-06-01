@@ -1,7 +1,6 @@
 import { UnsupportedChainIdError } from '@web3-react/core'
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import MetaMaskOnboarding from '@metamask/onboarding';
 import type { ProviderWhitelist } from '../../../hooks/useDApp';
@@ -14,11 +13,14 @@ import { useEagerConnect } from '../../../hooks/useEagerConnect';
 import useDuckiesContract from '../../../hooks/useDuckiesContract';
 import { appConfig } from '../../../config/app';
 import { convertNumberToLiteral } from '../../../helpers/convertNumberToLiteral';
+import Spinner from '../../Spinner';
 
 export const DuckiesHero = () => {
     const [isMetaMaskInstalled, setMetaMaskInstalled] = useState<boolean>(true);
     const [isOpenConnect, setIsOpenConnect] = useState<boolean>(false);
     const [isOpenBalancesInfo, setIsOpenBalancesInfo] = useState<boolean>(false);
+    const [isClaimed, setIsClaimed] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
     const [balance, setBalance] = useState<number | undefined>(undefined);
 
     const duckiesContract = useDuckiesContract();
@@ -43,11 +45,19 @@ export const DuckiesHero = () => {
             setBalance(balance);
         }
     }, [account, duckiesContract]);
+    
+    useEffect(() => {
+        if (!isReady) return
+        (async () => {
+            // if no referral_token, mark it as unclaim
+            const token = localStorage.getItem('referral_token');
+            const limit = +await duckiesContract?.getAccountBountyLimit('referral');
+            setIsClaimed(!token || limit > 0)
+        })()
+    }, [isReady])
 
     useEffect(() => {
         if (isReady) {
-            setIsOpenConnect(false);
-
             getBalance();
         }
     }, [isReady, getBalance]);
@@ -135,27 +145,99 @@ export const DuckiesHero = () => {
         const token = localStorage.getItem('referral_token');
 
         if (token && signer && account) {
+            setIsLoading(true)
             const { transaction } = await (await fetch(`/api/tx?token=${token}&account=${account}`)).json();
 
             try {
                 const tx = await signer.sendTransaction(transaction);
                 await tx.wait();
                 localStorage.removeItem('referral_token');
+                setIsLoading(false)
+                setIsOpenConnect(false)
             } catch (error) {
                 console.log(error);
+                setIsLoading(false)
             }
         }
-    }, [signer, account]);
+    }, [signer, account, setIsLoading, setIsOpenConnect]);
 
     const handleClick = React.useCallback(async () => {
-        if (!active) {
-            setIsOpenConnect(true);
-        } else {
-            if (signer) {
-                handleClaimReward();
-            }
-        }
-    }, [active, signer, handleClaimReward]);
+        setIsOpenConnect(true);
+    }, []);
+
+    const MetamaskModal = useMemo(() => {
+
+        const loginState = (
+            <>
+                <svg className="icon" width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="30" cy="30" r="30" fill="#FFF5C7"/>
+                    <path d="M48.7424 10.8027L32.4912 22.8275L35.5133 15.7409L48.7424 10.8027Z" fill="#E17726" stroke="#E17726" stroke-width="0.693333" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M11.2568 10.8027L27.3633 22.9397L24.4861 15.7409L11.2568 10.8027Z" fill="#E27625" stroke="#E27625" stroke-width="0.693333" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M42.8914 38.6826L38.5674 45.2882L47.8262 47.8375L50.4785 38.827L42.8914 38.6826Z" fill="#E27625" stroke="#E27625" stroke-width="0.693333" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M9.53711 38.827L12.1733 47.8375L21.4161 45.2882L17.1081 38.6826L9.53711 38.827Z" fill="#E27625" stroke="#E27625" stroke-width="0.693333" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M20.9176 27.5273L18.3457 31.4073L27.5081 31.8241L27.2027 21.9639L20.9176 27.5273Z" fill="#E27625" stroke="#E27625" stroke-width="0.693333" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M39.0816 27.5233L32.7002 21.8477L32.4912 31.8202L41.6535 31.4033L39.0816 27.5233Z" fill="#E27625" stroke="#E27625" stroke-width="0.693333" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M21.4155 45.2877L26.9611 42.6103L22.1871 38.8906L21.4155 45.2877Z" fill="#E27625" stroke="#E27625" stroke-width="0.693333" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M33.0371 42.6103L38.5666 45.2877L37.8111 38.8906L33.0371 42.6103Z" fill="#E27625" stroke="#E27625" stroke-width="0.693333" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M38.5666 45.2927L33.0371 42.6152L33.4871 46.2066L33.4389 47.7297L38.5666 45.2927Z" fill="#D5BFB2" stroke="#D5BFB2" stroke-width="0.693333" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M21.4155 45.2927L26.5594 47.7297L26.5272 46.2066L26.9611 42.6152L21.4155 45.2927Z" fill="#D5BFB2" stroke="#D5BFB2" stroke-width="0.693333" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M26.6564 36.5204L22.0591 35.1737L25.3061 33.6826L26.6564 36.5204Z" fill="#233447" stroke="#233447" stroke-width="0.693333" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M33.3433 36.5204L34.6936 33.6826L37.9566 35.1737L33.3433 36.5204Z" fill="#233447" stroke="#233447" stroke-width="0.693333" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M21.4158 45.2882L22.2196 38.6826L17.1079 38.827L21.4158 45.2882Z" fill="#CC6228" stroke="#CC6228" stroke-width="0.693333" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M37.7793 38.6826L38.567 45.2882L42.8909 38.827L37.7793 38.6826Z" fill="#CC6228" stroke="#CC6228" stroke-width="0.693333" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M41.6535 31.4023L32.4912 31.8192L33.3431 36.517L34.6934 33.679L37.9565 35.1701L41.6535 31.4023Z" fill="#CC6228" stroke="#CC6228" stroke-width="0.693333" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M22.0589 35.1701L25.3059 33.679L26.6562 36.517L27.5081 31.8192L18.3457 31.4023L22.0589 35.1701Z" fill="#CC6228" stroke="#CC6228" stroke-width="0.693333" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M18.3457 31.4023L22.1875 38.8898L22.0588 35.1701L18.3457 31.4023Z" fill="#E27525" stroke="#E27525" stroke-width="0.693333" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M37.9567 35.1701L37.812 38.8898L41.6538 31.4023L37.9567 35.1701Z" fill="#E27525" stroke="#E27525" stroke-width="0.693333" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M27.5083 31.8223L26.6562 36.52L27.7332 42.0673L27.9744 34.7563L27.5083 31.8223Z" fill="#E27525" stroke="#E27525" stroke-width="0.693333" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M32.4921 31.8223L32.042 34.7404L32.2671 42.0673L33.344 36.52L32.4921 31.8223Z" fill="#E27525" stroke="#E27525" stroke-width="0.693333" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M33.3436 36.5187L32.2666 42.066L33.0382 42.6112L37.8123 38.8915L37.957 35.1719L33.3436 36.5187Z" fill="#F5841F" stroke="#F5841F" stroke-width="0.693333" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M22.0591 35.1719L22.1878 38.8915L26.9617 42.6112L27.7333 42.066L26.6564 36.5187L22.0591 35.1719Z" fill="#F5841F" stroke="#F5841F" stroke-width="0.693333" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M33.4391 47.73L33.4873 46.2069L33.0694 45.8541H26.9291L26.5272 46.2069L26.5594 47.73L21.4155 45.293L23.2158 46.768L26.8647 49.2852H33.1176L36.7825 46.768L38.5668 45.293L33.4391 47.73Z" fill="#C0AC9D" stroke="#C0AC9D" stroke-width="0.693333" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M33.0379 42.6105L32.2663 42.0654H27.7334L26.9619 42.6105L26.5278 46.2019L26.9297 45.8492H33.0701L33.4881 46.2019L33.0379 42.6105Z" fill="#161616" stroke="#161616" stroke-width="0.693333" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M49.4328 23.613L50.7992 16.9754L48.7417 10.8027L33.0371 22.4267L39.081 27.5251L47.6164 30.0103L49.4972 27.8138L48.6774 27.2205L49.9794 26.0341L48.9828 25.2645L50.2849 24.2704L49.4328 23.613Z" fill="#763E1A" stroke="#763E1A" stroke-width="0.693333" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M9.19971 16.9754L10.5821 23.613L9.69802 24.2704L11.0161 25.2645L10.0195 26.0341L11.3215 27.2205L10.5017 27.8138L12.3824 30.0103L20.918 27.5251L26.9618 22.4267L11.2572 10.8027L9.19971 16.9754Z" fill="#763E1A" stroke="#763E1A" stroke-width="0.693333" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M47.6173 30.0095L39.0819 27.5244L41.6538 31.4044L37.812 38.8918L42.8915 38.8277H50.4785L47.6173 30.0095Z" fill="#F5841F" stroke="#F5841F" stroke-width="0.693333" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M20.9177 27.5244L12.3823 30.0095L9.53711 38.8277H17.1081L22.1875 38.8918L18.3458 31.4044L20.9177 27.5244Z" fill="#F5841F" stroke="#F5841F" stroke-width="0.693333" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M32.4918 31.8213L33.0384 22.4259L35.5138 15.7402H24.4868L26.9622 22.4259L27.5087 31.8213L27.7177 34.7714L27.7338 42.0664H32.2668L32.2829 34.7714L32.4918 31.8213Z" fill="#F5841F" stroke="#F5841F" stroke-width="0.693333" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+                <p className="content">
+                    Connect Metamask wallet in order to be able to get Duckies tokens
+                </p>
+                {renderMetamaskButton()}
+            </>
+        )
+
+        const claimState = (
+            <>
+                <p className="content">
+                    In order for the on-chain transaction to be executed please wait a couple of minutes. Time may vary depending on the queue & gas.
+                </p>
+                <div onClick={() => handleClaimReward()} className="button button--outline button--secondary button--shadow-secondary">
+                    <span className="button__inner">
+                        {isLoading ? <Spinner style={{margin: ".3em 1.25em"}} /> : <span>Confirm</span>}
+                    </span>
+                </div>
+            </>
+        )
+
+        const claimedState = (
+            <>
+                <p className="content">
+                    There is nothing to claim. You have already claimed your current rewards. Invite more people and fulfill more bounties to get more DUCKZ
+                </p>
+                <div onClick={() => setIsOpenConnect(false)} className="button button--outline button--secondary button--shadow-secondary">
+                    <span className="button__inner">OK</span>
+                </div>
+            </>
+        )
+
+        return (
+            <div className="metamask-modal">
+                {isClaimed ? claimedState : isReady ? claimState : loginState}
+            </div>
+        )
+    }, [isReady, handleClaimReward, setIsOpenConnect, isClaimed, isLoading]);
 
     return (
         <>
@@ -267,8 +349,8 @@ export const DuckiesHero = () => {
                 </div>
             </div>
             <DuckiesConnectorModalWindow
-                bodyContent={isReady ? <div>Claim logic</div> : renderMetamaskButton()}
-                headerContent="Connect Wallet"
+                bodyContent={MetamaskModal}
+                headerContent={isReady ? "Claim Reward" : "Connect Wallet"}
                 isOpen={isOpenConnect}
                 setIsOpen={setIsOpenConnect}
             />
