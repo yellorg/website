@@ -683,6 +683,124 @@ describe("Duckies", function () {
 
     countOfReceivedBounty = await duckies.connect(accounts[1]).getAccountBountyLimit(message.id);
     expect(countOfReceivedBounty).to.be.equal(1);
+  });
 
+  it("should claim several rewards", async function() {
+    const { duckies }: TestContext = this as any;
+
+    const [_owner, signer, ...accounts] = await ethers.getSigners();
+    const provider = ethers.provider;
+    const signerAccount = signer.address;
+
+    const messageOne = {
+      ref: '0x0000000000000000000000000000000000000000',
+      amt: 1000,
+      id: 'message-1',
+      blockExpiration: 100,
+      limit: 1,
+    };
+
+    const messageTwo = {
+      ref: '0x0000000000000000000000000000000000000000',
+      amt: 500,
+      id: 'message-2',
+      blockExpiration: 100,
+      limit: 1,
+    };
+
+    const messageThree = {
+      ref: '0x0000000000000000000000000000000000000000',
+      amt: 250,
+      id: 'message-3',
+      blockExpiration: 100,
+      limit: 1,
+    };
+
+    const messageOneHash = await duckies.getMessageHash(messageOne);
+    const signatureOne = await provider.send("personal_sign", [messageOneHash, signerAccount]);
+
+    const messageTwoHash = await duckies.getMessageHash(messageTwo);
+    const signatureTwo = await provider.send("personal_sign", [messageTwoHash, signerAccount]);
+
+    const messageThreeHash = await duckies.getMessageHash(messageThree);
+    const signatureThree = await provider.send("personal_sign", [messageThreeHash, signerAccount]);
+
+    expect(await duckies.balanceOf(accounts[0].address)).to.be.equal(0);
+
+    const messagesToClaim = [
+      {
+        message: messageOne,
+        signature: signatureOne,
+      },
+      {
+        message: messageTwo,
+        signature: signatureTwo,
+      },
+      {
+        message: messageThree,
+        signature: signatureThree,
+      },
+    ];
+
+    await duckies.connect(accounts[0]).claimRewards(messagesToClaim);
+
+    expect(await duckies.balanceOf(accounts[0].address)).to.be.equal(1750);
+  });
+
+  it("should fail claiming of several rewards if limit is reached", async function() {
+    const { duckies }: TestContext = this as any;
+
+    const [_owner, signer, ...accounts] = await ethers.getSigners();
+    const provider = ethers.provider;
+    const signerAccount = signer.address;
+
+    const messageOne = {
+      ref: '0x0000000000000000000000000000000000000000',
+      amt: 1000,
+      id: 'message-1',
+      blockExpiration: 100,
+      limit: 1,
+    };
+
+    const messageTwo = {
+      ref: '0x0000000000000000000000000000000000000000',
+      amt: 500,
+      id: 'message-2',
+      blockExpiration: 100,
+      limit: 1,
+    };
+
+    const messageOneHash = await duckies.getMessageHash(messageOne);
+    const signatureOne = await provider.send("personal_sign", [messageOneHash, signerAccount]);
+
+    const messageTwoHash = await duckies.getMessageHash(messageTwo);
+    const signatureTwo = await provider.send("personal_sign", [messageTwoHash, signerAccount]);
+
+    expect(await duckies.balanceOf(accounts[0].address)).to.be.equal(0);
+
+    const messagesToClaim = [
+      {
+        message: messageOne,
+        signature: signatureOne,
+      },
+      {
+        message: messageOne,
+        signature: signatureOne,
+      },
+      {
+        message: messageTwo,
+        signature: signatureTwo,
+      },
+    ];
+
+    try {
+      await duckies.connect(accounts[0]).claimRewards(messagesToClaim);
+
+      assert(false);
+    } catch (error) {
+      assert(error);
+    }
+
+    expect(await duckies.balanceOf(accounts[0].address)).to.be.equal(0);
   });
 });

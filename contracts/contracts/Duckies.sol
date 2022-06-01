@@ -35,6 +35,11 @@ contract Duckies is Initializable, ERC20CappedUpgradeable, PausableUpgradeable, 
         uint16  limit;
     }
 
+    struct Reward {
+        Message message;
+        bytes   signature;
+    }
+
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() {
         _disableInitializers();
@@ -148,8 +153,14 @@ contract Duckies is Initializable, ERC20CappedUpgradeable, PausableUpgradeable, 
         }
     }
 
+    function claimRewards(Reward[] memory rewards) public {
+        for (uint8 i = 0; i < rewards.length; i++) {
+            reward(rewards[i].message, rewards[i].signature);
+        }
+    }
+
     // reward method is used to retriave the reward from invitation link or claim the bounty for some bounty task
-    function reward(Message memory _message, bytes memory _sig) public
+    function reward(Message memory _message, bytes memory _sig) public returns (bool)
     {
         bytes32 messageHash = getMessageHash(_message);
         bytes32 ethSignedMessageHash = getEthSignedMessageHash(messageHash);
@@ -160,7 +171,7 @@ contract Duckies is Initializable, ERC20CappedUpgradeable, PausableUpgradeable, 
         if (_message.ref != address(0)) {
             require(_referrers[msg.sender] == address(0));
             require(msg.sender != _message.ref);
-            require(isAccountPresentInReferrers(msg.sender, _message.ref));
+            require(isAccountNotInReferrers(msg.sender, _message.ref));
 
             _referrers[msg.sender] = _message.ref;
             _affiliates[_message.ref].push(msg.sender);
@@ -174,22 +185,22 @@ contract Duckies is Initializable, ERC20CappedUpgradeable, PausableUpgradeable, 
         }
 
         _bounty[msg.sender][_message.id]++;
+
+        return true;
     }
 
-    function isAccountPresentInReferrers(address targetAccount, address refAccount) private view returns (bool) {
-        bool notPresent = true;
+    function isAccountNotInReferrers(address targetAccount, address refAccount) private view returns (bool) {
         address bufAccount = refAccount;
 
         for (uint8 i = 0; i < 5; i++) {
             if (_referrers[bufAccount] == targetAccount) {
-                notPresent = false;
-                break;
+                return false;
             }
 
             bufAccount = _referrers[bufAccount];
         }
 
-        return notPresent;
+        return true;
     }
 
     function getMessageHash(Message memory _message) public pure returns (bytes32)
