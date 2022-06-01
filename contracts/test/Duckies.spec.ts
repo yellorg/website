@@ -40,21 +40,38 @@ describe("Duckies", function () {
     expect(balance).to.equal(444000000000 * 10 ** decimals);
   });
 
+  it("Should successfully get initial referral payouts and set payouts", async function () {
+    const { duckies }: TestContext = this as any;
+
+    expect(await duckies._referralPayouts(0)).to.equal(500);
+    expect(await duckies._referralPayouts(1)).to.equal(125);
+    expect(await duckies._referralPayouts(2)).to.equal(80);
+    expect(await duckies._referralPayouts(3)).to.equal(50);
+    expect(await duckies._referralPayouts(4)).to.equal(20);
+
+    await duckies.setReferralPayouts([10, 20, 30, 40, 50]);
+    expect(await duckies._referralPayouts(0)).to.equal(10);
+    expect(await duckies._referralPayouts(1)).to.equal(20);
+    expect(await duckies._referralPayouts(2)).to.equal(30);
+    expect(await duckies._referralPayouts(3)).to.equal(40);
+    expect(await duckies._referralPayouts(4)).to.equal(50);
+  });
+
   it("Should successfully get initial payouts and set payouts", async function () {
     const { duckies }: TestContext = this as any;
 
-    expect(await duckies._payouts(0)).to.equal(500);
-    expect(await duckies._payouts(1)).to.equal(125);
-    expect(await duckies._payouts(2)).to.equal(80);
-    expect(await duckies._payouts(3)).to.equal(50);
-    expect(await duckies._payouts(4)).to.equal(20);
+    expect(await duckies._bountyPayouts(0)).to.equal(50);
+    expect(await duckies._bountyPayouts(1)).to.equal(25);
+    expect(await duckies._bountyPayouts(2)).to.equal(15);
+    expect(await duckies._bountyPayouts(3)).to.equal(10);
+    expect(await duckies._bountyPayouts(4)).to.equal(5);
 
-    await duckies.setPayouts([10, 20, 30, 40, 50]);
-    expect(await duckies._payouts(0)).to.equal(10);
-    expect(await duckies._payouts(1)).to.equal(20);
-    expect(await duckies._payouts(2)).to.equal(30);
-    expect(await duckies._payouts(3)).to.equal(40);
-    expect(await duckies._payouts(4)).to.equal(50);
+    await duckies.setBountyPayouts([10, 20, 30, 40, 50]);
+    expect(await duckies._bountyPayouts(0)).to.equal(10);
+    expect(await duckies._bountyPayouts(1)).to.equal(20);
+    expect(await duckies._bountyPayouts(2)).to.equal(30);
+    expect(await duckies._bountyPayouts(3)).to.equal(40);
+    expect(await duckies._bountyPayouts(4)).to.equal(50);
   });
 
   it("Should successfully convert message to hash", async function () {
@@ -132,11 +149,11 @@ describe("Duckies", function () {
     const [_owner, signer, ...accounts] = await ethers.getSigners();
     const provider = ethers.provider;
     const signerAccount = signer.address;
-    const payoutRefOne = await duckies._payouts(0);
-    const payoutRefTwo = await duckies._payouts(1);
-    const payoutRefThree = await duckies._payouts(2);
-    const payoutRefFour = await duckies._payouts(3);
-    const payoutRefFive = await duckies._payouts(4);
+    const payoutRefOne = await duckies._referralPayouts(0);
+    const payoutRefTwo = await duckies._referralPayouts(1);
+    const payoutRefThree = await duckies._referralPayouts(2);
+    const payoutRefFour = await duckies._referralPayouts(3);
+    const payoutRefFive = await duckies._referralPayouts(4);
 
     // preparing message and signature for first account
     const messageAccountZero = {
@@ -381,7 +398,7 @@ describe("Duckies", function () {
     const [_owner, signer, ...accounts] = await ethers.getSigners();
     const provider = ethers.provider;
     const signerAccount = signer.address;
-    const payoutRefOne = await duckies._payouts(0);
+    const payoutRefOne = await duckies._referralPayouts(0);
 
     const messageOne = {
       ref: accounts[0].address,
@@ -593,7 +610,13 @@ describe("Duckies", function () {
   it("should successfully get all payouts array", async function () {
     const { duckies }: TestContext = this as any;
 
-    expect(await duckies.getPayouts()).to.be.eql([500, 125, 80, 50, 20]);
+    expect(await duckies.getRefferalPayouts()).to.be.eql([500, 125, 80, 50, 20]);
+  });
+
+  it("should successfully get all payouts array", async function () {
+    const { duckies }: TestContext = this as any;
+
+    expect(await duckies.getBountyPayouts()).to.be.eql([50, 25, 15, 10, 5]);
   });
 
   it("should allow receive the bounty limited times", async function () {
