@@ -18,7 +18,7 @@ const getLibrary = (provider: any): ethers.providers.Web3Provider => {
     return library;
 };
 
-export const getStaticProps = async ({ previewData }: any) => {
+export const getServerSideProps = async ({ previewData }: any) => {
     const client = createClient({ previewData });
     const bounties = await client.getSingle('bounties');
 
