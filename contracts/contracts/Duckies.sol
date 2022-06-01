@@ -21,7 +21,8 @@ contract Duckies is Initializable, ERC20CappedUpgradeable, PausableUpgradeable, 
     mapping(address => address[]) private _affiliates;
 
     // Affiliate Payouts
-    uint16[] public _payouts;
+    uint16[] public _referralPayouts;
+    uint8[] public _bountyPayouts;
 
     // Participants
     mapping(address => mapping(string => uint16)) private _bounty;
@@ -32,6 +33,11 @@ contract Duckies is Initializable, ERC20CappedUpgradeable, PausableUpgradeable, 
         uint32  amt;
         uint256 blockExpiration;
         uint16  limit;
+    }
+
+    struct Reward {
+        Message message;
+        bytes   signature;
     }
 
     /// @custom:oz-upgrades-unsafe-allow constructor
@@ -46,7 +52,8 @@ contract Duckies is Initializable, ERC20CappedUpgradeable, PausableUpgradeable, 
         __Ownable_init();
 
         _issuer = issuer;
-        setPayouts([500, 125, 80, 50, 20]);
+        setReferralPayouts([500, 125, 80, 50, 20]);
+        setBountyPayouts([50, 25, 15, 10, 5]);
         _mint(msg.sender, 444000000000 * 10 ** decimals());
     }
 
@@ -88,8 +95,12 @@ contract Duckies is Initializable, ERC20CappedUpgradeable, PausableUpgradeable, 
         _mint(to, amount);
     }
 
-    function setPayouts(uint16[5] memory payouts) public onlyOwner {
-        _payouts = payouts;
+    function setReferralPayouts(uint16[5] memory payouts) public onlyOwner {
+        _referralPayouts = payouts;
+    }
+
+    function setBountyPayouts(uint8[5] memory payouts) public onlyOwner {
+        _bountyPayouts = payouts;
     }
 
     function _beforeTokenTransfer(address from, address to, uint256 amount)
@@ -104,27 +115,52 @@ contract Duckies is Initializable, ERC20CappedUpgradeable, PausableUpgradeable, 
      * @dev Mint referral rewards.
      *
      */
-    function _mintReward(uint amount) private {
+    function _mintReferralReward(uint amount) private {
         require(msg.sender != address(0), "ERC20: reward to the zero address");
         require(amount > uint256(0), "ERC20: amount must be higher than zero");
 
         _mint(msg.sender, amount);
         address currentAddress = _referrers[msg.sender];
 
-        for (uint8 i = 0; i < _payouts.length; i++) {
+        for (uint8 i = 0; i < _referralPayouts.length; i++) {
             if (currentAddress == address(0)) {
                 break;
             }
 
-            uint mintingAmount = amount * _payouts[i] / 100;
+            uint mintingAmount = amount * _referralPayouts[i] / 100;
 
             _mint(currentAddress, mintingAmount);
             currentAddress = _referrers[currentAddress];
         }
     }
 
+    function _mintBountyReward(uint amount) private {
+        require(msg.sender != address(0), "ERC20: reward to the zero address");
+        require(amount > uint256(0), "ERC20: amount must be higher than zero");
+
+        _mint(msg.sender, amount);
+        address currentAddress = _referrers[msg.sender];
+
+        for (uint8 i = 0; i < _bountyPayouts.length; i++) {
+            if (currentAddress == address(0)) {
+                break;
+            }
+
+            uint mintingAmount = amount * _bountyPayouts[i] / 100;
+
+            _mint(currentAddress, mintingAmount);
+            currentAddress = _referrers[currentAddress];
+        }
+    }
+
+    function claimRewards(Reward[] memory rewards) public {
+        for (uint8 i = 0; i < rewards.length; i++) {
+            reward(rewards[i].message, rewards[i].signature);
+        }
+    }
+
     // reward method is used to retriave the reward from invitation link or claim the bounty for some bounty task
-    function reward(Message memory _message, bytes memory _sig) public
+    function reward(Message memory _message, bytes memory _sig) public returns (bool)
     {
         bytes32 messageHash = getMessageHash(_message);
         bytes32 ethSignedMessageHash = getEthSignedMessageHash(messageHash);
@@ -135,34 +171,36 @@ contract Duckies is Initializable, ERC20CappedUpgradeable, PausableUpgradeable, 
         if (_message.ref != address(0)) {
             require(_referrers[msg.sender] == address(0));
             require(msg.sender != _message.ref);
-            require(isAccountPresentInReferrers(msg.sender, _message.ref));
+            require(isAccountNotInReferrers(msg.sender, _message.ref));
 
             _referrers[msg.sender] = _message.ref;
             _affiliates[_message.ref].push(msg.sender);
+            _mintReferralReward(_message.amt);
         } else {
             if (_message.limit != 0) {
                 require(_bounty[msg.sender][_message.id] < _message.limit, "Limit of this bounty is exceeded");
             }
+
+            _mintBountyReward(_message.amt);
         }
 
         _bounty[msg.sender][_message.id]++;
-        _mintReward(_message.amt);
+
+        return true;
     }
 
-    function isAccountPresentInReferrers(address targetAccount, address refAccount) private view returns (bool) {
-        bool notPresent = true;
+    function isAccountNotInReferrers(address targetAccount, address refAccount) private view returns (bool) {
         address bufAccount = refAccount;
 
         for (uint8 i = 0; i < 5; i++) {
             if (_referrers[bufAccount] == targetAccount) {
-                notPresent = false;
-                break;
+                return false;
             }
 
             bufAccount = _referrers[bufAccount];
         }
 
-        return notPresent;
+        return true;
     }
 
     function getMessageHash(Message memory _message) public pure returns (bytes32)
@@ -196,8 +234,12 @@ contract Duckies is Initializable, ERC20CappedUpgradeable, PausableUpgradeable, 
         }
     }
 
-    function getPayouts() public view returns (uint16[] memory) {
-        return _payouts;
+    function getRefferalPayouts() public view returns (uint16[] memory) {
+        return _referralPayouts;
+    }
+
+    function getBountyPayouts() public view returns (uint8[] memory) {
+        return _bountyPayouts;
     }
 
     function getAffiliatesCount() public view returns (uint8[5] memory)  {
