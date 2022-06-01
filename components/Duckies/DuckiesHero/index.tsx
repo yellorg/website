@@ -54,7 +54,7 @@ export const DuckiesHero = () => {
             const limit = +await duckiesContract?.getAccountBountyLimit('referral');
             setIsClaimed(!token || limit > 0)
         })()
-    }, [isReady])
+    }, [isReady, duckiesContract])
 
     useEffect(() => {
         if (isReady) {
@@ -100,13 +100,13 @@ export const DuckiesHero = () => {
         setMetaMaskInstalled(MetaMaskOnboarding.isMetaMaskInstalled());
     }, [])
 
-    const handleMetamask = (isMetaMaskInstalled: boolean, id: ProviderWhitelist) => {
+    const handleMetamask = React.useCallback((isMetaMaskInstalled: boolean, id: ProviderWhitelist) => {
         if (isMetaMaskInstalled) {
             handleConnectWallet(id);
         } else {
             onboarding.current?.startOnboarding();
         }
-    }
+    }, [handleConnectWallet, onboarding])
 
     const handleDisconnect = React.useCallback(() => {
         disconnect();
@@ -135,11 +135,11 @@ export const DuckiesHero = () => {
         );
     }
 
-    const renderMetamaskButton = () => (
+    const renderMetamaskButton = React.useCallback(() => (
         <div onClick={() => handleMetamask(isMetaMaskInstalled, 'Injected')} className="button button--outline button--secondary button--shadow-secondary">
             <span className="button__inner">{isMetaMaskInstalled ? 'Connect Metamask' : 'Install Metamask'}</span>
         </div>
-    );
+    ), [handleMetamask, isMetaMaskInstalled]);
 
     const handleClaimReward = React.useCallback(async () => {
         const token = localStorage.getItem('referral_token');
@@ -237,7 +237,7 @@ export const DuckiesHero = () => {
                 {isClaimed ? claimedState : isReady ? claimState : loginState}
             </div>
         )
-    }, [isReady, handleClaimReward, setIsOpenConnect, isClaimed, isLoading]);
+    }, [isReady, handleClaimReward, setIsOpenConnect, isClaimed, isLoading, renderMetamaskButton]);
 
     return (
         <>
