@@ -201,7 +201,7 @@ export const DuckiesHero = () => {
                     <path d="M20.9177 27.5244L12.3823 30.0095L9.53711 38.8277H17.1081L22.1875 38.8918L18.3458 31.4044L20.9177 27.5244Z" fill="#F5841F" stroke="#F5841F" strokeWidth="0.693333" strokeLinecap="round" strokeLinejoin="round"/>
                     <path d="M32.4918 31.8213L33.0384 22.4259L35.5138 15.7402H24.4868L26.9622 22.4259L27.5087 31.8213L27.7177 34.7714L27.7338 42.0664H32.2668L32.2829 34.7714L32.4918 31.8213Z" fill="#F5841F" stroke="#F5841F" strokeWidth="0.693333" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
-                <p className="content">
+                <p className="content center">
                     Connect Metamask wallet in order to be able to get Duckies tokens
                 </p>
                 {renderMetamaskButton()}
