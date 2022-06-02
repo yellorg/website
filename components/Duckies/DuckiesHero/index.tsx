@@ -234,7 +234,7 @@ export const DuckiesHero = () => {
 
         return (
             <div className="metamask-modal">
-                {isClaimed ? claimedState : isReady ? claimState : loginState}
+                {!isReady ? loginState : isClaimed ? claimedState : claimState}
             </div>
         )
     }, [isReady, handleClaimReward, setIsOpenConnect, isClaimed, isLoading, renderMetamaskButton]);
