@@ -310,6 +310,9 @@
     .content {
         padding: 0 .5em 1.5em .5em;
         margin: 0;
-        text-align: center;
+
+        &.center {
+            text-align: center;
+        }
     }
 }

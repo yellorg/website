@@ -32,7 +32,11 @@ export const DuckiesConnectorModalWindow = (props: DuckiesConnectorModalWindowPr
                 <div className={modalClass}>
                     <div className="mw-modal-window__header">
                         <h4>{props.headerContent}</h4>
-                        <div onClick={closeModal} className="mw-modal-window__header-cancel">X</div>
+                        <div onClick={closeModal} className="mw-modal-window__header-cancel">
+                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M1 13L13 1M1 1L13 13" stroke="#AAAAAA" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            </svg>
+                        </div>
                     </div>
                     <div className="mw-modal-window__body">
                         {props.bodyContent}

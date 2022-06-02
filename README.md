@@ -18,6 +18,7 @@ To deploy the component to K8s, you should do the following:
 First, run the development server:
 
 ```bash
+npm install
 npm run dev
 ```
 

@@ -7,18 +7,24 @@
     visibility: hidden;
     padding: 1rem;
     width: 25rem;
+    border: 2px solid #090909;
+    box-shadow: -4px 4px 0 0 rgba(236, 170, 0, 0.75);
 
     &__header {
         display: flex;
         align-items: center;
-        justify-content: space-between;
+        justify-content: center;
+        position: relative;
 
         &-cancel {
+            display: flex;
             cursor: pointer;
+            position: absolute;
+            right: 0;
         }
 
         h4 {
-            font-size: 24px;
+            font-size: 1.7rem;
             margin-bottom: 0px;
         }
     }
@@ -73,7 +79,7 @@
         width: 100%;
         z-index: 999;
   
-        background: rgba(0, 0, 0, 0.72);
+        background: rgba(0, 0, 0, 0.5);
   
       &--opened {
         opacity: 1;
