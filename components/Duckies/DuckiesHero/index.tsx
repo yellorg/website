@@ -142,6 +142,8 @@ export const DuckiesHero = () => {
     ), [handleMetamask, isMetaMaskInstalled]);
 
     const handleClaimReward = React.useCallback(async () => {
+        if (isLoading) return
+
         const token = localStorage.getItem('referral_token');
 
         if (token && signer && account) {
@@ -159,7 +161,7 @@ export const DuckiesHero = () => {
                 setIsLoading(false)
             }
         }
-    }, [signer, account, setIsLoading, setIsOpenConnect]);
+    }, [signer, account, isLoading, setIsLoading, setIsOpenConnect]);
 
     const handleClick = React.useCallback(async () => {
         setIsOpenConnect(true);
