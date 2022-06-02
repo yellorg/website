@@ -52,6 +52,7 @@ const getTX = async (token: string, account: string) => {
 
     return {
         transaction,
+        amt: rewardMessage.amt,
     };
 };
 

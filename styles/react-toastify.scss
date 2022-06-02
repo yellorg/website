@@ -1,0 +1,15 @@
+@import "react-toastify/dist/ReactToastify.css";
+
+.Toastify__toast-body {
+  align-items: flex-start;
+}
+
+.Toastify__toast-icon {
+  width: auto;
+
+  > svg {
+    width: 20px;
+    height: 20px;
+    margin-top: 0.3em;
+  }
+}
