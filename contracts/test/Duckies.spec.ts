@@ -610,7 +610,7 @@ describe("Duckies", function () {
   it("should successfully get all payouts array", async function () {
     const { duckies }: TestContext = this as any;
 
-    expect(await duckies.getRefferalPayouts()).to.be.eql([500, 125, 80, 50, 20]);
+    expect(await duckies.getReferralPayouts()).to.be.eql([500, 125, 80, 50, 20]);
   });
 
   it("should successfully get all payouts array", async function () {

@@ -17,7 +17,7 @@ export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({ bounties }
     const getAffiliatesAndPayouts = React.useCallback(async() => {
         if (account && signer) {
             const affiliatesCount = await duckiesContract?.connect(signer).getAffiliatesCount();
-            const payoutsCommission = await duckiesContract?.getPayouts();
+            const payoutsCommission = await duckiesContract?.getReferralPayouts();
 
             setAffiliates(affiliatesCount);
             setPayouts(payoutsCommission);

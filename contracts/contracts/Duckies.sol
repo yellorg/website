@@ -234,7 +234,7 @@ contract Duckies is Initializable, ERC20CappedUpgradeable, PausableUpgradeable, 
         }
     }
 
-    function getRefferalPayouts() public view returns (uint16[] memory) {
+    function getReferralPayouts() public view returns (uint16[] memory) {
         return _referralPayouts;
     }
 
