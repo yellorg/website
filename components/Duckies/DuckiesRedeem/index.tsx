@@ -1,25 +1,5 @@
 import React from 'react';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
-import Image from 'next/image';
-
-const CustomDot = () => {
-    return <span className="slider-dot" />;
-};
-
-const CustomArrow = (props: any) => {
-    const { className, onClick } = props;
-    return (
-        <div className={className} style={{display:"flex", justifyContent:"center", alignItems:"center"}} onClick={onClick}>
-            <Image
-                src="/images/icons/chevron.svg"
-                alt="Yellow ttetst Chain"
-                width={10}
-                height={14}
-                layout='fixed'
-            />
-        </div>
-    );
-};
 
 export const DuckiesRedeem = () => {
     return (
