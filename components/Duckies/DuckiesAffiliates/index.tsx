@@ -2,6 +2,7 @@ import React from 'react';
 import useDuckiesContract from '../../../hooks/useDuckiesContract';
 import useWallet from '../../../hooks/useWallet';
 import { BountyItem, BountyRow } from '../BountyRow';
+import UnloginEyes from '../UnloginEyes';
 
 interface DuckiesAffiliatesProps {
     bounties: any;
@@ -182,7 +183,9 @@ export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({ bounties }
                             <div className="table-title">
                                 Affiliates
                             </div>
-                            {renderAffiliateLevels}
+                            <UnloginEyes>
+                                {renderAffiliateLevels}
+                            </UnloginEyes>
                         </div>
                     </div>
                     <div className="duckies-affiliates__row-bounties">
