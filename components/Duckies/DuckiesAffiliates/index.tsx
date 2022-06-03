@@ -1,6 +1,7 @@
 import React from 'react';
 import useDuckiesContract from '../../../hooks/useDuckiesContract';
 import useWallet from '../../../hooks/useWallet';
+import { SimplePagination } from '../../Pagination/SimplePagination';
 import { BountyItem, BountyRow } from '../BountyRow';
 import UnloginEyes from '../UnloginEyes';
 
@@ -200,6 +201,15 @@ export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({ bounties }
                             </div>
                             <UnloginEyes>
                                 {renderBountySlices}
+                                <SimplePagination 
+                                    page={1}
+                                    limit={10}
+                                    nextPageExists={true}
+                                    handleClickNextButton={() => console.log('test')}
+                                    handleClickPrevButton={() => console.log('test')}
+                                    total={15}
+                                    shouldRenderTotal={true}
+                                />
                             </UnloginEyes>
                         </div>
                     </div>
