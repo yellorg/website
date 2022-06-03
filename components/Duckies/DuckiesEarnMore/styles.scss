@@ -45,9 +45,10 @@
         align-items: center;
         &-link {
             display: flex;
+            position: relative;
             align-items: center;
             max-width: 700px;
-            margin-bottom: 28px;
+            margin-bottom: 20px;
             @media screen and (max-width: 833px) {
                 padding: 0 var(--ifm-spacing-horizontal);
             }
@@ -81,11 +82,29 @@
                     letter-spacing: 0.15px;
                     white-space: nowrap;
                 }
+                &-ref {
+                    border-right: none;
+                    border-top-right-radius: 0;
+                    border-bottom-right-radius: 0;
+                    left: 0;
+                }
+                &-login {
+                    background: linear-gradient(270deg, #FCD000 34.49%, rgba(252, 208, 0, 0) 100%);
+                    width: 320px;
+                    position: absolute;
+                    height: 64px;
+                }
+                &-image {
+                    position: absolute;
+                    right: -45px;
+                }
             }
         }
         &-social {
             display: flex;
             align-items: center;
+            width: 100%;
+            justify-content: center;
             padding: 8px 0;
             max-width: 100%;
             overflow-x: auto;
@@ -116,6 +135,18 @@
                     border-radius: 50%;
                 }
             }
+        }
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .duckies-earn-more__body-link-input {
+        &-login {
+            width: 225px;
+        }
+        &-image {
+            position: absolute;
+            right: -20px;
         }
     }
 }
