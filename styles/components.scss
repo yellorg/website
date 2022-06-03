@@ -11,15 +11,16 @@
 @import "../components/IconExternalLink/styles.scss";
 @import "../components/Announcement//styles.scss";
 @import "../components/Spinner/styles.scss";
+@import "../components/Pagination/SimplePagination.scss";
 
 @import "../components/Duckies/DuckiesAffiliates/styles.scss";
 @import "../components/Duckies/DuckiesEarnMore/styles.scss";
 @import "../components/Duckies/DuckiesHero/styles.scss";
 @import "../components/Duckies/DuckiesRedeem/styles.scss";
 @import "../components/Duckies/DuckiesConnectModalWindow/styles.scss";
+@import "../components/Duckies/BountyRow/styles.scss";
+@import "../components//Duckies/UnloginEyes//styles.scss";
 
 @import "react-lazy-load-image-component/src/effects/blur.css";
 @import "slick-carousel/slick/slick.css";
 @import "slick-carousel/slick/slick-theme.css";
-
-

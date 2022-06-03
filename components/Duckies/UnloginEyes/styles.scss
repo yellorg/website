@@ -1,0 +1,23 @@
+.cr-unlogin {
+    position: relative;
+    height: 80%;
+
+    &-content {
+        position: relative;
+        height: 84%;
+    
+        &--blur {
+            filter: blur(5px);
+        }
+    }
+
+    &-eyes {
+        position: absolute;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        top: 0;
+    }   
+}
