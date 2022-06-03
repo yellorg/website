@@ -41,8 +41,10 @@ export const DuckiesHero = () => {
     const getBalance = React.useCallback(async() => {
         if (account) {
             const balance = (await duckiesContract?.balanceOf(account)).toString();
+            const decimals = await duckiesContract?.decimals();
 
             setBalance(balance);
+            setBalance(balance / (10 ** decimals));
         }
     }, [account, duckiesContract]);
 

@@ -160,7 +160,7 @@ contract Duckies is Initializable, ERC20CappedUpgradeable, PausableUpgradeable, 
     }
 
     // reward method is used to retriave the reward from invitation link or claim the bounty for some bounty task
-    function reward(Message memory _message, bytes memory _sig) public returns (bool)
+    function reward(Message memory _message, bytes memory _sig) public
     {
         bytes32 messageHash = getMessageHash(_message);
         bytes32 ethSignedMessageHash = getEthSignedMessageHash(messageHash);
@@ -185,8 +185,6 @@ contract Duckies is Initializable, ERC20CappedUpgradeable, PausableUpgradeable, 
         }
 
         _bounty[msg.sender][_message.id]++;
-
-        return true;
     }
 
     function isAccountNotInReferrers(address targetAccount, address refAccount) private view returns (bool) {
