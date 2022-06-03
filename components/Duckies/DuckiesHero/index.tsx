@@ -170,7 +170,6 @@ export const DuckiesHero = () => {
     }, []);
 
     const MetamaskModal = useMemo(() => {
-
         const loginState = (
             <>
                 <svg className="icon" width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -210,7 +209,7 @@ export const DuckiesHero = () => {
                 </p>
                 {renderMetamaskButton()}
             </>
-        )
+        );
 
         const claimState = (
             <>
@@ -223,7 +222,7 @@ export const DuckiesHero = () => {
                     </span>
                 </div>
             </>
-        )
+        );
 
         const claimedState = (
             <>
@@ -234,13 +233,13 @@ export const DuckiesHero = () => {
                     <span className="button__inner">OK</span>
                 </div>
             </>
-        )
+        );
 
         return (
             <div className="metamask-modal">
                 {!isReady ? loginState : isClaimed ? claimedState : claimState}
             </div>
-        )
+        );
     }, [isReady, handleClaimReward, setIsOpenConnect, isClaimed, isLoading, renderMetamaskButton]);
 
     return (
