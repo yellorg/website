@@ -14,8 +14,8 @@ import useDuckiesContract from '../../../hooks/useDuckiesContract';
 import { appConfig } from '../../../config/app';
 import { convertNumberToLiteral } from '../../../helpers/convertNumberToLiteral';
 import Spinner from '../../Spinner';
-import { ToastContainer, toast } from 'react-toastify';
-import type { TypeOptions } from 'react-toastify'
+import { ToastContainer } from 'react-toastify';
+import useAlert from '../../../hooks/useAlert';
 
 export const DuckiesHero = () => {
     const [isMetaMaskInstalled, setMetaMaskInstalled] = useState<boolean>(true);
@@ -24,6 +24,8 @@ export const DuckiesHero = () => {
     const [isClaimed, setIsClaimed] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [balance, setBalance] = useState<number | undefined>(undefined);
+    const [localStorageState, setLocalStorageState] = useState<number>(0);
+    const alert = useAlert();
 
     const duckiesContract = useDuckiesContract();
     const { connectWithProvider, disconnect } = useDApp();
@@ -56,7 +58,7 @@ export const DuckiesHero = () => {
             const limit = +await duckiesContract?.getAccountBountyLimit('referral');
             setIsClaimed(!token || limit > 0)
         })()
-    }, [isReady, duckiesContract])
+    }, [isReady, duckiesContract, localStorageState])
 
     useEffect(() => {
         if (isReady) {
@@ -102,27 +104,6 @@ export const DuckiesHero = () => {
         setMetaMaskInstalled(MetaMaskOnboarding.isMetaMaskInstalled());
     }, [])
 
-    const notify = useCallback((type: TypeOptions, title: string | JSX.Element, body: string | JSX.Element) => {
-        const iconMap: any = {
-            info: (
-                <div style={{marginTop: "0.3em"}}>
-                    <svg width="24" height="24" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M11.9995 9.5V11.5M11.9995 15.5H12.0095M5.07134 19.5H18.9277C20.4673 19.5 21.4296 17.8333 20.6598 16.5L13.7316 4.5C12.9618 3.16667 11.0373 3.16667 10.2675 4.5L3.33929 16.5C2.56949 17.8333 3.53174 19.5 5.07134 19.5Z" stroke="#419E6A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                </div>
-            ),
-        }
-        toast(
-            <div className="notification-modal">
-                <div className="notification-modal__title">{title}</div>
-                <div className="notification-modal__body">{body}</div>
-            </div>
-        , {
-            icon: iconMap[type],
-            type,
-        })
-    }, [])
-
     const handleMetamask = React.useCallback((isMetaMaskInstalled: boolean, id: ProviderWhitelist) => {
         if (isMetaMaskInstalled) {
             handleConnectWallet(id);
@@ -165,7 +146,7 @@ export const DuckiesHero = () => {
     ), [handleMetamask, isMetaMaskInstalled]);
 
     const handleClaimReward = React.useCallback(async () => {
-        if (isLoading) return
+        if (isLoading || !alert) return
 
         const token = localStorage.getItem('referral_token');
 
@@ -175,19 +156,20 @@ export const DuckiesHero = () => {
 
             try {
                 const tx = await signer.sendTransaction(transaction);
-                const receipt = await tx.wait();
+                await tx.wait();
                 localStorage.removeItem('referral_token');
+                setLocalStorageState(localStorageState + 1)
                 setIsLoading(false)
                 setIsOpenConnect(false)
                 getBalance()
-                notify('info', 'Success', `${amt}DUCKZ has been claimed`)
+                alert.notify('info', 'Success', `${amt}DUCKZ has been claimed`)
             } catch (error: any) {
                 console.log(error);
                 setIsLoading(false)
-                notify('error', 'Error', 'Something went wrong. Please try again!')
+                alert.notify('error', 'Error', 'Something went wrong. Please try again!')
             }
         }
-    }, [signer, account, isLoading, setIsLoading, setIsOpenConnect, getBalance, notify]);
+    }, [signer, account, isLoading, setIsLoading, setIsOpenConnect, getBalance, alert, localStorageState, setLocalStorageState]);
 
     const handleClick = React.useCallback(async () => {
         setIsOpenConnect(true);
