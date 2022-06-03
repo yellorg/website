@@ -6,10 +6,15 @@ import { DuckiesRedeem} from '../DuckiesRedeem';
 import useDuckiesContract from '../../../hooks/useDuckiesContract';
 import useWallet from '../../../hooks/useWallet';
 
-export const DuckiesLayout: FC = ({ bounties }: any): JSX.Element => {
+interface DuckiesLayoutProps {
+    bounties: any;
+}
+
+export const DuckiesLayout: FC<DuckiesLayoutProps> = ({ bounties }: DuckiesLayoutProps): JSX.Element => {
     const [affiliates, setAffiliates] = React.useState<number[]>([0, 0, 0, 0, 0]);
     const { items } = bounties?.data.slices[0];
     const [bountyItems, setBountyItems] = React.useState<any[]>([]);
+    const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
     const duckiesContract = useDuckiesContract();
     const { active, account, signer } = useWallet();
@@ -91,7 +96,7 @@ export const DuckiesLayout: FC = ({ bounties }: any): JSX.Element => {
 
             setBountyItems(newItems);
         }
-    }, [items]);
+    }, [items, account]);
 
     React.useEffect(() => {
         if (bountyItems.length) {
@@ -99,7 +104,7 @@ export const DuckiesLayout: FC = ({ bounties }: any): JSX.Element => {
                 getClaimedBountyInfo(bounty);
             });
         }
-    }, [bountyItems, getClaimedBountyInfo]);
+    }, [bountyItems, getClaimedBountyInfo, account]);
 
     const bountiesToClaim = React.useMemo(() => {
         return bountyItems
@@ -124,13 +129,21 @@ export const DuckiesLayout: FC = ({ bounties }: any): JSX.Element => {
 
     return (
         <main className="duckies container">
-            <DuckiesHero />
+            <DuckiesHero
+                bountiesToClaim={bountiesToClaim}
+                handleClaimAllBounties={handleClaimAllBounties}
+                bountyItems={bountyItems}
+                isLoading={isLoading}
+                setIsLoading={setIsLoading}
+            />
             <DuckiesAffiliates
                 bountyItems={bountyItems}
                 bountiesToClaim={bountiesToClaim}
                 bountyTitle={bounties.data.title}
                 affiliates={affiliates}
                 handleClaimAllBounties={handleClaimAllBounties}
+                isLoading={isLoading}
+                setIsLoading={setIsLoading}
             />
             <DuckiesEarnMore />
             <DuckiesRedeem />

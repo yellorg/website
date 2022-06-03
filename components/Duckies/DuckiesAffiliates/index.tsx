@@ -3,7 +3,9 @@ import useDuckiesContract from '../../../hooks/useDuckiesContract';
 import useWallet from '../../../hooks/useWallet';
 import { SimplePagination } from '../../Pagination/SimplePagination';
 import { BountyItem, BountyRow } from '../BountyRow';
+import { DuckiesConnectorModalWindow } from '../DuckiesConnectModalWindow';
 import UnloginEyes from '../UnloginEyes';
+import Image from 'next/image';
 
 interface DuckiesAffiliatesProps {
     bountyItems: BountyItem[];
@@ -11,6 +13,8 @@ interface DuckiesAffiliatesProps {
     affiliates: number[];
     bountiesToClaim: string[];
     handleClaimAllBounties: () => void;
+    isLoading: boolean;
+    setIsLoading: (value: boolean) => void;
 }
 
 export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({
@@ -19,9 +23,11 @@ export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({
     affiliates,
     bountiesToClaim,
     handleClaimAllBounties,
+    isLoading,
+    setIsLoading,
 }: DuckiesAffiliatesProps) => {
     const [payouts, setPayouts] = React.useState<number[]>([]);
-
+    const [isOpenModal, setIsOpenModal] = React.useState<boolean>(false);
     const duckiesContract = useDuckiesContract();
     const { active, account, signer } = useWallet();
 
@@ -86,46 +92,140 @@ export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({
         });
     }, [bountyItems, handleClaimReward]);
 
-    return (
-        <div className="duckies-affiliates">
-            <div className="container">
-                <div className="duckies-affiliates__row">
-                    <div className="duckies-affiliates__row-info">
-                        <div className="table">
-                            <div className="table-title">
-                                Affiliates
-                            </div>
-                            <UnloginEyes>
-                                {renderAffiliateLevels}
-                            </UnloginEyes>
-                        </div>
+    const getBountiesClaimableAmount = React.useCallback(() => {
+        let amountToClaim = 0;
+        let bountyTitles: string[] = [];
+
+        bountiesToClaim.forEach((bountyItem: string) => {
+            const bounty = bountyItems.find(item => item.fid === bountyItem);
+
+            if (bounty) {
+                amountToClaim += bounty.value;
+                bountyTitles.push(bounty.title);
+            }
+        });
+
+        return [amountToClaim as number, bountyTitles as string[]];
+    }, [bountyItems, bountiesToClaim]);
+
+    const renderLoadingModalBody = React.useMemo(() => {
+        return (
+            <React.Fragment>
+                <div className="cr-bounty-modal__body-description">
+                    In order for the on-chain transaction to be executed please wait a couple of minutes. Time may vary depending on the queue & gas.
+                </div>
+                <div className="cr-bounty-modal__body-buttons buttons-justify-center">
+                    <div className="button button--outline button--secondary button--shadow-secondary" onClick={() => setIsOpenModal(false)}>
+                        <span className="button__inner">Confirm</span>
                     </div>
-                    <div className="duckies-affiliates__row-bounties">
-                        <div className="table">
-                            <div className="table-title">
-                                {bountyTitle}
-                                {bountiesToClaim.length > 1 && (
-                                    <div onClick={handleClaimAllBounties} className="button button--outline button--secondary button--shadow-secondary">
-                                        <span className="button__inner">Claim All</span>
-                                    </div>)
-                                }
+                </div>
+            </React.Fragment>
+        );
+    }, []);
+
+    const handleClaim = React.useCallback(async () => {
+        setIsLoading(true);
+        await handleClaimAllBounties();
+        setIsLoading(false);
+    }, [handleClaimAllBounties, setIsLoading]);
+
+    const renderClaimModalBody = React.useMemo(() => {
+        const [amountToClaim, bountyTitles]: any = getBountiesClaimableAmount();
+        const renderBountyTitles = bountyTitles.map((bountyTitle: any, index: number) => {
+            return (
+                <div key={`bounty-title-${index}`}>&#x2022; {bountyTitle}</div>
+            );
+        });
+
+        return (
+            <React.Fragment>
+                <div className="cr-bounty-modal__body-subtitle">
+                    Amount
+                </div>
+                <div className="cr-bounty-modal__body-price">
+                    <div className="cr-bounty-modal__body-price-value">
+                        {amountToClaim}
+                        <svg width="20" height="28" viewBox="0 0 20 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9.51487 3.11111H0V24.8889H9.51487C15.9624 24.8889 20 20.2844 20 14C20 7.59111 15.8998 3.11111 9.51487 3.11111ZM9.42097 21.0311H4.25665V6.93778H9.42097C13.1768 6.93778 15.6808 9.76889 15.6808 13.9067C15.6808 18.1067 13.1768 21.0311 9.42097 21.0311Z" fill="#ECAA00" />
+                            <path d="M3.92 0H7.04989V6.22222H3.92V0Z" fill="#ECAA00" />
+                            <path d="M3.92 21.7778H7.04989V28H3.92V21.7778Z" fill="#ECAA00" />
+                            <path d="M8.61484 0H11.7447V6.22222H8.61484V0Z" fill="#ECAA00" />
+                            <path d="M8.61484 21.7778H11.7447V28H8.61484V21.7778Z" fill="#ECAA00" />
+                        </svg>
+                    </div>
+                </div>
+                <div className="cr-bounty-modal__body-description">
+                    List of bounties:
+                    {renderBountyTitles}
+                </div>
+                <div className="cr-bounty-modal__body-buttons buttons-justify-center">
+                    <div className="button button--outline button--secondary button--shadow-secondary" onClick={handleClaim}>
+                        <span className="button__inner">Claim all</span>
+                    </div>
+                </div>
+            </React.Fragment>
+        );
+    }, [getBountiesClaimableAmount, handleClaim]);
+
+    const renderClaimRewardModalBody = React.useMemo(() => {
+        return (
+            <div className="cr-bounty-modal__body">
+                <div className="cr-bounty-modal__body-image">
+                    <Image width="156px" height="156px" src="/images/components/duckies/duckDetective.svg" alt="duck-no-rewards" />
+                </div>
+                {isLoading ? renderLoadingModalBody : renderClaimModalBody}
+            </div>
+        );
+    }, [isLoading, renderLoadingModalBody, renderClaimModalBody]);
+
+    return (
+        <React.Fragment>
+            <div className="duckies-affiliates">
+                <div className="container">
+                    <div className="duckies-affiliates__row">
+                        <div className="duckies-affiliates__row-info">
+                            <div className="table">
+                                <div className="table-title">
+                                    Affiliates
+                                </div>
+                                <UnloginEyes>
+                                    {renderAffiliateLevels}
+                                </UnloginEyes>
                             </div>
-                            <UnloginEyes>
-                                {renderBountySlices}
-                                <SimplePagination
-                                    page={1}
-                                    limit={10}
-                                    nextPageExists={true}
-                                    handleClickNextButton={() => console.log('test')}
-                                    handleClickPrevButton={() => console.log('test')}
-                                    total={15}
-                                    shouldRenderTotal={true}
-                                />
-                            </UnloginEyes>
+                        </div>
+                        <div className="duckies-affiliates__row-bounties">
+                            <div className="table">
+                                <div className="table-title">
+                                    {bountyTitle}
+                                    {bountiesToClaim.length > 1 && (
+                                        <div onClick={() => setIsOpenModal(true)} className="button button--outline button--secondary button--shadow-secondary">
+                                            <span className="button__inner">Claim All</span>
+                                        </div>)
+                                    }
+                                </div>
+                                <UnloginEyes>
+                                    {renderBountySlices}
+                                    <SimplePagination
+                                        page={1}
+                                        limit={10}
+                                        nextPageExists={true}
+                                        handleClickNextButton={() => console.log('test')}
+                                        handleClickPrevButton={() => console.log('test')}
+                                        total={15}
+                                        shouldRenderTotal={true}
+                                    />
+                                </UnloginEyes>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+            <DuckiesConnectorModalWindow
+                bodyContent={renderClaimRewardModalBody}
+                headerContent="Claim rewards"
+                isOpen={isOpenModal}
+                setIsOpen={setIsOpenModal}
+            />
+        </React.Fragment>
     );
 };
