@@ -1,5 +1,6 @@
-import React from 'react';
-import useWallet from '../../../hooks/useWallet';
+import classnames from 'classnames';
+import React, { useEffect, useState, useMemo, useRef, useCallback } from 'react';
+import { UnsupportedChainIdError } from '@web3-react/core'
 import { isBrowser } from '../../../helpers/isBrowser';
 import {
     FacebookShareButton,
@@ -8,13 +9,34 @@ import {
     TelegramShareButton,
     WeiboShareButton
 } from 'react-share';
+import MetaMaskOnboarding from '@metamask/onboarding';
+import { useEagerConnect } from '../../../hooks/useEagerConnect';
+import type { ProviderWhitelist } from '../../../hooks/useDApp';
+import useDApp from '../../../hooks/useDApp';
+import useWallet from '../../../hooks/useWallet';
+import { appConfig } from '../../../config/app';
+
 
 export const DuckiesEarnMore = () => {
+    const [isMetaMaskInstalled, setMetaMaskInstalled] = useState<boolean>(true);
     const [shareableLink, setShareableLink] = React.useState<string>('');
     const [shareableLinkPrefix, setShareableLinkPrefix] = React.useState('');
+
+    const onboarding = useRef<MetaMaskOnboarding>();
+
     const isBrowserDefined = isBrowser();
 
-    const { active, account } = useWallet();
+    const { connectWithProvider } = useDApp();
+    const { active, account, chain } = useWallet();
+    const triedToEagerConnect = useEagerConnect();
+
+    const supportedChain = useMemo(() => {
+        return appConfig.blockchain.supportedChainIds.includes(chain?.chainId ?? -1);
+    }, [chain]);
+
+    const isReady = useMemo(() => {
+        return supportedChain && triedToEagerConnect && active && account;
+    }, [supportedChain, triedToEagerConnect, active, account]);
 
     const getSharableLink = React.useCallback(async (account: string) => {
         const response = await fetch(`/api/link?address=${account}`);
@@ -22,6 +44,72 @@ export const DuckiesEarnMore = () => {
         const data = await response.json();
         setShareableLink(data.token);
     }, []);
+
+    useEffect(() => {
+        if (!account) {
+            setShareableLink('')
+        }
+    }, [active, account]);
+
+    const handleConnectWallet = useCallback(
+        async (provider: ProviderWhitelist) => {
+            if (!triedToEagerConnect) return
+
+            // Metamask exposes experimental methods under 'ethereum._metamask' property.
+            // 'ethereum._metamask.isUnlocked' may be removed or changed without warning.
+            // There is no other stable solution to detect Metamask 'unlocked' status right now.
+            // Details: https://docs.metamask.io/guide/ethereum-provider.html#ethereum-metamask-isunlocked
+            // Future breaking changes can be found here https://medium.com/metamask
+            const isMetamaskUnlocked = await (window as any)?.ethereum._metamask?.isUnlocked();
+
+            if (!isMetamaskUnlocked) {
+                console.warn('alerts.message.wallet.metamask.locked');
+            }
+
+            connectWithProvider(provider).then(() => {
+                console.log('removeConnectWalletAlert');
+            }).catch(async (error) => {
+                if (
+                    error instanceof UnsupportedChainIdError &&
+                    !error
+                        .toString()
+                        .includes('Supported chain ids are: undefined')
+                ) {
+                    console.log('success');
+                } else {
+                    console.error('handleConnectWallet: sign error');
+                }
+            })
+        },
+        [connectWithProvider, triedToEagerConnect],
+    )
+
+    useEffect(() => {
+        onboarding.current = new MetaMaskOnboarding();
+        setMetaMaskInstalled(MetaMaskOnboarding.isMetaMaskInstalled());
+    }, [])
+
+    const handleMetamask = React.useCallback((isMetaMaskInstalled: boolean, id: ProviderWhitelist) => {
+        if (isMetaMaskInstalled) {
+            handleConnectWallet(id);
+        } else {
+            onboarding.current?.startOnboarding();
+        }
+    }, [handleConnectWallet, onboarding])
+
+    const renderMetamaskButton = React.useCallback(() => (
+        <div onClick={() => handleMetamask(isMetaMaskInstalled, 'Injected')} className="button button--outline button--secondary button--shadow-secondary">
+            <span className="button__inner">{isMetaMaskInstalled ? 'Connect Metamask' : 'Install Metamask'}</span>
+        </div>
+    ), [handleMetamask, isMetaMaskInstalled]);
+
+    const inputLink = classnames('', {
+        'duckies-earn-more__body-link-input-login': !isReady,
+    });
+
+    const inputLinkRef = classnames('duckies-earn-more__body-link-input', {
+        'duckies-earn-more__body-link-input-ref': !isReady,
+    });
 
     const socials = React.useMemo(() => {
         return [
@@ -154,11 +242,13 @@ export const DuckiesEarnMore = () => {
                 </div>
                 <div className="duckies-earn-more__body">
                     <div className="duckies-earn-more__body-link">
-                        <div className="duckies-earn-more__body-link-input">
+                        <div className={inputLinkRef}>
                             <div className="duckies-earn-more__body-link-input-value">
                                 {`${shareableLinkPrefix}${shareableLink}`}
                             </div>
+                            <div className={inputLink} />
                         </div>
+                        {isReady ?
                         <div onClick={() => handleCopy(`${shareableLinkPrefix}${shareableLink}`)} className="button button--outline button--secondary button--shadow-secondary">
                             <span className="button__inner">
                                 <svg width="20" height="24" viewBox="0 0 20 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -167,9 +257,10 @@ export const DuckiesEarnMore = () => {
                                 </svg>
                             </span>
                         </div>
+                        : <div className="duckies-earn-more__body-link-input-image"><img src="/images/components/duckies/login_eyes.png" alt="login" /></div>}
                     </div>
                     <div className="duckies-earn-more__body-social">
-                        {renderSocials}
+                        {isReady ? renderSocials : renderMetamaskButton()}
                     </div>
                 </div>
             </div>
