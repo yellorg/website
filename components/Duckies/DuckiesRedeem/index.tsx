@@ -1,6 +1,5 @@
 import React from 'react';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
-import Slider, { LazyLoadTypes } from 'react-slick';
 import Image from 'next/image';
 
 const CustomDot = () => {
@@ -21,52 +20,6 @@ const CustomArrow = (props: any) => {
         </div>
     );
 };
-
-const SLIDER_SETTINGS = {
-    customPaging: CustomDot,
-    dots: true,
-    infinite: false,
-    speed: 500,
-    slidesToShow: 3,
-    slidesToScroll: 1,
-    lazyLoad: "progressive" as LazyLoadTypes,
-    nextArrow: <CustomArrow style={{display:"flex", justifyContent:"center", alignItems:"center"}} />,
-    prevArrow: <CustomArrow />,
-    responsive: [
-        {
-            breakpoint: 1240,
-            settings: {
-                slidesToShow: 3,
-                arrows: false,
-            },
-        },
-        {
-            breakpoint: 768,
-            settings: {
-                slidesToShow: 2,
-                arrows: false,
-            },
-        },
-        {
-            breakpoint: 575,
-            settings: {
-                slidesToShow: 1,
-                arrows: false,
-            },
-        },
-    ],
-};
-
-const NFT_LIST = [
-    '/images/components/duckies/ducky-pixel.png',
-    '/images/components/duckies/ducky-pixel.png',
-    '/images/components/duckies/ducky-pixel.png',
-    '/images/components/duckies/ducky-pixel.png',
-    '/images/components/duckies/ducky-pixel.png',
-    '/images/components/duckies/ducky-pixel.png',
-    '/images/components/duckies/ducky-pixel.png',
-    '/images/components/duckies/ducky-pixel.png',
-];
 
 export const DuckiesRedeem = () => {
     return (
@@ -115,22 +68,6 @@ export const DuckiesRedeem = () => {
                         effect="blur"
                         threshold={200}
                     />
-                </div>
-            </div>
-            <div className="container">
-                <div className="duckies-redeem__slider">
-                    <Slider {...SLIDER_SETTINGS}>
-                        {NFT_LIST.map((imgSrc, i) => (
-                            <div key={i} className="slider-item">
-                                <LazyLoadImage
-                                    src={imgSrc}
-                                    effect="blur"
-                                    threshold={200}
-                                    className="slider-item__logo"
-                                />
-                            </div>
-                        ))}
-                    </Slider>
                 </div>
             </div>
         </div>
