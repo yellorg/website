@@ -198,7 +198,9 @@ export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({ bounties }
                                     </div>)
                                 }
                             </div>
-                            {renderBountySlices}
+                            <UnloginEyes>
+                                {renderBountySlices}
+                            </UnloginEyes>
                         </div>
                     </div>
                 </div>
