@@ -6,33 +6,38 @@ import { BountyItem, BountyRow } from '../BountyRow';
 import UnloginEyes from '../UnloginEyes';
 
 interface DuckiesAffiliatesProps {
-    bounties: any;
+    bountyItems: BountyItem[];
+    bountyTitle: string;
+    affiliates: number[];
+    bountiesToClaim: string[];
+    handleClaimAllBounties: () => void;
 }
 
-export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({ bounties }: DuckiesAffiliatesProps) => {
-    const [affiliates, setAffiliates] = React.useState<number[]>([0, 0, 0, 0, 0]);
+export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({
+    bountyItems,
+    bountyTitle,
+    affiliates,
+    bountiesToClaim,
+    handleClaimAllBounties,
+}: DuckiesAffiliatesProps) => {
     const [payouts, setPayouts] = React.useState<number[]>([]);
-    const { items } = bounties.data.slices[0];
-    const [bountyItems, setBountyItems] = React.useState<any[]>([]);
 
     const duckiesContract = useDuckiesContract();
     const { active, account, signer } = useWallet();
 
-    const getAffiliatesAndPayouts = React.useCallback(async() => {
+    const getPayouts = React.useCallback(async() => {
         if (account && signer) {
-            const affiliatesCount = await duckiesContract?.connect(signer).getAffiliatesCount();
             const payoutsCommission = await duckiesContract?.getReferralPayouts();
 
-            setAffiliates(affiliatesCount);
             setPayouts(payoutsCommission);
         }
     }, [account, duckiesContract, signer]);
 
     React.useEffect(() => {
         if (active && account) {
-            getAffiliatesAndPayouts();
+            getPayouts();
         }
-    }, [active, account, getAffiliatesAndPayouts]);
+    }, [active, account, getPayouts]);
 
     const renderAffiliateLevels = React.useMemo(() => {
         return affiliates.map((affiliateCount: number, index: number) => {
@@ -71,79 +76,6 @@ export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({ bounties }
         }
     }, [signer, bountyItems, account]);
 
-    const getAffiliatesCountOnLevel = React.useCallback((level: string, value: string): boolean => {
-        return affiliates[+level - 1] < +value ? false : true;
-    }, [affiliates]);
-
-    const getAffiliatesRuleCompleted = React.useCallback((level: string, key: string, value: string): boolean => {
-        switch (key) {
-            case 'count':
-                const [_, levelNumber] = level.split('-');
-
-                return getAffiliatesCountOnLevel(levelNumber, value);
-            default:
-                return false;
-        }
-    }, [getAffiliatesCountOnLevel]);
-
-    const getClaimedBountyInfo = React.useCallback(async (bounty: any) => {
-        if (signer) {
-            const bountyId = bounty.fid.split('-')[0];
-            const claimedTimes = await duckiesContract?.connect(signer).getAccountBountyLimit(bounty.fid);
-            let status = '';
-
-            switch (bountyId) {
-                case 'affiliates':
-                    const [level, key, value] = bounty.triggerPhrase.split(' ');
-                    const result = getAffiliatesRuleCompleted(level, key, value);
-
-                    if (claimedTimes === bounty.limit) {
-                        status = 'claimed';
-                    } else {
-                        if (result) {
-                            status = 'claim';
-                        }
-                    }
-                    break;
-                default:
-            }
-
-            const bountyIndex = bountyItems.findIndex((item => item.fid === bounty.fid));
-
-            if (bountyIndex !== -1 && bountyItems[bountyIndex].status !== status) {
-                const newBountyItems = [...bountyItems];
-
-                newBountyItems[bountyIndex] = {
-                    ...bounty,
-                    status,
-                }
-                setBountyItems(newBountyItems);
-            }
-        }
-        return 0;
-    }, [duckiesContract, signer, bountyItems, getAffiliatesRuleCompleted]);
-
-    React.useEffect(() => {
-        if (items) {
-            const newItems = items.map((item: any) => {
-                return {
-                    ...item,
-                    status: '',
-                }
-            });
-
-            setBountyItems(newItems);
-        }
-    }, [items]);
-
-    React.useEffect(() => {
-        if (bountyItems.length) {
-            bountyItems.forEach((bounty: any) => {
-                getClaimedBountyInfo(bounty);
-            });
-        }
-    }, [bountyItems, getClaimedBountyInfo]);
-
     const renderBountySlices = React.useMemo(() => {
         return bountyItems.map((bounty: BountyItem, index: number) => {
             return (
@@ -153,27 +85,6 @@ export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({ bounties }
             );
         });
     }, [bountyItems, handleClaimReward]);
-
-    const bountiesToClaim = React.useMemo(() => {
-        return bountyItems
-            .filter(bounty => bounty.status === 'claim')
-            .map(item => item.fid);
-    }, [bountyItems]);
-
-    const handleClaimAllBounties = React.useCallback(async () => {
-        if (bountiesToClaim.length && signer) {
-            const { transaction } = await (await fetch(
-                `/api/allBountiesTx?bountyIDs=${bountiesToClaim}&account=${account}`
-            )).json();
-
-            try {
-                const tx = await signer.sendTransaction(transaction);
-                await tx.wait();
-            } catch (error) {
-                console.log(error);
-            }
-        }
-    }, [signer, account, bountiesToClaim]);
 
     return (
         <div className="duckies-affiliates">
@@ -192,7 +103,7 @@ export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({ bounties }
                     <div className="duckies-affiliates__row-bounties">
                         <div className="table">
                             <div className="table-title">
-                                {bounties.data.title}
+                                {bountyTitle}
                                 {bountiesToClaim.length > 1 && (
                                     <div onClick={handleClaimAllBounties} className="button button--outline button--secondary button--shadow-secondary">
                                         <span className="button__inner">Claim All</span>
@@ -201,7 +112,7 @@ export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({ bounties }
                             </div>
                             <UnloginEyes>
                                 {renderBountySlices}
-                                <SimplePagination 
+                                <SimplePagination
                                     page={1}
                                     limit={10}
                                     nextPageExists={true}
