@@ -7,6 +7,8 @@ import { ethers } from 'ethers';
 import { DuckiesLayout } from '../components/Duckies/DuckiesWrapper';
 import { createClient } from '../prismicio';
 import '../.d';
+import { ReduxProvider } from '../providers/ReduxProvider';
+import { Alerts } from '../components/Alerts';
 
 const getLibrary = (provider: any): ethers.providers.Web3Provider => {
     const library = new ethers.providers.Web3Provider(provider, 'any');
@@ -29,22 +31,25 @@ export const getServerSideProps = async ({ previewData }: any) => {
 const Duckies: FC = ({ bounties }: any): JSX.Element => {
     return (
         <Web3ReactProvider getLibrary={getLibrary}>
-            <div className="flex flex-col min-h-full">
-                <Navbar />
-                <div className="main-wrapper">
-                    <Head>
-                        <title>
-                            Yellow DeFi - Discover WEB 3.0 Internet of Finance
-                        </title>
-                        <meta
-                            name="description"
-                            content="Yellow DeFi is a new generation hybrid technology cryptocurrency exchange combining the best of decentralized and centralized performance."
-                        />
-                    </Head>
-                    <DuckiesLayout bounties={bounties} />
+            <ReduxProvider>
+                <div className="flex flex-col min-h-full">
+                    <Navbar />
+                    <Alerts />
+                    <div className="main-wrapper">
+                        <Head>
+                            <title>
+                                Yellow DeFi - Discover WEB 3.0 Internet of Finance
+                            </title>
+                            <meta
+                                name="description"
+                                content="Yellow DeFi is a new generation hybrid technology cryptocurrency exchange combining the best of decentralized and centralized performance."
+                            />
+                        </Head>
+                        <DuckiesLayout bounties={bounties} />
+                    </div>
+                    <Footer />
                 </div>
-                <Footer />
-            </div>
+            </ReduxProvider>
         </Web3ReactProvider>
     );
 };

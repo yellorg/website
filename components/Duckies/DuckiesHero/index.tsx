@@ -145,8 +145,8 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
                     setIsLoading(false);
                     setIsOpenModal(false);
                 } catch (error) {
-                    console.log(error);
                     setIsLoading(false);
+                    setIsOpenModal(false);
                 }
             }
         } else {
@@ -167,7 +167,7 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
         handleClaimAllBounties,
     ]);
 
-    const handleClaimButtonClick = React.useCallback(async () => {
+    const handleClaimButtonClick = React.useCallback(() => {
         setIsOpenModal(true);
     }, []);
 
