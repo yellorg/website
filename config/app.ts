@@ -6,4 +6,5 @@ export const appConfig = {
       4, // Ethereum Testnet Rinkeby
     ],
   },
+  alertDisplayTime: '5',
 }

@@ -1,0 +1,10 @@
+.cr-alerts {
+    position: absolute;
+    z-index: 50;
+    right: 6px;
+    &__alert {
+        position: relative;
+        margin-top: 6px;
+        margin-bottom: 6px;
+    }
+}
