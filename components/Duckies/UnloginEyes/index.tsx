@@ -6,9 +6,10 @@ import useWallet from '../../../hooks/useWallet';
 
 interface UnloginEyes {
     children: React.ReactNode
+    paginationComponent?: React.ReactNode
 }
 
-const UnloginEyes: React.FC<UnloginEyes> = ({ children }: UnloginEyes) => {
+const UnloginEyes: React.FC<UnloginEyes> = ({ children, paginationComponent }: UnloginEyes) => {
     const { active, account, chain } = useWallet();
     const triedToEagerConnect = useEagerConnect();
 
@@ -24,10 +25,17 @@ const UnloginEyes: React.FC<UnloginEyes> = ({ children }: UnloginEyes) => {
         'cr-unlogin-content--blur': !isReady
     });
 
+    const paginationClassName = classnames('', {
+        'cr-unlogin-content--blur': !isReady
+    });
+
     return (
         <div className="cr-unlogin">
             <div className={rootClassName}>
                 {children}
+            </div>
+            <div className={paginationClassName}>
+                {paginationComponent}
             </div>
             {!isReady ?
                 <div className="cr-unlogin-eyes">
