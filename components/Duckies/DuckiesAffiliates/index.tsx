@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import useDuckiesContract from '../../../hooks/useDuckiesContract';
 import useWallet from '../../../hooks/useWallet';
 import { SimplePagination } from '../../Pagination/SimplePagination';
@@ -26,8 +26,13 @@ export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({
     isLoading,
     setIsLoading,
 }: DuckiesAffiliatesProps) => {
-    const [payouts, setPayouts] = React.useState<number[]>([]);
-    const [isOpenModal, setIsOpenModal] = React.useState<boolean>(false);
+    const limit: number = 5;
+
+    const [bounties, setBounties] = useState<BountyItem[]>([]);
+    const [page, setPage] = useState<number>(1);
+
+    const [payouts, setPayouts] = useState<number[]>([]);
+    const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
     const duckiesContract = useDuckiesContract();
     const { active, account, signer } = useWallet();
 
@@ -44,6 +49,20 @@ export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({
             getPayouts();
         }
     }, [active, account, getPayouts]);
+
+    useEffect(() => {
+        if (bountyItems && bountyItems.length) {
+            const paginationBounties = [];
+
+            for (let index = (page * limit - limit); index < limit * page; index++) {
+                const element = bountyItems[index];
+                
+                element && paginationBounties.push(element);
+            }
+
+            setBounties(paginationBounties)
+        }
+    }, [bountyItems, page])
 
     const renderAffiliateLevels = React.useMemo(() => {
         return affiliates.map((affiliateCount: number, index: number) => {
@@ -83,14 +102,14 @@ export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({
     }, [signer, bountyItems, account]);
 
     const renderBountySlices = React.useMemo(() => {
-        return bountyItems.map((bounty: BountyItem, index: number) => {
+        return bounties.map((bounty: BountyItem, index: number) => {
             return (
                 <React.Fragment key={`bounty-${bounty.fid}`}>
-                    <BountyRow bounty={bounty} handleClaim={handleClaimReward} index={index + 1} />
+                    <BountyRow bounty={bounty} handleClaim={handleClaimReward} index={((page - 1) * limit) + index + 1} />
                 </React.Fragment>
             );
         });
-    }, [bountyItems, handleClaimReward]);
+    }, [bounties, handleClaimReward, page]);
 
     const getBountiesClaimableAmount = React.useCallback(() => {
         let amountToClaim = 0;
@@ -178,6 +197,22 @@ export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({
         );
     }, [isLoading, renderLoadingModalBody, renderClaimModalBody]);
 
+    const handleClickNextButton = React.useCallback(
+        (value: number) => {
+            setPage(value + 1);
+            setBounties([]);
+        },
+        [page]
+    );
+
+    const handleClickPrevButton = React.useCallback(
+        (value: number) => {
+            setPage(value - 1);
+            setBounties([]);
+        },
+        [page]
+    );
+
     return (
         <React.Fragment>
             <div className="duckies-affiliates">
@@ -203,17 +238,19 @@ export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({
                                         </div>)
                                     }
                                 </div>
-                                <UnloginEyes>
-                                    {renderBountySlices}
+                                <UnloginEyes paginationComponent={
                                     <SimplePagination
-                                        page={1}
-                                        limit={10}
-                                        nextPageExists={true}
-                                        handleClickNextButton={() => console.log('test')}
-                                        handleClickPrevButton={() => console.log('test')}
-                                        total={15}
+                                        page={page}
+                                        limit={limit}
+                                        nextPageExists={page * limit < bountyItems.length}
+                                        handleClickNextButton={handleClickNextButton}
+                                        handleClickPrevButton={handleClickPrevButton}
+                                        totalValue={bountyItems.length}
+                                        total={bounties.length}
                                         shouldRenderTotal={true}
                                     />
+                                }>
+                                    {renderBountySlices}
                                 </UnloginEyes>
                             </div>
                         </div>

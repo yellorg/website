@@ -1,6 +1,9 @@
 .cr-unlogin {
     position: relative;
-    height: 80%;
+    display: flex;
+    flex-flow: column;
+    justify-content: space-between;
+    height: 89%;
 
     &-content {
         position: relative;

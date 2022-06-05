@@ -28,6 +28,18 @@
         line-height: 20px;
         border-radius: 6px;
         cursor: pointer;
+        background: #fff;
+        border-color: #CECFD2;
+        transition: all 0.2s ease-in-out;
+
+        &:disabled:hover{
+            background: #fff;
+            cursor: not-allowed;
+        }
+
+        &:hover {
+            background: #F1F1F1;
+        }
     }
 
     &-next-button {
@@ -41,6 +53,18 @@
         line-height: 20px;
         border-radius: 6px;
         cursor: pointer;
+        background: #fff;
+        border-color: #CECFD2;
+        transition: all 0.2s ease-in-out;
+
+        &:disabled:hover{
+            background: #fff;
+            cursor: not-allowed;
+        }
+
+        &:hover {
+            background: #F1F1F1;
+        }
     }
 
     &-right {
