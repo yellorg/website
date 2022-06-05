@@ -52,6 +52,8 @@ steps:
         from_secret: helm_namespace
       DOMAIN:
         from_secret: domain
+      REDIRECT_FROM_DOMAIN:
+        from_secret: redirect_from_domain
       SVC_PORT:
         from_secret: svc_port
     commands:
