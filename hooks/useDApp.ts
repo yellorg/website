@@ -1,11 +1,12 @@
 import type { AbstractConnector } from '@web3-react/abstract-connector'
 import { useWeb3React } from '@web3-react/core'
 import { InjectedConnector } from '@web3-react/injected-connector'
-import { WalletConnectConnector } from '@web3-react/walletconnect-connector'
+import { WalletConnectConnector, IRPCMap } from '@web3-react/walletconnect-connector'
 import type { ethers } from 'ethers'
 import { useCallback, useMemo } from 'react'
 import { appConfig } from '../config/app'
 import chains from '../config/chains'
+import { IRPCMap } from '@walletconnect/types';
 
 const { supportedChainIds } = appConfig.blockchain
 
@@ -24,6 +25,10 @@ export const providerCache = {
   },
 }
 
+const rpc: IRPCMap = {
+  80001: process.env.NEXT_PUBLIC_POLYGON_URL as string,
+}
+
 export const connectorsByProvider: {
   [id in ProviderWhitelist]: {
     connector: AbstractConnector
@@ -39,7 +44,7 @@ export const connectorsByProvider: {
   WalletConnect: {
     connector: new WalletConnectConnector({
       supportedChainIds,
-      infuraId: process.env.NEXT_PUBLIC_INFURA_URL,
+      rpc,
       bridge: 'https://bridge.walletconnect.org',
       qrcode: true,
     }),
