@@ -15,7 +15,7 @@ describe("Duckies", function () {
   beforeEach(async function () {
     const [owner, signer] = await ethers.getSigners();
 
-    const Duckies = await ethers.getContractFactory("Duckies");
+    const Duckies = ethers.getContractFactory("Duckies");
     const duckies = await upgrades.deployProxy(Duckies, [signer.address]);
     await duckies.deployed();
     this.duckies = duckies;
