@@ -9,8 +9,8 @@ const getTX = async (token: string, account: string) => {
     const jwtPrivateKey = process.env.NEXT_PUBLIC_JWT_PRIVATE_KEY || '';
     const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || '';
 
-    const provider = new ethers.providers.JsonRpcProvider(process.env.NEXT_PUBLIC_INFURA_URL);
-    const web3 = new Web3(new Web3.providers.HttpProvider(process.env.NEXT_PUBLIC_INFURA_URL || ''));
+    const provider = new ethers.providers.JsonRpcProvider(process.env.NEXT_PUBLIC_POLYGON_URL);
+    const web3 = new Web3(new Web3.providers.HttpProvider(process.env.NEXT_PUBLIC_POLYGON_URL || ''));
 
     const decodedJWT = jwt.verify(token, jwtPrivateKey);
     const contract = new ethers.Contract(

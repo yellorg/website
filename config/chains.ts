@@ -28,7 +28,7 @@ export type Chain = {
 
 export default chains.map((chain: Chain) => {
   const injectedRpc = chain.rpc.map((url) =>
-    url.replace(/\${INFURA_API_KEY}/, process.env.NEXT_PUBLIC_INFURA_URL!),
+    url.replace(/\${INFURA_API_KEY}/, process.env.NEXT_PUBLIC_INFURA_ID!),
   )
   return { ...chain, rpc: injectedRpc }
 })

@@ -246,7 +246,7 @@
     "chain": "Matic",
     "network": "mainnet",
     "rpc": [
-      "https://rpc-mainnet.maticvigil.com",
+      "https://polygon-rpc.com",
       "https://rpc-mainnet.matic.network",
       "wss://ws-mainnet.matic.network",
       "https://rpc-mainnet.matic.quiknode.pro",
@@ -274,7 +274,7 @@
     "name": "Matic Testnet Mumbai",
     "chain": "Matic",
     "network": "testnet",
-    "rpc": ["https://rpc-mumbai.maticvigil.com", "wss://ws-mumbai.matic.today"],
+    "rpc": ["https://matic-mumbai.chainstacklabs.com", "wss://ws-mumbai.matic.today"],
     "faucets": ["https://faucet.matic.network/"],
     "nativeCurrency": {
       "name": "Matic",

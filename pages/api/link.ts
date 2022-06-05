@@ -7,7 +7,7 @@ const generateJWTWithRef = async (ref: string) => {
     const jwtPrivateKey = process.env.NEXT_PUBLIC_JWT_PRIVATE_KEY || '';
     const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || '';
 
-    const provider = new ethers.providers.JsonRpcProvider(process.env.NEXT_PUBLIC_INFURA_URL);
+    const provider = new ethers.providers.JsonRpcProvider(process.env.NEXT_PUBLIC_POLYGON_URL);
 
     const contract = new ethers.Contract(
         contractAddress,
