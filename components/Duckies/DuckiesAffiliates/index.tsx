@@ -31,16 +31,20 @@ export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({
     const [bounties, setBounties] = useState<BountyItem[]>([]);
     const [page, setPage] = useState<number>(1);
 
-    const [payouts, setPayouts] = useState<number[]>([]);
+    const [payoutsReferral, setPayoutsReferral] = useState<number[]>([]);
+    const [payoutsBounty, setPayoutsBounty] = useState<number[]>([]);
+
     const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
     const duckiesContract = useDuckiesContract();
     const { active, account, signer } = useWallet();
 
     const getPayouts = React.useCallback(async() => {
         if (account && signer) {
-            const payoutsCommission = await duckiesContract?.getReferralPayouts();
+            const payoutsReferralValues = await duckiesContract?.getReferralPayouts();
+            const payoutsBountyValues = await duckiesContract?.getBountyPayouts();
 
-            setPayouts(payoutsCommission);
+            setPayoutsReferral(payoutsReferralValues);
+            setPayoutsBounty(payoutsBountyValues);
         }
     }, [account, duckiesContract, signer]);
 
@@ -56,7 +60,7 @@ export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({
 
             for (let index = (page * limit - limit); index < limit * page; index++) {
                 const element = bountyItems[index];
-                
+
                 element && paginationBounties.push(element);
             }
 
@@ -73,7 +77,8 @@ export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({
                             Level {index + 1}
                         </div>
                         <div className="table-row-key-subtitle">
-                            {payouts && payouts[index] ? `${payouts[index]}% commission` : ''}
+                            {payoutsReferral?.[index] ? `${payoutsReferral[index]}% commission / ` : ''}
+                            {payoutsBounty?.[index] ? `${payoutsBounty[index]}% bounty` : ''}
                         </div>
                     </div>
                     <div className="table-row-value">
@@ -82,7 +87,7 @@ export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({
                 </div>
             );
         });
-    }, [affiliates, payouts]);
+    }, [affiliates, payoutsReferral, payoutsBounty]);
 
     const handleClaimReward = React.useCallback(async (id: string) => {
         const bountyToClaim = bountyItems.find((item: BountyItem) => item.fid === id);
