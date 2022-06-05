@@ -1,7 +1,7 @@
 import type { AbstractConnector } from '@web3-react/abstract-connector'
 import { useWeb3React } from '@web3-react/core'
 import { InjectedConnector } from '@web3-react/injected-connector'
-import { WalletConnectConnector, IRPCMap } from '@web3-react/walletconnect-connector'
+import { WalletConnectConnector } from '@web3-react/walletconnect-connector'
 import type { ethers } from 'ethers'
 import { useCallback, useMemo } from 'react'
 import { appConfig } from '../config/app'

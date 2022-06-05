@@ -64,6 +64,7 @@
         &-logout {
             margin-top: 12px;
             margin-right: 0px !important;
+            .button__inner {}
         }
     }
     @media screen and (min-width: 872px) {
@@ -99,7 +100,6 @@
             flex-direction: column;
             justify-content: flex-start;
             word-wrap: break-word;
-
             @media screen and (max-width: 1200px) {
                 font-size: 2.5rem;
                 line-height: 3rem;
@@ -125,30 +125,24 @@
                 display: flex;
                 align-items: center;
                 width: 100%;
-
                 @media screen and (max-width: 871px) {
                     justify-content: center;
                 }
-
                 @media screen and (max-width: 572px) {
                     flex-direction: column;
                 }
-
                 &-value {
                     font-size: 3.75rem;
                     line-height: 4rem;
                     font-weight: bolder;
                     font-family: var(--ifm-heading-font-family);
                     margin-right: 18px;
-
                     // @media screen and (max-width: 572px) {
                     //     display
                     // }
                 }
-
                 &-image {
                     display: flex;
-
                     @media screen and (max-width: 871px) {
                         margin-right: 0;
                     }
@@ -165,9 +159,11 @@
                 font-size: 24px;
                 line-height: 32px;
                 padding: 16px;
+                justify-content: center;
             }
             &-claim {
                 margin-right: 24px;
+                text-align: center;
                 @media screen and (max-width: 871px) {
                     width: 50%;
                 }
@@ -242,6 +238,7 @@
                     }
                     .button__inner {
                         padding: 6px 18px;
+                        justify-content: center;
                     }
                 }
             }
@@ -302,15 +299,12 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-
     .icon {
         margin-bottom: 1.5em;
     }
-
     .content {
         padding: 0 .5em 1.5em .5em;
         margin: 0;
-
         &.center {
             text-align: center;
         }
