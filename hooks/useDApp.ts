@@ -26,7 +26,7 @@ export const providerCache = {
 }
 
 const rpc: IRPCMap = {
-  80001: process.env.NEXT_PUBLIC_POLYGON_URL as string,
+  80001: chains.find(c => c.chainId === 80001)?.rpc[0] as string,
 }
 
 export const connectorsByProvider: {
