@@ -47,7 +47,7 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
     const [isMetaMaskInstalled, setMetaMaskInstalled] = useState<boolean>(true);
     const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
     const [isOpenBalancesInfo, setIsOpenBalancesInfo] = useState<boolean>(false);
-    const [balance, setBalance] = useState<number | undefined>(undefined);
+    const [balance, setBalance] = useState<number>(0);
 
     const dispatch = useAppDispatch();
     const duckiesContract = useDuckiesContract();
@@ -91,13 +91,13 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
             const token = localStorage.getItem('referral_token');
             const referralLimit = +await duckiesContract?.getAccountBountyLimit('referral');
 
-            setIsReferralClaimed(!token || referralLimit === 1 || affiliates[0] > 0);
+            setIsReferralClaimed(!token || referralLimit === 1 || affiliates[0] > 0 || balance > 0);
 
             if (referralLimit === 1 || affiliates[0] > 0) {
                 localStorage.removeItem('referral_token');
             }
         })();
-    }, [isReady, duckiesContract, isRewardsClaimed, affiliates]);
+    }, [isReady, duckiesContract, isRewardsClaimed, affiliates, balance]);
 
     useEffect(() => {
         if (isReady) {
