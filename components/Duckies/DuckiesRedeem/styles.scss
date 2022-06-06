@@ -52,6 +52,13 @@
                     margin-bottom: 36px;
                     font-family: var(--font-family-subtitle-400);
                 }
+                &-image {
+                    display: flex;
+                    margin-bottom: 40px;
+                    @media screen and (min-width: 676px) {
+                        display: none;
+                    }
+                }
             }
             &-content {
                 display: flex;
@@ -88,9 +95,12 @@
             }
         }
         &-duckies {
-            display: flex;
+            display: none;
             width: 100%;
             max-width: 50%;
+            @media screen and (min-width: 676px) {
+                display: flex;
+            }
             @media screen and (max-width: 851px) {
                 max-width: 100%;
             }

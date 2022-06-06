@@ -19,6 +19,13 @@ export const DuckiesRedeem = () => {
                             Exchange your duckies for valuable gifts and rare NFTs
                         </div>
                     </div>
+                    <div className="duckies-redeem__block-info-header-image">
+                        <LazyLoadImage className="section__main-img"
+                            srcSet={`${'/images/components/duckies/redeem.svg'}`}
+                            effect="blur"
+                            threshold={200}
+                        />
+                    </div>
                     <div className="duckies-redeem__block-info-content">
                         <div className="duckies-redeem__block-info-content-row">
                             <div className="duckies-redeem__block-info-content-row-item">
