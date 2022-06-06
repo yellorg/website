@@ -150,18 +150,30 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
 
             if (token && signer && account) {
                 setIsLoading(true);
-                const { transaction } = await (await fetch(`/api/tx?token=${token}&account=${account}`)).json();
 
                 try {
-                    const tx = await signer.sendTransaction(transaction);
-                    await tx.wait();
-                    localStorage.removeItem('referral_token');
-                    dispatch(dispatchAlert({
-                        type: 'success',
-                        title: 'Success',
-                        message: 'You were successfully claimed the reward!',
-                    }));
-                    setIsRewardsClaimed(true);
+                    const response = await fetch(`/api/tx?token=${token}&account=${account}`);
+
+                    if (response.status !== 400) {
+                        const { transaction } = await response.json();
+
+                        const tx = await signer.sendTransaction(transaction);
+                        await tx.wait();
+                        localStorage.removeItem('referral_token');
+                        dispatch(dispatchAlert({
+                            type: 'success',
+                            title: 'Success',
+                            message: 'You were successfully claimed the reward!',
+                        }));
+                        setIsRewardsClaimed(true);
+                    } else {
+                        localStorage.removeItem('referral_token');
+                        dispatch(dispatchAlert({
+                            type: 'error',
+                            title: 'Error',
+                            message: 'Something were wrong! Please, try again!',
+                        }));
+                    }
                 } catch (error) {
                     dispatch(dispatchAlert({
                         type: 'error',
