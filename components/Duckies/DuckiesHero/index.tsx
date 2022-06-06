@@ -91,7 +91,7 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
             const token = localStorage.getItem('referral_token');
             const referralLimit = +await duckiesContract?.getAccountBountyLimit('referral');
 
-            setIsReferralClaimed(!token || referralLimit === 1 || affiliates[0] > 0 || (balance && balance > 0));
+            setIsReferralClaimed(!token || referralLimit === 1 || affiliates[0] > 0 || (balance && balance > 0 || false));
 
             if (referralLimit === 1 || affiliates[0] > 0) {
                 localStorage.removeItem('referral_token');

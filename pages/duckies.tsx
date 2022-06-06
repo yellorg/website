@@ -9,6 +9,8 @@ import { createClient } from '../prismicio';
 import '../.d';
 import { ReduxProvider } from '../providers/ReduxProvider';
 import { Alerts } from '../components/Alerts';
+import Script from 'next/script';
+import { GTM_ID, pageview } from '../lib/gtm';
 
 const getLibrary = (provider: any): ethers.providers.Web3Provider => {
     const library = new ethers.providers.Web3Provider(provider, 'any');
@@ -45,6 +47,19 @@ const Duckies: FC = ({ bounties }: any): JSX.Element => {
                                 content="Yellow DeFi is a new generation hybrid technology cryptocurrency exchange combining the best of decentralized and centralized performance."
                             />
                         </Head>
+                        <Script
+                            id="gtm"
+                            strategy="afterInteractive"
+                            dangerouslySetInnerHTML={{
+                                __html: `
+                                    (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+                                    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+                                    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+                                    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+                                    })(window,document,'script','dataLayer', '${GTM_ID}');
+                                `,
+                            }}
+                        />
                         <DuckiesLayout bounties={bounties} />
                     </div>
                     <Footer />
