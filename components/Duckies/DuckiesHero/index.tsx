@@ -25,6 +25,7 @@ interface DuckiesHeroProps {
     setIsLoading: (value: boolean) => void;
     isRewardsClaimed: boolean;
     setIsRewardsClaimed: (value: boolean) => void;
+    affiliates: number[];
 }
 
 export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
@@ -35,6 +36,7 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
     setIsLoading,
     isRewardsClaimed,
     setIsRewardsClaimed,
+    affiliates,
 }: DuckiesHeroProps) => {
     const [isMetaMaskInstalled, setMetaMaskInstalled] = useState<boolean>(true);
     const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
@@ -84,13 +86,13 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
             const token = localStorage.getItem('referral_token');
             const referralLimit = +await duckiesContract?.getAccountBountyLimit('referral');
 
-            setIsReferralClaimed(!token || referralLimit === 1);
+            setIsReferralClaimed(!token || referralLimit === 1 || affiliates[0] > 0);
 
-            if (referralLimit === 1) {
+            if (referralLimit === 1 || affiliates[0] > 0) {
                 localStorage.removeItem('referral_token');
             }
         })();
-    }, [isReady, duckiesContract, isRewardsClaimed]);
+    }, [isReady, duckiesContract, isRewardsClaimed, affiliates]);
 
     useEffect(() => {
         if (isReady) {

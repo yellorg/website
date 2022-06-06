@@ -16,10 +16,11 @@ describe("Duckies", function () {
     const [owner, signer] = await ethers.getSigners();
 
     const Duckies = ethers.getContractFactory("Duckies");
-    const duckies = await upgrades.deployProxy(Duckies, [signer.address]);
-    await duckies.deployed();
-    this.duckies = duckies;
 
+    const duckies = await upgrades.deployProxy((Duckies as any), [signer.address]);
+    await duckies.deployed();
+
+    this.duckies = duckies;
     this.owner = owner;
   });
 
@@ -604,7 +605,6 @@ describe("Duckies", function () {
     expect(await duckies.connect(accounts[5]).getAffiliatesCount()).to.be.eql([1, 4, 5, 1, 0]);
     expect(await duckies.connect(accounts[1]).getAffiliatesCount()).to.be.eql([3, 1, 4, 5, 1]);
     expect(await duckies.connect(accounts[0]).getAffiliatesCount()).to.be.eql([2, 3, 1, 4, 5]);
-
   });
 
   it("should successfully get all payouts array", async function () {
@@ -802,5 +802,75 @@ describe("Duckies", function () {
     }
 
     expect(await duckies.balanceOf(accounts[0].address)).to.be.equal(0);
+  });
+
+  it("should prevent getting award twice or more times", async function () {
+    const { duckies }: TestContext = this as any;
+    const [_owner, signer, ...accounts] = await ethers.getSigners();
+    const provider = ethers.provider;
+    const signerAccount = signer.address;
+
+    const messageOne = {
+      ref: accounts[0].address,
+      amt: 15000,
+      id: 'referral',
+      blockExpiration: 20,
+      limit: 0,
+    };
+    const messageOneHash = await duckies.getMessageHash(
+      messageOne
+    );
+    const signatureOne = await provider.send("personal_sign", [
+      messageOneHash,
+      signerAccount,
+    ]);
+
+    await duckies.connect(accounts[1]).reward(messageOne, signatureOne);
+
+    const balanceOne = await duckies.balanceOf(accounts[1].address);
+    expect(balanceOne).to.be.equal(messageOne.amt);
+
+    const messageTwo = {
+      ref: accounts[1].address,
+      amt: 30000,
+      id: 'referral',
+      blockExpiration: 20,
+      limit: 0,
+    };
+    const messageTwoHash = await duckies.getMessageHash(
+      messageTwo
+    );
+    const signatureTwo = await provider.send("personal_sign", [
+      messageTwoHash,
+      signerAccount,
+    ]);
+
+    await duckies.connect(accounts[2]).reward(messageTwo, signatureTwo);
+
+    const balanceTwo = await duckies.balanceOf(accounts[12].address);
+    expect(balanceTwo).to.be.equal(messageTwo.amt);
+
+    const messageThree = {
+      ref: accounts[3].address,
+      amt: 45000,
+      id: 'referral',
+      blockExpiration: 20,
+      limit: 0,
+    };
+    const messageThreeHash = await duckies.getMessageHash(
+      messageThree
+    );
+    const signatureThree = await provider.send("personal_sign", [
+      messageThreeHash,
+      signerAccount,
+    ]);
+
+    try {
+      await duckies.connect(accounts[0]).reward(messageTwo, signatureThree);
+
+      assert(false);
+    } catch (err) {
+      assert(err);
+    }
   });
 });

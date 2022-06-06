@@ -172,6 +172,7 @@ contract Duckies is Initializable, ERC20CappedUpgradeable, PausableUpgradeable, 
             require(_referrers[msg.sender] == address(0));
             require(msg.sender != _message.ref);
             require(isAccountNotInReferrers(msg.sender, _message.ref));
+            require(_affiliates[msg.sender].length == 0);
 
             _referrers[msg.sender] = _message.ref;
             _affiliates[_message.ref].push(msg.sender);

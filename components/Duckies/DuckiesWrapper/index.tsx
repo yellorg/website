@@ -151,6 +151,7 @@ export const DuckiesLayout: FC<DuckiesLayoutProps> = ({ bounties }: DuckiesLayou
                 setIsLoading={setIsLoading}
                 isRewardsClaimed={isRewardsClaimed}
                 setIsRewardsClaimed={setIsRewardsClaimed}
+                affiliates={affiliates}
             />
             <DuckiesAffiliates
                 bountyItems={bountyItems}
