@@ -117,7 +117,7 @@ export const DuckiesEarnMore = () => {
                 <WeiboShareButton
                     key="weibo"
                     url={`${shareableLinkPrefix}${shareableLink}`}
-                    title="DUCKIES"
+                    title="Go and claim your DUCKIES tokens (choose Polygon mainnet on your Wallet for tokens minting)!"
                 >
                     <svg width="49" height="48" viewBox="0.5 0 49 48" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M24.5 48C37.7548 48 48.5 37.2548 48.5 24C48.5 10.7452 37.7548 0 24.5 0C11.2452 0 0.5 10.7452 0.5 24C0.5 37.2548 11.2452 48 24.5 48Z" fill="white"/>
@@ -137,6 +137,7 @@ export const DuckiesEarnMore = () => {
                     className=""
                     key="facebook"
                     hashtag="invitation"
+                    title="Go and claim your DUCKIES tokens (choose Polygon mainnet on your Wallet for tokens minting)!"
                 >
                     <svg width="49" height="48" viewBox="0.5 0 49 48" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M0.5 24C0.5 10.7452 11.2452 0 24.5 0C37.7548 0 48.5 10.7452 48.5 24C48.5 37.2548 37.7548 48 24.5 48C11.2452 48 0.5 37.2548 0.5 24Z" fill="#3B5998"/>
@@ -147,7 +148,7 @@ export const DuckiesEarnMore = () => {
             (
                 <TwitterShareButton
                     url={`${shareableLinkPrefix}${shareableLink}`}
-                    title="DUCKIES"
+                    title="Go and claim your DUCKIES tokens (choose Polygon mainnet on your Wallet for tokens minting)!"
                     className=""
                     key="twitter"
                 >
@@ -161,7 +162,8 @@ export const DuckiesEarnMore = () => {
                 <LinkedinShareButton
                     url={`${shareableLinkPrefix}${shareableLink}`}
                     className=""
-                    key="linkedIN"
+                    key="Go and claim your DUCKIES tokens (choose Polygon mainnet on your Wallet for tokens minting)!"
+                    title=""
                 >
                     <svg width="49" height="48" viewBox="0.5 0 49 48" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M0.5 24C0.5 10.7452 11.2452 0 24.5 0C37.7548 0 48.5 10.7452 48.5 24C48.5 37.2548 37.7548 48 24.5 48C11.2452 48 0.5 37.2548 0.5 24Z" fill="#0077B5"/>
@@ -172,7 +174,7 @@ export const DuckiesEarnMore = () => {
             (
                 <TelegramShareButton
                     url={`${shareableLinkPrefix}${shareableLink}`}
-                    title="DUCKIES"
+                    title="Go and claim your DUCKIES tokens (choose Polygon mainnet on your Wallet for tokens minting)!"
                     className=""
                     key="telegram"
                 >
