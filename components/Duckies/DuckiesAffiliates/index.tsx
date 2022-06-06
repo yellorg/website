@@ -243,7 +243,7 @@ export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({
                                         </div>)
                                     }
                                 </div>
-                                <UnloginEyes paginationComponent={
+                                <UnloginEyes isReversed={true} paginationComponent={
                                     <SimplePagination
                                         page={page}
                                         limit={limit}

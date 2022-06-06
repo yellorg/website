@@ -7,9 +7,10 @@ import useWallet from '../../../hooks/useWallet';
 interface UnloginEyes {
     children: React.ReactNode
     paginationComponent?: React.ReactNode
+    isReversed?: boolean
 }
 
-const UnloginEyes: React.FC<UnloginEyes> = ({ children, paginationComponent }: UnloginEyes) => {
+const UnloginEyes: React.FC<UnloginEyes> = ({ children, paginationComponent, isReversed }: UnloginEyes) => {
     const { active, account, chain } = useWallet();
     const triedToEagerConnect = useEagerConnect();
 
@@ -29,6 +30,11 @@ const UnloginEyes: React.FC<UnloginEyes> = ({ children, paginationComponent }: U
         'cr-unlogin-content--blur': !isReady
     });
 
+    const reversedClassName = classnames('cr-unlogin-eyes', {
+        'cr-unlogin-eyes--reversed': isReversed
+    });
+
+
     return (
         <div className="cr-unlogin">
             <div className={rootClassName}>
@@ -38,7 +44,7 @@ const UnloginEyes: React.FC<UnloginEyes> = ({ children, paginationComponent }: U
                 {paginationComponent}
             </div>
             {!isReady ?
-                <div className="cr-unlogin-eyes">
+                <div className={reversedClassName}>
                     <img src="/images/components/duckies/login_eyes_2.png" alt="login" />
                 </div> : <></>
             }
