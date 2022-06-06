@@ -17,6 +17,7 @@ export const DuckiesLayout: FC<DuckiesLayoutProps> = ({ bounties }: DuckiesLayou
     const { items } = bounties?.data.slices[0];
     const [bountyItems, setBountyItems] = React.useState<any[]>([]);
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
+    const [isRewardsClaimed, setIsRewardsClaimed] = React.useState<boolean>(false);
 
     const dispatch = useAppDispatch();
     const duckiesContract = useDuckiesContract();
@@ -129,6 +130,7 @@ export const DuckiesLayout: FC<DuckiesLayoutProps> = ({ bounties }: DuckiesLayou
                     title: 'Success',
                     message: 'You were successfully claimed the reward!',
                 })));
+                setIsRewardsClaimed(true);
             } catch (error) {
                 dispatch((dispatchAlert({
                     type: 'error',
@@ -147,6 +149,8 @@ export const DuckiesLayout: FC<DuckiesLayoutProps> = ({ bounties }: DuckiesLayou
                 bountyItems={bountyItems}
                 isLoading={isLoading}
                 setIsLoading={setIsLoading}
+                isRewardsClaimed={isRewardsClaimed}
+                setIsRewardsClaimed={setIsRewardsClaimed}
             />
             <DuckiesAffiliates
                 bountyItems={bountyItems}
@@ -156,6 +160,7 @@ export const DuckiesLayout: FC<DuckiesLayoutProps> = ({ bounties }: DuckiesLayou
                 handleClaimAllBounties={handleClaimAllBounties}
                 isLoading={isLoading}
                 setIsLoading={setIsLoading}
+                setIsRewardsClaimed={setIsRewardsClaimed}
             />
             <DuckiesEarnMore />
             <DuckiesRedeem />

@@ -23,6 +23,8 @@ interface DuckiesHeroProps {
     bountyItems: any[];
     isLoading: boolean;
     setIsLoading: (value: boolean) => void;
+    isRewardsClaimed: boolean;
+    setIsRewardsClaimed: (value: boolean) => void;
 }
 
 export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
@@ -31,6 +33,8 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
     bountyItems,
     isLoading,
     setIsLoading,
+    isRewardsClaimed,
+    setIsRewardsClaimed,
 }: DuckiesHeroProps) => {
     const [isMetaMaskInstalled, setMetaMaskInstalled] = useState<boolean>(true);
     const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
@@ -65,6 +69,13 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
     }, [account, duckiesContract]);
 
     useEffect(() => {
+        if (isRewardsClaimed) {
+            getBalance();
+            setIsRewardsClaimed(false);
+        }
+    }, [isRewardsClaimed]);
+
+    useEffect(() => {
         if (!isReady) {
             return;
         }
@@ -79,7 +90,7 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
                 localStorage.removeItem('referral_token');
             }
         })();
-    }, [isReady, duckiesContract]);
+    }, [isReady, duckiesContract, isRewardsClaimed]);
 
     useEffect(() => {
         if (isReady) {
@@ -150,8 +161,8 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
                         title: 'Success',
                         message: 'You were successfully claimed the reward!',
                     }));
+                    setIsRewardsClaimed(true);
                 } catch (error) {
-
                     dispatch(dispatchAlert({
                         type: 'error',
                         title: 'Error',
@@ -177,6 +188,7 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
         isReferralClaimed,
         handleClaimAllBounties,
         dispatch,
+        setIsRewardsClaimed,
     ]);
 
     const handleClaimButtonClick = React.useCallback(() => {

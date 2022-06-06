@@ -17,6 +17,7 @@ interface DuckiesAffiliatesProps {
     handleClaimAllBounties: () => void;
     isLoading: boolean;
     setIsLoading: (value: boolean) => void;
+    setIsRewardsClaimed: (value: boolean) => void;
 }
 
 export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({
@@ -27,6 +28,7 @@ export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({
     handleClaimAllBounties,
     isLoading,
     setIsLoading,
+    setIsRewardsClaimed,
 }: DuckiesAffiliatesProps) => {
     const limit: number = 5;
 
@@ -107,6 +109,7 @@ export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({
                     title: 'Success',
                     message: 'You were successfully claimed the reward!',
                 }));
+                setIsRewardsClaimed(true);
             } catch (error) {
                 dispatch(dispatchAlert({
                     type: 'error',
