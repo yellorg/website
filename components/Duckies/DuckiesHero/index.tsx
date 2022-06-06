@@ -14,6 +14,8 @@ import useDuckiesContract from '../../../hooks/useDuckiesContract';
 import { appConfig } from '../../../config/app';
 import { convertNumberToLiteral } from '../../../helpers/convertNumberToLiteral';
 import Image from 'next/image';
+import { dispatchAlert } from '../../../features/alerts/alertsSlice';
+import { useAppDispatch } from '../../../app/hooks';
 
 interface DuckiesHeroProps {
     bountiesToClaim: string[];
@@ -36,6 +38,7 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
     const [isReferralClaimed, setIsReferralClaimed] = useState<boolean>(false);
     const [balance, setBalance] = useState<number | undefined>(undefined);
 
+    const dispatch = useAppDispatch();
     const duckiesContract = useDuckiesContract();
     const { connectWithProvider, disconnect } = useDApp();
     const { active, account, chain, signer } = useWallet();
@@ -142,12 +145,21 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
                     const tx = await signer.sendTransaction(transaction);
                     await tx.wait();
                     localStorage.removeItem('referral_token');
-                    setIsLoading(false);
-                    setIsOpenModal(false);
+                    dispatch(dispatchAlert({
+                        type: 'success',
+                        title: 'Success',
+                        message: 'You were successfully claimed the reward!',
+                    }));
                 } catch (error) {
-                    setIsLoading(false);
-                    setIsOpenModal(false);
+
+                    dispatch(dispatchAlert({
+                        type: 'error',
+                        title: 'Error',
+                        message: 'Something were wrong! Please, try again!',
+                    }));
                 }
+
+                setIsLoading(false);
             }
         } else {
             if (bountiesToClaim.length) {
@@ -161,10 +173,10 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
         account,
         isLoading,
         setIsLoading,
-        setIsOpenModal,
         bountiesToClaim,
         isReferralClaimed,
         handleClaimAllBounties,
+        dispatch,
     ]);
 
     const handleClaimButtonClick = React.useCallback(() => {
@@ -317,48 +329,6 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
         renderClaimRewardModalBody,
     ]);
 
-    const balanceTooltip = () => {
-        if (!isReady) {
-            return (
-                <div className="duckies-hero__tooltip">
-                    <h5 className="duckies-hero__tooltip-header">Connected wallet info</h5>
-                    <div className="duckies-hero__tooltip-box">
-                        <span className="duckies-hero__tooltip-box-text">Connect metamask in order to see Balance details</span>
-                    </div>
-                </div>     
-            );
-        }
-
-        return (
-            <div className="duckies-hero__tooltip">
-                <h5 className="duckies-hero__tooltip-header">Connected wallet info</h5>
-                <div className="duckies-hero__tooltip-box">
-                    <span className="duckies-hero__tooltip-box-title">Current address: </span>
-                    <span className="duckies-hero__tooltip-box-text">{ENSName || account}</span>
-                </div>
-                {
-                    chain && <div>
-                        <span className="duckies-hero__tooltip-box-title">Current network: </span>
-                        <span className="duckies-hero__tooltip-box-text">{chain.network}</span>
-                    </div>
-                }
-                <div className="duckies-hero__tooltip-balance">
-                    <span className="duckies-hero__tooltip-box-title">Balance:</span>
-                    <span className="duckies-hero__tooltip-box-text duckies-hero__tooltip-box-balance">
-                        {balance}
-                        <svg width="14" height="20" viewBox="0 0 20 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M9.51487 3.11111H0V24.8889H9.51487C15.9624 24.8889 20 20.2844 20 14C20 7.59111 15.8998 3.11111 9.51487 3.11111ZM9.42097 21.0311H4.25665V6.93778H9.42097C13.1768 6.93778 15.6808 9.76889 15.6808 13.9067C15.6808 18.1067 13.1768 21.0311 9.42097 21.0311Z" fill="#000000"/>
-                            <path d="M3.92 0H7.04989V6.22222H3.92V0Z" fill="#000000"/>
-                            <path d="M3.92 21.7778H7.04989V28H3.92V21.7778Z" fill="#000000"/>
-                            <path d="M8.61484 0H11.7447V6.22222H8.61484V0Z" fill="#000000"/>
-                            <path d="M8.61484 21.7778H11.7447V28H8.61484V21.7778Z" fill="#000000"/>
-                        </svg>
-                    </span>
-                </div>
-            </div>
-        );
-    }
-
     return (
         <>
             <div className="duckies-hero">
@@ -401,7 +371,34 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
                                             <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                 <path d="M11 14H10V10H9M10 6H10.01M19 10C19 14.9706 14.9706 19 10 19C5.02944 19 1 14.9706 1 10C1 5.02944 5.02944 1 10 1C14.9706 1 19 5.02944 19 10Z" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                                             </svg>
-                                            {isOpenBalancesInfo && balanceTooltip()}
+                                            {isOpenBalancesInfo &&
+                                                <div className="duckies-hero__tooltip">
+                                                    <h5 className="duckies-hero__tooltip-header">Connected wallet info</h5>
+                                                    <div className="duckies-hero__tooltip-box">
+                                                        <span className="duckies-hero__tooltip-box-title">Current address: </span>
+                                                        <span className="duckies-hero__tooltip-box-text">{ENSName || account}</span>
+                                                    </div>
+                                                    {
+                                                        chain && <div>
+                                                            <span className="duckies-hero__tooltip-box-title">Current network: </span>
+                                                            <span className="duckies-hero__tooltip-box-text">{chain.network}</span>
+                                                        </div>
+                                                    }
+                                                    <div className="duckies-hero__tooltip-balance">
+                                                        <span className="duckies-hero__tooltip-box-title">Balance:</span>
+                                                        <span className="duckies-hero__tooltip-box-text duckies-hero__tooltip-box-balance">
+                                                            {balance}
+                                                            <svg width="14" height="20" viewBox="0 0 20 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                <path d="M9.51487 3.11111H0V24.8889H9.51487C15.9624 24.8889 20 20.2844 20 14C20 7.59111 15.8998 3.11111 9.51487 3.11111ZM9.42097 21.0311H4.25665V6.93778H9.42097C13.1768 6.93778 15.6808 9.76889 15.6808 13.9067C15.6808 18.1067 13.1768 21.0311 9.42097 21.0311Z" fill="#000000"/>
+                                                                <path d="M3.92 0H7.04989V6.22222H3.92V0Z" fill="#000000"/>
+                                                                <path d="M3.92 21.7778H7.04989V28H3.92V21.7778Z" fill="#000000"/>
+                                                                <path d="M8.61484 0H11.7447V6.22222H8.61484V0Z" fill="#000000"/>
+                                                                <path d="M8.61484 21.7778H11.7447V28H8.61484V21.7778Z" fill="#000000"/>
+                                                            </svg>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            }
                                         </div>
                                     </div>
                                     {isReady ? (

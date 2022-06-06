@@ -5,6 +5,8 @@ import { DuckiesEarnMore} from '../DuckiesEarnMore';
 import { DuckiesRedeem} from '../DuckiesRedeem';
 import useDuckiesContract from '../../../hooks/useDuckiesContract';
 import useWallet from '../../../hooks/useWallet';
+import { dispatchAlert } from '../../../features/alerts/alertsSlice';
+import { useAppDispatch } from '../../../app/hooks';
 
 interface DuckiesLayoutProps {
     bounties: any;
@@ -16,6 +18,7 @@ export const DuckiesLayout: FC<DuckiesLayoutProps> = ({ bounties }: DuckiesLayou
     const [bountyItems, setBountyItems] = React.useState<any[]>([]);
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
+    const dispatch = useAppDispatch();
     const duckiesContract = useDuckiesContract();
     const { active, account, signer } = useWallet();
 
@@ -121,8 +124,17 @@ export const DuckiesLayout: FC<DuckiesLayoutProps> = ({ bounties }: DuckiesLayou
             try {
                 const tx = await signer.sendTransaction(transaction);
                 await tx.wait();
+                dispatch((dispatchAlert({
+                    type: 'success',
+                    title: 'Success',
+                    message: 'You were successfully claimed the reward!',
+                })));
             } catch (error) {
-                console.log(error);
+                dispatch((dispatchAlert({
+                    type: 'error',
+                    title: 'Error',
+                    message: 'Something were wrong! Please, try again!',
+                })));
             }
         }
     }, [signer, account, bountiesToClaim]);

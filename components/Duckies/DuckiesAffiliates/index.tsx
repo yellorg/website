@@ -6,6 +6,8 @@ import { BountyItem, BountyRow } from '../BountyRow';
 import { DuckiesConnectorModalWindow } from '../DuckiesConnectModalWindow';
 import UnloginEyes from '../UnloginEyes';
 import Image from 'next/image';
+import { dispatchAlert } from '../../../features/alerts/alertsSlice';
+import { useAppDispatch } from '../../../app/hooks';
 
 interface DuckiesAffiliatesProps {
     bountyItems: BountyItem[];
@@ -30,11 +32,11 @@ export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({
 
     const [bounties, setBounties] = useState<BountyItem[]>([]);
     const [page, setPage] = useState<number>(1);
-
     const [payoutsReferral, setPayoutsReferral] = useState<number[]>([]);
     const [payoutsBounty, setPayoutsBounty] = useState<number[]>([]);
-
     const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
+
+    const dispatch = useAppDispatch();
     const duckiesContract = useDuckiesContract();
     const { active, account, signer } = useWallet();
 
@@ -100,8 +102,17 @@ export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({
             try {
                 const tx = await signer.sendTransaction(transaction);
                 await tx.wait();
+                dispatch(dispatchAlert({
+                    type: 'success',
+                    title: 'Success',
+                    message: 'You were successfully claimed the reward!',
+                }));
             } catch (error) {
-                console.log(error);
+                dispatch(dispatchAlert({
+                    type: 'error',
+                    title: 'Error',
+                    message: 'Something were wrong! Please, try again!',
+                }));
             }
         }
     }, [signer, bountyItems, account]);
@@ -202,21 +213,15 @@ export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({
         );
     }, [isLoading, renderLoadingModalBody, renderClaimModalBody]);
 
-    const handleClickNextButton = React.useCallback(
-        (value: number) => {
-            setPage(value + 1);
-            setBounties([]);
-        },
-        [page]
-    );
+    const handleClickNextButton = React.useCallback((value: number) => {
+        setPage(value + 1);
+        setBounties([]);
+    }, []);
 
-    const handleClickPrevButton = React.useCallback(
-        (value: number) => {
-            setPage(value - 1);
-            setBounties([]);
-        },
-        [page]
-    );
+    const handleClickPrevButton = React.useCallback((value: number) => {
+        setPage(value - 1);
+        setBounties([]);
+    }, []);
 
     return (
         <React.Fragment>
