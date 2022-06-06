@@ -8,14 +8,14 @@ import {
     LinkedinShareButton,
     TelegramShareButton,
     WeiboShareButton
-} from 'react-share';
+} from 'next-share';
 import MetaMaskOnboarding from '@metamask/onboarding';
 import { useEagerConnect } from '../../../hooks/useEagerConnect';
 import type { ProviderWhitelist } from '../../../hooks/useDApp';
 import useDApp from '../../../hooks/useDApp';
 import useWallet from '../../../hooks/useWallet';
 import { appConfig } from '../../../config/app';
-
+import Link from 'next/link';
 
 export const DuckiesEarnMore = () => {
     const [isMetaMaskInstalled, setMetaMaskInstalled] = useState<boolean>(true);
@@ -111,13 +111,15 @@ export const DuckiesEarnMore = () => {
         'duckies-earn-more__body-link-input-ref': !isReady,
     });
 
+    const message = React.useMemo(() => 'Go and claim your DUCKIES tokens (choose Polygon mainnet on your Wallet for tokens minting)!', []);
+
     const socials = React.useMemo(() => {
         return [
             (
                 <WeiboShareButton
                     key="weibo"
                     url={`${shareableLinkPrefix}${shareableLink}`}
-                    title="Go and claim your DUCKIES tokens (choose Polygon mainnet on your Wallet for tokens minting)!"
+                    title={message}
                 >
                     <svg width="49" height="48" viewBox="0.5 0 49 48" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M24.5 48C37.7548 48 48.5 37.2548 48.5 24C48.5 10.7452 37.7548 0 24.5 0C11.2452 0 0.5 10.7452 0.5 24C0.5 37.2548 11.2452 48 24.5 48Z" fill="white"/>
@@ -131,25 +133,25 @@ export const DuckiesEarnMore = () => {
 
             ),
             (
-                <FacebookShareButton
-                    url={`${shareableLinkPrefix}${shareableLink}`}
-                    quote=""
-                    className=""
-                    key="facebook"
-                    hashtag="invitation"
-                    title="Go and claim your DUCKIES tokens (choose Polygon mainnet on your Wallet for tokens minting)!"
-                >
-                    <svg width="49" height="48" viewBox="0.5 0 49 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M0.5 24C0.5 10.7452 11.2452 0 24.5 0C37.7548 0 48.5 10.7452 48.5 24C48.5 37.2548 37.7548 48 24.5 48C11.2452 48 0.5 37.2548 0.5 24Z" fill="#3B5998"/>
-                        <path d="M27.0015 38.1115V25.0542H30.6058L31.0835 20.5546H27.0015L27.0076 18.3025C27.0076 17.1289 27.1191 16.5001 28.8047 16.5001H31.058V12H27.4531C23.123 12 21.599 14.1828 21.599 17.8536V20.5551H18.8999V25.0547H21.599V38.1115H27.0015Z" fill="white"/>
-                    </svg>
-                </FacebookShareButton>
+                <Link key="facebook" href={`https://www.facebook.com/sharer/sharer.php?u=${shareableLinkPrefix}${shareableLink}&quote=${message}`}>
+                    <a
+                        type="button"
+                        role="button"
+                        href={`https://www.facebook.com/sharer/sharer.php?u=${shareableLinkPrefix}${shareableLink}&quote=${message}`}
+                        target="_blank"
+                        rel="noreferrer"
+                    >
+                        <svg width="49" height="48" viewBox="0.5 0 49 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M0.5 24C0.5 10.7452 11.2452 0 24.5 0C37.7548 0 48.5 10.7452 48.5 24C48.5 37.2548 37.7548 48 24.5 48C11.2452 48 0.5 37.2548 0.5 24Z" fill="#3B5998"/>
+                            <path d="M27.0015 38.1115V25.0542H30.6058L31.0835 20.5546H27.0015L27.0076 18.3025C27.0076 17.1289 27.1191 16.5001 28.8047 16.5001H31.058V12H27.4531C23.123 12 21.599 14.1828 21.599 17.8536V20.5551H18.8999V25.0547H21.599V38.1115H27.0015Z" fill="white"/>
+                        </svg>
+                    </a>
+                </Link>
             ),
             (
                 <TwitterShareButton
                     url={`${shareableLinkPrefix}${shareableLink}`}
-                    title="Go and claim your DUCKIES tokens (choose Polygon mainnet on your Wallet for tokens minting)!"
-                    className=""
+                    title={message}
                     key="twitter"
                 >
                     <svg width="49" height="48" viewBox="0.5 0 49 48" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -161,9 +163,8 @@ export const DuckiesEarnMore = () => {
             (
                 <LinkedinShareButton
                     url={`${shareableLinkPrefix}${shareableLink}`}
-                    className=""
-                    key="Go and claim your DUCKIES tokens (choose Polygon mainnet on your Wallet for tokens minting)!"
-                    title=""
+                    key="linkedin"
+                    title={message}
                 >
                     <svg width="49" height="48" viewBox="0.5 0 49 48" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M0.5 24C0.5 10.7452 11.2452 0 24.5 0C37.7548 0 48.5 10.7452 48.5 24C48.5 37.2548 37.7548 48 24.5 48C11.2452 48 0.5 37.2548 0.5 24Z" fill="#0077B5"/>
@@ -174,8 +175,7 @@ export const DuckiesEarnMore = () => {
             (
                 <TelegramShareButton
                     url={`${shareableLinkPrefix}${shareableLink}`}
-                    title="Go and claim your DUCKIES tokens (choose Polygon mainnet on your Wallet for tokens minting)!"
-                    className=""
+                    title={message}
                     key="telegram"
                 >
                     <svg width="49" height="48" viewBox="0.5 0 49 48" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -197,7 +197,7 @@ export const DuckiesEarnMore = () => {
                 </TelegramShareButton>
             ),
         ];
-    }, [shareableLinkPrefix, shareableLink]);
+    }, [shareableLinkPrefix, shareableLink, message]);
 
     React.useEffect(() => {
         if (active && account) {
