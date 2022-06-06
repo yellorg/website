@@ -43,6 +43,7 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
     const [isOpenBalancesInfo, setIsOpenBalancesInfo] = useState<boolean>(false);
     const [isReferralClaimed, setIsReferralClaimed] = useState<boolean>(false);
     const [balance, setBalance] = useState<number | undefined>(undefined);
+    const [localStorageState, setLocalStorageState] = useState<number>(0);
 
     const dispatch = useAppDispatch();
     const duckiesContract = useDuckiesContract();
@@ -90,9 +91,10 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
 
             if (referralLimit === 1 || affiliates[0] > 0) {
                 localStorage.removeItem('referral_token');
+                setLocalStorageState(localStorageState + 1);
             }
         })();
-    }, [isReady, duckiesContract, isRewardsClaimed, affiliates]);
+    }, [isReady, duckiesContract, isRewardsClaimed, affiliates, localStorageState, setLocalStorageState]);
 
     useEffect(() => {
         if (isReady) {
@@ -161,21 +163,22 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
 
                         const tx = await signer.sendTransaction(transaction);
                         await tx.wait();
-                        localStorage.removeItem('referral_token');
                         dispatch(dispatchAlert({
                             type: 'success',
                             title: 'Success',
                             message: 'You were successfully claimed the reward!',
                         }));
                         setIsRewardsClaimed(true);
+                        getBalance();
                     } else {
-                        localStorage.removeItem('referral_token');
                         dispatch(dispatchAlert({
                             type: 'error',
                             title: 'Error',
                             message: 'Something were wrong! Please, try again!',
                         }));
                     }
+                    localStorage.removeItem('referral_token');
+                    setLocalStorageState(localStorageState + 1);
                 } catch (error) {
                     dispatch(dispatchAlert({
                         type: 'error',
@@ -203,6 +206,8 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
         handleClaimAllBounties,
         dispatch,
         setIsRewardsClaimed,
+        localStorageState,
+        setLocalStorageState,
     ]);
 
     const handleClaimButtonClick = React.useCallback(() => {
