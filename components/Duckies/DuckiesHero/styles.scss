@@ -27,7 +27,7 @@
         &-header {
             font-size: 18px !important;
             line-height: 18px !important;
-            padding-bottom: 20px;
+            padding-bottom: 8px;
             margin-bottom: 0px !important;
             font-weight: bold;
         }
@@ -43,6 +43,14 @@
                 svg {
                     margin-left: 4px;
                 }
+            }
+            &-message {
+                font-size: 14px;
+                line-height: 22px;
+                font-weight: 400;
+                word-wrap: break-word;
+                font-family: var(--ifm-font-family-base);
+                color: var(--text-color-100);
             }
         }
     }

@@ -47,7 +47,7 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
     const [isMetaMaskInstalled, setMetaMaskInstalled] = useState<boolean>(true);
     const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
     const [isOpenBalancesInfo, setIsOpenBalancesInfo] = useState<boolean>(false);
-    const [balance, setBalance] = useState<number>(0);
+    const [balance, setBalance] = useState<number | undefined>(undefined);
 
     const dispatch = useAppDispatch();
     const duckiesContract = useDuckiesContract();
@@ -91,7 +91,7 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
             const token = localStorage.getItem('referral_token');
             const referralLimit = +await duckiesContract?.getAccountBountyLimit('referral');
 
-            setIsReferralClaimed(!token || referralLimit === 1 || affiliates[0] > 0 || balance > 0);
+            setIsReferralClaimed(!token || referralLimit === 1 || affiliates[0] > 0 || (balance && balance > 0));
 
             if (referralLimit === 1 || affiliates[0] > 0) {
                 localStorage.removeItem('referral_token');
@@ -362,7 +362,7 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
     ]);
 
     return (
-        <>
+        <React.Fragment>
             <div className="duckies-hero">
                 <div className="container">
                     <div className="duckies-hero__info">
@@ -406,29 +406,37 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
                                             {isOpenBalancesInfo &&
                                                 <div className="duckies-hero__tooltip">
                                                     <h5 className="duckies-hero__tooltip-header">Connected wallet info</h5>
-                                                    <div className="duckies-hero__tooltip-box">
-                                                        <span className="duckies-hero__tooltip-box-title">Current address: </span>
-                                                        <span className="duckies-hero__tooltip-box-text">{ENSName || account}</span>
-                                                    </div>
-                                                    {
-                                                        chain && <div>
-                                                            <span className="duckies-hero__tooltip-box-title">Current network: </span>
-                                                            <span className="duckies-hero__tooltip-box-text">{chain.network}</span>
+                                                    {account && (
+                                                        <React.Fragment>
+                                                            <div className="duckies-hero__tooltip-box">
+                                                                <span className="duckies-hero__tooltip-box-title">Current address: </span>
+                                                                <span className="duckies-hero__tooltip-box-text">{ENSName || account}</span>
+                                                            </div>
+                                                            {chain && (
+                                                                <div>
+                                                                    <span className="duckies-hero__tooltip-box-title">Current network: </span>
+                                                                    <span className="duckies-hero__tooltip-box-text">{chain.network}</span>
+                                                                </div>
+                                                            )}
+                                                            <div className="duckies-hero__tooltip-balance">
+                                                                <span className="duckies-hero__tooltip-box-title">Balance:</span>
+                                                                <span className="duckies-hero__tooltip-box-text duckies-hero__tooltip-box-balance">
+                                                                    {balance}
+                                                                    <svg width="14" height="20" viewBox="0 0 20 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                        <path d="M9.51487 3.11111H0V24.8889H9.51487C15.9624 24.8889 20 20.2844 20 14C20 7.59111 15.8998 3.11111 9.51487 3.11111ZM9.42097 21.0311H4.25665V6.93778H9.42097C13.1768 6.93778 15.6808 9.76889 15.6808 13.9067C15.6808 18.1067 13.1768 21.0311 9.42097 21.0311Z" fill="#000000"/>
+                                                                        <path d="M3.92 0H7.04989V6.22222H3.92V0Z" fill="#000000"/>
+                                                                        <path d="M3.92 21.7778H7.04989V28H3.92V21.7778Z" fill="#000000"/>
+                                                                        <path d="M8.61484 0H11.7447V6.22222H8.61484V0Z" fill="#000000"/>
+                                                                        <path d="M8.61484 21.7778H11.7447V28H8.61484V21.7778Z" fill="#000000"/>
+                                                                    </svg>
+                                                                </span>
+                                                            </div>
+                                                        </React.Fragment>
+                                                    ) || (
+                                                        <div className="duckies-hero__tooltip-box">
+                                                            <span className="duckies-hero__tooltip-box-message">Connect MetaMask to access your balance (Polygon network)</span>
                                                         </div>
-                                                    }
-                                                    <div className="duckies-hero__tooltip-balance">
-                                                        <span className="duckies-hero__tooltip-box-title">Balance:</span>
-                                                        <span className="duckies-hero__tooltip-box-text duckies-hero__tooltip-box-balance">
-                                                            {balance}
-                                                            <svg width="14" height="20" viewBox="0 0 20 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                <path d="M9.51487 3.11111H0V24.8889H9.51487C15.9624 24.8889 20 20.2844 20 14C20 7.59111 15.8998 3.11111 9.51487 3.11111ZM9.42097 21.0311H4.25665V6.93778H9.42097C13.1768 6.93778 15.6808 9.76889 15.6808 13.9067C15.6808 18.1067 13.1768 21.0311 9.42097 21.0311Z" fill="#000000"/>
-                                                                <path d="M3.92 0H7.04989V6.22222H3.92V0Z" fill="#000000"/>
-                                                                <path d="M3.92 21.7778H7.04989V28H3.92V21.7778Z" fill="#000000"/>
-                                                                <path d="M8.61484 0H11.7447V6.22222H8.61484V0Z" fill="#000000"/>
-                                                                <path d="M8.61484 21.7778H11.7447V28H8.61484V21.7778Z" fill="#000000"/>
-                                                            </svg>
-                                                        </span>
-                                                    </div>
+                                                    )}
                                                 </div>
                                             }
                                         </div>
@@ -478,6 +486,6 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
                 isOpen={isOpenModal}
                 setIsOpen={setIsOpenModal}
             />
-        </>
+        </React.Fragment>
     );
 };
