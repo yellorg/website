@@ -15,9 +15,9 @@ describe("Duckies", function () {
   beforeEach(async function () {
     const [owner, signer] = await ethers.getSigners();
 
-    const Duckies = ethers.getContractFactory("Duckies");
+    const Duckies = await ethers.getContractFactory("Duckies");
 
-    const duckies = await upgrades.deployProxy((Duckies as any), [signer.address]);
+    const duckies = await upgrades.deployProxy(Duckies, [signer.address]);
     await duckies.deployed();
 
     this.duckies = duckies;
@@ -814,7 +814,7 @@ describe("Duckies", function () {
       ref: accounts[0].address,
       amt: 15000,
       id: 'referral',
-      blockExpiration: 20,
+      blockExpiration: 1000,
       limit: 0,
     };
     const messageOneHash = await duckies.getMessageHash(
@@ -834,7 +834,7 @@ describe("Duckies", function () {
       ref: accounts[1].address,
       amt: 30000,
       id: 'referral',
-      blockExpiration: 20,
+      blockExpiration: 1000,
       limit: 0,
     };
     const messageTwoHash = await duckies.getMessageHash(
@@ -847,14 +847,14 @@ describe("Duckies", function () {
 
     await duckies.connect(accounts[2]).reward(messageTwo, signatureTwo);
 
-    const balanceTwo = await duckies.balanceOf(accounts[12].address);
+    const balanceTwo = await duckies.balanceOf(accounts[2].address);
     expect(balanceTwo).to.be.equal(messageTwo.amt);
 
     const messageThree = {
       ref: accounts[3].address,
       amt: 45000,
       id: 'referral',
-      blockExpiration: 20,
+      blockExpiration: 1000,
       limit: 0,
     };
     const messageThreeHash = await duckies.getMessageHash(
