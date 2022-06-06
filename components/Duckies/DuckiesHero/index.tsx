@@ -26,6 +26,9 @@ interface DuckiesHeroProps {
     isRewardsClaimed: boolean;
     setIsRewardsClaimed: (value: boolean) => void;
     affiliates: number[];
+    isSingleBountyProcessing: boolean;
+    isReferralClaimed: boolean;
+    setIsReferralClaimed: (value: boolean) => void;
 }
 
 export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
@@ -37,11 +40,13 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
     isRewardsClaimed,
     setIsRewardsClaimed,
     affiliates,
+    isSingleBountyProcessing,
+    isReferralClaimed,
+    setIsReferralClaimed,
 }: DuckiesHeroProps) => {
     const [isMetaMaskInstalled, setMetaMaskInstalled] = useState<boolean>(true);
     const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
     const [isOpenBalancesInfo, setIsOpenBalancesInfo] = useState<boolean>(false);
-    const [isReferralClaimed, setIsReferralClaimed] = useState<boolean>(false);
     const [balance, setBalance] = useState<number | undefined>(undefined);
 
     const dispatch = useAppDispatch();
@@ -143,7 +148,7 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
     }, [disconnect]);
 
     const handleClaimRewards = React.useCallback(async () => {
-        if (isLoading || (isReferralClaimed && !bountiesToClaim.length)) {
+        if (isLoading || isSingleBountyProcessing || (isReferralClaimed && !bountiesToClaim.length)) {
             return;
         }
 
@@ -203,6 +208,7 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
         handleClaimAllBounties,
         dispatch,
         setIsRewardsClaimed,
+        isSingleBountyProcessing,
     ]);
 
     const handleClaimButtonClick = React.useCallback(() => {
@@ -294,7 +300,7 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
                 </div>
             </React.Fragment>
         );
-    }, [isReferralClaimed, getBountiesClaimableAmount, handleClaimRewards]);
+    }, [isReferralClaimed, getBountiesClaimableAmount, handleClaimRewards, bountiesToClaim]);
 
     const renderClaimRewardModalBody = React.useMemo(() => {
         return (
@@ -302,10 +308,10 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
                 <div className="cr-bounty-modal__body-image">
                     <Image width="156px" height="156px" src="/images/components/duckies/duckDetective.svg" alt="duck-no-rewards" />
                 </div>
-                {isLoading ? renderLoadingModalBody : renderClaimModalBody}
+                {(isLoading || isSingleBountyProcessing) ? renderLoadingModalBody : renderClaimModalBody}
             </div>
         );
-    }, [isLoading, renderLoadingModalBody, renderClaimModalBody]);
+    }, [isLoading, renderLoadingModalBody, renderClaimModalBody, isSingleBountyProcessing]);
 
     const renderNoRewardsModalBody = React.useMemo(() => {
         return (

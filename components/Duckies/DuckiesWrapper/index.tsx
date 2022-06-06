@@ -18,6 +18,8 @@ export const DuckiesLayout: FC<DuckiesLayoutProps> = ({ bounties }: DuckiesLayou
     const [bountyItems, setBountyItems] = React.useState<any[]>([]);
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
     const [isRewardsClaimed, setIsRewardsClaimed] = React.useState<boolean>(false);
+    const [isSingleBountyProcessing, setIsSingleBountyProcessing] = React.useState<boolean>(false);
+    const [isReferralClaimed, setIsReferralClaimed] = React.useState<boolean>(false);
 
     const dispatch = useAppDispatch();
     const duckiesContract = useDuckiesContract();
@@ -30,6 +32,19 @@ export const DuckiesLayout: FC<DuckiesLayoutProps> = ({ bounties }: DuckiesLayou
             setAffiliates(affiliatesCount);
         }
     }, [account, duckiesContract, signer]);
+
+    React.useEffect(() => {
+        if (items && isRewardsClaimed) {
+            const newItems = items.map((item: any) => {
+                return {
+                    ...item,
+                    status: '',
+                }
+            });
+
+            setBountyItems(newItems);
+        }
+    }, [isRewardsClaimed]);
 
     React.useEffect(() => {
         if (active && account) {
@@ -152,6 +167,9 @@ export const DuckiesLayout: FC<DuckiesLayoutProps> = ({ bounties }: DuckiesLayou
                 isRewardsClaimed={isRewardsClaimed}
                 setIsRewardsClaimed={setIsRewardsClaimed}
                 affiliates={affiliates}
+                isSingleBountyProcessing={isSingleBountyProcessing}
+                isReferralClaimed={isReferralClaimed}
+                setIsReferralClaimed={setIsReferralClaimed}
             />
             <DuckiesAffiliates
                 bountyItems={bountyItems}
@@ -162,6 +180,9 @@ export const DuckiesLayout: FC<DuckiesLayoutProps> = ({ bounties }: DuckiesLayou
                 isLoading={isLoading}
                 setIsLoading={setIsLoading}
                 setIsRewardsClaimed={setIsRewardsClaimed}
+                isSingleBountyProcessing={isSingleBountyProcessing}
+                setIsSingleBountyProcessing={setIsSingleBountyProcessing}
+                isReferralClaimed={isReferralClaimed}
             />
             <DuckiesEarnMore />
             <DuckiesRedeem />

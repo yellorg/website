@@ -18,6 +18,9 @@ interface DuckiesAffiliatesProps {
     isLoading: boolean;
     setIsLoading: (value: boolean) => void;
     setIsRewardsClaimed: (value: boolean) => void;
+    isSingleBountyProcessing: boolean;
+    setIsSingleBountyProcessing: (value: boolean) => void;
+    isReferralClaimed: boolean;
 }
 
 export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({
@@ -29,6 +32,9 @@ export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({
     isLoading,
     setIsLoading,
     setIsRewardsClaimed,
+    isSingleBountyProcessing,
+    setIsSingleBountyProcessing,
+    isReferralClaimed,
 }: DuckiesAffiliatesProps) => {
     const limit: number = 5;
 
@@ -97,6 +103,7 @@ export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({
         const bountyToClaim = bountyItems.find((item: BountyItem) => item.fid === id);
 
         if (bountyToClaim && signer) {
+            setIsLoading(true);
             const { transaction } = await (await fetch(
                 `/api/bountyTx?bountyID=${bountyToClaim.fid}&&account=${account}`
             )).json();
@@ -117,6 +124,7 @@ export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({
                     message: 'Something were wrong! Please, try again!',
                 }));
             }
+            setIsLoading(false);
         }
     }, [signer, bountyItems, account]);
 
@@ -124,11 +132,18 @@ export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({
         return bounties.map((bounty: BountyItem, index: number) => {
             return (
                 <React.Fragment key={`bounty-${bounty.fid}`}>
-                    <BountyRow bounty={bounty} handleClaim={handleClaimReward} index={((page - 1) * limit) + index + 1} />
+                    <BountyRow
+                        bounty={bounty}
+                        handleClaim={handleClaimReward}
+                        index={((page - 1) * limit) + index + 1}
+                        isLoading={isLoading}
+                        isSingleBountyProcessing={isSingleBountyProcessing}
+                        setIsSingleBountyProcessing={setIsSingleBountyProcessing}
+                    />
                 </React.Fragment>
             );
         });
-    }, [bounties, handleClaimReward, page]);
+    }, [bounties, handleClaimReward, page, isLoading, isSingleBountyProcessing]);
 
     const getBountiesClaimableAmount = React.useCallback(() => {
         let amountToClaim = 0;
@@ -211,10 +226,44 @@ export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({
                 <div className="cr-bounty-modal__body-image">
                     <Image width="156px" height="156px" src="/images/components/duckies/duckDetective.svg" alt="duck-no-rewards" />
                 </div>
-                {isLoading ? renderLoadingModalBody : renderClaimModalBody}
+                {(isLoading || isSingleBountyProcessing) ? renderLoadingModalBody : renderClaimModalBody}
             </div>
         );
-    }, [isLoading, renderLoadingModalBody, renderClaimModalBody]);
+    }, [isLoading, renderLoadingModalBody, renderClaimModalBody, isSingleBountyProcessing]);
+
+    const renderNoRewardsModalBody = React.useMemo(() => {
+        return (
+            <div className="cr-bounty-modal__body">
+                <div className="cr-bounty-modal__body-image">
+                    <Image width="156px" height="156px" src="/images/components/duckies/duckNoRewards.svg" alt="duck-no-rewards" />
+                </div>
+                <div className="cr-bounty-modal__body-subtitle">
+                    Duckies are busy with other rewards.
+                </div>
+                <div className="cr-bounty-modal__body-description">
+                    You have already claimed your current rewards. Invite more people and fulfill more bounties to get more DUCKZ
+                </div>
+                <div className="cr-bounty-modal__body-buttons buttons-justify-center">
+                    <div className="button button--outline button--secondary button--shadow-secondary" onClick={() => { setIsOpenModal(false); } }>
+                        <span className="button__inner">OK</span>
+                    </div>
+                </div>
+            </div>
+        );
+    }, []);
+
+    const renderModalBody = React.useMemo(() => {
+        if (isReferralClaimed && !bountiesToClaim.length) {
+            return renderNoRewardsModalBody;
+        }
+
+        return renderClaimRewardModalBody;
+    }, [
+        isReferralClaimed,
+        bountiesToClaim,
+        renderNoRewardsModalBody,
+        renderClaimRewardModalBody,
+    ]);
 
     const handleClickNextButton = React.useCallback((value: number) => {
         setPage(value + 1);
@@ -271,7 +320,7 @@ export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({
                 </div>
             </div>
             <DuckiesConnectorModalWindow
-                bodyContent={renderClaimRewardModalBody}
+                bodyContent={renderModalBody}
                 headerContent="Claim rewards"
                 isOpen={isOpenModal}
                 setIsOpen={setIsOpenModal}

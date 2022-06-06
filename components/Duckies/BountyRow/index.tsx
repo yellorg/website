@@ -18,40 +18,52 @@ interface BountyProps {
     bounty: BountyItem;
     handleClaim: (id: string) => void;
     index: number;
+    isLoading: boolean;
+    isSingleBountyProcessing: boolean;
+    setIsSingleBountyProcessing: (value: boolean) => void;
 }
 
-export const BountyRow: React.FC<BountyProps> = ({ bounty, handleClaim, index }: BountyProps) => {
+export const BountyRow: React.FC<BountyProps> = ({
+    bounty,
+    handleClaim,
+    index,
+    isLoading,
+    isSingleBountyProcessing,
+    setIsSingleBountyProcessing,
+}: BountyProps) => {
     const [isOpenShow, setIsOpenShow] = React.useState<boolean>(false);
     const [isOpenClaim, setIsOpenClaim] = React.useState<boolean>(false);
     const [loading, setLoading] = React.useState<boolean>(false);
 
     const rowClassName = React.useMemo(() => {
         return classnames('table-row table-row-bounty', {
-            'cr-bounty-row': bounty.status === 'claim' && !loading,
+            'cr-bounty-row': bounty.status === 'claim' && !((loading && isSingleBountyProcessing) || (isLoading && !isSingleBountyProcessing)),
         })
-    }, [bounty.status, loading]);
+    }, [bounty.status, loading, isLoading, isSingleBountyProcessing]);
 
     const indexClassName = React.useMemo(() => {
         return classnames('table-row-key-index ', {
-            'table-row-key-index--active': bounty.status === 'claim' && !loading,
+            'table-row-key-index--active': bounty.status === 'claim' && !((loading && isSingleBountyProcessing) || (isLoading && !isSingleBountyProcessing)),
         })
-    }, [bounty.status, loading]);
+    }, [bounty.status, loading, isLoading, isSingleBountyProcessing]);
 
     const duckiesColor = React.useMemo(() => bounty.status === 'claim' ? '#ECAA00' : '#525252', [bounty.status]);
 
     const handleClaimReward = React.useCallback(async () => {
         setLoading(true);
+        setIsSingleBountyProcessing(true);
         setIsOpenClaim(false);
         await handleClaim(bounty.fid);
         setLoading(false);
+        setIsSingleBountyProcessing(false);
     }, [handleClaim, bounty.fid]);
 
-    const handleSelectBountyId = (id: string | number) => {
+    const handleSelectBountyId = React.useCallback(() => {
         setIsOpenShow(true);
-    };
+    }, []);
 
     const renderBountyStatus = React.useMemo(() => {
-        if (loading) {
+        if ((loading && isSingleBountyProcessing) || (bounty.status === 'claim' && isLoading && !isSingleBountyProcessing)) {
             return (
                 <div className="cr-bounty-processing">
                     Processing...
@@ -75,7 +87,7 @@ export const BountyRow: React.FC<BountyProps> = ({ bounty, handleClaim, index }:
             default:
                 return null;
         }
-    }, [bounty, loading]);
+    }, [bounty, loading, isLoading, isSingleBountyProcessing]);
 
     const renderBounty = React.useMemo(() => {
         return (
@@ -88,7 +100,7 @@ export const BountyRow: React.FC<BountyProps> = ({ bounty, handleClaim, index }:
                         <div className="table-row-key-title">
                             {bounty.title}
                         </div>
-                        <div onClick={() => handleSelectBountyId(bounty.fid)} className="table-row-key-subtitle">
+                        <div onClick={handleSelectBountyId} className="table-row-key-subtitle">
                             <span>Show more details</span>
                             <span className="cr-arrow" />
                         </div>
@@ -112,7 +124,6 @@ export const BountyRow: React.FC<BountyProps> = ({ bounty, handleClaim, index }:
             </div>
         );
     }, [
-        bounty.fid,
         bounty.value,
         bounty.title,
         index,
@@ -120,9 +131,10 @@ export const BountyRow: React.FC<BountyProps> = ({ bounty, handleClaim, index }:
         duckiesColor,
         indexClassName,
         rowClassName,
+        handleSelectBountyId,
     ]);
 
-    const renderModalBody = React.useMemo(() => {
+    const renderDetailsModalBody = React.useMemo(() => {
         return (
             <div className="cr-bounty-modal__body">
                 <div className="cr-bounty-modal__body-price">
@@ -149,12 +161,9 @@ export const BountyRow: React.FC<BountyProps> = ({ bounty, handleClaim, index }:
         );
     }, [bounty]);
 
-    const renderClaimModalBody = React.useMemo(() => {
+    const renderClaimRewardModalBody = React.useMemo(() => {
         return (
-            <div className="cr-bounty-modal__body">
-                <div className="cr-bounty-modal__body-image">
-                    <Image width="156px" height="156px" src="/images/components/duckies/duckDetective.svg" alt="duck-no-rewards" />
-                </div>
+            <React.Fragment>
                 <div className="cr-bounty-modal__body-subtitle">
                     Amount to claim for completed<br/>
                     &quot;{bounty.title}&quot;<br/>
@@ -180,31 +189,57 @@ export const BountyRow: React.FC<BountyProps> = ({ bounty, handleClaim, index }:
                         <span className="button__inner">Claim reward</span>
                     </div>
                 </div>
-            </div>
+            </React.Fragment>
         );
     }, [bounty, handleClaimReward]);
+
+    const renderLoadingModalBody = React.useMemo(() => {
+        return (
+            <React.Fragment>
+                <div className="cr-bounty-modal__body-description">
+                    In order for the on-chain transaction to be executed please wait a couple of minutes. Time may vary depending on the queue & gas.
+                </div>
+                <div className="cr-bounty-modal__body-buttons buttons-justify-center">
+                    <div className="button button--outline button--secondary button--shadow-secondary" onClick={() => setIsOpenClaim(false)}>
+                        <span className="button__inner">Confirm</span>
+                    </div>
+                </div>
+            </React.Fragment>
+        );
+    }, []);
+
+    const renderModalBody = React.useMemo(() => {
+        return (
+            <div className="cr-bounty-modal__body">
+                <div className="cr-bounty-modal__body-image">
+                    <Image width="156px" height="156px" src="/images/components/duckies/duckDetective.svg" alt="duck-no-rewards" />
+                </div>
+                {(isLoading || isSingleBountyProcessing) ? renderLoadingModalBody : renderClaimRewardModalBody}
+            </div>
+        );
+    }, [isLoading, renderLoadingModalBody, renderClaimRewardModalBody, isSingleBountyProcessing]);
 
     const renderModal = React.useMemo(() => {
         return (
             <DuckiesConnectorModalWindow
                 isOpen={isOpenShow}
                 headerContent={bounty.title}
-                bodyContent={renderModalBody}
+                bodyContent={renderDetailsModalBody}
                 setIsOpen={setIsOpenShow}
             />
         );
-    }, [isOpenShow, bounty.title, renderModalBody]);
+    }, [isOpenShow, bounty.title, renderDetailsModalBody]);
 
     const renderClaimModal = React.useMemo(() => {
         return (
             <DuckiesConnectorModalWindow
                 isOpen={isOpenClaim}
                 headerContent="Claim reward"
-                bodyContent={renderClaimModalBody}
+                bodyContent={renderModalBody}
                 setIsOpen={setIsOpenClaim}
             />
         );
-    }, [isOpenClaim, renderClaimModalBody]);
+    }, [isOpenClaim, renderModalBody]);
 
     return (
         <React.Fragment>
