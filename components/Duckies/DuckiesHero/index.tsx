@@ -170,7 +170,7 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
                         dispatch(dispatchAlert({
                             type: 'success',
                             title: 'Success',
-                            message: 'You were successfully claimed the reward!',
+                            message: 'You have successfully claimed the reward!',
                         }));
                         setIsRewardsClaimed(true);
                     } else {
@@ -178,14 +178,14 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
                         dispatch(dispatchAlert({
                             type: 'error',
                             title: 'Error',
-                            message: 'Something were wrong! Please, try again!',
+                            message: 'Something went wrong! Please, try again!',
                         }));
                     }
                 } catch (error) {
                     dispatch(dispatchAlert({
                         type: 'error',
                         title: 'Error',
-                        message: 'Something were wrong! Please, try again!',
+                        message: 'Something went wrong! Please, try again!',
                     }));
                 }
 
