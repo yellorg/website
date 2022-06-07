@@ -4,7 +4,7 @@
 // When running the script with `npx hardhat run <script>` you'll find the Hardhat
 // Runtime Environment's members available in the global scope.
 
-import { ethers, upgrades } from 'hardhat';
+import { ethers, upgrades } from "hardhat";
 
 async function main() {
   const [deployer] = await ethers.getSigners();
@@ -14,7 +14,9 @@ async function main() {
 
   const Duckies = await ethers.getContractFactory("Duckies");
 
-  const token = await upgrades.deployProxy(Duckies as any, ['0x4eB9a8C69F33676b6681109Cbf1B57F589e12cc0']);
+  const token = await upgrades.deployProxy(Duckies as any, [
+    process.env.SIGNER_ACCOUNT as string,
+  ]);
 
   await token.deployed();
   console.log("Token deployed to:", token.address);
