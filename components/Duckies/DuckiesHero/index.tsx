@@ -16,6 +16,7 @@ import { convertNumberToLiteral } from '../../../helpers/convertNumberToLiteral'
 import Image from 'next/image';
 import { dispatchAlert } from '../../../features/alerts/alertsSlice';
 import { useAppDispatch } from '../../../app/hooks';
+import { isBrowser } from '../../../helpers';
 
 interface DuckiesHeroProps {
     bountiesToClaim: string[];
@@ -161,7 +162,7 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
                 try {
                     const response = await fetch(`/api/tx?token=${token}&account=${account}`);
 
-                    if (response.status !== 400) {
+                    if (response.status !== 400 && response.status !== 500) {
                         const { transaction } = await response.json();
 
                         const tx = await signer.sendTransaction(transaction);
@@ -300,7 +301,7 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
                 </div>
             </React.Fragment>
         );
-    }, [isReferralClaimed, getBountiesClaimableAmount, handleClaimRewards, bountiesToClaim]);
+    }, [isReferralClaimed, getBountiesClaimableAmount, handleClaimRewards]);
 
     const renderClaimRewardModalBody = React.useMemo(() => {
         return (
@@ -343,11 +344,13 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
     }, [isReady]);
 
     const renderModalBody = React.useMemo(() => {
+        const token = isBrowser() && localStorage.getItem('referral_token');
+
         if (!isReady) {
             return renderMetamaskModalBody;
         }
 
-        if (isReferralClaimed && !bountiesToClaim.length) {
+        if ((isReferralClaimed && !bountiesToClaim.length) || (!isReferralClaimed && !token)) {
             return renderNoRewardsModalBody;
         }
 
