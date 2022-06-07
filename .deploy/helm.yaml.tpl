@@ -9,6 +9,11 @@ image:
 service:
   port: ${SVC_PORT}
 
+secrets:
+  NEXT_PUBLIC_POLYGON_URL: ${NEXT_PUBLIC_POLYGON_URL}
+  NEXT_PUBLIC_CONTRACT_ADDRESS: ${NEXT_PUBLIC_CONTRACT_ADDRESS}
+  NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID: ${NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID}
+
 ingress:
 # annotations:
 #   cert-manager.io/issuer: zerossl-prod

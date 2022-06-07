@@ -56,6 +56,12 @@ steps:
         from_secret: redirect_from_domain
       SVC_PORT:
         from_secret: svc_port
+      NEXT_PUBLIC_POLYGON_URL:
+        from_secret: next_public_polygon_url
+      NEXT_PUBLIC_CONTRACT_ADDRESS:
+        from_secret: next_public_contact_address
+      NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID:
+        from_secret: next_public_google_tag_manager_id
     commands:
       - apk add gettext
       - ./.deploy/install.sh
