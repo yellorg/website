@@ -14,6 +14,8 @@ secrets:
   NEXT_PUBLIC_CONTRACT_ADDRESS: "${NEXT_PUBLIC_CONTRACT_ADDRESS}"
   NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID: "${NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID}"
 
+externalSecretName: yellow-org-external
+
 ingress:
 # annotations:
 #   cert-manager.io/issuer: zerossl-prod
