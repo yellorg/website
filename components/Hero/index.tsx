@@ -11,7 +11,7 @@ export const Hero: React.FC = () => {
                         <div className="hero-left">
                             <h4 className="hero__text">Franchising trading businesses</h4>
                             <p className="h8 hero__text hero__description">
-                                Yellow is a Layer-3 decentralized Broker Creating Network powered by state channels used for communicating and trading between brokers and aggregating liquidity of connected nodes.
+                                Yellow is a Layer-3 decentralized Broker Clearing Network powered by state channels used for communicating and trading between brokers and aggregating liquidity of connected nodes.
                             </p>
                             <div className="hero__buttons">
                                 <Link href="#tokenomics">
