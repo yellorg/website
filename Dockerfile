@@ -36,6 +36,15 @@ COPY --from=builder /app/package.json ./package.json
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
+COPY entrypoint.sh .
+COPY .env.production .
+
+# Execute script
+RUN apk add --no-cache --upgrade bash
+RUN ["chmod", "+x", "./entrypoint.sh"]
+ENTRYPOINT ["./entrypoint.sh"]
+
+
 USER nextjs
 
 EXPOSE 3000
