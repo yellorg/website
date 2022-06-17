@@ -54,7 +54,7 @@ export const FOOTER_ITEMS = {
             items: [
                 {
                     label: 'Blog',
-                    to: '/blog',
+                    to: 'https://medium.com/yellow-blog',
                 },
                 {
                     label: 'GitHub',
