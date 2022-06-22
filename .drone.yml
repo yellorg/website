@@ -24,9 +24,9 @@ steps:
         from_secret: quay_repo
       registry: quay.io
 
-  - name: Helm Deploy
+  - name: Helm Deploy Prod
     image: alpine/helm:3.8.2
-    environment:
+    environment: &envs
       KUBECONF:
         from_secret: kubeconfig_b64
       KUBECONFIG: /root/.kubeconfig
@@ -65,9 +65,35 @@ steps:
     commands:
       - apk add gettext
       - ./.deploy/install.sh
+    when:
+      branch:
+      - stable
+    
+  - name: Helm Deploy UAT
+    image: alpine/helm:3.8.2
+    environment:
+      <<: *envs
+      KUBECONFIG_B64:
+        from_secret: kubeconfig_uat_b64
+      HELM_NAMESPACE:
+        from_secret: helm_namespace_uat
+      DOMAIN:
+        from_secret: domain_uat
+      REDIRECT_FROM_DOMAIN:
+        from_secret: redirect_from_domain_uat
+      NEXT_PUBLIC_POLYGON_URL:
+        from_secret: next_public_polygon_url_uat
+      NEXT_PUBLIC_CONTRACT_ADDRESS:
+        from_secret: next_public_contact_address_uat
+      NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID:
+        from_secret: next_public_google_tag_manager_id_uat
+    commands:
+      - apk add gettext
+      - ./.deploy/install.sh
+    when:
+      branch:
+      - master
 
 trigger:
   event:
     - push
-  branch:
-    - master
