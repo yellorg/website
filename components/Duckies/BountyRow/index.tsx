@@ -219,7 +219,7 @@ export const BountyRow: React.FC<BountyProps> = ({
         return (
             <div className="cr-bounty-modal__body">
                 <div className="cr-bounty-modal__body-image">
-                    <Image width="156px" height="156px" src="/images/components/duckies/duckDetective.svg" alt="duck-no-rewards" />
+                    <Image width="156px" height="156px" src="/images/components/duckies/duckDetective.png" alt="duck-no-rewards" />
                 </div>
                 {(isLoading || isSingleBountyProcessing) ? renderLoadingModalBody : renderClaimRewardModalBody}
             </div>

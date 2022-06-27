@@ -21,7 +21,7 @@ export const DuckiesRedeem = () => {
                     </div>
                     <div className="duckies-redeem__block-info-header-image">
                         <LazyLoadImage className="section__main-img"
-                            srcSet={`${'/images/components/duckies/redeem.svg'}`}
+                            srcSet={`${'/images/components/duckies/redeem.png'}`}
                             effect="blur"
                             threshold={200}
                         />
@@ -51,7 +51,7 @@ export const DuckiesRedeem = () => {
                 </div>
                 <div className="duckies-redeem__block-duckies">
                     <LazyLoadImage className="section__main-img"
-                        srcSet={`${'/images/components/duckies/redeem.svg'}`}
+                        srcSet={`${'/images/components/duckies/redeem.png'}`}
                         effect="blur"
                         threshold={200}
                     />

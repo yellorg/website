@@ -226,7 +226,7 @@ export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({
         return (
             <div className="cr-bounty-modal__body">
                 <div className="cr-bounty-modal__body-image">
-                    <Image width="156px" height="156px" src="/images/components/duckies/duckDetective.svg" alt="duck-no-rewards" />
+                    <Image width="156px" height="156px" src="/images/components/duckies/duckDetective.png" alt="duck-no-rewards" />
                 </div>
                 {(isLoading || isSingleBountyProcessing) ? renderLoadingModalBody : renderClaimModalBody}
             </div>
@@ -237,7 +237,7 @@ export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({
         return (
             <div className="cr-bounty-modal__body">
                 <div className="cr-bounty-modal__body-image">
-                    <Image width="156px" height="156px" src="/images/components/duckies/duckNoRewards.svg" alt="duck-no-rewards" />
+                    <Image width="156px" height="156px" src="/images/components/duckies/duckNoRewards.png" alt="duck-no-rewards" />
                 </div>
                 <div className="cr-bounty-modal__body-subtitle">
                     Duckies are busy with other rewards.
