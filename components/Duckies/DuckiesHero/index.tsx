@@ -416,7 +416,8 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
                         </div>
                         <div className="duckies-hero__info-received">
                             <div className="duckies-hero__info-received-message">
-                                Go and get your DUCKZ tokens!
+                            It’s duck season! 
+                            Collect your DUCZ
                             </div>
                         </div>
                         <div className="duckies-hero__info-buttons">

@@ -291,7 +291,7 @@ export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({
                         <div className="duckies-affiliates__row-info">
                             <div className="table">
                                 <div className="table-title">
-                                    Affiliates
+                                    Your Squad
                                 </div>
                                 <UnloginEyes>
                                     {renderAffiliateLevels}
