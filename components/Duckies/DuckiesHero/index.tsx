@@ -412,6 +412,8 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
                                 srcSet={`${'/images/components/duckies/celebration.png'}`}
                                 effect="blur"
                                 threshold={200}
+                                width={132}
+                                height={132}
                             />
                         </div>
                         <div className="duckies-hero__info-received">
