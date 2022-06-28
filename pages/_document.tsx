@@ -1,26 +1,45 @@
 import { Html, Head, Main, NextScript } from "next/document";
 
 export default function Document() {
-   return (
-     <Html>
-        <Head>
-      <link rel="shortcut icon" href="/favicon.ico" />
-        {/* <!-- Google Tag Manager --> */}
-        <script dangerouslySetInnerHTML={{ __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-        })(window,document,'script','dataLayer','GTM-MKQHGKN');`}}></script>
-        {/* <!-- End Google Tag Manager --> */}
-   </Head>
-        <body>
-            {/* <!-- Google Tag Manager (noscript) --> */}
-            <noscript dangerouslySetInnerHTML={{ __html: `<iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MKQHGKN"
-              height="0" width="0" style="display:none;visibility:hidden"></iframe>`}}></noscript>
-            {/* // <!-- End Google Tag Manager (noscript) --> */}
-          <Main />
-          <NextScript />
-        </body>
-     </Html>
+    console.log('NEXT_PUBLIC_GOOGLE_ANALYTICS', process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS);
+    console.log('NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID', process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID);
+
+    return (
+        <Html>
+            <Head>
+                <link rel="shortcut icon" href="/favicon.ico" />
+                <script
+                    async
+                    src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS}`}
+                />
+                <script
+                    dangerouslySetInnerHTML={{
+                    __html: `
+                        window.dataLayer = window.dataLayer || [];
+                        function gtag(){dataLayer.push(arguments);}
+                        gtag('js', new Date());
+                        gtag('config', '${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS}', {
+                            page_path: window.location.pathname,
+                        });
+                    `,
+                    }}
+                />
+            </Head>
+            <body>
+                {/* <!-- Google Tag Manager (noscript) --> */}
+                <noscript dangerouslySetInnerHTML={{
+                __html: `
+                    <iframe
+                    src="https://www.googletagmanager.com/ns.html?id=${process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID}"
+                    height="0"
+                    width="0"
+                    style="display:none;visibility:hidden"
+                    ></iframe>
+                `}}></noscript>
+                {/* // <!-- End Google Tag Manager (noscript) --> */}
+                <Main />
+                <NextScript />
+            </body>
+        </Html>
   );
 }

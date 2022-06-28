@@ -3,6 +3,7 @@ import classnames from 'classnames';
 import { convertNumberToLiteral } from '../../../helpers/convertNumberToLiteral';
 import { DuckiesConnectorModalWindow } from '../DuckiesConnectModalWindow';
 import Image from 'next/image';
+import * as ga from '../../../lib/ga';
 
 export interface BountyItem {
     fid: string;
@@ -60,7 +61,13 @@ export const BountyRow: React.FC<BountyProps> = ({
 
     const handleSelectBountyId = React.useCallback(() => {
         setIsOpenShow(true);
-    }, []);
+        ga.event({
+            action: "duckies_bounty_details_click",
+            params: {
+                bounty_id: bounty.fid,
+            }
+        });
+    }, [bounty]);
 
     const renderBountyStatus = React.useMemo(() => {
         if ((loading && isSingleBountyProcessing) || (bounty.status === 'claim' && isLoading && !isSingleBountyProcessing)) {

@@ -18,9 +18,11 @@ import { dispatchAlert } from '../../../features/alerts/alertsSlice';
 import { useAppDispatch } from '../../../app/hooks';
 import { isBrowser } from '../../../helpers';
 
+import * as ga from '../../../lib/ga';
+
 interface DuckiesHeroProps {
     bountiesToClaim: string[];
-    handleClaimAllBounties: () => void;
+    handleClaimAllBounties: (amountToClaim: number) => void;
     bountyItems: any[];
     isLoading: boolean;
     setIsLoading: (value: boolean) => void;
@@ -139,8 +141,17 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
     const handleMetamask = React.useCallback((isMetaMaskInstalled: boolean, id: ProviderWhitelist) => {
         if (isMetaMaskInstalled) {
             handleConnectWallet(id);
+            ga.event({
+                action: "duckies_connect_metamask_click",
+                params: {
+                    source: 'hero',
+                },
+            });
         } else {
             onboarding.current?.startOnboarding();
+            ga.event({
+                action: "duckies_hero_metamask_install_click",
+            });
         }
     }, [handleConnectWallet, onboarding]);
 
@@ -148,7 +159,7 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
         disconnect();
     }, [disconnect]);
 
-    const handleClaimRewards = React.useCallback(async () => {
+    const handleClaimRewards = React.useCallback(async (amountToClaim: number) => {
         if (isLoading || isSingleBountyProcessing || (isReferralClaimed && !bountiesToClaim.length)) {
             return;
         }
@@ -174,6 +185,12 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
                             message: 'You have successfully claimed the reward!',
                         }));
                         setIsRewardsClaimed(true);
+                        ga.event({
+                            action: "duckies_claim_success",
+                            params: {
+                                duckies_amount_claim: 10000,
+                            }
+                        });
                     } else {
                         localStorage.removeItem('referral_token');
                         dispatch(dispatchAlert({
@@ -195,7 +212,7 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
         } else {
             if (bountiesToClaim.length) {
                 setIsLoading(true);
-                await handleClaimAllBounties();
+                await handleClaimAllBounties(amountToClaim);
                 setIsLoading(false);
             }
         }
@@ -212,9 +229,40 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
         isSingleBountyProcessing,
     ]);
 
+    const getBountiesClaimableAmount = React.useCallback(() => {
+        let amountToClaim = 0;
+        let bountyTitles: string[] = [];
+
+        bountiesToClaim.forEach((bountyItem: string) => {
+            const bounty = bountyItems.find(item => item.fid === bountyItem);
+
+            if (bounty) {
+                amountToClaim += bounty.value;
+                bountyTitles.push(bounty.title);
+            }
+        });
+
+        return [amountToClaim as number, bountyTitles as string[]];
+    }, [bountyItems, bountiesToClaim]);
+
+
     const handleClaimButtonClick = React.useCallback(() => {
         setIsOpenModal(true);
-    }, []);
+
+        if (isReady) {
+            const [amountToClaim] = !isReferralClaimed ? [10000, ['Referral reward']] : getBountiesClaimableAmount();
+            ga.event({
+                action: "duckies_hero_claim_click",
+                params: {
+                    duckies_amount_claim: amountToClaim,
+                }
+            });
+        } else {
+            ga.event({
+                action: "duckies_hero_claim_show_auth_click",
+            });
+        }
+    }, [isReady, getBountiesClaimableAmount, isReferralClaimed]);
 
     const renderMetamaskModalBody = React.useMemo(() => {
         return (
@@ -233,22 +281,6 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
             </div>
         );
     }, [handleMetamask, isMetaMaskInstalled]);
-
-    const getBountiesClaimableAmount = React.useCallback(() => {
-        let amountToClaim = 0;
-        let bountyTitles: string[] = [];
-
-        bountiesToClaim.forEach((bountyItem: string) => {
-            const bounty = bountyItems.find(item => item.fid === bountyItem);
-
-            if (bounty) {
-                amountToClaim += bounty.value;
-                bountyTitles.push(bounty.title);
-            }
-        });
-
-        return [amountToClaim as number, bountyTitles as string[]];
-    }, [bountyItems, bountiesToClaim]);
 
     const renderLoadingModalBody = React.useMemo(() => {
         return (
@@ -295,7 +327,7 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
                     {renderBountyTitles}
                 </div>
                 <div className="cr-bounty-modal__body-buttons buttons-justify-center">
-                    <div className="button button--outline button--secondary button--shadow-secondary" onClick={handleClaimRewards}>
+                    <div className="button button--outline button--secondary button--shadow-secondary" onClick={() => handleClaimRewards(amountToClaim)}>
                         <span className="button__inner">Claim all</span>
                     </div>
                 </div>
@@ -364,6 +396,12 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
         renderClaimRewardModalBody,
     ]);
 
+    const handleSendGAEvent = React.useCallback(() => {
+        ga.event({
+            action: "duckies_hero_earn_click",
+        });
+    }, []);
+
     return (
         <React.Fragment>
             <div className="duckies-hero">
@@ -386,7 +424,7 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
                                 <span className="button__inner">Claim your reward</span>
                             </div>
                             <Link href="#earn-more">
-                                <a className="duckies-hero__info-buttons-earn button button--secondary button--shadow-secondary">
+                                <a className="duckies-hero__info-buttons-earn button button--secondary button--shadow-secondary" onClick={handleSendGAEvent}>
                                     <span className="button__inner">
                                         Earn more
                                     </span>

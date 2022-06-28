@@ -9,12 +9,14 @@ import Image from 'next/image';
 import { dispatchAlert } from '../../../features/alerts/alertsSlice';
 import { useAppDispatch } from '../../../app/hooks';
 
+import * as ga from '../../../lib/ga';
+
 interface DuckiesAffiliatesProps {
     bountyItems: BountyItem[];
     bountyTitle: string;
     affiliates: number[];
     bountiesToClaim: string[];
-    handleClaimAllBounties: () => void;
+    handleClaimAllBounties: (amountToClaim: number) => void;
     isLoading: boolean;
     setIsLoading: (value: boolean) => void;
     setIsRewardsClaimed: (value: boolean) => void;
@@ -176,9 +178,9 @@ export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({
         );
     }, []);
 
-    const handleClaim = React.useCallback(async () => {
+    const handleClaim = React.useCallback(async (amountToClaim: number) => {
         setIsLoading(true);
-        await handleClaimAllBounties();
+        await handleClaimAllBounties(amountToClaim);
         setIsLoading(false);
     }, [handleClaimAllBounties, setIsLoading]);
 
@@ -212,7 +214,7 @@ export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({
                     {renderBountyTitles}
                 </div>
                 <div className="cr-bounty-modal__body-buttons buttons-justify-center">
-                    <div className="button button--outline button--secondary button--shadow-secondary" onClick={handleClaim}>
+                    <div className="button button--outline button--secondary button--shadow-secondary" onClick={() => handleClaim(amountToClaim)}>
                         <span className="button__inner">Claim all</span>
                     </div>
                 </div>
@@ -268,11 +270,17 @@ export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({
     const handleClickNextButton = React.useCallback((value: number) => {
         setPage(value + 1);
         setBounties([]);
+        ga.event({
+            action: "duckies_bounty_next_click",
+        });
     }, []);
 
     const handleClickPrevButton = React.useCallback((value: number) => {
         setPage(value - 1);
         setBounties([]);
+        ga.event({
+            action: "duckies_bounty_previous_click",
+        });
     }, []);
 
     return (

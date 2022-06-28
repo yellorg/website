@@ -62,13 +62,15 @@ steps:
         from_secret: next_public_contact_address
       NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID:
         from_secret: next_public_google_tag_manager_id
+      NEXT_PUBLIC_GOOGLE_ANALYTICS:
+        from_secret: next_public_google_analytics
     commands:
       - apk add gettext
       - ./.deploy/install.sh
     when:
       branch:
       - stable
-    
+
   - name: Helm Deploy UAT
     image: alpine/helm:3.8.2
     environment:
@@ -87,6 +89,8 @@ steps:
         from_secret: next_public_contact_address_uat
       NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID:
         from_secret: next_public_google_tag_manager_id_uat
+      NEXT_PUBLIC_GOOGLE_ANALYTICS:
+        from_secret: next_public_google_analytics_uat
     commands:
       - apk add gettext
       - ./.deploy/install.sh

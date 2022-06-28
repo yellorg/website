@@ -8,6 +8,8 @@ import useWallet from '../../../hooks/useWallet';
 import { dispatchAlert } from '../../../features/alerts/alertsSlice';
 import { useAppDispatch } from '../../../app/hooks';
 
+import * as ga from '../../../lib/ga';
+
 interface DuckiesLayoutProps {
     bounties: any;
 }
@@ -131,7 +133,7 @@ export const DuckiesLayout: FC<DuckiesLayoutProps> = ({ bounties }: DuckiesLayou
             .map(item => item.fid);
     }, [bountyItems]);
 
-    const handleClaimAllBounties = React.useCallback(async () => {
+    const handleClaimAllBounties = React.useCallback(async (amountToClaim: number) => {
         if (bountiesToClaim.length && signer) {
             const { transaction } = await (await fetch(
                 `/api/allBountiesTx?bountyIDs=${bountiesToClaim}&account=${account}`
@@ -146,6 +148,12 @@ export const DuckiesLayout: FC<DuckiesLayoutProps> = ({ bounties }: DuckiesLayou
                     message: 'You have successfully claimed the reward!',
                 })));
                 setIsRewardsClaimed(true);
+                ga.event({
+                    action: "duckies_claim_success",
+                    params: {
+                        duckies_amount_claim: amountToClaim,
+                    }
+                });
             } catch (error) {
                 dispatch((dispatchAlert({
                     type: 'error',
