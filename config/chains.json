@@ -242,7 +242,7 @@
     ]
   },
   {
-    "name": "Matic(Polygon) Mainnet",
+    "name": "Polygon",
     "chain": "Matic",
     "network": "mainnet",
     "rpc": [
@@ -271,7 +271,7 @@
     ]
   },
   {
-    "name": "Matic Testnet Mumbai",
+    "name": "Polygon Testnet Mumbai",
     "chain": "Matic",
     "network": "testnet",
     "rpc": ["https://rpc-mumbai.maticvigil.com", "wss://ws-mumbai.matic.today"],
