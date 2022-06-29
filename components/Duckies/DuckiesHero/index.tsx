@@ -19,6 +19,7 @@ import { useAppDispatch } from '../../../app/hooks';
 import { isBrowser } from '../../../helpers';
 
 import * as ga from '../../../lib/ga';
+import classNames from 'classnames';
 
 interface DuckiesHeroProps {
     bountiesToClaim: string[];
@@ -402,6 +403,10 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
         });
     }, []);
 
+    const handleCopy = React.useCallback(() => {
+        navigator.clipboard.writeText(appConfig.duckzSmartContractAddress);
+    }, []);
+
     return (
         <React.Fragment>
             <div className="duckies-hero">
@@ -437,47 +442,61 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
                             <div className="duckies-hero__icons-balance-body">
                                 <div className="duckies-hero__icons-balance-body-content">
                                     <div className="duckies-hero__icons-balance-body-content-title">
-                                        <div className="duckies-hero__icons-balance-body-content-title-name">
+                                        <div className={classNames('duckies-hero__icons-balance-body-content-title-name', {'loggedin': isReady, 'loggedout': !isReady})}>
                                             Balance
                                         </div>
                                         <div onMouseEnter={() => setIsOpenBalancesInfo(true)} onMouseLeave={() => setIsOpenBalancesInfo(false)} className="duckies-hero__icons-balance-body-content-title-icon">
-                                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" className="pointer">
                                                 <path d="M11 14H10V10H9M10 6H10.01M19 10C19 14.9706 14.9706 19 10 19C5.02944 19 1 14.9706 1 10C1 5.02944 5.02944 1 10 1C14.9706 1 19 5.02944 19 10Z" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                                             </svg>
                                             {isOpenBalancesInfo &&
-                                                <div className="duckies-hero__tooltip">
-                                                    <h5 className="duckies-hero__tooltip-header">Connected wallet info</h5>
-                                                    {account && (
-                                                        <React.Fragment>
-                                                            <div className="duckies-hero__tooltip-box">
-                                                                <span className="duckies-hero__tooltip-box-title">Current address: </span>
-                                                                <span className="duckies-hero__tooltip-box-text">{ENSName || account}</span>
-                                                            </div>
-                                                            {chain && (
-                                                                <div>
-                                                                    <span className="duckies-hero__tooltip-box-title">Current network: </span>
-                                                                    <span className="duckies-hero__tooltip-box-text">{chain.network}</span>
+                                                <div className="duckies-hero__tooltip-back">
+                                                    <div className="duckies-hero__tooltip">
+                                                        <h5 className="duckies-hero__tooltip-header">Connected wallet info</h5>
+                                                        {account && (
+                                                            <React.Fragment>
+                                                                <div className="duckies-hero__tooltip-balance">
+                                                                    <span className="duckies-hero__tooltip-box-title">Balance:</span>
+                                                                    <span className="duckies-hero__tooltip-box-text duckies-hero__tooltip-box-balance">
+                                                                        {convertNumberToLiteral(balance ? +balance : 0)}
+                                                                        <svg width="10" height="14" viewBox="0 0 20 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                            <path d="M9.51487 3.11111H0V24.8889H9.51487C15.9624 24.8889 20 20.2844 20 14C20 7.59111 15.8998 3.11111 9.51487 3.11111ZM9.42097 21.0311H4.25665V6.93778H9.42097C13.1768 6.93778 15.6808 9.76889 15.6808 13.9067C15.6808 18.1067 13.1768 21.0311 9.42097 21.0311Z" fill="#000000"/>
+                                                                            <path d="M3.92 0H7.04989V6.22222H3.92V0Z" fill="#000000"/>
+                                                                            <path d="M3.92 21.7778H7.04989V28H3.92V21.7778Z" fill="#000000"/>
+                                                                            <path d="M8.61484 0H11.7447V6.22222H8.61484V0Z" fill="#000000"/>
+                                                                            <path d="M8.61484 21.7778H11.7447V28H8.61484V21.7778Z" fill="#000000"/>
+                                                                        </svg>
+                                                                    </span>
                                                                 </div>
-                                                            )}
-                                                            <div className="duckies-hero__tooltip-balance">
-                                                                <span className="duckies-hero__tooltip-box-title">Balance:</span>
-                                                                <span className="duckies-hero__tooltip-box-text duckies-hero__tooltip-box-balance">
-                                                                    {balance}
-                                                                    <svg width="14" height="20" viewBox="0 0 20 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                        <path d="M9.51487 3.11111H0V24.8889H9.51487C15.9624 24.8889 20 20.2844 20 14C20 7.59111 15.8998 3.11111 9.51487 3.11111ZM9.42097 21.0311H4.25665V6.93778H9.42097C13.1768 6.93778 15.6808 9.76889 15.6808 13.9067C15.6808 18.1067 13.1768 21.0311 9.42097 21.0311Z" fill="#000000"/>
-                                                                        <path d="M3.92 0H7.04989V6.22222H3.92V0Z" fill="#000000"/>
-                                                                        <path d="M3.92 21.7778H7.04989V28H3.92V21.7778Z" fill="#000000"/>
-                                                                        <path d="M8.61484 0H11.7447V6.22222H8.61484V0Z" fill="#000000"/>
-                                                                        <path d="M8.61484 21.7778H11.7447V28H8.61484V21.7778Z" fill="#000000"/>
-                                                                    </svg>
-                                                                </span>
+                                                                {chain && (
+                                                                    <div>
+                                                                        <span className="duckies-hero__tooltip-box-title">Current network: </span>
+                                                                        <span className="duckies-hero__tooltip-box-text">{chain.network}</span>
+                                                                    </div>
+                                                                )}
+                                                                <div className="duckies-hero__tooltip-box">
+                                                                    <span className="duckies-hero__tooltip-box-title">Current address: </span>
+                                                                    <span className="duckies-hero__tooltip-box-text">{ENSName || account}</span>
+                                                                </div>
+                                                                <div>
+                                                                    <span className="duckies-hero__tooltip-box-title">DUCKZ smart-contract address:</span>
+                                                                    <div className="duckies-hero__tooltip-box-smartcontract">
+                                                                        <span className="duckies-hero__tooltip-box-smartcontract-input">{appConfig.duckzSmartContractAddress}</span>
+                                                                        <div className="duckies-hero__tooltip-box-smartcontract-button" onClick={handleCopy}>
+                                                                            <svg width="14" height="16" viewBox="0 0 14 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                                <path d="M6.10117 0.800049C5.10706 0.800049 4.30117 1.60594 4.30117 2.60005V9.80005C4.30117 10.7942 5.10706 11.6 6.10117 11.6H11.5012C12.4953 11.6 13.3012 10.7942 13.3012 9.80005V4.77284C13.3012 4.29545 13.1115 3.83761 12.774 3.50005L10.6012 1.32726C10.2636 0.989691 9.80577 0.800049 9.32838 0.800049H6.10117Z" fill="#070707"/>
+                                                                                <path d="M0.701172 6.20005C0.701172 5.20594 1.50706 4.40005 2.50117 4.40005V13.4H9.70117C9.70117 14.3942 8.89528 15.2 7.90117 15.2H2.50117C1.50706 15.2 0.701172 14.3942 0.701172 13.4V6.20005Z" fill="#070707"/>
+                                                                            </svg>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </React.Fragment>
+                                                        ) || (
+                                                            <div className="duckies-hero__tooltip-box">
+                                                                <span className="duckies-hero__tooltip-box-message">Connect MetaMask to access your balance (Polygon network)</span>
                                                             </div>
-                                                        </React.Fragment>
-                                                    ) || (
-                                                        <div className="duckies-hero__tooltip-box">
-                                                            <span className="duckies-hero__tooltip-box-message">Connect MetaMask to access your balance (Polygon network)</span>
-                                                        </div>
-                                                    )}
+                                                        )}
+                                                    </div>
                                                 </div>
                                             }
                                         </div>
@@ -498,11 +517,11 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
                                                 {ENSName || `${shortenHex(account, 4)}`}
                                             </span>
                                             <div onClick={handleDisconnect} className="duckies-hero__info-buttons-claim duckies-hero__balance-logout button button--outline button--secondary button--shadow-secondary">
-                                                <span className="button__inner">Logout</span>
+                                                <span className="button__inner">Log out</span>
                                             </div>
                                         </div>
                                     ) : (
-                                        <div onClick={() => handleMetamask(isMetaMaskInstalled, 'Injected')} className="button button--outline button--secondary button--shadow-secondary">
+                                        <div onClick={() => handleMetamask(isMetaMaskInstalled, 'Injected')} className="button button--outline button--secondary button--shadow-secondary duckies-hero__full-width">
                                             <span className="button__inner">{isMetaMaskInstalled ? 'Connect Metamask' : 'Install Metamask'}</span>
                                         </div>
                                     )}

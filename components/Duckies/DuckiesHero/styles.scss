@@ -5,36 +5,55 @@
     padding-top: 93px;
     padding-bottom: 168px;
     &__tooltip {
-        position: absolute;
         background: #fff;
         border: 2px solid #090909;
         border-radius: 4px;
         display: flex;
-        min-width: 420px;
-        width: fit-content;
-        right: 0;
-        top: 30px;
-        z-index: 100;
         height: fit-content;
         display: flex;
         flex-flow: column;
-        padding: 20px 24px;
-        right: 0;
+        padding: 16px;
+        &-back {
+            z-index: 100;
+            @media screen and (max-width: 768px) {
+                position: absolute;
+                left: 18px;
+                right: 18px;
+                margin-top: 30px;
+            }
+            @media screen and (min-width: 769px) {
+                position: absolute;
+                right: 0;
+                padding-top: 30px;
+                min-width: 445px;
+                width: fit-content;
+            }
+        }
         &-balance {
             display: flex;
             align-items: center;
         }
         &-header {
-            font-size: 18px !important;
-            line-height: 18px !important;
+            font-size: 24px !important;
+            line-height: 32px !important;
             padding-bottom: 8px;
             margin-bottom: 0px !important;
-            font-weight: bold;
+            font-weight: 600 !important;
+            font-family: var(--font-family-h8);
+            color: var(--text-color-100);
         }
         &-box {
             &-title {
                 font-size: 14px;
-                font-weight: bold;
+                font-family: var(--font-family-body-600);
+                color: var(--text-color-100);
+                line-height: 22px;
+            }
+            &-text {
+                font-family: var(--font-family-body-400);
+                font-size: 14px;
+                color: var(--text-color-100);
+                line-height: 15px;
             }
             &-balance {
                 margin-left: 3px;
@@ -42,6 +61,34 @@
                 align-items: center;
                 svg {
                     margin-left: 4px;
+                }
+            }
+            &-smartcontract {
+                display: flex;
+                &-input {
+                    font-size: 13px;
+                    color: var(--text-color-70);
+                    font-family: var(--font-family-body-500);
+                    background-color: var(--neutral-control-color-20);
+                    padding-left: 10px;
+                    display: flex;
+                    align-items: center;
+                    width: calc(100% - 42px);
+                    border-top-left-radius: 6px;
+                    border-bottom-left-radius: 6px;
+                    word-break: break-all;
+                    line-height: 14px;
+                }
+                &-button {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    width: 42px;
+                    height: 42px;
+                    background-color: var(--primary-cta-color-80);
+                    border-top-right-radius: 6px;
+                    border-bottom-right-radius: 6px;
+                    cursor: pointer;
                 }
             }
             &-message {
@@ -57,14 +104,19 @@
     &__balance {
         display: flex;
         flex-flow: column;
+        align-items: center;
+        justify-content: center;
         &-address {
             font-size: 14px;
-            color: var(--neutral-control-layer-color-50);
+            color: var(--text-color-60);
+            font-family: var(--font-family-subtitle-600);
         }
         &-amount {
-            font-weight: bold;
-            font-size: 20px;
-            line-height: 20px;
+            font-family: var(--font-family-h8);
+            font-weight: 600;
+            font-size: 24px;
+            line-height: 32px;
+            color: var(--text-color-100);
             display: flex;
             align-items: center;
             svg {
@@ -72,7 +124,7 @@
             }
         }
         &-logout {
-            margin-top: 12px;
+            margin-top: 16px;
             margin-right: 0px !important;
             .button__inner {}
         }
@@ -197,7 +249,7 @@
         display: flex;
         justify-content: flex-end;
         width: 100%;
-        position: relative;
+        // position: relative;
         @media screen and (max-width: 871px) {
             justify-content: center;
         }
@@ -230,19 +282,29 @@
                         display: flex;
                         justify-content: space-between;
                         align-items: center;
-                        margin-bottom: 12px;
+                        margin-bottom: 8px;
                         &-name {
-                            font-size: 1.875rem;
-                            line-height: 2.5rem;
                             text-transform: uppercase;
                             font-weight: bolder;
+                            font-family: var(--ifm-heading-font-family);
+                            &.loggedin {
+                                font-size: 1.5rem;
+                                line-height: 2rem;
+                            }
+                            &.loggedout {
+                                font-size: 30px;
+                                line-height: 40px;
+                            }
                         }
                         &-icon {
                             display: flex;
                             vertical-align: middle;
-                            margin-left: 8px;
-                            position: relative;
-                            svg {
+                            margin-left: 13px;
+                            @media screen and (min-width: 769px) {
+                                position: relative;
+                            }
+                            .pointer {
+                                z-index: 101;
                                 cursor: pointer;
                             }
                         }
@@ -299,10 +361,8 @@
             }
         }
     }
-    @media screen and (max-width: 768px) {
-        .duckies-hero__icons-balance-body-content-title-icon {
-            display: none;
-        }
+    &__full-width{
+        width: 100%;
     }
 }
 
