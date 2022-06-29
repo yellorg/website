@@ -353,7 +353,7 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
                     <Image width="156px" height="156px" src="/images/components/duckies/duckNoRewards.svg" alt="duck-no-rewards" />
                 </div>
                 <div className="cr-bounty-modal__body-subtitle">
-                    Duckies are busy with other rewards.
+                    Not the right time
                 </div>
                 <div className="cr-bounty-modal__body-description">
                     You have already claimed your current rewards. Invite more people and fulfill more bounties to get more DUCKZ
@@ -416,8 +416,7 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
                         </div>
                         <div className="duckies-hero__info-received">
                             <div className="duckies-hero__info-received-message">
-                            It’s duck season! 
-                            Collect your DUCZ
+                            Quack, quack! Collect your DUCKZ
                             </div>
                         </div>
                         <div className="duckies-hero__info-buttons">

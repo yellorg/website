@@ -129,6 +129,9 @@
                 line-height: 4rem;
                 font-weight: bolder;
                 font-family: var(--ifm-heading-font-family);
+                @media screen and (min-width: 872px) {
+                    width: 120%;
+                }
             }
             &-amount {
                 color: var(--text-color-100);

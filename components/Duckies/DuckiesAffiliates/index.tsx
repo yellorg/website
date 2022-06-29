@@ -240,7 +240,7 @@ export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({
                     <Image width="156px" height="156px" src="/images/components/duckies/duckNoRewards.svg" alt="duck-no-rewards" />
                 </div>
                 <div className="cr-bounty-modal__body-subtitle">
-                    Duckies are busy with other rewards.
+                    Not the right time
                 </div>
                 <div className="cr-bounty-modal__body-description">
                     You have already claimed your current rewards. Invite more people and fulfill more bounties to get more DUCKZ
