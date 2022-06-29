@@ -145,6 +145,10 @@ module.exports = {
         extend: {
             colors: customColors,
             fontFamily: customTypography,
+            maxWidth: {
+                'layout': '1272px',
+                'layout-2p': '1304px',
+            }
         },
     },
     plugins: [],

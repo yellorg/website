@@ -83,17 +83,17 @@ export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({
     const renderAffiliateLevels = React.useMemo(() => {
         return affiliates.map((affiliateCount: number, index: number) => {
             return (
-                <div className="table-row" key={`affiliate-${index}`}>
-                    <div className="table-row-key">
-                        <div className="table-row-key-title">
+                <div className="flex w-full items-center justify-between py-2 border-b border-divider-color-40" key={`affiliate-${index}`}>
+                    <div className="flex flex-col font-metro-semibold">
+                        <div className="text-xl text-text-color-100">
                             Level {index + 1}
                         </div>
-                        <div className="table-row-key-subtitle">
+                        <div className="text-base text-text-color-60 cursor-pointer flex items-center w-fit">
                             {payoutsReferral?.[index] ? `${payoutsReferral[index]}% commission / ` : ''}
                             {payoutsBounty?.[index] ? `${payoutsBounty[index]}% bounty` : ''}
                         </div>
                     </div>
-                    <div className="table-row-value">
+                    <div className="text-2xl flex items-center font-gilmer-medium text-text-color-100">
                         {affiliateCount}
                     </div>
                 </div>
@@ -166,10 +166,10 @@ export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({
     const renderLoadingModalBody = React.useMemo(() => {
         return (
             <React.Fragment>
-                <div className="cr-bounty-modal__body-description">
+                <div className="text-text-color-100 text-sm text-center font-metro-regular font-medium mb-6">
                     In order for the on-chain transaction to be executed please wait a couple of minutes. Time may vary depending on the queue & gas.
                 </div>
-                <div className="cr-bounty-modal__body-buttons buttons-justify-center">
+                <div className="flex items-center justify-center">
                     <div className="button button--outline button--secondary button--shadow-secondary" onClick={() => setIsOpenModal(false)}>
                         <span className="button__inner">Confirm</span>
                     </div>
@@ -194,13 +194,13 @@ export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({
 
         return (
             <React.Fragment>
-                <div className="cr-bounty-modal__body-subtitle">
+                <div className="text-text-color-100 text-base text-center font-metro-regular font-semibold mb-1">
                     Amount
                 </div>
-                <div className="cr-bounty-modal__body-price">
-                    <div className="cr-bounty-modal__body-price-value">
+                <div className="bg-primary-cta-color-10 w-full flex justify-center py-3 mb-4">
+                    <div className="text-text-color-100 text-2xl font-gilmer-bold flex items-center">
                         {amountToClaim}
-                        <svg width="20" height="28" viewBox="0 0 20 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <svg className="ml-3" width="20" height="28" viewBox="0 0 20 28" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M9.51487 3.11111H0V24.8889H9.51487C15.9624 24.8889 20 20.2844 20 14C20 7.59111 15.8998 3.11111 9.51487 3.11111ZM9.42097 21.0311H4.25665V6.93778H9.42097C13.1768 6.93778 15.6808 9.76889 15.6808 13.9067C15.6808 18.1067 13.1768 21.0311 9.42097 21.0311Z" fill="#ECAA00" />
                             <path d="M3.92 0H7.04989V6.22222H3.92V0Z" fill="#ECAA00" />
                             <path d="M3.92 21.7778H7.04989V28H3.92V21.7778Z" fill="#ECAA00" />
@@ -209,11 +209,11 @@ export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({
                         </svg>
                     </div>
                 </div>
-                <div className="cr-bounty-modal__body-description">
+                <div className="text-text-color-100 text-sm text-center font-metro-regular font-medium mb-6">
                     List of bounties:
                     {renderBountyTitles}
                 </div>
-                <div className="cr-bounty-modal__body-buttons buttons-justify-center">
+                <div className="flex items-center justify-center">
                     <div className="button button--outline button--secondary button--shadow-secondary" onClick={() => handleClaim(amountToClaim)}>
                         <span className="button__inner">Claim all</span>
                     </div>
@@ -224,8 +224,8 @@ export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({
 
     const renderClaimRewardModalBody = React.useMemo(() => {
         return (
-            <div className="cr-bounty-modal__body">
-                <div className="cr-bounty-modal__body-image">
+            <div className="flex flex-col w-full">
+                <div className="flex justify-center mb-4">
                     <Image width="156px" height="156px" src="/images/components/duckies/duckDetective.png" alt="duck-no-rewards" />
                 </div>
                 {(isLoading || isSingleBountyProcessing) ? renderLoadingModalBody : renderClaimModalBody}
@@ -235,17 +235,17 @@ export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({
 
     const renderNoRewardsModalBody = React.useMemo(() => {
         return (
-            <div className="cr-bounty-modal__body">
-                <div className="cr-bounty-modal__body-image">
+            <div className="flex flex-col w-full">
+                <div className="flex justify-center mb-4">
                     <Image width="156px" height="156px" src="/images/components/duckies/duckNoRewards.png" alt="duck-no-rewards" />
                 </div>
-                <div className="cr-bounty-modal__body-subtitle">
+                <div className="text-text-color-100 text-base text-center font-metro-regular font-semibold mb-1">
                     Duckies are busy with other rewards.
                 </div>
-                <div className="cr-bounty-modal__body-description">
+                <div className="text-text-color-100 text-sm text-center font-metro-regular font-medium mb-6">
                     You have already claimed your current rewards. Invite more people and fulfill more bounties to get more DUCKZ
                 </div>
-                <div className="cr-bounty-modal__body-buttons buttons-justify-center">
+                <div className="flex items-center justify-center">
                     <div className="button button--outline button--secondary button--shadow-secondary" onClick={() => { setIsOpenModal(false); } }>
                         <span className="button__inner">OK</span>
                     </div>
@@ -285,12 +285,12 @@ export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({
 
     return (
         <React.Fragment>
-            <div className="duckies-affiliates">
-                <div className="container">
-                    <div className="duckies-affiliates__row">
-                        <div className="duckies-affiliates__row-info">
-                            <div className="table">
-                                <div className="table-title">
+            <div className="pt-8 pb-[174px] mx-auto bg-primary-cta-color-90 duckies-affiliates">
+                <div className="mx-auto p-0 w-full max-w-full lg:max-w-layout-2p">
+                    <div className="flex w-full overflow-x-auto overflow-y-hidden px-4 no-scrollbar">
+                        <div className="mr-6 w-1/4 min-w-[300px]">
+                            <div className="h-full border-2 rounded p-6 border-text-color-90 bg-body-background-color">
+                                <div className="font-gilmer-bold text-4xl text-text-color-100">
                                     Affiliates
                                 </div>
                                 <UnloginEyes>
@@ -298,9 +298,9 @@ export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({
                                 </UnloginEyes>
                             </div>
                         </div>
-                        <div className="duckies-affiliates__row-bounties">
-                            <div className="table">
-                                <div className="table-title">
+                        <div className="w-full min-w-[650px]">
+                            <div className="h-full border-2 rounded p-6 border-text-color-90 bg-body-background-color">
+                                <div className="font-gilmer-bold text-4xl text-text-color-100 flex justify-between mb-2">
                                     {bountyTitle}
                                     {bountiesToClaim.length > 1 && (
                                         <div onClick={() => setIsOpenModal(true)} className="button button--outline button--secondary button--shadow-secondary">

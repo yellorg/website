@@ -37,14 +37,14 @@ export const BountyRow: React.FC<BountyProps> = ({
     const [loading, setLoading] = React.useState<boolean>(false);
 
     const rowClassName = React.useMemo(() => {
-        return classnames('table-row table-row-bounty', {
-            'cr-bounty-row': bounty.status === 'claim' && !((loading && isSingleBountyProcessing) || (isLoading && !isSingleBountyProcessing)),
+        return classnames('flex w-full items-center justify-between border-b border-color-divider-color-40 px-1 py-2', {
+            'bg-primary-cta-color-10': bounty.status === 'claim' && !((loading && isSingleBountyProcessing) || (isLoading && !isSingleBountyProcessing)),
         })
     }, [bounty.status, loading, isLoading, isSingleBountyProcessing]);
 
     const indexClassName = React.useMemo(() => {
-        return classnames('table-row-key-index ', {
-            'table-row-key-index--active': bounty.status === 'claim' && !((loading && isSingleBountyProcessing) || (isLoading && !isSingleBountyProcessing)),
+        return classnames('py-1 px-[9.5px] text-base w-7 h-8 flex items-center justify-center font-bold rounded-sm mr-4 bg-neutral-control-color-30', {
+            'bg-primary-cta-color-40': bounty.status === 'claim' && !((loading && isSingleBountyProcessing) || (isLoading && !isSingleBountyProcessing)),
         })
     }, [bounty.status, loading, isLoading, isSingleBountyProcessing]);
 
@@ -72,7 +72,7 @@ export const BountyRow: React.FC<BountyProps> = ({
     const renderBountyStatus = React.useMemo(() => {
         if ((loading && isSingleBountyProcessing) || (bounty.status === 'claim' && isLoading && !isSingleBountyProcessing)) {
             return (
-                <div className="cr-bounty-processing">
+                <div className="text-base text-system-yellow-60">
                     Processing...
                 </div>
             );
@@ -87,7 +87,7 @@ export const BountyRow: React.FC<BountyProps> = ({
                 );
             case 'claimed':
                 return (
-                    <div className="cr-bounty-claimed">
+                    <div className="text-base text-system-green-60">
                         Claimed
                     </div>
                 );
@@ -99,26 +99,26 @@ export const BountyRow: React.FC<BountyProps> = ({
     const renderBounty = React.useMemo(() => {
         return (
             <div className={rowClassName}>
-                <div className="table-row-key flex-row">
+                <div className="flex flex-row items-center">
                     <div className={indexClassName}>
                         {index}
                     </div>
                     <div>
-                        <div className="table-row-key-title">
+                        <div className="text-xl text-text-color-100">
                             {bounty.title}
                         </div>
-                        <div onClick={handleSelectBountyId} className="table-row-key-subtitle">
+                        <div onClick={handleSelectBountyId} className="text-base text-text-color-60 cursor-pointer w-fit flex items-center hover:text-text-color-100">
                             <span>Show more details</span>
                             <span className="cr-arrow" />
                         </div>
                     </div>
                 </div>
-                <div className="table-row-value">
-                    <div className="cr-bounty-column-status">
+                <div className="flex items-center text-2xl font-gilmer-medium text-text-color-100">
+                    <div className="pr-[10px]">
                         {renderBountyStatus}
                     </div>
-                    <div className="cr-bounty-column-amount">
-                        <span>{convertNumberToLiteral(bounty.value)}</span>
+                    <div className="flex items-center justify-end w-[140px]">
+                        <span className="mr-1">{convertNumberToLiteral(bounty.value)}</span>
                         <svg width="20" height="28" viewBox="0 0 20 28" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M9.51487 3.11111H0V24.8889H9.51487C15.9624 24.8889 20 20.2844 20 14C20 7.59111 15.8998 3.11111 9.51487 3.11111ZM9.42097 21.0311H4.25665V6.93778H9.42097C13.1768 6.93778 15.6808 9.76889 15.6808 13.9067C15.6808 18.1067 13.1768 21.0311 9.42097 21.0311Z" fill={duckiesColor}/>
                             <path d="M3.92 0H7.04989V6.22222H3.92V0Z" fill={duckiesColor}/>
@@ -143,11 +143,11 @@ export const BountyRow: React.FC<BountyProps> = ({
 
     const renderDetailsModalBody = React.useMemo(() => {
         return (
-            <div className="cr-bounty-modal__body">
-                <div className="cr-bounty-modal__body-price">
-                    <div className="cr-bounty-modal__body-price-value">
+            <div className="flex flex-col w-full">
+                <div className="bg-primary-cta-color-10 w-full flex justify-center py-3 mb-4">
+                    <div className="text-text-color-100 text-2xl font-gilmer-bold flex items-center">
                         {bounty.value}
-                        <svg width="20" height="28" viewBox="0 0 20 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <svg className="ml-3" width="20" height="28" viewBox="0 0 20 28" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M9.51487 3.11111H0V24.8889H9.51487C15.9624 24.8889 20 20.2844 20 14C20 7.59111 15.8998 3.11111 9.51487 3.11111ZM9.42097 21.0311H4.25665V6.93778H9.42097C13.1768 6.93778 15.6808 9.76889 15.6808 13.9067C15.6808 18.1067 13.1768 21.0311 9.42097 21.0311Z" fill="#ECAA00" />
                             <path d="M3.92 0H7.04989V6.22222H3.92V0Z" fill="#ECAA00" />
                             <path d="M3.92 21.7778H7.04989V28H3.92V21.7778Z" fill="#ECAA00" />
@@ -156,10 +156,10 @@ export const BountyRow: React.FC<BountyProps> = ({
                         </svg>
                     </div>
                 </div>
-                <div className="cr-bounty-modal__body-description">
+                <div className="text-text-color-100 text-sm text-center font-metro-regular font-medium mb-6">
                     {bounty.description}
                 </div>
-                <div className="cr-bounty-modal__body-buttons buttons-justify-center">
+                <div className="flex items-center justify-center">
                     <div className="button button--outline button--secondary button--shadow-secondary" onClick={() => setIsOpenShow(false)}>
                         <span className="button__inner">OK</span>
                     </div>
@@ -171,15 +171,15 @@ export const BountyRow: React.FC<BountyProps> = ({
     const renderClaimRewardModalBody = React.useMemo(() => {
         return (
             <React.Fragment>
-                <div className="cr-bounty-modal__body-subtitle">
+                <div className="text-text-color-100 text-base text-center font-metro-regular font-semibold mb-1">
                     Amount to claim for completed<br/>
                     &quot;{bounty.title}&quot;<br/>
                     bounty
                 </div>
-                <div className="cr-bounty-modal__body-price">
-                    <div className="cr-bounty-modal__body-price-value">
+                <div className="bg-primary-cta-color-10 w-full flex justify-center py-3 mb-4">
+                    <div className="text-text-color-100 text-2xl font-gilmer-bold flex items-center">
                         {bounty.value}
-                        <svg width="20" height="28" viewBox="0 0 20 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <svg className="ml-3" width="20" height="28" viewBox="0 0 20 28" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M9.51487 3.11111H0V24.8889H9.51487C15.9624 24.8889 20 20.2844 20 14C20 7.59111 15.8998 3.11111 9.51487 3.11111ZM9.42097 21.0311H4.25665V6.93778H9.42097C13.1768 6.93778 15.6808 9.76889 15.6808 13.9067C15.6808 18.1067 13.1768 21.0311 9.42097 21.0311Z" fill="#ECAA00" />
                             <path d="M3.92 0H7.04989V6.22222H3.92V0Z" fill="#ECAA00" />
                             <path d="M3.92 21.7778H7.04989V28H3.92V21.7778Z" fill="#ECAA00" />
@@ -188,10 +188,10 @@ export const BountyRow: React.FC<BountyProps> = ({
                         </svg>
                     </div>
                 </div>
-                <div className="cr-bounty-modal__body-description">
+                <div className="text-text-color-100 text-sm text-center font-metro-regular font-medium mb-6">
                     {bounty.description}
                 </div>
-                <div className="cr-bounty-modal__body-buttons buttons-justify-center">
+                <div className="flex items-center justify-center">
                     <div className="button button--outline button--secondary button--shadow-secondary" onClick={handleClaimReward}>
                         <span className="button__inner">Claim reward</span>
                     </div>
@@ -203,10 +203,10 @@ export const BountyRow: React.FC<BountyProps> = ({
     const renderLoadingModalBody = React.useMemo(() => {
         return (
             <React.Fragment>
-                <div className="cr-bounty-modal__body-description">
+                <div className="text-text-color-100 text-sm text-center font-metro-regular font-medium mb-6">
                     In order for the on-chain transaction to be executed please wait a couple of minutes. Time may vary depending on the queue & gas.
                 </div>
-                <div className="cr-bounty-modal__body-buttons buttons-justify-center">
+                <div className="flex items-center justify-center">
                     <div className="button button--outline button--secondary button--shadow-secondary" onClick={() => setIsOpenClaim(false)}>
                         <span className="button__inner">Confirm</span>
                     </div>
@@ -217,8 +217,8 @@ export const BountyRow: React.FC<BountyProps> = ({
 
     const renderModalBody = React.useMemo(() => {
         return (
-            <div className="cr-bounty-modal__body">
-                <div className="cr-bounty-modal__body-image">
+            <div className="flex flex-col w-full">
+                <div className="flex justify-center mb-4">
                     <Image width="156px" height="156px" src="/images/components/duckies/duckDetective.png" alt="duck-no-rewards" />
                 </div>
                 {(isLoading || isSingleBountyProcessing) ? renderLoadingModalBody : renderClaimRewardModalBody}

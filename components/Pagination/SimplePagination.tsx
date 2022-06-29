@@ -51,7 +51,7 @@ export const SimplePagination: React.FC<SimplePaginationProps> = ({
     const renderFromToNode = React.useMemo(() => {
         return (
             <>
-                {prefixedTextLabel} <span className="simple-pagination-font-medium">{fromValue}</span> {separatorText} <span className="simple-pagination-font-medium">{toValue}</span>
+                {prefixedTextLabel} <span className="font-bold">{fromValue}</span> {separatorText} <span className="font-bold">{toValue}</span>
             </>
         );
     }, [prefixedTextLabel, fromValue, separatorText, toValue]);
@@ -60,7 +60,7 @@ export const SimplePagination: React.FC<SimplePaginationProps> = ({
         if (shouldRenderTotal) {
             return (
                 <>
-                    {totalSeparatorText} <span className="simple-pagination-font-medium">{totalValue}</span> {resultsText}
+                    {totalSeparatorText} <span className="font-bold">{totalValue}</span> {resultsText}
                 </>
             );
         }
@@ -71,7 +71,7 @@ export const SimplePagination: React.FC<SimplePaginationProps> = ({
     const renderPreviousButton = React.useMemo(() => {
         return (
             <button
-                className={classnames("simple-pagination-prev-button", buttonsAdditionalClassName)}
+                className={classnames("relative inline-flex items-center py-2 px-4 border leading-5 rounded-md cursor-pointer bg-body-background-color border-neutral-control-color-70 transition-all ease-in-out duration-200 disabled:hover:cursor-not-allowed enabled:hover:bg-neutral-control-color-30", buttonsAdditionalClassName)}
                 onClick={() => handleClickPrevButton(page)}
                 disabled={page === 1}
             >
@@ -83,7 +83,7 @@ export const SimplePagination: React.FC<SimplePaginationProps> = ({
     const renderNextButton = React.useMemo(() => {
         return (
             <button
-                className={classnames("simple-pagination-next-button", buttonsAdditionalClassName)}
+                className={classnames("ml-3 relative inline-flex items-center py-2 px-4 border leading-5 rounded-md cursor-pointer bg-body-background-color border-neutral-control-color-70 transition-all ease-in-out duration-200 disabled:hover:cursor-not-allowed enabled:hover:bg-neutral-control-color-30", buttonsAdditionalClassName)}
                 onClick={() => handleClickNextButton(page)}
                 disabled={!nextPageExists}
             >
@@ -94,12 +94,12 @@ export const SimplePagination: React.FC<SimplePaginationProps> = ({
 
     return (
         <nav className={mainBlockClassName} aria-label="Pagination">
-            <div className="simple-pagination-left">
+            <div className="block">
                 <p className={textLabelClassName}>
                     {renderFromToNode} {renderOfTotal}
                 </p>
             </div>
-            <div className="simple-pagination-right">
+            <div className="flex justify-between">
                 {renderPreviousButton}
                 {renderNextButton}
             </div>
@@ -111,7 +111,7 @@ SimplePagination.defaultProps = {
     page: 1,
     limit: 10,
     nextPageExists: true,
-    mainBlockClassName: 'simple-pagination',
+    mainBlockClassName: 'bg-neutral-control-color-0 pt-5 pb-2 px-1 flex items-center justify-between border-t border-divider-color-40 sticky bottom-0 z-[10]',
     total: 10,
     shouldRenderTotal: true,
     prefixedTextLabel: 'Showing',
@@ -120,6 +120,5 @@ SimplePagination.defaultProps = {
     resultsText: 'results',
     previousButtonLabel: 'Previous',
     nextButtonLabel: 'Next',
-    textLabelClassName: 'simple-pagination-label',
-    buttonsAdditionalClassName: 'text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 border-gray-300',
+    textLabelClassName: 'm-0',
 };
