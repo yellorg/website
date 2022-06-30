@@ -147,8 +147,9 @@ module.exports = {
             colors: customColors,
             fontFamily: customTypography,
             maxWidth: {
-                'layout': '1272px',
-                'layout-2p': '1304px',
+                'lg-layout': '1272px',
+                'lg-layout-2p': '1304px',
+                'md-layout': '1140px',
             }
         },
     },

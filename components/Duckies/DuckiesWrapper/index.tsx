@@ -165,7 +165,7 @@ export const DuckiesLayout: FC<DuckiesLayoutProps> = ({ bounties }: DuckiesLayou
     }, [signer, account, bountiesToClaim]);
 
     return (
-        <main className="duckies container">
+        <main className="bg-primary-cta-color-60">
             <DuckiesHero
                 bountiesToClaim={bountiesToClaim}
                 handleClaimAllBounties={handleClaimAllBounties}

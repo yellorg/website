@@ -232,15 +232,6 @@ a:not(
 }
 
 .duckies {
-  background-color: var(--ifm-color-primary);
-
-  &.container {
-    padding: 0;
-    margin: 0;
-    width: 100%;
-    max-width: 100%;
-  }
-
   &-hero {
     background-image: url('/images/components/duckies/heroBg.png');
     background-repeat: no-repeat;

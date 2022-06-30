@@ -3,7 +3,7 @@ import { LazyLoadImage } from 'react-lazy-load-image-component';
 
 export const DuckiesRedeem = () => {
     return (
-        <div className="mx-auto mt-[74px] px-[14px] max-w-layout">
+        <div className="mx-auto mt-[74px] px-[14px] max-w-md-layout 2xl:max-w-lg-layout">
             <div className="flex items-center pb-[74px] w-full flex-col sm:flex-row">
                 <div className="flex w-full max-w-full sm:max-w-1/2 flex-col">
                     <div className="flex justify-start flex-col">

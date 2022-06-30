@@ -335,7 +335,7 @@ export const DuckiesEarnMore = () => {
     }, []);
 
     return (
-        <div className="mx-auto pt-[100px] px-[14px] max-w-layout" id="earn-more">
+        <div className="mx-auto pt-[100px] px-[14px] max-w-md-layout 2xl:max-w-lg-layout" id="earn-more">
             <div className="flex justify-center items-center gap-[36px] flex-col sm:flex-row">
                 {renderHypnoduck}
                 <div className="basis-full">
