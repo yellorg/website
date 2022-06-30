@@ -3,54 +3,54 @@ import { LazyLoadImage } from 'react-lazy-load-image-component';
 
 export const DuckiesRedeem = () => {
     return (
-        <div className="duckies-redeem">
-            <div className="container duckies-redeem__block">
-                <div className="duckies-redeem__block-info">
-                    <div className="duckies-redeem__block-info-header">
-                        <div className="duckies-redeem__block-info-header-name">
-                            <div className="duckies-redeem__block-info-header-name-content">
+        <div className="mx-auto mt-[74px] px-[14px] max-w-layout">
+            <div className="flex items-center pb-[74px] w-full flex-col sm:flex-row">
+                <div className="flex w-full max-w-full sm:max-w-1/2 flex-col">
+                    <div className="flex justify-start flex-col">
+                        <div className="text-primary-cta-layer-color-60 font-bold text-[18px] leading-[26px] mb-[12px]">
+                            <div className="block w-fit bg-primary-cta-color-90 py-[4px] px-[14px] font-metro-bold">
                                 DUCKIES
                             </div>
                         </div>
-                        <div className="duckies-redeem__block-info-header-title">
+                        <div className="text-text-color-100 font-gilmer-bold text-[60px] leading-[64px] mb-[12px]">
                             Redeem
                         </div>
-                        <div className="duckies-redeem__block-info-header-subtitle">
+                        <div className="text-text-color-100 font-metro-semibold text-[20px] leading-[28px] mb-[36px]">
                             Exchange your duckies for valuable gifts and rare NFTs
                         </div>
                     </div>
-                    <div className="duckies-redeem__block-info-header-image">
-                        <LazyLoadImage className="section__main-img"
+                    <div className="flex mb-[40px] sm:hidden">
+                        <LazyLoadImage
                             srcSet={`${'/images/components/duckies/redeem.png'}`}
                             effect="blur"
                             threshold={200}
                         />
                     </div>
-                    <div className="duckies-redeem__block-info-content">
-                        <div className="duckies-redeem__block-info-content-row">
-                            <div className="duckies-redeem__block-info-content-row-item">
-                            <div className="duckies-redeem__block-info-content-row-item-line" />
+                    <div className="flex flex-col">
+                        <div className="flex w-full flex-col sm:flex-row">
+                            <div className="flex w-full max-w-full sm:max-w-1/2 mb-[36px] pr-[58px] flex-col font-gilmer-medium text-[24px] leading-[32px]">
+                                <div className="w-[48px] h-[4px] bg-primary-cta-color-90 mb-[8px]" />
                                 Exclusive NFT Duckies collection
                             </div>
-                            <div className="duckies-redeem__block-info-content-row-item">
-                                <div className="duckies-redeem__block-info-content-row-item-line" />
+                            <div className="flex w-full max-w-full sm:max-w-1/2 mb-[36px] pr-[58px] flex-col font-gilmer-medium text-[24px] leading-[32px]">
+                                <div className="w-[48px] h-[4px] bg-primary-cta-color-90 mb-[8px]" />
                                 Swap for YELLOW tokens
                             </div>
                         </div>
-                        <div className="duckies-redeem__block-info-content-row">
-                            <div className="duckies-redeem__block-info-content-row-item">
-                            <div className="duckies-redeem__block-info-content-row-item-line" />
-                                YELLOW NETWORK & DUCKIES merch
+                        <div className="flex w-full flex-col sm:flex-row">
+                            <div className="flex w-full max-w-full sm:max-w-1/2 mb-[36px] pr-[58px] flex-col font-gilmer-medium text-[24px] leading-[32px]">
+                                <div className="w-[48px] h-[4px] bg-primary-cta-color-90 mb-[8px]" />
+                                YELLOW NETWORK &#38; DUCKIES merch
                             </div>
-                            <div className="duckies-redeem__block-info-content-row-item">
-                            <div className="duckies-redeem__block-info-content-row-item-line" />
+                            <div className="flex w-full max-w-full sm:max-w-1/2 mb-[36px] pr-[58px] flex-col font-gilmer-medium text-[24px] leading-[32px]">
+                                <div className="w-[48px] h-[4px] bg-primary-cta-color-90 mb-[8px]" />
                                 And more coming soon
                             </div>
                         </div>
                     </div>
                 </div>
-                <div className="duckies-redeem__block-duckies">
-                    <LazyLoadImage className="section__main-img"
+                <div className="hidden sm:flex w-full max-w-full sm:max-w-1/2">
+                    <LazyLoadImage
                         srcSet={`${'/images/components/duckies/redeem.png'}`}
                         effect="blur"
                         threshold={200}

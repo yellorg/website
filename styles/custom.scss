@@ -297,6 +297,14 @@ a:not(
   height: 0;
 }
 
+.login-gradient {
+  background: linear-gradient(270deg, #FCD000 34.49%, rgba(252, 208, 0, 0) 100%);
+}
+
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}
+
 @media screen and (min-width: 1440px) {
   .section__main-img {
     max-width: initial;

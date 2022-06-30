@@ -22,21 +22,21 @@ const UnloginEyes: React.FC<UnloginEyes> = ({ children, paginationComponent, isR
         return supportedChain && triedToEagerConnect && active && account;
     }, [supportedChain, triedToEagerConnect, active, account]);
 
-    const rootClassName = classnames('cr-unlogin-content', {
-        'cr-unlogin-content--blur': !isReady
+    const rootClassName = classnames('relative flex flex-col justify-between h-[89%]', {
+        'blur-[5px]': !isReady
     });
 
     const paginationClassName = classnames('', {
-        'cr-unlogin-content--blur': !isReady
+        'blur-[5px]': !isReady
     });
 
-    const reversedClassName = classnames('cr-unlogin-eyes', {
-        'cr-unlogin-eyes--reversed': isReversed
+    const reversedClassName = classnames('absolute flex items-center justify-center w-full h-full top-[-50px]', {
+        'rotate-y-180': isReversed
     });
 
 
     return (
-        <div className="cr-unlogin">
+        <div className="relative flex flex-col justify-between h-[89%]">
             <div className={rootClassName}>
                 {children}
             </div>
