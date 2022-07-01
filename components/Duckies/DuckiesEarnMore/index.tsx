@@ -156,7 +156,7 @@ export const DuckiesEarnMore = () => {
                 type: 'facebook',
                 icon: (
                     <Link key="facebook" href={`https://www.facebook.com/sharer/sharer.php?u=${shareableLinkPrefix}${shareableLink}&quote=${message}`}>
-                        <a
+                        <button
                             type="button"
                             role="button"
                             href={`https://www.facebook.com/sharer/sharer.php?u=${shareableLinkPrefix}${shareableLink}&quote=${message}`}
@@ -167,7 +167,7 @@ export const DuckiesEarnMore = () => {
                                 <path d="M0.5 24C0.5 10.7452 11.2452 0 24.5 0C37.7548 0 48.5 10.7452 48.5 24C48.5 37.2548 37.7548 48 24.5 48C11.2452 48 0.5 37.2548 0.5 24Z" fill="#3B5998"/>
                                 <path d="M27.0015 38.1115V25.0542H30.6058L31.0835 20.5546H27.0015L27.0076 18.3025C27.0076 17.1289 27.1191 16.5001 28.8047 16.5001H31.058V12H27.4531C23.123 12 21.599 14.1828 21.599 17.8536V20.5551H18.8999V25.0547H21.599V38.1115H27.0015Z" fill="white"/>
                             </svg>
-                        </a>
+                        </button>
                     </Link>
                 ),
             },
@@ -363,7 +363,7 @@ export const DuckiesEarnMore = () => {
                                 </div>
                             )}
                         </div>
-                        <div className={classnames('flex items-center w-full py-[8px] max-2-full overflow-x-auto', { 'justify-center': !isReady, 'jsutify-start ml-[-4px]': isReady })}>
+                        <div className={classnames('flex items-center w-full py-[8px] max-w-full overflow-x-auto', { 'justify-center': !isReady, 'justify-start ml-[-4px]': isReady })}>
                             {isReady ? renderSocials : renderMetamaskButton()}
                         </div>
                     </div>
