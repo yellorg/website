@@ -11,12 +11,6 @@
   }
 
   &__link {
-    letter-spacing: 0.15px;
-    margin: 0px 18px;
-    display: inline-block;
-    position: relative;
-    @extend .subtitle-2-18-600;
-
     &:after {
       content: '';
       position: absolute;

@@ -121,11 +121,11 @@ export const DuckiesEarnMore = () => {
     ), [handleMetamask, isMetaMaskInstalled]);
 
     const inputLink = classnames('', {
-        'duckies-earn-more__body-link-input-login': !isReady,
+        'login-gradient w-full sm:w-[320px] absolute h-[64px]': !isReady,
     });
 
-    const inputLinkRef = classnames('duckies-earn-more__body-link-input', {
-        'duckies-earn-more__body-link-input-ref': !isReady,
+    const inputLinkRef = classnames('flex items-center bg-input-background-color border-2 border-text-color-100 rounded mr-4 py-[18px] px-[18px] sm:px-5 w-full max-2-full overflow-x-auto', {
+        'border-r-0 rounded-tr-0 rounded-br-0 left-0': !isReady,
     });
 
     const message = React.useMemo(() => 'Go and claim your DUCKIES tokens (choose Polygon mainnet on your Wallet for tokens minting)!', []);
@@ -256,10 +256,10 @@ export const DuckiesEarnMore = () => {
         return socials.map((social: any, index: number) => {
             return (
                 <div
-                    className="duckies-earn-more__body-social-icon button button--secondary button--shadow-secondary"
+                    className="w-[48px] h-[48px] mr-[5px] ml-[5px] last:mr-0 after:!rounded-[50%] before:hidden button button--secondary button--shadow-secondary"
                     key={`social-${index}`}
                 >
-                    <span className="button__inner" onClick={() => sendGAEvent(social.type)}>
+                    <span className="button__inner !bg-transparent !p-0 !w-12 !h-12 !rounded-[50%]" onClick={() => sendGAEvent(social.type)}>
                         {social.icon}
                     </span>
                 </div>
@@ -273,15 +273,15 @@ export const DuckiesEarnMore = () => {
         }
 
         return (
-            <div className="duckies-earn-more__content-left">
-                <div className="duckies-earn-more__content-left-hypnoduck">
-                    <div className="duckies-earn-more__content-left-hypnoduck-img">
+            <div className="basis-full w-full sm:max-w-[620px]">
+                <div className="relative w-full sm:max-w-[620px] sm:max-h-[620px] pt-[100%]">
+                    <div className="absolute top-0 bottom-0 left-0 right-0 w-full h-full object-cover object-center">
                         <Image
                             src="/images/referral_hypnoduck_back.png"
                             layout="fill"
                         />
                     </div>
-                    <div className="duckies-earn-more__content-left-hypnoduck-img">
+                    <div className="absolute top-0 bottom-0 left-0 right-0 w-full h-full object-cover object-center">
                         <Image
                             src="/images/referral_hypnoduck.gif"
                             layout="fill"
@@ -295,11 +295,11 @@ export const DuckiesEarnMore = () => {
     const renderReferrerHeader = React.useMemo(() => {
         if (!isReady) {
             return (
-                <div className="duckies-earn-more__header">
-                    <div className="duckies-earn-more__header-title center-align">
+                <div className="flex flex-col items-left justify-center mb-[36px]">
+                    <div className="text-[60px] leading-[64px] text-text-color-100 font-gilmer-bold pb-[8px] text-center">
                         Quack to your friends
                     </div>
-                    <div className="duckies-earn-more__header-subtitle center-align">
+                    <div className="text-[24px] leading-[32px] text-text-color-100 font-gilmer-medium text-center">
                         Share the link to grow your squad and earn more DUCKZ
                     </div>
                 </div>
@@ -307,14 +307,14 @@ export const DuckiesEarnMore = () => {
         }
 
         return (
-            <div className="duckies-earn-more__header">
-                <div className="duckies-earn-more__header-badge">
+            <div className="flex flex-col items-left justify-center mb-[36px]">
+                <div className="block w-fit bg-primary-cta-color-90 text-primary-cta-layer-color-60 py-[4px] px-[14px] font-metro-bold rounded-sm mb-[8px]">
                     REFERRAL
                 </div>
-                <div className="duckies-earn-more__header-title left-align">
+                <div className="text-[60px] leading-[64px] text-text-color-100 font-gilmer-bold pb-[8px] text-left">
                     Quack to your friends 
                 </div>
-                <div className="duckies-earn-more__header-subtitle left-align">
+                <div className="text-[24px] leading-[32px] text-text-color-100 font-gilmer-medium text-left">
                     Share the link to grow your squad and earn more DUCKZ
                 </div>
             </div>
@@ -335,22 +335,22 @@ export const DuckiesEarnMore = () => {
     }, []);
 
     return (
-        <div className="duckies-earn-more" id="earn-more">
-            <div className="container duckies-earn-more__content">
+        <div className="mx-auto pt-[100px] px-[14px] max-w-md-layout 2xl:max-w-lg-layout" id="earn-more">
+            <div className="flex justify-center items-center gap-[36px] flex-col sm:flex-row">
                 {renderHypnoduck}
-                <div className="duckies-earn-more__content-right">
+                <div className="basis-full">
                     {renderReferrerHeader}
-                    <div className={classnames('duckies-earn-more__body', { 'center-align': !isReady, 'left-align': isReady })}>
-                        <div className="duckies-earn-more__body-link">
+                    <div className={classnames('flex w-full justify-center flex-col', { 'items-center': !isReady, 'items-left': isReady })}>
+                        <div className={classnames('flex relative items-center max-w-screen sm:w-auto -mx-[14px] px-[14px] sm:max-w-[700px] mb-[24px] sm:mb-[20px]', { 'w-screen': isReady })}>
                             <div className={inputLinkRef} onClick={handleSendGAEvent} onFocus={handleSendGAEvent}>
-                                <div className="duckies-earn-more__body-link-input-value">
+                                <div className="text-text-color-100 text-[16px] leading-[24px] font-metro-regular font-bold whitespace-nowrap">
                                     {`${shareableLinkPrefix}${shareableLink}`}
                                 </div>
                                 <div className={inputLink} />
                             </div>
                             {isReady ? (
                                 <div onClick={() => handleCopy(`${shareableLinkPrefix}${shareableLink}`)} className="button button--outline button--secondary button--shadow-secondary">
-                                    <span className="button__inner">
+                                    <span className="button__inner !px-[24px] !py-[14.25px]">
                                         <svg width="20" height="24" viewBox="0 0 20 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M8.60019 0.800049C7.0538 0.800049 5.8002 2.05365 5.8002 3.60005V14.8C5.8002 16.3464 7.0538 17.6 8.60019 17.6H17.0002C18.5466 17.6 19.8002 16.3464 19.8002 14.8V6.97995C19.8002 6.23734 19.5052 5.52515 18.9801 5.00005L15.6002 1.62015C15.0751 1.09505 14.3629 0.800049 13.6203 0.800049H8.60019Z" fill="black"/>
                                             <path d="M0.200195 9.20005C0.200195 7.65365 1.4538 6.40005 3.0002 6.40005V20.4001H14.2002C14.2002 21.9464 12.9466 23.2001 11.4002 23.2001H3.0002C1.4538 23.2001 0.200195 21.9464 0.200195 20.4001V9.20005Z" fill="black"/>
@@ -358,12 +358,12 @@ export const DuckiesEarnMore = () => {
                                     </span>
                                 </div>
                             ) : (
-                                <div className="duckies-earn-more__body-link-input-image">
+                                <div className="absolute right-[-45px]">
                                     <img src="/images/components/duckies/login_eyes.png" alt="login" />
                                 </div>
                             )}
                         </div>
-                        <div className={classnames('duckies-earn-more__body-social', { 'center-align': !isReady, 'left-align': isReady })}>
+                        <div className={classnames('flex items-center w-full py-[8px] max-2-full overflow-x-auto', { 'justify-center': !isReady, 'jsutify-start ml-[-4px]': isReady })}>
                             {isReady ? renderSocials : renderMetamaskButton()}
                         </div>
                     </div>

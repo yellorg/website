@@ -16,14 +16,14 @@ export const Navbar = () => {
                 <Link key={i} href={n.to}>
                     <a
                         aria-current="page"
-                        className="navbar__item navbar__link navbar__link--active"
+                        className="mx-[18px] hidden md:inline-block relative text-text-color-90 text-[18px] leading-[26px] font-metro-semibold navbar__link"
                     >
                         {n.label}
                     </a>
                 </Link>
             ) : (
                 <Link key={i} href={`https://yellow.org${n.to}`}>
-                    <a className="navbar__item navbar__link">{n.label}</a>
+                    <a className="mx-[18px] hidden sm:inline-block relative text-text-color-100 text-[18px] leading-[26px] font-metro-semibold navbar__link">{n.label}</a>
                 </Link>
             );
         });
@@ -55,17 +55,17 @@ export const Navbar = () => {
         });
     }, []);
 
-    const cnNav = classnames('navbar navbar--fixed-top', {
+    const cnNav = classnames('flex justify-center items-center h-[62px] sticky top-0 z-[22] bg-primary-cta-color-60', {
         'navbar-sidebar--show': showSidebar,
     });
 
     return (
         <nav className={cnNav}>
-            <div className="navbar__inner container">
-                <div className="navbar__items">
+            <div className="flex justify-between w-full max-w-md-layout 2xl:max-w-lg-layout-2p px-[14px]">
+                <div className="flex min-w-0 items-center">
                     <button
                         aria-label="Navigation bar toggle"
-                        className="navbar__toggle clean-btn"
+                        className="inherit md:hidden mr-[10px]"
                         type="button"
                         tabIndex={0}
                         onClick={() => setShowSidebar(true)}
@@ -88,9 +88,9 @@ export const Navbar = () => {
                     </Link>
                     {renderNavItems}
                 </div>
-                <div className="navbar__items navbar__items--right">
+                <div className="flex items-center min-w-0 justify-end">
                     <a
-                        className="button button--secondary margin-right--md"
+                        className="button button--secondary"
                         href="https://docs.yellow.org/whitepaper"
                     >
                         <span className="button__inner">Whitepaper</span>

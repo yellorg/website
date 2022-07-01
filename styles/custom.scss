@@ -232,15 +232,6 @@ a:not(
 }
 
 .duckies {
-  background-color: var(--ifm-color-primary);
-
-  &.container {
-    padding: 0;
-    margin: 0;
-    width: 100%;
-    max-width: 100%;
-  }
-
   &-hero {
     background-image: url('/images/components/duckies/heroBg.png');
     background-repeat: no-repeat;
@@ -249,12 +240,60 @@ a:not(
   }
 
   &-affiliates {
-    background-color: var(--secondary-control-color-90);
     background-image: url('/images/components/duckies/affiliateBg.png');
     background-repeat: repeat-x;
     background-attachment: local;
     background-position: bottom;
   }
+}
+
+.cr-arrow {
+  display: inline-block;
+  padding: 10px 15px 10px 10px;
+  position: relative;
+  text-decoration: none;
+}
+
+.cr-arrow:before,
+.cr-arrow:after {
+  border-right: 2px solid;
+  content: '';
+  display: block;
+  height: 8px;
+  margin-top: -6px;
+  position: absolute;
+  -moz-transform: rotate(135deg);
+  -o-transform: rotate(135deg);
+  -webkit-transform: rotate(135deg);
+  transform: rotate(135deg);
+  right: 10px;
+  top: 50%;
+  width: 0;
+}
+
+.cr-arrow:after {
+  margin-top: -1px;
+  -moz-transform: rotate(45deg);
+  -o-transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+.login-gradient {
+  background: linear-gradient(270deg, #FCD000 34.49%, rgba(252, 208, 0, 0) 100%);
+}
+
+.rotate-y-180 {
+  transform: rotateY(180deg);
 }
 
 @media screen and (min-width: 1440px) {
