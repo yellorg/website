@@ -240,7 +240,7 @@ export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({
                     <Image width="156px" height="156px" src="/images/components/duckies/duckNoRewards.png" alt="duck-no-rewards" />
                 </div>
                 <div className="text-text-color-100 text-base text-center font-metro-regular font-semibold mb-1">
-                    Duckies are busy with other rewards.
+                    Not the right time
                 </div>
                 <div className="text-text-color-100 text-sm text-center font-metro-regular font-medium mb-6">
                     You have already claimed your current rewards. Invite more people and fulfill more bounties to get more DUCKZ
@@ -291,7 +291,7 @@ export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({
                         <div className="mr-6 w-1/4 min-w-[300px]">
                             <div className="h-full border-2 rounded p-6 border-text-color-90 bg-body-background-color">
                                 <div className="font-gilmer-bold text-4xl text-text-color-100">
-                                    Affiliates
+                                    Your Squad
                                 </div>
                                 <UnloginEyes>
                                     {renderAffiliateLevels}
