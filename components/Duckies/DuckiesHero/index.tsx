@@ -409,10 +409,10 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
 
     return (
         <React.Fragment>
-            <div className="flex justify-between pb-[168px] flex-col lg:flex-row pt-[42px] lg:pt-[93px] duckies-hero">
-                <div className="flex flex-col lg:flex-row mx-auto px-[14px] max-w-md-layout 2xl:max-w-lg-layout-2p">
-                    <div className="flex flex-col justify-start mb-[60px] lg:mb-0">
-                        <div className="flex justify-center lg:justify-start -lg:mb-10">
+            <div className="flex justify-between pb-[168px] flex-col sm:flex-row pt-[42px] sm:pt-8 duckies-hero">
+                <div className="flex flex-col sm:flex-row mx-auto px-[14px] max-w-md-layout 2xl:max-w-lg-layout-2p">
+                    <div className="flex flex-col justify-start mb-[60px] sm:mb-0">
+                        <div className="flex justify-center sm:justify-start sm:mb-4">
                             <LazyLoadImage
                                 srcSet={`${'/images/components/duckies/celebration.png'}`}
                                 effect="blur"
@@ -421,7 +421,7 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
                                 height={132}
                             />
                         </div>
-                        <div className="flex flex-col justify-start break-words lg:justify-center lg:items-center lg:pb-[36px]">
+                        <div className="flex flex-col justify-start break-words sm:justify-center sm:items-center sm:pb-2">
                             <div className="text-text-color-100 font-gilmer-bold text-[60px] leading-[64px]">
                             <div className="py-1">
                                 <svg width="263" height="54" viewBox="0 0 263 54" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -447,7 +447,7 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
                                 <span className="button__inner !text-[24px] !leading-[32px] !p-[16px] !justify-center">Claim your reward</span>
                             </div>
                             <Link href="#earn-more">
-                                <a className="lg:mt-0 w-full lg:w-1/2 button button--secondary button--shadow-secondary" onClick={handleSendGAEvent}>
+                                <a className="sm:mt-0 w-full sm:w-1/4 button button--secondary button--shadow-secondary" onClick={handleSendGAEvent}>
                                     <span className="button__inner !text-[24px] !leading-[32px] !p-[16px] !justify-center">
                                         Earn more
                                     </span>
@@ -455,7 +455,7 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
                             </Link>
                         </div>
                     </div>
-                    <div className="flex justify-center lg:justify-end w-full">
+                    <div className="flex pt-20 justify-center sm:justify-end w-full">
                         <div className="p-[16px] rounded-[50%] w-[300px] h-[300px] bg-primary-cta-color-10 z-[10] border-2 border-primary-cta-layer-color-60 shadow-[-5px_5px_#CC8F18] button--shadow-secondary">
                             <div className="flex flex-col items-center justify-center rounded-[50%] h-full bg-primary-cta-color-10 border border-primary-cta-color-90 z-[10]">
                                 <div>

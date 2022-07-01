@@ -55,7 +55,7 @@ export const Navbar = () => {
         });
     }, []);
 
-    const cnNav = classnames('flex justify-center items-center h-[62px] sticky top-0 z-[22] bg-primary-cta-color-60', {
+    const cnNav = classnames('flex shadow-sm justify-center items-center h-[62px] sticky top-0 z-[22] bg-primary-cta-color-60', {
         'navbar-sidebar--show': showSidebar,
     });
 
