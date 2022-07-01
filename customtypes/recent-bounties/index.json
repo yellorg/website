@@ -1,0 +1,35 @@
+{
+  "id": "recent-bounties",
+  "label": "Recent Bounties",
+  "repeatable": false,
+  "status": true,
+  "json": {
+    "Main": {
+      "uid": {
+        "type": "UID",
+        "config": {
+          "label": "Uid",
+          "placeholder": ""
+        }
+      },
+      "ct-static": {
+        "type": "Text",
+        "config": {
+          "label": "Ct Static",
+          "placeholder": ""
+        }
+      },
+      "slices": {
+        "type": "Slices",
+        "fieldset": "Slice Zone",
+        "config": {
+          "choices": {
+            "recent_bounties": {
+              "type": "SharedSlice"
+            }
+          }
+        }
+      }
+    }
+  }
+}

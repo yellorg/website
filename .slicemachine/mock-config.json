@@ -1,12 +1,26 @@
 {
   "_cts": {
-    "bounties": {}
+    "bounties": {},
+    "faq": {}
   },
   "slices": {
     "Bounty": {
       "default": {
         "primary": {},
         "items": {}
+      }
+    },
+    "FaqQuestion": {
+      "default": {
+        "primary": {},
+        "items": {
+          "answer": {
+            "config": {
+              "patternType": "PARAGRAPH",
+              "blocks": 1
+            }
+          }
+        }
       }
     }
   }
