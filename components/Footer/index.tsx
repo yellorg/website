@@ -110,8 +110,8 @@ export const Footer = () => {
     }, []);
 
     return (
-        <footer className="footer footer--dark">
-            <div className="container">
+        <footer className="flex justify-center pt-[36px] pb-[18px] bg-[#101010]">
+            <div className="w-full max-w-md-layout 2xl:max-w-lg-layout-2p px-[14px]">
                 <div className="row footer__links">
                     <div className="col col--4 footer__col footer__overview">
                         {renderLogo}
