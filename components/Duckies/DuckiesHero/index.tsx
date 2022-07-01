@@ -269,7 +269,7 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
         return (
             <div className="cr-bounty-modal__body">
                 <div className="cr-bounty-modal__body-image">
-                    <Image width="156px" height="156px" src="/images/components/duckies/duckMetamask.svg" alt="duck-no-rewards" />
+                    <Image width="156px" height="156px" src="/images/components/duckies/duckMetamask.png" alt="duck-no-rewards" />
                 </div>
                 <div className="cr-bounty-modal__body-description">
                     Connect Metamask wallet in order to be able to get Duckies tokens
@@ -340,7 +340,7 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
         return (
             <div className="cr-bounty-modal__body">
                 <div className="cr-bounty-modal__body-image">
-                    <Image width="156px" height="156px" src="/images/components/duckies/duckDetective.svg" alt="duck-no-rewards" />
+                    <Image width="156px" height="156px" src="/images/components/duckies/duckDetective.png" alt="duck-no-rewards" />
                 </div>
                 {(isLoading || isSingleBountyProcessing) ? renderLoadingModalBody : renderClaimModalBody}
             </div>
@@ -351,7 +351,7 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
         return (
             <div className="cr-bounty-modal__body">
                 <div className="cr-bounty-modal__body-image">
-                    <Image width="156px" height="156px" src="/images/components/duckies/duckNoRewards.svg" alt="duck-no-rewards" />
+                    <Image width="156px" height="156px" src="/images/components/duckies/duckNoRewards.png" alt="duck-no-rewards" />
                 </div>
                 <div className="cr-bounty-modal__body-subtitle">
                     Duckies are busy with other rewards.
@@ -414,9 +414,11 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
                     <div className="duckies-hero__info">
                         <div className="duckies-hero__info-selebration">
                             <LazyLoadImage className="section__main-img"
-                                srcSet={`${'/images/components/duckies/selebration.svg'}`}
+                                srcSet={`${'/images/components/duckies/celebration.png'}`}
                                 effect="blur"
                                 threshold={200}
+                                width={132}
+                                height={132}
                             />
                         </div>
                         <div className="duckies-hero__info-received">
@@ -531,7 +533,7 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
                         <div className="duckies-hero__icons-duck">
                             <div className="duckies-hero__icons-duck-body">
                                 <LazyLoadImage className="duckies-hero__icons-duck-body-img"
-                                    srcSet={`${'/images/components/duckies/duck.svg'}`}
+                                    srcSet={`${'/images/components/duckies/duck.png'}`}
                                     effect="blur"
                                     threshold={200}
                                 />
