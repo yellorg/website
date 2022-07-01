@@ -354,7 +354,7 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
                     <Image width="156px" height="156px" src="/images/components/duckies/duckNoRewards.png" alt="duck-no-rewards" />
                 </div>
                 <div className="text-text-color-100 text-base text-center font-metro-regular font-semibold mb-1">
-                    Duckies are busy with other rewards.
+                    Not the right time
                 </div>
                 <div className="text-text-color-100 text-sm text-center font-metro-regular font-medium mb-6">
                     You have already claimed your current rewards. Invite more people and fulfill more bounties to get more DUCKZ
@@ -409,10 +409,10 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
 
     return (
         <React.Fragment>
-            <div className="flex justify-between pb-[168px] flex-col lg:flex-row pt-[42px] lg:pt-[93px] duckies-hero">
-                <div className="flex flex-col lg:flex-row mx-auto px-[14px] max-w-md-layout 2xl:max-w-lg-layout-2p">
-                    <div className="flex flex-col justify-start mb-[60px] lg:mb-0">
-                        <div className="flex justify-center lg:justify-start -lg:mb-10">
+            <div className="flex justify-between pb-[168px] flex-col sm:flex-row pt-[42px] sm:pt-8 duckies-hero">
+                <div className="flex flex-col sm:flex-row mx-auto px-[14px] max-w-md-layout 2xl:max-w-lg-layout-2p">
+                    <div className="flex flex-col justify-start mb-[60px] sm:mb-0">
+                        <div className="flex justify-center sm:justify-start sm:mb-4">
                             <LazyLoadImage
                                 srcSet={`${'/images/components/duckies/celebration.png'}`}
                                 effect="blur"
@@ -421,9 +421,25 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
                                 height={132}
                             />
                         </div>
-                        <div className="flex flex-col justify-start break-words lg:justify-center lg:items-center lg:pb-[36px]">
+                        <div className="flex flex-col justify-start break-words sm:justify-center sm:items-center sm:pb-2">
                             <div className="text-text-color-100 font-gilmer-bold text-[60px] leading-[64px]">
-                                Go and get your DUCKZ tokens!
+                            <div className="py-1">
+                                <svg width="263" height="54" viewBox="0 0 263 54" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M18.24 6H0V48H18.24C30.6 48 38.34 39.12 38.34 27C38.34 14.64 30.48 6 18.24 6ZM18.06 40.56H8.16V13.38H18.06C25.26 13.38 30.06 18.84 30.06 26.82C30.06 34.92 25.26 40.56 18.06 40.56Z" fill="#090909"/>
+                                    <path d="M72.1341 6V30.66C72.1341 36.84 68.8341 41.28 62.2341 41.28C55.6941 41.28 52.3941 36.84 52.3941 30.66V6H44.0541V30.78C44.0541 41.46 50.4741 48.84 62.2341 48.84C73.9341 48.84 80.4141 41.46 80.4141 30.78V6H72.1341Z" fill="#090909"/>
+                                    <path d="M108.172 48.84C119.272 48.84 126.352 42.06 128.272 35.34L120.292 33.3C118.912 37.44 114.412 41.1 108.052 41.1C99.772 41.1 94.492 34.44 94.492 26.88C94.492 19.32 99.772 12.9 108.052 12.9C114.412 12.9 118.912 16.68 120.292 20.76L128.332 18.78C126.412 12.12 119.332 5.16 107.992 5.16C95.512 5.16 86.092 14.58 86.092 26.94C86.092 39.36 95.512 48.84 108.172 48.84Z" fill="#090909"/>
+                                    <path d="M161.723 48H171.743L153.863 24.36L170.423 6H159.982L142.283 26.34V6H134.062V48H142.283V37.26L148.462 30.42L161.723 48Z" fill="#090909"/>
+                                    <path d="M176.25 48H184.59V6H176.25V48Z" fill="#090909"/>
+                                    <path d="M223.323 13.44V6H192.363V48H223.263V40.56H200.403V30.24H220.263V23.04H200.403V13.44H223.323Z" fill="#090909"/>
+                                    <path d="M245.793 48.84C255.873 48.84 262.593 43.02 262.593 35.82C262.593 28.98 257.733 26.28 251.313 24.3L240.873 20.94C238.113 20.1 236.853 18.84 236.853 16.98C236.853 14.52 239.493 12.42 243.633 12.42C248.373 12.42 252.273 14.76 254.013 18.18L261.633 15.96C259.353 10.14 252.633 5.16 243.573 5.16C234.813 5.16 228.453 10.68 228.513 17.22C228.453 22.62 232.473 26.16 237.993 27.9L248.733 31.26C252.753 32.58 254.253 34.08 254.253 36.3C254.253 39.06 251.193 41.58 246.273 41.58C240.213 41.58 235.953 38.1 234.273 33.72L226.413 36.12C228.753 42.66 235.533 48.84 245.793 48.84Z" fill="#090909"/>
+                                    <path d="M7.548 0H13.4948V12H7.548V0Z" fill="black"/>
+                                    <path d="M7.548 42H13.4948V54H7.548V42Z" fill="black"/>
+                                    <path d="M16.4682 0H22.415V12H16.4682V0Z" fill="black"/>
+                                    <path d="M16.4682 42H22.415V54H16.4682V42Z" fill="black"/>
+                                </svg>
+                            </div>
+                                The Fun and Friendly 
+                                Web3 reward Token
                             </div>
                         </div>
                         <div className="flex mt-[32px] flex-col lg:flex-row gap-[12px]">
@@ -431,7 +447,7 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
                                 <span className="button__inner !text-[24px] !leading-[32px] !p-[16px] !justify-center">Claim your reward</span>
                             </div>
                             <Link href="#earn-more">
-                                <a className="lg:mt-0 w-full lg:w-1/2 button button--secondary button--shadow-secondary" onClick={handleSendGAEvent}>
+                                <a className="sm:mt-0 w-full sm:w-1/4 button button--secondary button--shadow-secondary" onClick={handleSendGAEvent}>
                                     <span className="button__inner !text-[24px] !leading-[32px] !p-[16px] !justify-center">
                                         Earn more
                                     </span>
@@ -439,7 +455,7 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
                             </Link>
                         </div>
                     </div>
-                    <div className="flex justify-center lg:justify-end w-full">
+                    <div className="flex pt-20 justify-center sm:justify-end w-full">
                         <div className="p-[16px] rounded-[50%] w-[300px] h-[300px] bg-primary-cta-color-10 z-[10] border-2 border-primary-cta-layer-color-60 shadow-[-5px_5px_#CC8F18] button--shadow-secondary">
                             <div className="flex flex-col items-center justify-center rounded-[50%] h-full bg-primary-cta-color-10 border border-primary-cta-color-90 z-[10]">
                                 <div>

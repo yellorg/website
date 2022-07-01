@@ -13,7 +13,7 @@ export const DuckiesRedeem = () => {
                             </div>
                         </div>
                         <div className="text-text-color-100 font-gilmer-bold text-[60px] leading-[64px] mb-[12px]">
-                            Redeem
+                            Redeem Prizes
                         </div>
                         <div className="text-text-color-100 font-metro-semibold text-[20px] leading-[28px] mb-[36px]">
                             Exchange your duckies for valuable gifts and rare NFTs
