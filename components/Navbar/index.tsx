@@ -16,7 +16,7 @@ export const Navbar = () => {
                 <Link key={i} href={n.to}>
                     <a
                         aria-current="page"
-                        className="mx-[18px] hidden md:inline-block relative text-text-color-90 text-[18px] leading-[26px] font-metro-semibold navbar__link"
+                        className="mx-[18px] hidden lg:inline-block relative text-text-color-90 text-[18px] leading-[26px] font-metro-semibold navbar__link"
                     >
                         {n.label}
                     </a>
@@ -65,7 +65,7 @@ export const Navbar = () => {
                 <div className="flex min-w-0 items-center">
                     <button
                         aria-label="Navigation bar toggle"
-                        className="inherit md:hidden mr-[10px]"
+                        className="inherit lg:hidden mr-[10px]"
                         type="button"
                         tabIndex={0}
                         onClick={() => setShowSidebar(true)}

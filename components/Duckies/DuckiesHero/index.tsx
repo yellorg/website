@@ -409,10 +409,10 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
 
     return (
         <React.Fragment>
-            <div className="flex justify-between pb-[168px] flex-col sm:flex-row pt-[42px] sm:pt-[93px] duckies-hero">
-                <div className="flex flex-col sm:flex-row mx-auto px-[14px] max-w-md-layout 2xl:max-w-lg-layout-2p">
-                    <div className="flex flex-col justify-start mb-[60px] sm:mb-0">
-                        <div className="flex justify-center sm:justify-start -sm:mb-10">
+            <div className="flex justify-between pb-[168px] flex-col lg:flex-row pt-[42px] lg:pt-[93px] duckies-hero">
+                <div className="flex flex-col lg:flex-row mx-auto px-[14px] max-w-md-layout 2xl:max-w-lg-layout-2p">
+                    <div className="flex flex-col justify-start mb-[60px] lg:mb-0">
+                        <div className="flex justify-center lg:justify-start -lg:mb-10">
                             <LazyLoadImage
                                 srcSet={`${'/images/components/duckies/celebration.png'}`}
                                 effect="blur"
@@ -421,17 +421,17 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
                                 height={132}
                             />
                         </div>
-                        <div className="flex flex-col justify-start break-words sm:justify-center sm:items-center sm:pb-[36px]">
+                        <div className="flex flex-col justify-start break-words lg:justify-center lg:items-center lg:pb-[36px]">
                             <div className="text-text-color-100 font-gilmer-bold text-[60px] leading-[64px]">
                                 Go and get your DUCKZ tokens!
                             </div>
                         </div>
-                        <div className="flex mt-[32px] flex-col sm:flex-row gap-[12px]">
-                            <div onClick={handleClaimButtonClick} className="duckies-hero__info-buttons-claim button button--outline button--secondary button--shadow-secondary">
+                        <div className="flex mt-[32px] flex-col lg:flex-row gap-[12px]">
+                            <div onClick={handleClaimButtonClick} className="w-full lg:w-1/2 button button--outline button--secondary button--shadow-secondary">
                                 <span className="button__inner !text-[24px] !leading-[32px] !p-[16px] !justify-center">Claim your reward</span>
                             </div>
                             <Link href="#earn-more">
-                                <a className="sm:mt-0 w-full sm:w-1/2 button button--secondary button--shadow-secondary" onClick={handleSendGAEvent}>
+                                <a className="lg:mt-0 w-full lg:w-1/2 button button--secondary button--shadow-secondary" onClick={handleSendGAEvent}>
                                     <span className="button__inner !text-[24px] !leading-[32px] !p-[16px] !justify-center">
                                         Earn more
                                     </span>
@@ -439,7 +439,7 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
                             </Link>
                         </div>
                     </div>
-                    <div className="flex justify-center sm:justify-end w-full">
+                    <div className="flex justify-center lg:justify-end w-full">
                         <div className="p-[16px] rounded-[50%] w-[300px] h-[300px] bg-primary-cta-color-10 z-[10] border-2 border-primary-cta-layer-color-60 shadow-[-5px_5px_#CC8F18] button--shadow-secondary">
                             <div className="flex flex-col items-center justify-center rounded-[50%] h-full bg-primary-cta-color-10 border border-primary-cta-color-90 z-[10]">
                                 <div>
@@ -447,12 +447,12 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
                                         <div className={classNames('uppercase font-gilmer-bold text-primary-cta-layer-color-60', {'text-[24px] leading-[32px]': isReady, 'text-[30px] leading-[40px]': !isReady})}>
                                             Balance
                                         </div>
-                                        <div onMouseEnter={() => setIsOpenBalancesInfo(true)} onMouseLeave={() => setIsOpenBalancesInfo(false)} className="flex ml-[13px] sm:relative">
+                                        <div onMouseEnter={() => setIsOpenBalancesInfo(true)} onMouseLeave={() => setIsOpenBalancesInfo(false)} className="flex ml-[13px] lg:relative">
                                             <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" className="z-[101] cursor-pointer">
                                                 <path d="M11 14H10V10H9M10 6H10.01M19 10C19 14.9706 14.9706 19 10 19C5.02944 19 1 14.9706 1 10C1 5.02944 5.02944 1 10 1C14.9706 1 19 5.02944 19 10Z" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                                             </svg>
                                             {isOpenBalancesInfo &&
-                                                <div className="z-[100] absolute left-[18px] sm:left-auto right-[18px] sm:right-0 mt-[30px] sm:mt-0 sm:pt-[30px] min-w-[445px] w-fit">
+                                                <div className="z-[100] absolute left-[18px] lg:left-auto right-[18px] lg:right-0 mt-[30px] lg:mt-0 lg:pt-[30px] min-w-[445px] w-fit">
                                                     <div className="bg-text-color-0 border-2 border-text-color-100 rounded flex h-fit flex-col p-[16px]">
                                                         <h5 className="pb-[8px] mb-0 text-text-color-100 text-[24px] leading-[32px] font-gilmer-medium">Connected wallet info</h5>
                                                         {account && (
@@ -518,7 +518,7 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
                                             <span className="text-[14px] text-text-color-60 font-metro-semibold">
                                                 {ENSName || `${shortenHex(account, 4)}`}
                                             </span>
-                                            <div onClick={handleDisconnect} className="text-center w-1/2 sm:w-full mr-[24px] sm:mr-0 mt-[16px] !mr-0 button button--outline button--secondary button--shadow-secondary">
+                                            <div onClick={handleDisconnect} className="text-center w-1/2 lg:w-full mr-[24px] lg:mr-0 mt-[16px] !mr-0 button button--outline button--secondary button--shadow-secondary">
                                                 <span className="button__inner !py-[6px] !px-[18px] !justify-center">Log out</span>
                                             </div>
                                         </div>
@@ -530,8 +530,8 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
                                 </div>
                             </div>
                         </div>
-                        <div className="p-[6px] sm:p-[10px] rounded-[50%] w-[97px] sm:w-[174px] h-[97px] sm:h-[174px] bg-primary-cta-color-20 mt-[-18px] sm:mt-[-24px] ml-[228px] sm:ml-[-78px] z-[9] absolute sm:relative shadow-[-5px_5px] shadow-primary-cta-color-90">
-                            <div className="flex items-centerjustify-center rounded-[50%] h-full border border-primary-cta-color-90">
+                        <div className="p-[6px] md:p-[10px] rounded-[50%] w-[97px] md:w-[174px] h-[97px] md:h-[174px] bg-primary-cta-color-20 mt-[-18px] md:mt-[-24px] ml-[228px] md:ml-[-78px] z-[9] absolute md:relative shadow-[-5px_5px] shadow-primary-cta-color-90">
+                            <div className="flex items-center justify-center rounded-[50%] h-full border border-primary-cta-color-90">
                                 <LazyLoadImage
                                     srcSet={`${'/images/components/duckies/duck.png'}`}
                                     effect="blur"
