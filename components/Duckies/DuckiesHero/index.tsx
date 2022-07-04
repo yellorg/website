@@ -378,9 +378,11 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
                     In order for the on-chain transaction to be executed please wait a couple of minutes. Time may vary depending on the queue & gas.
                 </div>
                 <div className="flex items-center justify-center">
-                    <div className="button button--outline button--secondary button--shadow-secondary" onClick={() => setIsOpenModal(false)}>
-                        <span className="button__inner">Confirm</span>
-                    </div>
+                    <span className="animate-spin">
+                        <svg width="38" height="39" viewBox="0 0 38 39" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M38 19.5C38 15.1042 36.4758 10.8445 33.6872 7.44653C30.8986 4.04857 27.018 1.72265 22.7067 0.86508C18.3954 0.00751132 13.9202 0.671353 10.0435 2.7435C6.16676 4.81564 3.12847 8.16787 1.44629 12.229C-0.235892 16.2902 -0.457885 20.8089 0.818133 25.0154C2.09415 29.2219 4.78923 32.8558 8.44416 35.2979C12.0991 37.7401 16.4877 38.8394 20.8623 38.4085C25.2369 37.9777 29.3268 36.0433 32.435 32.935L31.0915 31.5915C28.2941 34.389 24.6132 36.1299 20.6761 36.5177C16.739 36.9054 12.7892 35.9161 9.49975 33.7181C6.21031 31.5202 3.78474 28.2497 2.63632 24.4639C1.4879 20.678 1.6877 16.6111 3.20166 12.9561C4.71562 9.30108 7.45008 6.28407 10.9391 4.41915C14.4282 2.55422 18.4559 1.95676 22.336 2.72857C26.2162 3.50038 29.7087 5.59371 32.2185 8.65187C34.7282 11.71 36.1 15.5438 36.1 19.5H38Z" fill="#F8C100"/>
+                        </svg>
+                    </span>
                 </div>
             </React.Fragment>
         );
