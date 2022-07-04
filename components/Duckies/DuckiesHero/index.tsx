@@ -335,7 +335,7 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
 
         const added = await switchToMainChain()
         setAddedMainChain(added)
-    }, [isReady, getBountiesClaimableAmount, isReferralClaimed]);
+    }, [isReady, getBountiesClaimableAmount, isReferralClaimed, switchToMainChain, setAddedMainChain]);
 
     const renderMetamaskModalBody = React.useMemo(() => {
         return (
@@ -363,7 +363,7 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
                 </div>
             </div>
         );
-    }, [handleMetamask, isMetaMaskInstalled, isAddedMainChain]);
+    }, [handleMetamask, isMetaMaskInstalled, isAddedMainChain, addOrSwitchToMainChain, mainChain]);
 
     const renderLoadingModalBody = React.useMemo(() => {
         return (
