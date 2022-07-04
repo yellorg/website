@@ -33,19 +33,6 @@ const HtmlSerializer = (
         );
     }
 
-    if (type === 'group-list-item') {
-        return (
-            <ul
-                style={{
-                    listStylePosition: 'outside',
-                    listStyle: 'disc',
-                }}
-            >
-                {children}
-            </ul>
-        );
-    }
-
     if (type === 'list-item') {
         return (
             <li
@@ -54,10 +41,6 @@ const HtmlSerializer = (
                 {children}
             </li>
         );
-    }
-
-    if (type == 'group-o-list-item') {
-        return <ol style={{listStyle: 'decimal'}}>{children}</ol>;
     }
 
     if (type === 'o-list-item') {
