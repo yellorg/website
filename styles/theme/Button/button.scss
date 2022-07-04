@@ -72,6 +72,45 @@
   }
 }
 
+.socials {
+  .button__inner {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &:before {
+    background-color: var(--neutral-control-color-40);
+  }
+
+  &:after {
+    background-color: var(--neutral-control-color-40);
+  }
+}
+
+.facebook {
+  .button__inner {
+    background-color: #3B5998;
+    color: var(--text-color-00);
+  }
+}
+
+.twitter {
+  .button__inner {
+    background-color: #1DA1F2;
+    color: var(--text-color-00);
+  }
+}
+
+.google {
+  .button__inner {
+    background-color: var(--text-color-00);
+    color: var(--text-color-100);
+    border: 1px solid var(--neutral-control-color-30);
+  }
+}
+
 .button--outline {
   .button__inner {
     background-color: var(--ifm-color-primary);

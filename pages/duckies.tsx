@@ -9,6 +9,7 @@ import { createClient } from '../prismicio';
 import '../.d';
 import { ReduxProvider } from '../providers/ReduxProvider';
 import { Alerts } from '../components/Alerts';
+import { supabase } from '../lib/SupabaseConnector';
 
 const getLibrary = (provider: any): ethers.providers.Web3Provider => {
     const library = new ethers.providers.Web3Provider(provider, 'any');
@@ -46,7 +47,7 @@ const Duckies: FC = ({ bounties, faqList }: any): JSX.Element => {
                                 name="description"
                                 content="Yellow DeFi is a new generation hybrid technology cryptocurrency exchange combining the best of decentralized and centralized performance."
                             />
-                            <meta 
+                            <meta
                                 property="og:type"
                                 content="website"
                             />
@@ -60,7 +61,7 @@ const Duckies: FC = ({ bounties, faqList }: any): JSX.Element => {
                             />
                             <meta
                                 property="og:image"
-                                content="/images/og-image.png"    
+                                content="/images/og-image.png"
                             />
                             <meta
                                 name="twitter:card"
@@ -76,7 +77,7 @@ const Duckies: FC = ({ bounties, faqList }: any): JSX.Element => {
                             />
                             <meta
                                 name="twitter:image"
-                                content="https://www.yellow.org/images/og-image.png"    
+                                content="https://www.yellow.org/images/og-image.png"
                             />
                         </Head>
                         <DuckiesLayout bounties={bounties} faqList={faqList} />
