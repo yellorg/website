@@ -4,6 +4,7 @@ import { convertNumberToLiteral } from '../../../helpers/convertNumberToLiteral'
 import { DuckiesConnectorModalWindow } from '../DuckiesConnectModalWindow';
 import Image from 'next/image';
 import * as ga from '../../../lib/ga';
+import ReCAPTCHA from 'react-google-recaptcha';
 
 export interface BountyItem {
     fid: string;
@@ -35,6 +36,10 @@ export const BountyRow: React.FC<BountyProps> = ({
     const [isOpenShow, setIsOpenShow] = React.useState<boolean>(false);
     const [isOpenClaim, setIsOpenClaim] = React.useState<boolean>(false);
     const [loading, setLoading] = React.useState<boolean>(false);
+    const [isCaptchaResolved, setIsCaptchaResolved] = React.useState<boolean>(false);
+
+    let captcha: any;
+    captcha = React.useRef();
 
     const rowClassName = React.useMemo(() => {
         return classnames('flex w-full items-center justify-between border-b border-color-divider-color-40 px-1 py-2', {
@@ -48,16 +53,28 @@ export const BountyRow: React.FC<BountyProps> = ({
         })
     }, [bounty.status, loading, isLoading, isSingleBountyProcessing]);
 
+    const claimButtonClassName = React.useMemo(() => {
+        return classnames('button__inner', !isCaptchaResolved && 'cursor-not-allowed')
+    },[isCaptchaResolved]);
+
+    const claimButtonContainerClassName = React.useMemo(() => {
+        return classnames(!isCaptchaResolved ? 'px-1.5 py-2 bg-neutral-control-color-40 rounded-sm text-neutral-control-layer-color-40 cursor-not-allowed' : 'button button--outline button--secondary button--shadow-secondary')
+    },[isCaptchaResolved]);
+
     const duckiesColor = React.useMemo(() => bounty.status === 'claim' ? '#ECAA00' : '#525252', [bounty.status]);
 
     const handleClaimReward = React.useCallback(async () => {
-        setLoading(true);
-        setIsSingleBountyProcessing(true);
-        setIsOpenClaim(false);
-        await handleClaim(bounty.fid);
-        setLoading(false);
-        setIsSingleBountyProcessing(false);
-    }, [handleClaim, bounty.fid]);
+        captcha.reset();
+        if (isCaptchaResolved) {
+            setLoading(true);
+            setIsSingleBountyProcessing(true);
+            setIsOpenClaim(false);
+            setIsCaptchaResolved(false);
+            await handleClaim(bounty.fid);
+            setLoading(false);
+            setIsSingleBountyProcessing(false)
+        }
+    }, [handleClaim, bounty.fid, isCaptchaResolved]);
 
     const handleSelectBountyId = React.useCallback(() => {
         setIsOpenShow(true);
@@ -191,14 +208,22 @@ export const BountyRow: React.FC<BountyProps> = ({
                 <div className="text-text-color-100 text-sm text-center font-metro-regular font-medium mb-6">
                     {bounty.description}
                 </div>
+                <div>
+                    <ReCAPTCHA
+                        ref={e => {captcha = e}}
+                        sitekey="6Lesd7UgAAAAAIWzFO94kO20H2xicH9NBaeksC1G"
+                        onChange={() => setIsCaptchaResolved(true)}
+                        className="mb-5"
+                    />
+                </div>
                 <div className="flex items-center justify-center">
-                    <div className="button button--outline button--secondary button--shadow-secondary" onClick={handleClaimReward}>
-                        <span className="button__inner">Claim reward</span>
+                    <div className={claimButtonContainerClassName} onClick={handleClaimReward}>
+                        <button className={claimButtonClassName} disabled={!isCaptchaResolved}>Claim reward</button>
                     </div>
                 </div>
             </div>
         );
-    }, [bounty, handleClaimReward]);
+    }, [bounty, handleClaimReward, captcha, isCaptchaResolved]);
 
     const renderLoadingModalBody = React.useMemo(() => {
         return (
