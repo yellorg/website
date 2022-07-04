@@ -7,6 +7,7 @@ import { useCallback, useMemo } from 'react'
 import { appConfig } from '../config/app'
 import chains from '../config/chains'
 import { IRPCMap } from '@walletconnect/types';
+import { supabaseLogout } from '../lib/SupabaseConnector'
 
 const { supportedChainIds } = appConfig.blockchain
 
@@ -117,6 +118,7 @@ export default function useDApp() {
   const disconnect = useCallback(() => {
     providerCache.clear()
     deactivate()
+
     if (connectorInfo) {
       const connector = connectorsByProvider[connectorInfo?.id]
       if (connector.postDisconnect) {

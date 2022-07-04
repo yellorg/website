@@ -37,6 +37,8 @@
   --neutral-control-layer-color-70: #2C2C2C;
   --neutral-control-layer-color-80: #000000;
   --neutral-control-color-20: #F4F4F4;
+  --neutral-control-color-30: #aaaaaa;
+  --neutral-control-color-40: #ededed;
   --divider-color-20: #DCDCDC;
 
   --system-red-color: #B01212;
@@ -146,7 +148,7 @@ ol {
 
 ul {
   list-style-type: disc;
-} 
+}
 
 .section {
   padding: var(--landing-block-padding) 0;

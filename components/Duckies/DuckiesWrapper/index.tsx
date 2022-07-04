@@ -10,6 +10,7 @@ import { useAppDispatch } from '../../../app/hooks';
 
 import * as ga from '../../../lib/ga';
 import { DuckiesFAQ } from '../DuckiesFAQ';
+import { supabase } from '../../../lib/SupabaseConnector';
 
 interface DuckiesLayoutProps {
     bounties: any;
@@ -24,6 +25,7 @@ export const DuckiesLayout: FC<DuckiesLayoutProps> = ({ bounties, faqList }: Duc
     const [isRewardsClaimed, setIsRewardsClaimed] = React.useState<boolean>(false);
     const [isSingleBountyProcessing, setIsSingleBountyProcessing] = React.useState<boolean>(false);
     const [isReferralClaimed, setIsReferralClaimed] = React.useState<boolean>(false);
+    const [session, setSession] = React.useState<any>(null);
 
     const dispatch = useAppDispatch();
     const duckiesContract = useDuckiesContract();
@@ -36,6 +38,12 @@ export const DuckiesLayout: FC<DuckiesLayoutProps> = ({ bounties, faqList }: Duc
             setAffiliates(affiliatesCount);
         }
     }, [account, duckiesContract, signer]);
+
+    React.useEffect(() => {
+        const supabaseSession = supabase.auth.session();
+
+        supabaseSession && setSession(supabaseSession);
+    }, []);
 
     React.useEffect(() => {
         if (items && isRewardsClaimed) {
@@ -180,6 +188,7 @@ export const DuckiesLayout: FC<DuckiesLayoutProps> = ({ bounties, faqList }: Duc
                 isSingleBountyProcessing={isSingleBountyProcessing}
                 isReferralClaimed={isReferralClaimed}
                 setIsReferralClaimed={setIsReferralClaimed}
+                supabaseSession={session}
             />
             <DuckiesAffiliates
                 bountyItems={bountyItems}
@@ -196,7 +205,7 @@ export const DuckiesLayout: FC<DuckiesLayoutProps> = ({ bounties, faqList }: Duc
             />
             <DuckiesEarnMore />
             <DuckiesRedeem />
-            <DuckiesFAQ 
+            <DuckiesFAQ
                 faqList={faqList}
             />
         </main>

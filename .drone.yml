@@ -91,6 +91,10 @@ steps:
         from_secret: next_public_google_tag_manager_id_uat
       NEXT_PUBLIC_GOOGLE_ANALYTICS:
         from_secret: next_public_google_analytics_uat
+      NEXT_PUBLIC_SUPABASE_URL:
+        from_secret: next_public_supabase_url_uat
+      NEXT_PUBLIC_SUPABASE_ANON_KEY:
+        from_secret: next_public_supabase_anon_key_uat
     commands:
       - apk add gettext
       - ./.deploy/install.sh
