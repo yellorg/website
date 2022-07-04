@@ -17,6 +17,7 @@ import Image from 'next/image';
 import { dispatchAlert } from '../../../features/alerts/alertsSlice';
 import { useAppDispatch } from '../../../app/hooks';
 import { isBrowser } from '../../../helpers';
+import chains from '../../../config/chains'
 
 import * as ga from '../../../lib/ga';
 import classNames from 'classnames';
@@ -52,6 +53,8 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
     const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
     const [isOpenBalancesInfo, setIsOpenBalancesInfo] = useState<boolean>(false);
     const [balance, setBalance] = useState<number | undefined>(undefined);
+    const [isAddedMainChain, setAddedMainChain] = useState<boolean>(false);
+    const [currentMetamaskChain, setCurrentMetamaskChain] = useState<number>(-1);
 
     const dispatch = useAppDispatch();
     const duckiesContract = useDuckiesContract();
@@ -61,14 +64,20 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
     const triedToEagerConnect = useEagerConnect();
 
     const onboarding = useRef<MetaMaskOnboarding>();
+    const mainChain = useMemo(() => {
+        return chains.find(chain => chain.chainId === appConfig.blockchain.mainChainId)
+    }, []);
+    const mainChainIdHex = useMemo(() => {
+        return `0x${(mainChain?.chainId!).toString(16)}`
+    }, [mainChain]);
     const supportedChain = useMemo(() => {
-        return appConfig.blockchain.supportedChainIds.includes(chain?.chainId ?? -1);
-    }, [chain]);
+        return appConfig.blockchain.supportedChainIds.includes(chain?.chainId ?? currentMetamaskChain);
+    }, [chain, currentMetamaskChain]);
 
     const isReady = useMemo(() => {
-        return supportedChain && triedToEagerConnect && active && account;
-    }, [supportedChain, triedToEagerConnect, active, account]);
-;
+        return supportedChain && triedToEagerConnect && active && account && isAddedMainChain;
+    }, [supportedChain, triedToEagerConnect, active, account, isAddedMainChain]);
+
     const getBalance = React.useCallback(async() => {
         if (account) {
             const balance = (await duckiesContract?.balanceOf(account)).toString();
@@ -78,6 +87,53 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
             setBalance(balance / (10 ** decimals));
         }
     }, [account, duckiesContract]);
+
+    const switchToMainChain = useCallback(async() => {
+        try {
+            await window?.ethereum?.request({
+                method: 'wallet_switchEthereumChain',
+                params: [{ chainId: mainChainIdHex }],
+            });
+            return true
+        } catch (switchError: any) {
+            // This error code indicates that the chain has not been added to MetaMask.
+            if (switchError.code === 4902) {
+                return false
+            }
+            throw switchError 
+        }
+    }, [mainChainIdHex])
+
+    const addOrSwitchToMainChain = useCallback(async() => {
+        try {
+            const succeed = await switchToMainChain()
+            if (succeed) {
+                setAddedMainChain(true)
+            } else {
+                try {
+                    await window?.ethereum?.request({
+                        method: 'wallet_addEthereumChain',
+                        params: [
+                        {
+                            chainId: mainChainIdHex,
+                            chainName: mainChain?.name,
+                            rpcUrls: mainChain?.rpc,
+                            nativeCurrency: mainChain?.nativeCurrency,
+                            blockExplorerUrls: mainChain?.explorers?.map(exp => exp.url),
+                        },
+                        ],
+                    });
+                    setAddedMainChain(true)
+                } catch (addError: any) {
+                    console.error(addError)
+                    setAddedMainChain(false)
+                }
+            }
+        } catch (error: any) {
+            console.error(error)
+            setAddedMainChain(false)
+        }
+    }, [mainChain, mainChainIdHex, switchToMainChain, setAddedMainChain])
 
     useEffect(() => {
         if (isRewardsClaimed) {
@@ -118,6 +174,8 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
             console.warn('alerts.message.wallet.metamask.locked');
         }
 
+        await addOrSwitchToMainChain()
+
         connectWithProvider(provider).then(() => {
             console.log('removeConnectWalletAlert');
         }).catch(async (error) => {
@@ -132,12 +190,23 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
                 console.error('handleConnectWallet: sign error');
             }
         });
-    }, [connectWithProvider, triedToEagerConnect]);
+    }, [connectWithProvider, triedToEagerConnect, addOrSwitchToMainChain]);
 
     useEffect(() => {
         onboarding.current = new MetaMaskOnboarding();
         setMetaMaskInstalled(MetaMaskOnboarding.isMetaMaskInstalled());
     }, [])
+
+    useEffect(() => {
+        const handleChainChange = (chainId: string) => {
+            setCurrentMetamaskChain(+chainId)
+            setAddedMainChain(+chainId === mainChain?.chainId)
+        }
+        window?.ethereum?.on('chainChanged', handleChainChange)
+        return () => {
+            window?.ethereum?.off('chainChanged', handleChainChange)
+        }
+    }, [mainChain, setCurrentMetamaskChain, setAddedMainChain])
 
     const handleMetamask = React.useCallback((isMetaMaskInstalled: boolean, id: ProviderWhitelist) => {
         if (isMetaMaskInstalled) {
@@ -247,7 +316,7 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
     }, [bountyItems, bountiesToClaim]);
 
 
-    const handleClaimButtonClick = React.useCallback(() => {
+    const handleClaimButtonClick = useCallback(async () => {
         setIsOpenModal(true);
 
         if (isReady) {
@@ -263,7 +332,10 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
                 action: "duckies_hero_claim_show_auth_click",
             });
         }
-    }, [isReady, getBountiesClaimableAmount, isReferralClaimed]);
+
+        const added = await switchToMainChain()
+        setAddedMainChain(added)
+    }, [isReady, getBountiesClaimableAmount, isReferralClaimed, switchToMainChain, setAddedMainChain]);
 
     const renderMetamaskModalBody = React.useMemo(() => {
         return (
@@ -274,6 +346,22 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
                 <div className="text-text-color-100 text-sm text-center font-metro-regular font-medium mb-6">
                     Connect Metamask wallet in order to be able to get Duckies tokens
                 </div>
+                <div className="flex items-center justify-center mb-8">
+                    {isAddedMainChain && (
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M5 13L9 17L19 7" stroke="#419E6A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                    )}
+                    <div
+                        onClick={() => addOrSwitchToMainChain()}
+                        className={[
+                            'button-link cursor-pointer font-bold text-center underline px-2',
+                            isAddedMainChain ? 'active no-underline' : undefined
+                        ].join(' ')}
+                    >
+                        <span>Switch to {mainChain?.name?.split(' ')[0]} network</span>
+                    </div>
+                </div>
                 <div className="flex items-center justify-center">
                     <div onClick={() => handleMetamask(isMetaMaskInstalled, 'Injected')} className="button button--outline button--secondary button--shadow-secondary">
                         <span className="button__inner">{isMetaMaskInstalled ? 'Connect Metamask' : 'Install Metamask'}</span>
@@ -281,7 +369,7 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
                 </div>
             </div>
         );
-    }, [handleMetamask, isMetaMaskInstalled]);
+    }, [handleMetamask, isMetaMaskInstalled, isAddedMainChain, addOrSwitchToMainChain, mainChain]);
 
     const renderLoadingModalBody = React.useMemo(() => {
         return (

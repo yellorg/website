@@ -96,3 +96,9 @@
 .button--wide {
   width: 198px;
 }
+
+.button-link {
+  &.active {
+    color: #00632B;
+  }
+}
