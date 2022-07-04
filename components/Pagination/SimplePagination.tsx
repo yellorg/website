@@ -71,7 +71,7 @@ export const SimplePagination: React.FC<SimplePaginationProps> = ({
     const renderPreviousButton = React.useMemo(() => {
         return (
             <button
-                className={classnames("relative inline-flex items-center py-2 px-4 border leading-5 rounded-md cursor-pointer bg-body-background-color border-neutral-control-color-70 transition-all ease-in-out duration-200 disabled:hover:cursor-not-allowed enabled:hover:bg-neutral-control-color-30", buttonsAdditionalClassName)}
+                className={classnames("relative inline-flex items-center py-2 px-4 border leading-5 rounded-md cursor-pointer bg-body-background-color border-neutral-control-color-70 transition-all ease-in-out duration-200 disabled:hover:cursor-not-allowed enabled:hover:bg-neutral-control-color-30", buttonsAdditionalClassName, page === 1 && "hidden")}
                 onClick={() => handleClickPrevButton(page)}
                 disabled={page === 1}
             >
@@ -83,7 +83,7 @@ export const SimplePagination: React.FC<SimplePaginationProps> = ({
     const renderNextButton = React.useMemo(() => {
         return (
             <button
-                className={classnames("ml-3 relative inline-flex items-center py-2 px-4 border leading-5 rounded-md cursor-pointer bg-body-background-color border-neutral-control-color-70 transition-all ease-in-out duration-200 disabled:hover:cursor-not-allowed enabled:hover:bg-neutral-control-color-30", buttonsAdditionalClassName)}
+                className={classnames("ml-3 relative inline-flex items-center py-2 px-4 border leading-5 rounded-md cursor-pointer bg-body-background-color border-neutral-control-color-70 transition-all ease-in-out duration-200 disabled:hover:cursor-not-allowed enabled:hover:bg-neutral-control-color-30", buttonsAdditionalClassName, !nextPageExists && "hidden")}
                 onClick={() => handleClickNextButton(page)}
                 disabled={!nextPageExists}
             >
