@@ -15,7 +15,6 @@ import type { ProviderWhitelist } from '../../../hooks/useDApp';
 import useDApp from '../../../hooks/useDApp';
 import useWallet from '../../../hooks/useWallet';
 import { appConfig } from '../../../config/app';
-import Link from 'next/link';
 import Image from 'next/image';
 
 import * as ga from '../../../lib/ga';
@@ -24,6 +23,7 @@ export const DuckiesEarnMore = () => {
     const [isMetaMaskInstalled, setMetaMaskInstalled] = useState<boolean>(true);
     const [shareableLink, setShareableLink] = React.useState<string>('');
     const [shareableLinkPrefix, setShareableLinkPrefix] = React.useState('');
+    const [isCopyClicked, setIsCopyClicked] = useState<boolean>(false);
 
     const onboarding = useRef<MetaMaskOnboarding>();
 
@@ -53,6 +53,15 @@ export const DuckiesEarnMore = () => {
             setShareableLink('')
         }
     }, [active, account]);
+
+    useEffect(() => {
+        if (!isCopyClicked)
+            return;
+
+        setTimeout(() => {
+            setIsCopyClicked(false);
+        }, 700);
+    }, [isCopyClicked]);
 
     const handleConnectWallet = useCallback(
         async (provider: ProviderWhitelist) => {
@@ -323,6 +332,7 @@ export const DuckiesEarnMore = () => {
         ga.event({
             action: "duckies_share_copy_button_click",
         });
+        setIsCopyClicked(true);
     }, []);
 
     const handleSendGAEvent = React.useCallback(() => {
@@ -347,11 +357,22 @@ export const DuckiesEarnMore = () => {
                             </div>
                             {isReady ? (
                                 <div onClick={() => handleCopy(`${shareableLinkPrefix}${shareableLink}`)} className="button button--outline button--secondary button--shadow-secondary">
-                                    <span className="button__inner !px-[24px] !py-[14.25px]">
-                                        <svg width="20" height="24" viewBox="0 0 20 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M8.60019 0.800049C7.0538 0.800049 5.8002 2.05365 5.8002 3.60005V14.8C5.8002 16.3464 7.0538 17.6 8.60019 17.6H17.0002C18.5466 17.6 19.8002 16.3464 19.8002 14.8V6.97995C19.8002 6.23734 19.5052 5.52515 18.9801 5.00005L15.6002 1.62015C15.0751 1.09505 14.3629 0.800049 13.6203 0.800049H8.60019Z" fill="black"/>
-                                            <path d="M0.200195 9.20005C0.200195 7.65365 1.4538 6.40005 3.0002 6.40005V20.4001H14.2002C14.2002 21.9464 12.9466 23.2001 11.4002 23.2001H3.0002C1.4538 23.2001 0.200195 21.9464 0.200195 20.4001V9.20005Z" fill="black"/>
-                                        </svg>
+                                    <span className={classnames('button__inner !px-[24px] !py-[14.25px] relative flex justify-center items-center !w-[70px]', { '!bg-system-green-20': isCopyClicked })}>
+                                        {isCopyClicked && (
+                                            <div className="absolute bg-text-color-0 border-2 border-text-color-100 rounded text-[14px] leading-[22px] font-metro-regular font-normal text-text-color-100 py-[16px] px-[18px] bottom-[calc(100%+5px)] ml-[2px]">
+                                                Copied
+                                            </div>
+                                        )}
+                                        {isCopyClicked ? (
+                                            <svg width="25" height="19" viewBox="0 0 25 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path fillRule="evenodd" clipRule="evenodd" d="M24.2374 1.26256C24.9209 1.94598 24.9209 3.05402 24.2374 3.73744L10.2374 17.7374C9.55402 18.4209 8.44598 18.4209 7.76256 17.7374L0.762563 10.7374C0.0791456 10.054 0.0791456 8.94598 0.762563 8.26256C1.44598 7.57915 2.55402 7.57915 3.23744 8.26256L9 14.0251L21.7626 1.26256C22.446 0.579146 23.554 0.579146 24.2374 1.26256Z" fill="#00632B"/>
+                                            </svg>
+                                        ) : (
+                                            <svg width="20" height="24" viewBox="0 0 20 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M8.60019 0.800049C7.0538 0.800049 5.8002 2.05365 5.8002 3.60005V14.8C5.8002 16.3464 7.0538 17.6 8.60019 17.6H17.0002C18.5466 17.6 19.8002 16.3464 19.8002 14.8V6.97995C19.8002 6.23734 19.5052 5.52515 18.9801 5.00005L15.6002 1.62015C15.0751 1.09505 14.3629 0.800049 13.6203 0.800049H8.60019Z" fill="black"/>
+                                                <path d="M0.200195 9.20005C0.200195 7.65365 1.4538 6.40005 3.0002 6.40005V20.4001H14.2002C14.2002 21.9464 12.9466 23.2001 11.4002 23.2001H3.0002C1.4538 23.2001 0.200195 21.9464 0.200195 20.4001V9.20005Z" fill="black"/>
+                                            </svg>
+                                        )}
                                     </span>
                                 </div>
                             ) : (

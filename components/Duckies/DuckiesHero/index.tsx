@@ -55,6 +55,7 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
     const [balance, setBalance] = useState<number | undefined>(undefined);
     const [isAddedMainChain, setAddedMainChain] = useState<boolean>(false);
     const [currentMetamaskChain, setCurrentMetamaskChain] = useState<number>(-1);
+    const [isCopyClicked, setIsCopyClicked] = useState<boolean>(false);
 
     const dispatch = useAppDispatch();
     const duckiesContract = useDuckiesContract();
@@ -134,6 +135,15 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
             setAddedMainChain(false)
         }
     }, [mainChain, mainChainIdHex, switchToMainChain, setAddedMainChain])
+
+    useEffect(() => {
+        if (!isCopyClicked)
+            return;
+
+        setTimeout(() => {
+            setIsCopyClicked(false);
+        }, 700);
+    }, [isCopyClicked]);
 
     useEffect(() => {
         if (isRewardsClaimed) {
@@ -495,6 +505,7 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
 
     const handleCopy = React.useCallback(() => {
         navigator.clipboard.writeText(appConfig.duckzSmartContractAddress);
+        setIsCopyClicked(true);
     }, []);
 
     return (
@@ -590,11 +601,22 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
                                                                     <span className="text-[14px] leading-[22px] text-text-color-100 font-metro-semibold">DUCKZ smart-contract address:</span>
                                                                     <div className="flex">
                                                                         <span className="text-[13px] leading-[14px] text-text-color-70 font-metro-medium bg-neutral-control-color-20 pl-[10px] flex items-center w-[calc(100%-42px)] rounded-tl-[6px] rounded-bl-[6px] break-all">{appConfig.duckzSmartContractAddress}</span>
-                                                                        <div className="flex justify-center items-center w-[42px] h-[42px] bg-primary-cta-color-60 rounded-tr-[6px] rounded-br-[6px] cursor-pointer" onClick={handleCopy}>
-                                                                            <svg width="14" height="16" viewBox="0 0 14 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                                <path d="M6.10117 0.800049C5.10706 0.800049 4.30117 1.60594 4.30117 2.60005V9.80005C4.30117 10.7942 5.10706 11.6 6.10117 11.6H11.5012C12.4953 11.6 13.3012 10.7942 13.3012 9.80005V4.77284C13.3012 4.29545 13.1115 3.83761 12.774 3.50005L10.6012 1.32726C10.2636 0.989691 9.80577 0.800049 9.32838 0.800049H6.10117Z" fill="#070707"/>
-                                                                                <path d="M0.701172 6.20005C0.701172 5.20594 1.50706 4.40005 2.50117 4.40005V13.4H9.70117C9.70117 14.3942 8.89528 15.2 7.90117 15.2H2.50117C1.50706 15.2 0.701172 14.3942 0.701172 13.4V6.20005Z" fill="#070707"/>
-                                                                            </svg>
+                                                                        <div className={classNames('relative flex justify-center items-center w-[42px] h-[42px] bg-primary-cta-color-60 hover:bg-primary-cta-color-80 rounded-tr-[6px] rounded-br-[6px] cursor-pointer', { '!bg-system-green-20 !hover:bg-system-green-20': isCopyClicked })} onClick={handleCopy}>
+                                                                            {isCopyClicked && (
+                                                                                <div className="absolute bg-text-color-0 border-2 border-text-color-100 rounded text-[14px] leading-[22px] font-metro-regular font-normal text-text-color-100 py-[16px] px-[18px] bottom-[calc(100%+9px)]">
+                                                                                    Copied
+                                                                                </div>
+                                                                            )}
+                                                                            {isCopyClicked ? (
+                                                                                <svg width="12" height="10" viewBox="0 0 12 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                                    <path d="M0.75 5.75L3.75 8.75L11.25 1.25" stroke="#00401C" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                                                                                </svg>
+                                                                            ) : (
+                                                                                <svg width="14" height="16" viewBox="0 0 14 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                                    <path d="M6.10117 0.800049C5.10706 0.800049 4.30117 1.60594 4.30117 2.60005V9.80005C4.30117 10.7942 5.10706 11.6 6.10117 11.6H11.5012C12.4953 11.6 13.3012 10.7942 13.3012 9.80005V4.77284C13.3012 4.29545 13.1115 3.83761 12.774 3.50005L10.6012 1.32726C10.2636 0.989691 9.80577 0.800049 9.32838 0.800049H6.10117Z" fill="#070707"/>
+                                                                                    <path d="M0.701172 6.20005C0.701172 5.20594 1.50706 4.40005 2.50117 4.40005V13.4H9.70117C9.70117 14.3942 8.89528 15.2 7.90117 15.2H2.50117C1.50706 15.2 0.701172 14.3942 0.701172 13.4V6.20005Z" fill="#070707"/>
+                                                                                </svg>
+                                                                            )}
                                                                         </div>
                                                                     </div>
                                                                 </div>
