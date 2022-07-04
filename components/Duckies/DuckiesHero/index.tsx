@@ -352,7 +352,13 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
                             <path d="M5 13L9 17L19 7" stroke="#419E6A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                         </svg>
                     )}
-                    <div onClick={() => addOrSwitchToMainChain()} className={['button-link', isAddedMainChain ? 'active' : undefined].join(' ')}>
+                    <div
+                        onClick={() => addOrSwitchToMainChain()}
+                        className={[
+                            'button-link cursor-pointer font-bold text-center underline px-2',
+                            isAddedMainChain ? 'active no-underline' : undefined
+                        ].join(' ')}
+                    >
                         <span>Switch to {mainChain?.name?.split(' ')[0]} network</span>
                     </div>
                 </div>

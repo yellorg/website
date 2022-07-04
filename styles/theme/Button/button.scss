@@ -98,16 +98,7 @@
 }
 
 .button-link {
-  cursor: pointer;
-  font-style: normal;
-  font-weight: 700;
-  text-align: center;
-  text-decoration-line: underline;
-  color: #090909;
-  padding: 0 0.5em;
-
   &.active {
     color: #00632B;
-    text-decoration-line: none;
   }
 }
