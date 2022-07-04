@@ -39,45 +39,47 @@ export const BountyRow: React.FC<BountyProps> = ({
     const [isOpenShow, setIsOpenShow] = React.useState<boolean>(false);
     const [isOpenClaim, setIsOpenClaim] = React.useState<boolean>(false);
     const [loading, setLoading] = React.useState<boolean>(false);
-    const [isCaptchaResolved, setIsCaptchaResolved] = React.useState<boolean>(false);
+    const [isCaptchaNotResolved, setIsCaptchaNotResolved] = React.useState<boolean>(true);
 
-    let captcha: any;
-    captcha = React.useRef();
+    let captcha: any = React.useRef();
 
     const rowClassName = React.useMemo(() => {
         return classnames('flex w-full items-center justify-between border-b border-color-divider-color-40 px-1 py-2', {
             'bg-primary-cta-color-10': bounty.status === 'claim' && !((loading && isSingleBountyProcessing) || (isLoading && !isSingleBountyProcessing)),
-        })
+        });
     }, [bounty.status, loading, isLoading, isSingleBountyProcessing]);
 
     const indexClassName = React.useMemo(() => {
         return classnames('py-1 px-[9.5px] text-base w-7 h-8 flex items-center justify-center font-bold rounded-sm mr-4 bg-neutral-control-color-30', {
             'bg-primary-cta-color-40': bounty.status === 'claim' && !((loading && isSingleBountyProcessing) || (isLoading && !isSingleBountyProcessing)),
-        })
+        });
     }, [bounty.status, loading, isLoading, isSingleBountyProcessing]);
 
     const claimButtonClassName = React.useMemo(() => {
-        return classnames('button__inner', !isCaptchaResolved && 'cursor-not-allowed')
-    },[isCaptchaResolved]);
+        return classnames('button__inner', isCaptchaNotResolved && 'cursor-not-allowed');
+    },[isCaptchaNotResolved]);
 
     const claimButtonContainerClassName = React.useMemo(() => {
-        return classnames(!isCaptchaResolved ? 'px-1.5 py-2 bg-neutral-control-color-40 rounded-sm text-neutral-control-layer-color-40 cursor-not-allowed' : 'button button--outline button--secondary button--shadow-secondary')
-    },[isCaptchaResolved]);
+        return classnames({
+            'px-1.5 py-2 bg-neutral-control-color-40 rounded-sm text-neutral-control-layer-color-40 cursor-not-allowed': isCaptchaNotResolved,
+            'button button--outline button--secondary button--shadow-secondary': !isCaptchaNotResolved,
+        });
+    },[isCaptchaNotResolved]);
 
     const duckiesColor = React.useMemo(() => bounty.status === 'claim' ? '#ECAA00' : '#525252', [bounty.status]);
 
     const handleClaimReward = React.useCallback(async () => {
         captcha.reset();
-        if (isCaptchaResolved) {
+        if (!isCaptchaNotResolved) {
             setLoading(true);
             setIsSingleBountyProcessing(true);
             setIsOpenClaim(false);
-            setIsCaptchaResolved(false);
+            setIsCaptchaNotResolved(true);
             await handleClaim(bounty.fid);
             setLoading(false);
             setIsSingleBountyProcessing(false)
         }
-    }, [handleClaim, bounty.fid, isCaptchaResolved]);
+    }, [handleClaim, bounty.fid, isCaptchaNotResolved]);
 
     const handleSelectBountyId = React.useCallback(() => {
         setIsOpenShow(true);
@@ -214,19 +216,19 @@ export const BountyRow: React.FC<BountyProps> = ({
                 <div>
                     <ReCAPTCHA
                         ref={e => {captcha = e}}
-                        sitekey="6Lesd7UgAAAAAIWzFO94kO20H2xicH9NBaeksC1G"
-                        onChange={() => setIsCaptchaResolved(true)}
+                        sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITEKEY || 'changeme'}
+                        onChange={() => setIsCaptchaNotResolved(false)}
                         className="mb-5"
                     />
                 </div>
                 <div className="flex items-center justify-center">
                     <div className={claimButtonContainerClassName} onClick={handleClaimReward}>
-                        <button className={claimButtonClassName} disabled={!isCaptchaResolved}>Claim reward</button>
+                        <button className={claimButtonClassName} disabled={isCaptchaNotResolved}>Claim reward</button>
                     </div>
                 </div>
             </div>
         );
-    }, [bounty, handleClaimReward, captcha, isCaptchaResolved]);
+    }, [bounty, handleClaimReward, captcha, isCaptchaNotResolved]);
 
     const renderLoadingModalBody = React.useMemo(() => {
         return (
