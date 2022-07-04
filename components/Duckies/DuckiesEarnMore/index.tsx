@@ -126,7 +126,7 @@ export const DuckiesEarnMore = () => {
     });
 
     const inputLinkRef = classnames('flex items-center bg-input-background-color border-2 border-text-color-100 rounded mr-4 py-[18px] px-[18px] sm:px-5 w-full max-2-full overflow-x-auto', {
-        'border-r-0 rounded-tr-0 rounded-br-0 left-0': !isReady,
+        'border-r-0 rounded-tr-0 rounded-br-0 left-0 sm:w-[320px]': !isReady,
     });
 
     const message = React.useMemo(() => 'Go and claim your DUCKIES tokens (choose Polygon mainnet on your Wallet for tokens minting)!', []);
@@ -355,7 +355,7 @@ export const DuckiesEarnMore = () => {
                                     </span>
                                 </div>
                             ) : (
-                                <div className="absolute right-[-45px]">
+                                <div className="absolute right-[20px]">
                                     <img src="/images/components/duckies/login_eyes.png" alt="login" />
                                 </div>
                             )}

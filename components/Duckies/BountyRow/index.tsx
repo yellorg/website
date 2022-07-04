@@ -170,7 +170,7 @@ export const BountyRow: React.FC<BountyProps> = ({
 
     const renderClaimRewardModalBody = React.useMemo(() => {
         return (
-            <React.Fragment>
+            <div className="flex flex-col">
                 <div className="text-text-color-100 text-base text-center font-metro-regular font-semibold mb-1">
                     Amount to claim for completed<br/>
                     &quot;{bounty.title}&quot;<br/>
@@ -196,13 +196,13 @@ export const BountyRow: React.FC<BountyProps> = ({
                         <span className="button__inner">Claim reward</span>
                     </div>
                 </div>
-            </React.Fragment>
+            </div>
         );
     }, [bounty, handleClaimReward]);
 
     const renderLoadingModalBody = React.useMemo(() => {
         return (
-            <React.Fragment>
+            <div className="flex flex-col">
                 <div className="text-text-color-100 text-sm text-center font-metro-regular font-medium mb-6">
                     In order for the on-chain transaction to be executed please wait a couple of minutes. Time may vary depending on the queue & gas.
                 </div>
@@ -211,7 +211,7 @@ export const BountyRow: React.FC<BountyProps> = ({
                         <span className="button__inner">Confirm</span>
                     </div>
                 </div>
-            </React.Fragment>
+            </div>
         );
     }, []);
 
