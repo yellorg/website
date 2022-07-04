@@ -211,7 +211,7 @@ export const BountyRow: React.FC<BountyProps> = ({
                 <div>
                     <ReCAPTCHA
                         ref={e => {captcha = e}}
-                        sitekey="6Lesd7UgAAAAAIWzFO94kO20H2xicH9NBaeksC1G"
+                        sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITEKEY || 'changeme'}
                         onChange={() => setIsCaptchaResolved(true)}
                         className="mb-5"
                     />
@@ -256,11 +256,11 @@ export const BountyRow: React.FC<BountyProps> = ({
             <DuckiesConnectorModalWindow
                 isOpen={isOpenShow}
                 headerContent={bounty.title}
-                bodyContent={renderDetailsModalBody}
+                bodyContent={renderClaimRewardModalBody}
                 setIsOpen={setIsOpenShow}
             />
         );
-    }, [isOpenShow, bounty.title, renderDetailsModalBody]);
+    }, [isOpenShow, bounty.title, renderClaimRewardModalBody]);
 
     const renderClaimModal = React.useMemo(() => {
         return (
