@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { PrismicRichText } from '@prismicio/react';
 import classNames from 'classnames';
+import HtmlSerializer from '../../../helpers/HtmlSerializer';
 
 interface DuckiesFAQProps {
     faqList: any
@@ -30,7 +31,7 @@ export const DuckiesFAQ = ({ faqList }: DuckiesFAQProps) => {
                 'overflow-hidden transition-[max-height] transform duration-300 bg-body-background-color rounded-b',
                 {
                     'max-h-0 ease-out': !isSelected,
-                    'max-h-[500px] ease-in': isSelected,
+                    'max-h-[2100px] ease-in': isSelected,
                 },
             );
 
@@ -55,7 +56,7 @@ export const DuckiesFAQ = ({ faqList }: DuckiesFAQProps) => {
                     </div>
                     <div className={answerClassName}>
                         <div className="px-[24px] pt-[16px] pb-[24px]">
-                            <PrismicRichText field={item.answer} />
+                            <PrismicRichText field={item.answer} components={HtmlSerializer} />
                         </div>
                     </div>
                 </div>
