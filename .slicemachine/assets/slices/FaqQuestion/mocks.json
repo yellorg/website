@@ -1,0 +1,40 @@
+[
+  {
+    "variation": "default",
+    "name": "Default",
+    "slice_type": "faq_question",
+    "items": [
+      {
+        "question": "drive world-class networks",
+        "answer": [
+          {
+            "type": "paragraph",
+            "text": "Veniam pariatur dolor sunt anim officia in aute exercitation excepteur nostrud ea do. In officia qui reprehenderit dolore id irure culpa aute tempor et do proident voluptate anim proident. Non dolore veniam incididunt laborum sint tempor commodo.",
+            "spans": []
+          }
+        ]
+      },
+      {
+        "question": "drive value-added interfaces",
+        "answer": [
+          {
+            "type": "paragraph",
+            "text": "Amet cupidatat nostrud veniam ea magna aliquip tempor. Commodo nisi nostrud incididunt nostrud in aute mollit est minim velit Lorem.",
+            "spans": []
+          }
+        ]
+      },
+      {
+        "question": "strategize seamless technologies",
+        "answer": [
+          {
+            "type": "paragraph",
+            "text": "Ipsum duis dolore consequat aliquip irure incididunt. Mollit et sit ea proident fugiat ipsum aliquip excepteur sint tempor magna aliqua eu irure. Cupidatat et nulla eiusmod consectetur commodo labore laboris dolor officia.",
+            "spans": []
+          }
+        ]
+      }
+    ],
+    "primary": {}
+  }
+]

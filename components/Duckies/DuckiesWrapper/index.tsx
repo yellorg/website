@@ -9,12 +9,14 @@ import { dispatchAlert } from '../../../features/alerts/alertsSlice';
 import { useAppDispatch } from '../../../app/hooks';
 
 import * as ga from '../../../lib/ga';
+import { DuckiesFAQ } from '../DuckiesFAQ';
 
 interface DuckiesLayoutProps {
     bounties: any;
+    faqList: any;
 }
 
-export const DuckiesLayout: FC<DuckiesLayoutProps> = ({ bounties }: DuckiesLayoutProps): JSX.Element => {
+export const DuckiesLayout: FC<DuckiesLayoutProps> = ({ bounties, faqList }: DuckiesLayoutProps): JSX.Element => {
     const [affiliates, setAffiliates] = React.useState<number[]>([0, 0, 0, 0, 0]);
     const { items } = bounties?.data.slices[0];
     const [bountyItems, setBountyItems] = React.useState<any[]>([]);
@@ -165,7 +167,7 @@ export const DuckiesLayout: FC<DuckiesLayoutProps> = ({ bounties }: DuckiesLayou
     }, [signer, account, bountiesToClaim]);
 
     return (
-        <main className="bg-primary-cta-color-60">
+        <main className="bg-primary-cta-color-60 pb-[80px] md:pb-[120px]">
             <DuckiesHero
                 bountiesToClaim={bountiesToClaim}
                 handleClaimAllBounties={handleClaimAllBounties}
@@ -194,6 +196,9 @@ export const DuckiesLayout: FC<DuckiesLayoutProps> = ({ bounties }: DuckiesLayou
             />
             <DuckiesEarnMore />
             <DuckiesRedeem />
+            <DuckiesFAQ 
+                faqList={faqList}
+            />
         </main>
     );
 };

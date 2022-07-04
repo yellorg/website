@@ -1,65 +1,39 @@
 {
   "slices": {
     "components": {
-      "bounty": {
+      "faq_question": {
         "library": "slices",
-        "id": "bounty",
-        "name": "Bounty",
-        "description": "Bounty",
+        "id": "faq_question",
+        "name": "FaqQuestion",
+        "description": "FaqQuestion",
         "model": {
-          "id": "bounty",
+          "id": "faq_question",
           "type": "SharedSlice",
-          "name": "Bounty",
-          "description": "Bounty",
+          "name": "FaqQuestion",
+          "description": "FaqQuestion",
           "variations": [
             {
               "id": "default",
               "name": "Default",
               "docURL": "...",
               "version": "sktwi1xtmkfgx8626",
-              "description": "Bounty",
+              "description": "FaqQuestion",
               "primary": {},
               "items": {
-                "fid": {
+                "question": {
                   "type": "Text",
                   "config": {
-                    "label": "Field ID",
+                    "label": "Question",
                     "placeholder": ""
                   }
                 },
-                "title": {
-                  "type": "Text",
+                "answer": {
+                  "type": "StructuredText",
                   "config": {
-                    "label": "Title",
-                    "placeholder": ""
-                  }
-                },
-                "description": {
-                  "type": "Text",
-                  "config": {
-                    "label": "Description",
-                    "placeholder": ""
-                  }
-                },
-                "value": {
-                  "type": "Number",
-                  "config": {
-                    "label": "Value",
-                    "placeholder": ""
-                  }
-                },
-                "limit": {
-                  "type": "Number",
-                  "config": {
-                    "label": "Limit",
-                    "placeholder": ""
-                  }
-                },
-                "triggerPhrase": {
-                  "type": "Text",
-                  "config": {
-                    "label": "Trigger Phrase",
-                    "placeholder": ""
+                    "label": "Answer",
+                    "placeholder": "",
+                    "allowTargetBlank": true,
+                    "multi": "paragraph,preformatted,heading1,heading2,heading3,heading4,heading5,heading6,strong,em,hyperlink,image,embed,list-item,o-list-item,rtl"
                   }
                 }
               },
@@ -71,47 +45,37 @@
           "default": {
             "variation": "default",
             "name": "Default",
-            "slice_type": "bounty",
+            "slice_type": "faq_question",
             "items": [
               {
-                "fid": "exploit web-enabled e-services",
-                "title": "recontextualize cutting-edge applications",
-                "description": "embrace proactive synergies",
-                "value": 1424,
-                "limit": 3004,
-                "triggerPhrase": "leverage wireless web services"
+                "question": "drive world-class networks",
+                "answer": [
+                  {
+                    "type": "paragraph",
+                    "text": "Veniam pariatur dolor sunt anim officia in aute exercitation excepteur nostrud ea do. In officia qui reprehenderit dolore id irure culpa aute tempor et do proident voluptate anim proident. Non dolore veniam incididunt laborum sint tempor commodo.",
+                    "spans": []
+                  }
+                ]
               },
               {
-                "fid": "leverage compelling paradigms",
-                "title": "implement distributed action-items",
-                "description": "aggregate 24/7 models",
-                "value": 5780,
-                "limit": 1872,
-                "triggerPhrase": "redefine cutting-edge paradigms"
+                "question": "drive value-added interfaces",
+                "answer": [
+                  {
+                    "type": "paragraph",
+                    "text": "Amet cupidatat nostrud veniam ea magna aliquip tempor. Commodo nisi nostrud incididunt nostrud in aute mollit est minim velit Lorem.",
+                    "spans": []
+                  }
+                ]
               },
               {
-                "fid": "reintermediate web-enabled web services",
-                "title": "matrix wireless interfaces",
-                "description": "morph extensible schemas",
-                "value": 822,
-                "limit": 3321,
-                "triggerPhrase": "scale holistic experiences"
-              },
-              {
-                "fid": "enhance bricks-and-clicks niches",
-                "title": "unleash synergistic infomediaries",
-                "description": "cultivate intuitive technologies",
-                "value": 3350,
-                "limit": 451,
-                "triggerPhrase": "strategize clicks-and-mortar partnerships"
-              },
-              {
-                "fid": "engineer cross-platform platforms",
-                "title": "matrix ubiquitous initiatives",
-                "description": "implement best-of-breed e-markets",
-                "value": 1786,
-                "limit": 8244,
-                "triggerPhrase": "transform transparent e-services"
+                "question": "strategize seamless technologies",
+                "answer": [
+                  {
+                    "type": "paragraph",
+                    "text": "Ipsum duis dolore consequat aliquip irure incididunt. Mollit et sit ea proident fugiat ipsum aliquip excepteur sint tempor magna aliqua eu irure. Cupidatat et nulla eiusmod consectetur commodo labore laboris dolor officia.",
+                    "spans": []
+                  }
+                ]
               }
             ],
             "primary": {}
@@ -123,9 +87,9 @@
         },
         "screenshotPaths": {
           "default": {
-            "path": "/Users/jeng/works/yellow/yellorg/website/.slicemachine/assets/slices/Bounty/default/preview.png",
-            "width": 800,
-            "height": 404
+            "path": "/Users/maxmoskalenko/dev/duckies/slices/FaqQuestion/default/preview.png",
+            "width": 1116,
+            "height": 436
           }
         }
       }

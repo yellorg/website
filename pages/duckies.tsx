@@ -20,15 +20,17 @@ const getLibrary = (provider: any): ethers.providers.Web3Provider => {
 export const getServerSideProps = async ({ previewData }: any) => {
     const client = createClient({ previewData });
     const bounties = await client.getSingle('bounties');
+    const faqList = await client.getSingle('faq');
 
     return {
         props: {
             bounties,
+            faqList,
         },
     };
 };
 
-const Duckies: FC = ({ bounties }: any): JSX.Element => {
+const Duckies: FC = ({ bounties, faqList }: any): JSX.Element => {
     return (
         <Web3ReactProvider getLibrary={getLibrary}>
             <ReduxProvider>
@@ -77,7 +79,7 @@ const Duckies: FC = ({ bounties }: any): JSX.Element => {
                                 content="https://www.yellow.org/images/og-image.png"    
                             />
                         </Head>
-                        <DuckiesLayout bounties={bounties} />
+                        <DuckiesLayout bounties={bounties} faqList={faqList} />
                     </div>
                     <Footer />
                 </div>
