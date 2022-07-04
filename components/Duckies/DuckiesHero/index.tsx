@@ -54,6 +54,7 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
     const [isOpenBalancesInfo, setIsOpenBalancesInfo] = useState<boolean>(false);
     const [balance, setBalance] = useState<number | undefined>(undefined);
     const [isAddedMainChain, setAddedMainChain] = useState<boolean>(false);
+    const [currentMetamaskChain, setCurrentMetamaskChain] = useState<number>(-1);
 
     const dispatch = useAppDispatch();
     const duckiesContract = useDuckiesContract();
@@ -70,8 +71,8 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
         return `0x${(mainChain?.chainId!).toString(16)}`
     }, [mainChain]);
     const supportedChain = useMemo(() => {
-        return appConfig.blockchain.supportedChainIds.includes(chain?.chainId ?? -1);
-    }, [chain]);
+        return appConfig.blockchain.supportedChainIds.includes(chain?.chainId ?? currentMetamaskChain);
+    }, [chain, currentMetamaskChain]);
 
     const isReady = useMemo(() => {
         return supportedChain && triedToEagerConnect && active && account && isAddedMainChain;
@@ -195,6 +196,17 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
         onboarding.current = new MetaMaskOnboarding();
         setMetaMaskInstalled(MetaMaskOnboarding.isMetaMaskInstalled());
     }, [])
+
+    useEffect(() => {
+        const handleChainChange = (chainId: string) => {
+            setCurrentMetamaskChain(+chainId)
+            setAddedMainChain(+chainId === mainChain?.chainId)
+        }
+        window?.ethereum?.on('chainChanged', handleChainChange)
+        return () => {
+            window?.ethereum?.off('chainChanged', handleChainChange)
+        }
+    }, [mainChain, setCurrentMetamaskChain, setAddedMainChain])
 
     const handleMetamask = React.useCallback((isMetaMaskInstalled: boolean, id: ProviderWhitelist) => {
         if (isMetaMaskInstalled) {

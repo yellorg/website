@@ -3,8 +3,7 @@ export const appConfig = {
   blockchain: {
     mainChainId: +(process.env.NEXT_PUBLIC_MAIN_CHAIN_ID ?? 80001), // Polygon Testnet Mumbai
     supportedChainIds: [
-      137, // Polygon Mainnet
-      80001, // Polygon Testnet Mumbai
+      +(process.env.NEXT_PUBLIC_MAIN_CHAIN_ID ?? 80001), // 137: Polygon Mainnet, 80001: Polygon Testnet Mumbai
     ],
   },
   alertDisplayTime: '5',
