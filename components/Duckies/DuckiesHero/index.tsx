@@ -443,11 +443,11 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
                             </div>
                         </div>
                         <div className="flex mt-[32px] flex-col lg:flex-row gap-[12px]">
-                            <div onClick={handleClaimButtonClick} className="w-full lg:w-1/2 button button--outline button--secondary button--shadow-secondary">
+                            <div onClick={handleClaimButtonClick} className="w-full lg:w-fit button button--outline button--secondary button--shadow-secondary">
                                 <span className="button__inner !text-[24px] !leading-[32px] !p-[16px] !justify-center">Claim your reward</span>
                             </div>
                             <Link href="#earn-more">
-                                <a className="sm:mt-0 w-full sm:w-1/4 button button--secondary button--shadow-secondary" onClick={handleSendGAEvent}>
+                                <a className="sm:mt-0 w-full lg:w-fit button button--secondary button--shadow-secondary" onClick={handleSendGAEvent}>
                                     <span className="button__inner !text-[24px] !leading-[32px] !p-[16px] !justify-center">
                                         Earn more
                                     </span>
@@ -463,12 +463,12 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
                                         <div className={classNames('uppercase font-gilmer-bold text-primary-cta-layer-color-60', {'text-[24px] leading-[32px]': isReady, 'text-[30px] leading-[40px]': !isReady})}>
                                             Balance
                                         </div>
-                                        <div onMouseEnter={() => setIsOpenBalancesInfo(true)} onMouseLeave={() => setIsOpenBalancesInfo(false)} className="flex ml-[13px] lg:relative">
+                                        <div onMouseEnter={() => setIsOpenBalancesInfo(true)} onMouseLeave={() => setIsOpenBalancesInfo(false)} className="flex ml-[13px] sm:relative">
                                             <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" className="z-[101] cursor-pointer">
                                                 <path d="M11 14H10V10H9M10 6H10.01M19 10C19 14.9706 14.9706 19 10 19C5.02944 19 1 14.9706 1 10C1 5.02944 5.02944 1 10 1C14.9706 1 19 5.02944 19 10Z" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                                             </svg>
                                             {isOpenBalancesInfo &&
-                                                <div className="z-[100] absolute left-[18px] lg:left-auto right-[18px] lg:right-0 mt-[30px] lg:mt-0 lg:pt-[30px] min-w-[445px] w-fit">
+                                                <div className="z-[100] absolute left-[18px] sm:left-auto right-[18px] sm:right-0 mt-[30px] sm:mt-0 sm:pt-[30px] sm:min-w-[445px] w-[calc(100vw-36px)] sm:w-fit">
                                                     <div className="bg-text-color-0 border-2 border-text-color-100 rounded flex h-fit flex-col p-[16px]">
                                                         <h5 className="pb-[8px] mb-0 text-text-color-100 text-[24px] leading-[32px] font-gilmer-medium">Connected wallet info</h5>
                                                         {account && (
@@ -499,7 +499,7 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
                                                                 <div>
                                                                     <span className="text-[14px] leading-[22px] text-text-color-100 font-metro-semibold">DUCKZ smart-contract address:</span>
                                                                     <div className="flex">
-                                                                        <span className="text-[13px] leading-[14px] text-text-color-70 font-metro-medium bg-neutral-control-color-20 pl-[10px] flex items-center w-[calc(100%-42px)] rounded-tl-[6px] rounded-bl-[6px] break-words">{appConfig.duckzSmartContractAddress}</span>
+                                                                        <span className="text-[13px] leading-[14px] text-text-color-70 font-metro-medium bg-neutral-control-color-20 pl-[10px] flex items-center w-[calc(100%-42px)] rounded-tl-[6px] rounded-bl-[6px] break-all">{appConfig.duckzSmartContractAddress}</span>
                                                                         <div className="flex justify-center items-center w-[42px] h-[42px] bg-primary-cta-color-60 rounded-tr-[6px] rounded-br-[6px] cursor-pointer" onClick={handleCopy}>
                                                                             <svg width="14" height="16" viewBox="0 0 14 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                                                 <path d="M6.10117 0.800049C5.10706 0.800049 4.30117 1.60594 4.30117 2.60005V9.80005C4.30117 10.7942 5.10706 11.6 6.10117 11.6H11.5012C12.4953 11.6 13.3012 10.7942 13.3012 9.80005V4.77284C13.3012 4.29545 13.1115 3.83761 12.774 3.50005L10.6012 1.32726C10.2636 0.989691 9.80577 0.800049 9.32838 0.800049H6.10117Z" fill="#070707"/>
