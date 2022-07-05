@@ -18,7 +18,6 @@ import { dispatchAlert } from '../../../features/alerts/alertsSlice';
 import { useAppDispatch } from '../../../app/hooks';
 import { isBrowser } from '../../../helpers';
 import chains from '../../../config/chains'
-
 import * as ga from '../../../lib/ga';
 import classNames from 'classnames';
 import { loginWithProvider } from '../../../lib/SupabaseConnector';
@@ -622,6 +621,16 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
                                 </a>
                             </Link>
                         </div>
+                        <Link href="#faq">
+                            <a className="group font-metro-bold text-text-color-100 mt-4 hover:text-text-color-100 prevent-default">
+                                <span className="underline pr-1 text-xl">
+                                    Read FAQ
+                                </span>
+                                <svg className="inline group-hover:translate-x-1 duration-300 mb-[3.5px]" width="16" height="14" viewBox="0 0 16 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path fillRule="evenodd" clipRule="evenodd" d="M8.26341 0.963555C8.61488 0.612083 9.18473 0.612083 9.5362 0.963555L14.9362 6.36356C15.2877 6.71503 15.2877 7.28488 14.9362 7.63635L9.5362 13.0363C9.18473 13.3878 8.61488 13.3878 8.26341 13.0363C7.91194 12.6849 7.91194 12.115 8.26341 11.7636L12.127 7.89995L1.69981 7.89995C1.20275 7.89995 0.799805 7.49701 0.799805 6.99995C0.799805 6.50289 1.20275 6.09995 1.69981 6.09995H12.127L8.26341 2.23635C7.91194 1.88488 7.91194 1.31503 8.26341 0.963555Z" fill="#070707"/>
+                                </svg>
+                            </a>
+                        </Link>
                     </div>
                     <div className="flex pt-20 justify-center sm:justify-end w-full">
                         <div className="p-[16px] rounded-[50%] w-[300px] h-[300px] bg-primary-cta-color-10 z-[10] border-2 border-primary-cta-layer-color-60 shadow-[-5px_5px_#CC8F18] button--shadow-secondary">
