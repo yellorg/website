@@ -19,5 +19,6 @@ export const loginWithProvider = async (provider: string) => {
 
 export const supabaseLogout = async () => {
     const { error } = await supabase.auth.signOut();
+
     console.log(error);
 };

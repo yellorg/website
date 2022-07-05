@@ -42,8 +42,20 @@ export const DuckiesLayout: FC<DuckiesLayoutProps> = ({ bounties, faqList }: Duc
     React.useEffect(() => {
         const supabaseSession = supabase.auth.session();
 
-        supabaseSession && setSession(supabaseSession);
+        setSession(supabaseSession);
     }, []);
+
+    React.useEffect(() => {
+        const supabaseSession = supabase.auth.session();
+
+        if (supabaseSession) {
+            setSession(supabaseSession);
+
+            supabase.auth.onAuthStateChange((event, session) => {
+                console.log(event, session);
+            });
+        }
+    }, [session]);
 
     React.useEffect(() => {
         if (items && isRewardsClaimed) {

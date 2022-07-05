@@ -489,7 +489,7 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
         }
 
         return 'Claim reward';
-    }, [isReady]);
+    }, [isReady, supabaseSession]);
 
     const renderSocialsModalBody = React.useMemo(() => {
         return (
@@ -534,7 +534,7 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
                 </div>
             </div>
         );
-    }, []);
+    }, [handleSocialAuth]);
 
     const renderModalBody = React.useMemo(() => {
         const token = isBrowser() && localStorage.getItem('referral_token');
