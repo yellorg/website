@@ -56,6 +56,8 @@ steps:
         from_secret: redirect_from_domain
       SVC_PORT:
         from_secret: svc_port
+      NEXT_PUBLIC_MAIN_CHAIN_ID:
+        from_secret: next_public_main_chain_id
       NEXT_PUBLIC_POLYGON_URL:
         from_secret: next_public_polygon_url
       NEXT_PUBLIC_CONTRACT_ADDRESS:
@@ -83,6 +85,8 @@ steps:
         from_secret: domain_uat
       REDIRECT_FROM_DOMAIN:
         from_secret: redirect_from_domain_uat
+      NEXT_PUBLIC_MAIN_CHAIN_ID:
+        from_secret: next_public_main_chain_id_uat
       NEXT_PUBLIC_POLYGON_URL:
         from_secret: next_public_polygon_url_uat
       NEXT_PUBLIC_CONTRACT_ADDRESS:
