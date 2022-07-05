@@ -77,7 +77,7 @@ const Duckies: FC = ({ bounties, faqList }: any): JSX.Element => {
                             />
                             <meta
                                 name="twitter:image"
-                                content="https://www.yellow.org/images/og-image.png"
+                                content="/images/og-image.png"
                             />
                         </Head>
                         <DuckiesLayout bounties={bounties} faqList={faqList} />
