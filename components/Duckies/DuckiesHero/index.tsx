@@ -84,10 +84,14 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
 
     const getBalance = React.useCallback(async() => {
         if (account) {
-            const balance = (await duckiesContract?.balanceOf(account)).toString();
-            const decimals = await duckiesContract?.decimals();
-
-            setBalance(balance);
+            const balance = (await duckiesContract?.balanceOf(account).catch((error: any) => {
+                console.error(error)
+                return '0'
+            })).toString();
+            const decimals = await duckiesContract?.decimals().catch((error: any) => {
+                console.error(error)
+                return '2'
+            });
             setBalance(balance / (10 ** decimals));
         }
     }, [account, duckiesContract]);
