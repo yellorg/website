@@ -597,6 +597,146 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
         supabaseUser,
     ]);
 
+    const renderDuckImage = React.useMemo(() => {
+        return (
+            <div className={classNames("flex items-center justify-center rounded-[50%] h-full", { 'border border-primary-cta-color-90': !supabaseUser })}>
+                <div className={classNames('flex items-center justify-center rounded-full', { 'bg-primary-cta-color-20': !!supabaseUser })}>
+                    <LazyLoadImage
+                        srcSet="/images/components/duckies/duckBigEyes.png"
+                        className={classNames('hidden', { 'md:group-hover:block': isReady })}
+                    />
+                    <LazyLoadImage
+                        srcSet="/images/components/duckies/duck.png"
+                        className={classNames('block', { 'md:group-hover:hidden': isReady })}
+                    />
+                </div>
+            </div>
+        );
+    }, [supabaseUser, isReady]);
+
+    const renderDuckBubble = React.useMemo(() => {
+        return (
+            <div className="hidden md:group-hover:block">
+                <div className="absolute bg-body-background-color w-[203px] h-[80px] top-[-50%] right-[50%] rounded-[4px] !rounded-br-[0px] flex justify-center items-center shadow-md">
+                    <span className="text-[16px] leading-[24px] text-black font-metro-bold">
+                        {(isReady && !supabaseUser) && 'Need to connect socials'}
+                        {(isReady && supabaseUser) && 'Secured duck'}
+                    </span>
+                </div>
+                <div className="absolute bubble-corner h-[25px] w-[27px] top-[calc(-50%+80px)] right-[50%] z-20" />
+            </div>
+        )
+    }, [isReady, supabaseUser])
+
+    const renderDuck = React.useMemo(() => {
+        if (!isReady) {
+            return renderDuckImage;
+        }
+
+        if (!supabaseUser) {
+            return (
+                <>
+                    {renderDuckImage}
+                    <div className="absolute top-[-2px] z-20 flex justify-center items-center">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="12" cy="12" r="12" fill="#B01212"/>
+                        </svg>
+                        <div className="absolute">
+                            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M1.5 10.5L10.5 1.5M1.5 1.5L10.5 10.5" stroke="#FFEBEB" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div className="absolute">
+                        <svg className="w-[93px] h-[93px] md:w-[169px] md:h-[169px]" viewBox="0 0 169 167" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <g filter="url(#filter0_dd_5325_86048)">
+                                <path d="M84.5 5.377C84.5 3.51193 82.9872 1.99261 81.1238 2.07082C68.165 2.61472 55.5113 6.28321 44.25 12.785C32.0125 19.8503 21.8503 30.0125 14.785 42.25C7.7196 54.4875 4 68.3693 4 82.5C4 96.6307 7.71961 110.512 14.785 122.75C21.8503 134.988 32.0125 145.15 44.25 152.215C56.4876 159.28 70.3693 163 84.5 163C98.6307 163 112.512 159.28 124.75 152.215C136.011 145.713 145.515 136.589 152.466 125.638C153.465 124.064 152.906 121.994 151.29 121.061C149.675 120.129 147.616 120.687 146.611 122.258C140.257 132.184 131.608 140.457 121.373 146.366C110.162 152.838 97.4451 156.246 84.5 156.246C71.5549 156.246 58.8378 152.838 47.627 146.366C36.4162 139.893 27.1067 130.584 20.6341 119.373C14.1615 108.162 10.754 95.4451 10.754 82.5C10.754 69.5549 14.1615 56.8378 20.6341 45.627C27.1067 34.4162 36.4162 25.1067 47.627 18.6341C57.8615 12.7252 69.3514 9.37073 81.1241 8.8313C82.9872 8.74593 84.5 7.24206 84.5 5.377Z" fill="url(#paint0_radial_5325_86048)"/>
+                            </g>
+                            <defs>
+                                <filter id="filter0_dd_5325_86048" x="0" y="0.0678711" width="156.965" height="168.932" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
+                                    <feFlood floodOpacity="0" result="BackgroundImageFix"/>
+                                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+                                    <feOffset dy="2"/>
+                                    <feGaussianBlur stdDeviation="2"/>
+                                    <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0"/>
+                                    <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_5325_86048"/>
+                                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+                                    <feOffset/>
+                                    <feGaussianBlur stdDeviation="1"/>
+                                    <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.12 0"/>
+                                    <feBlend mode="normal" in2="effect1_dropShadow_5325_86048" result="effect2_dropShadow_5325_86048"/>
+                                    <feBlend mode="normal" in="SourceGraphic" in2="effect2_dropShadow_5325_86048" result="shape"/>
+                                </filter>
+                                <radialGradient id="paint0_radial_5325_86048" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(146 132.5) rotate(-129.618) scale(149.107)">
+                                    <stop stopColor="#FFA800"/>
+                                    <stop offset="1" stopColor="#E91B1B"/>
+                                </radialGradient>
+                            </defs>
+                        </svg>
+                    </div>
+                    {renderDuckBubble}
+                </>
+            );
+        }
+
+        return (
+            <>
+                <div className="absolute w-[84px] md:w-[161px] h-[84px] md:h-[161px] bg-system-green-10 rounded-full p-1 gradient-green">
+                    {renderDuckImage}
+                </div>
+                <div className="absolute top-[-2px] z-20 flex justify-center items-center">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="12" cy="12" r="12" fill="#00632B"/>
+                    </svg>
+                    <div className="absolute">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path fillRule="evenodd" clipRule="evenodd" d="M0.950278 3.499C3.65771 3.46227 6.12453 2.42929 8.00078 0.75C9.87702 2.42929 12.3438 3.46227 15.0513 3.499C15.1496 4.0847 15.2008 4.68638 15.2008 5.30002C15.2008 10.0024 12.1955 14.0028 8.00078 15.4854C3.80609 14.0028 0.800781 10.0024 0.800781 5.30002C0.800781 4.68638 0.851959 4.0847 0.950278 3.499ZM11.4079 6.90709C11.7984 6.51657 11.7984 5.8834 11.4079 5.49288C11.0174 5.10236 10.3842 5.10236 9.99367 5.49288L7.10078 8.38577L6.00788 7.29288C5.61736 6.90236 4.9842 6.90236 4.59367 7.29288C4.20315 7.6834 4.20315 8.31657 4.59367 8.70709L6.39367 10.5071C6.58121 10.6946 6.83556 10.8 7.10078 10.8C7.36599 10.8 7.62035 10.6946 7.80788 10.5071L11.4079 6.90709Z" fill="#E8FCF1"/>
+                        </svg>
+                    </div>
+                </div>
+                {renderDuckBubble}
+            </>
+        );
+    }, [isReady, supabaseUser, renderDuckBubble, renderDuckImage]);
+
+    const renderBalanceCircleButton = React.useMemo(() => {
+        if (!isReady) {
+           return (
+                <div onClick={() => handleMetamask(isMetaMaskInstalled, 'Injected')} className="w-full button button--outline button--secondary button--shadow-secondary">
+                    <span className="button__inner !py-[6px] !px-[18px] !justify-center">{isMetaMaskInstalled ? 'Connect Metamask' : 'Install Metamask'}</span>
+                </div>
+           );
+        }
+
+        if (!supabaseUser) {
+            return (
+                <>
+                    <div onClick={() => console.log('connect social')} className="text-center w-1/2 lg:w-full mr-[24px] lg:mr-0 mt-[16px] !mr-0 button button--outline button--secondary button--shadow-secondary">
+                        <span className="button__inner !py-[6px] !px-[18px] !justify-center">Connect Social</span>
+                    </div>
+                    <div onClick={handleDisconnect} className="group flex flex-row items-center gap-1 mt-2 cursor-pointer">
+                        <span className="text-[14px] leading-[22px] font-metro-semibold text-neutral-control-layer-color-60 underline group-hover:text-neutral-control-layer-color-80">Logout</span>
+                        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12.75 12L15.75 9M15.75 9L12.75 6M15.75 9L5.25 9M9.75 12V12.75C9.75 13.9926 8.74264 15 7.5 15H4.5C3.25736 15 2.25 13.9926 2.25 12.75V5.25C2.25 4.00736 3.25736 3 4.5 3H7.5C8.74264 3 9.75 4.00736 9.75 5.25V6" stroke="#3F3F3F" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                    </div>
+                </>
+            );
+        }
+
+        return (
+            <div onClick={handleDisconnect} className="text-center w-1/2 lg:w-full mr-[24px] lg:mr-0 mt-[16px] !mr-0 button button--outline button--secondary button--shadow-secondary">
+                <span className="button__inner !py-[6px] !px-[18px] !justify-center">Log out</span>
+            </div>
+        );
+    }, [
+        isReady,
+        supabaseUser,
+        handleMetamask,
+        isMetaMaskInstalled,
+        handleDisconnect,
+    ]);
+
     const handleSendGAEvent = React.useCallback(() => {
         ga.event({
             action: "duckies_hero_earn_click",
@@ -756,26 +896,16 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
                                             <span className="text-sm text-text-color-60 font-metro-semibold">
                                                 {ENSName || `${shortenHex(account, 4)}`}
                                             </span>
-                                            <div onClick={handleDisconnect} className="text-center w-1/2 lg:w-full mr-6 lg:mr-0 mt-4 !mr-0 button button--outline button--secondary button--shadow-secondary">
-                                                <span className="button__inner !py-1.5 !px-[1.125rem] !justify-center">Log out</span>
-                                            </div>
+                                            {renderBalanceCircleButton}
                                         </div>
                                     ) : (
-                                        <div onClick={() => handleMetamask(isMetaMaskInstalled, 'Injected')} className="w-full button button--outline button--secondary button--shadow-secondary">
-                                            <span className="button__inner !py-1.5 !px-[1.125rem] !justify-center">{isMetaMaskInstalled ? 'Connect Metamask' : 'Install Metamask'}</span>
-                                        </div>
+                                        renderBalanceCircleButton
                                     )}
                                 </div>
                             </div>
                         </div>
-                        <div className="p-1.5 md:p-2.5 rounded-[50%] w-[6.063rem] md:w-[10.875rem] h-[6.063rem] md:h-[10.875rem] bg-primary-cta-color-20 mt-[-1.125rem] md:mt-[-1.5rem] ml-[14.25rem] md:ml-[-4.875rem] z-[9] absolute md:relative shadow-[-0.313rem_0.313rem] shadow-primary-cta-color-90">
-                            <div className="flex items-center justify-center rounded-[50%] h-full border border-primary-cta-color-90">
-                                <LazyLoadImage
-                                    srcSet={`${'/images/components/duckies/duck.png'}`}
-                                    effect="blur"
-                                    threshold={200}
-                                />
-                            </div>
+                        <div className={classNames('group p-[6px] md:p-[10px] rounded-[50%] w-[97px] md:w-[174px] h-[97px] md:h-[174px] bg-primary-cta-color-20 mt-[-18px] md:mt-[-24px] ml-[228px] md:ml-[-78px] z-[9] absolute md:relative shadow-[-5px_5px] shadow-primary-cta-color-90 flex justify-center items-center', { 'md:hover:shadow-transparent md:hover:translate-y-[5px]': isReady })}>
+                            {renderDuck}
                         </div>
                     </div>
                 </div>
