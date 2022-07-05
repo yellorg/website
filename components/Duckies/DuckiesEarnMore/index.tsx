@@ -131,11 +131,11 @@ export const DuckiesEarnMore = () => {
     ), [handleMetamask, isMetaMaskInstalled]);
 
     const inputLink = classnames('', {
-        'login-gradient w-full sm:w-[320px] absolute h-[64px]': !isReady,
+        'login-gradient w-full w-[320px] absolute h-[64px]': !isReady,
     });
 
     const inputLinkRef = classnames('flex items-center bg-input-background-color border-2 border-text-color-100 rounded mr-4 py-[18px] px-[18px] sm:px-5 w-full max-2-full overflow-x-auto', {
-        'border-r-0 rounded-tr-0 rounded-br-0 left-0 sm:w-[320px]': !isReady,
+        'border-r-0 rounded-tr-0 rounded-br-0 left-0 w-[320px] overflow-hidden': !isReady,
     });
 
     const message = React.useMemo(() => 'Go and claim your DUCKIES tokens (choose Polygon mainnet on your Wallet for tokens minting)!', []);
@@ -350,7 +350,7 @@ export const DuckiesEarnMore = () => {
                     <div className={classnames('flex w-full justify-center flex-col', { 'items-center': !isReady, 'items-left': isReady })}>
                         <div className={classnames('flex relative items-center max-w-screen sm:w-auto -mx-[14px] px-[14px] sm:max-w-[700px] mb-[24px] sm:mb-[20px]', { 'w-screen': isReady })}>
                             <div className={inputLinkRef} onClick={handleSendGAEvent} onFocus={handleSendGAEvent}>
-                                <div className="text-text-color-100 text-[16px] leading-[24px] font-metro-regular font-bold whitespace-nowrap">
+                                <div className={classnames("text-text-color-100 text-[16px] leading-[24px] font-metro-regular font-bold whitespace-nowrap", { 'overflow-hidden': !isReady })}>
                                     {`${shareableLinkPrefix}${shareableLink}`}
                                 </div>
                                 <div className={inputLink} />
