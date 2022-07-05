@@ -286,7 +286,7 @@ export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({
     return (
         <React.Fragment>
             <div className="pt-8 pb-[174px] mx-auto bg-primary-cta-color-90 duckies-affiliates">
-                <div className="mx-auto p-0 w-full max-w-full max-w-md-layout 2xl:max-w-lg-layout-2p">
+                <div className="mx-auto p-0 w-full max-w-full sm:max-w-md-layout 2xl:max-w-lg-layout-2p">
                     <div className="flex w-full overflow-x-auto overflow-y-hidden px-4 no-scrollbar">
                         <div className="mr-6 w-1/4 min-w-[300px]">
                             <div className="h-full border-2 rounded p-6 border-text-color-90 bg-body-background-color">
