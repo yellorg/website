@@ -5,6 +5,7 @@ import { DuckiesConnectorModalWindow } from '../DuckiesConnectModalWindow';
 import Image from 'next/image';
 import * as ga from '../../../lib/ga';
 import ReCAPTCHA from 'react-google-recaptcha';
+import { GoogleReCaptcha } from 'react-google-recaptcha-v3';
 
 export interface BountyItem {
     fid: string;
@@ -38,9 +39,6 @@ export const BountyRow: React.FC<BountyProps> = ({
     const [loading, setLoading] = React.useState<boolean>(false);
     const [isCaptchaNotResolved, setIsCaptchaNotResolved] = React.useState<boolean>(true);
 
-    let captcha: any;
-    captcha = React.useRef();
-
     const rowClassName = React.useMemo(() => {
         return classnames('flex w-full items-center justify-between border-b border-color-divider-color-40 px-1 py-2', {
             'bg-primary-cta-color-10': bounty.status === 'claim' && !((loading && isSingleBountyProcessing) || (isLoading && !isSingleBountyProcessing)),
@@ -67,7 +65,6 @@ export const BountyRow: React.FC<BountyProps> = ({
     const duckiesColor = React.useMemo(() => bounty.status === 'claim' ? '#ECAA00' : '#525252', [bounty.status]);
 
     const handleClaimReward = React.useCallback(async () => {
-        captcha.reset();
         if (!isCaptchaNotResolved) {
             setLoading(true);
             setIsSingleBountyProcessing(true);
@@ -211,12 +208,10 @@ export const BountyRow: React.FC<BountyProps> = ({
                 <div className="text-text-color-100 text-sm text-center font-metro-regular font-medium mb-6">
                     {bounty.description}
                 </div>
-                <div>
-                    <ReCAPTCHA
-                        ref={e => {captcha = e}}
-                        sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITEKEY || 'changeme'}
-                        onChange={() => setIsCaptchaNotResolved(false)}
-                        className="mb-5"
+                <div className="mb-5">
+                    <GoogleReCaptcha
+                        // sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITEKEY || 'changeme'}
+                        onVerify={() => {setIsCaptchaNotResolved(false), console.log('verified')}}
                     />
                 </div>
                 <div className="flex items-center justify-center">
@@ -226,7 +221,7 @@ export const BountyRow: React.FC<BountyProps> = ({
                 </div>
             </div>
         );
-    }, [bounty, handleClaimReward, captcha, isCaptchaNotResolved]);
+    }, [bounty, handleClaimReward, isCaptchaNotResolved]);
 
     const renderLoadingModalBody = React.useMemo(() => {
         return (
@@ -259,11 +254,11 @@ export const BountyRow: React.FC<BountyProps> = ({
             <DuckiesConnectorModalWindow
                 isOpen={isOpenShow}
                 headerContent={bounty.title}
-                bodyContent={renderDetailsModalBody}
+                bodyContent={renderClaimRewardModalBody}
                 setIsOpen={setIsOpenShow}
             />
         );
-    }, [isOpenShow, bounty.title, renderDetailsModalBody]);
+    }, [isOpenShow, bounty.title, renderClaimRewardModalBody]);
 
     const renderClaimModal = React.useMemo(() => {
         return (
