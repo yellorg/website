@@ -4,7 +4,6 @@ import { convertNumberToLiteral } from '../../../helpers/convertNumberToLiteral'
 import { DuckiesConnectorModalWindow } from '../DuckiesConnectModalWindow';
 import Image from 'next/image';
 import * as ga from '../../../lib/ga';
-import ReCAPTCHA from 'react-google-recaptcha';
 import { GoogleReCaptcha } from 'react-google-recaptcha-v3';
 
 export interface BountyItem {
@@ -210,8 +209,7 @@ export const BountyRow: React.FC<BountyProps> = ({
                 </div>
                 <div className="mb-5">
                     <GoogleReCaptcha
-                        // sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITEKEY || 'changeme'}
-                        onVerify={() => {setIsCaptchaNotResolved(false), console.log('verified')}}
+                        onVerify={() => setIsCaptchaNotResolved(false)}
                     />
                 </div>
                 <div className="flex items-center justify-center">
