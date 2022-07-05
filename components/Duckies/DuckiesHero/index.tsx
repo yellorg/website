@@ -79,8 +79,8 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
     }, [chain, currentMetamaskChain]);
 
     const isReady = useMemo(() => {
-        return supportedChain && triedToEagerConnect && active && account && isAddedMainChain;
-    }, [supportedChain, triedToEagerConnect, active, account, isAddedMainChain]);
+        return supportedChain && triedToEagerConnect && active && account;
+    }, [supportedChain, triedToEagerConnect, active, account]);
 
     const getBalance = React.useCallback(async() => {
         if (account) {
