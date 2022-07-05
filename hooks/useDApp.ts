@@ -118,6 +118,7 @@ export default function useDApp() {
   const disconnect = useCallback(() => {
     providerCache.clear()
     deactivate()
+    supabaseLogout();
 
     if (connectorInfo) {
       const connector = connectorsByProvider[connectorInfo?.id]
