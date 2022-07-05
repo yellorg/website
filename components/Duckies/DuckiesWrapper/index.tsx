@@ -25,11 +25,12 @@ export const DuckiesLayout: FC<DuckiesLayoutProps> = ({ bounties, faqList }: Duc
     const [isRewardsClaimed, setIsRewardsClaimed] = React.useState<boolean>(false);
     const [isSingleBountyProcessing, setIsSingleBountyProcessing] = React.useState<boolean>(false);
     const [isReferralClaimed, setIsReferralClaimed] = React.useState<boolean>(false);
-    const [session, setSession] = React.useState<any>(null);
+    const [user, setUser] = React.useState<any>(null);
 
     const dispatch = useAppDispatch();
     const duckiesContract = useDuckiesContract();
     const { active, account, signer } = useWallet();
+    const supabaseUser = supabase.auth.user();
 
     const getAffiliates = React.useCallback(async() => {
         if (account && signer) {
@@ -40,22 +41,10 @@ export const DuckiesLayout: FC<DuckiesLayoutProps> = ({ bounties, faqList }: Duc
     }, [account, duckiesContract, signer]);
 
     React.useEffect(() => {
-        const supabaseSession = supabase.auth.session();
-
-        setSession(supabaseSession);
-    }, []);
-
-    React.useEffect(() => {
-        const supabaseSession = supabase.auth.session();
-
-        if (supabaseSession) {
-            setSession(supabaseSession);
-
-            supabase.auth.onAuthStateChange((event, session) => {
-                console.log(event, session);
-            });
+        if (supabaseUser && !user) {
+            setUser(supabaseUser);
         }
-    }, [session]);
+    }, [supabaseUser, user]);
 
     React.useEffect(() => {
         if (items && isRewardsClaimed) {
@@ -68,7 +57,7 @@ export const DuckiesLayout: FC<DuckiesLayoutProps> = ({ bounties, faqList }: Duc
 
             setBountyItems(newItems);
         }
-    }, [isRewardsClaimed]);
+    }, [isRewardsClaimed, items]);
 
     React.useEffect(() => {
         if (active && account) {
@@ -200,7 +189,7 @@ export const DuckiesLayout: FC<DuckiesLayoutProps> = ({ bounties, faqList }: Duc
                 isSingleBountyProcessing={isSingleBountyProcessing}
                 isReferralClaimed={isReferralClaimed}
                 setIsReferralClaimed={setIsReferralClaimed}
-                supabaseSession={session}
+                supabaseUser={user}
             />
             <DuckiesAffiliates
                 bountyItems={bountyItems}

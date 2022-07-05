@@ -34,7 +34,7 @@ interface DuckiesHeroProps {
     isSingleBountyProcessing: boolean;
     isReferralClaimed: boolean;
     setIsReferralClaimed: (value: boolean) => void;
-    supabaseSession: any;
+    supabaseUser: any;
 }
 
 export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
@@ -49,7 +49,7 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
     isSingleBountyProcessing,
     isReferralClaimed,
     setIsReferralClaimed,
-    supabaseSession,
+    supabaseUser,
 }: DuckiesHeroProps) => {
     const [isMetaMaskInstalled, setMetaMaskInstalled] = useState<boolean>(true);
     const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
@@ -484,12 +484,12 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
             return 'Connect Wallet';
         }
 
-        if (!supabaseSession) {
+        if (!supabaseUser) {
             return 'Connect social';
         }
 
         return 'Claim reward';
-    }, [isReady, supabaseSession]);
+    }, [isReady, supabaseUser]);
 
     const renderSocialsModalBody = React.useMemo(() => {
         return (
@@ -543,7 +543,7 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
             return renderMetamaskModalBody;
         }
 
-        if (!supabaseSession) {
+        if (!supabaseUser) {
             return renderSocialsModalBody;
         }
 
@@ -560,7 +560,7 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
         renderNoRewardsModalBody,
         renderClaimRewardModalBody,
         renderSocialsModalBody,
-        supabaseSession,
+        supabaseUser,
     ]);
 
     const handleSendGAEvent = React.useCallback(() => {
