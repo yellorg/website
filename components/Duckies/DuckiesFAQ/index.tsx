@@ -91,7 +91,7 @@ export const DuckiesFAQ = ({ faqList }: DuckiesFAQProps) => {
     );
 
     return (
-        <div className="flex flex-col lg:flex-row mx-auto pt-[84px] lg:pt-[100px] px-[14px] max-w-md-layout 2xl:max-w-lg-layout">
+        <div id="faq" className="flex flex-col lg:flex-row mx-auto pt-[84px] lg:pt-[100px] px-[14px] max-w-md-layout 2xl:max-w-lg-layout">
             <div className="basis-1/3 hidden lg:block">
                 {renderRiddlerDuck}
             </div>
