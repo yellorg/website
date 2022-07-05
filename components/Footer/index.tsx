@@ -48,7 +48,7 @@ export const Footer = () => {
 
     const renderLinkItems = (items: any) => {
         return (
-            <ul className="footer__items">
+            <ul className="list-none pl-0">
                 {items.map((item: any, i: number) => {
                     const isExternal = item.hasOwnProperty('href');
                     return (
@@ -60,25 +60,13 @@ export const Footer = () => {
                                         rel="noopener noreferrer"
                                         className="footer__link-item"
                                     >
-                                        <span>
+                                        <span className="flex inline-block items-center">
                                             {item.label}
-                                            {/* <svg
-                                                width="13.5"
-                                                height="13.5"
-                                                aria-hidden="true"
-                                                viewBox="0 0 24 24"
-                                                className="iconExternalLink"
-                                            >
-                                                <path
-                                                    fill="currentColor"
-                                                    d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"
-                                                ></path>
-                                            </svg> */}
                                             <IconExternalLink />
                                         </span>
                                     </a>
                                 ):(
-                                    <a className="footer__link-item" >
+                                    <a className="footer__link-item">
                                         {item.label}
                                     </a>
                                 )}
@@ -123,154 +111,6 @@ export const Footer = () => {
                         </p>
                         {renderSocials}
                     </div>
-                    {/* <div className="col footer__col">
-                        <div className="footer__title">Docs</div>
-                        <ul className="footer__items">
-                            <li className="footer__item">
-                                <a
-                                    className="footer__link-item"
-                                    href="/docs/overview/what-is-yellow"
-                                >
-                                    Introduction
-                                </a>
-                            </li>
-                            <li className="footer__item">
-                                <a
-                                    className="footer__link-item"
-                                    href="https://docs.yellow.org/"
-                                >
-                                    Vision
-                                </a>
-                            </li>
-                            <li className="footer__item">
-                                <a
-                                    className="footer__link-item"
-                                    href="https://docs.yellow.org/network-architecture"
-                                >
-                                    Architecture
-                                </a>
-                            </li>
-                            <li className="footer__item">
-                                <a
-                                    className="footer__link-item"
-                                    href="https://docs.yellow.org/business-model/token-utility"
-                                >
-                                    Tokenomics
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div className="col footer__col">
-                        <div className="footer__title">Community</div>
-                        <ul className="footer__items">
-                            <li className="footer__item">
-                                <a
-                                    href="https://twitter.com/Yellow"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="footer__link-item"
-                                >
-                                    <span>
-                                        Twitter{' '}
-                                        <svg
-                                            width="13.5"
-                                            height="13.5"
-                                            aria-hidden="true"
-                                            viewBox="0 0 24 24"
-                                            className="iconExternalLink_I5OW"
-                                        >
-                                            <path
-                                                fill="currentColor"
-                                                d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"
-                                            ></path>
-                                        </svg>
-                                    </span>
-                                </a>
-                            </li>
-                            <li className="footer__item">
-                                <a
-                                    href="https://t.me/yellow_org"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="footer__link-item"
-                                >
-                                    <span>
-                                        Telegram{' '}
-                                        <svg
-                                            width="13.5"
-                                            height="13.5"
-                                            aria-hidden="true"
-                                            viewBox="0 0 24 24"
-                                            className="iconExternalLink"
-                                        >
-                                            <path
-                                                fill="currentColor"
-                                                d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"
-                                            ></path>
-                                        </svg>
-                                    </span>
-                                </a>
-                            </li>
-                            <li className="footer__item">
-                                <a
-                                    href="https://stackoverflow.com/questions/tagged/yellow"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="footer__link-item"
-                                >
-                                    <span>
-                                        Stack Overflow{' '}
-                                        <svg
-                                            width="13.5"
-                                            height="13.5"
-                                            aria-hidden="true"
-                                            viewBox="0 0 24 24"
-                                            className="iconExternalLink"
-                                        >
-                                            <path
-                                                fill="currentColor"
-                                                d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"
-                                            ></path>
-                                        </svg>
-                                    </span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div className="col footer__col">
-                        <div className="footer__title">More</div>
-                        <ul className="footer__items">
-                            <li className="footer__item">
-                                <a className="footer__link-item" href="https://docs.yellow.org/business-model/token-utility">
-                                    Blog
-                                </a>
-                            </li>
-                            <li className="footer__item">
-                                <a
-                                    href="https://github.com/yellorg"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="footer__link-item"
-                                >
-                                    <span>
-                                        GitHub{' '}
-                                        <svg
-                                            width="13.5"
-                                            height="13.5"
-                                            aria-hidden="true"
-                                            viewBox="0 0 24 24"
-                                            className="iconExternalLink"
-                                        >
-                                            <path
-                                                fill="currentColor"
-                                                d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"
-                                            ></path>
-                                        </svg>
-                                    </span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div> */}
                     {renderLinks}
                 </div>
                 <div className="footer__bottom text--center">
