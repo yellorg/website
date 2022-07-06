@@ -16,7 +16,7 @@ export const DuckiesConnectorModalWindow = (props: DuckiesConnectorModalWindowPr
 
     const modalClass = classnames('bg-body-background-color text-text-color-100 relative transition-all ease-in-out duration-200 py-[18px] px-6 w-[360px] border-2 border-text-color-100', {
         'opacity-100 visible m-3 scale-100': props.isOpen,
-        'opacity-0 hidden': !props.isOpen
+        'opacity-0 hidden': !props.isOpen,
     });
 
     const wrapClass = classnames('flex items-center justify-center left-0 top-0 min-h-screen fixed transition-all ease-in-out duration-200 w-full z-[999]', {

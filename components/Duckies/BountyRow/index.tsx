@@ -56,12 +56,14 @@ export const BountyRow: React.FC<BountyProps> = ({
     }, [bounty.status, loading, isLoading, isSingleBountyProcessing]);
 
     const claimButtonClassName = React.useMemo(() => {
-        return classnames('button__inner', isCaptchaNotResolved && 'cursor-not-allowed');
+        return classnames('button__inner', {
+            'cursor-not-allowed': isCaptchaNotResolved,
+        });
     },[isCaptchaNotResolved]);
 
     const claimButtonContainerClassName = React.useMemo(() => {
         return classnames({
-            'px-1.5 py-2 bg-neutral-control-color-40 rounded-sm text-neutral-control-layer-color-40 cursor-not-allowed': isCaptchaNotResolved,
+            'px-7 py-1.5 bg-neutral-control-color-40 rounded-sm text-neutral-control-layer-color-40 cursor-not-allowed': isCaptchaNotResolved,
             'button button--outline button--secondary button--shadow-secondary': !isCaptchaNotResolved,
         });
     },[isCaptchaNotResolved]);
@@ -70,6 +72,7 @@ export const BountyRow: React.FC<BountyProps> = ({
 
     const handleClaimReward = React.useCallback(async () => {
         captcha.reset();
+
         if (!isCaptchaNotResolved) {
             setLoading(true);
             setIsSingleBountyProcessing(true);
