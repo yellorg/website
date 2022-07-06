@@ -1,5 +1,6 @@
 import React from 'react';
 import { useRouter } from 'next/router';
+import DuckiesHead from '../../components/Duckies/DuckiesHead';
 
 interface DuckiesLinkProps {
     token: string;
@@ -21,7 +22,7 @@ const DuckiesLink: React.FC<DuckiesLinkProps> = ({ token, redirectToHome }: Duck
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    return null;
+    return <DuckiesHead />
 };
 
 export const getServerSideProps = async (context: any) => {
