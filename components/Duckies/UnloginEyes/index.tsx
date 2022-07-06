@@ -23,14 +23,14 @@ const UnloginEyes: React.FC<UnloginEyes> = ({ children, paginationComponent, isR
     }, [supportedChain, triedToEagerConnect, active, account]);
 
     const rootClassName = classnames('relative flex flex-col justify-between h-[89%]', {
-        'blur-[5px]': !isReady
+        'blur-[0.313rem]': !isReady
     });
 
     const paginationClassName = classnames('', {
-        'blur-[5px]': !isReady
+        'blur-[0.313rem]': !isReady
     });
 
-    const reversedClassName = classnames('absolute flex items-center justify-center w-full h-full top-[-50px]', {
+    const reversedClassName = classnames('absolute flex items-center justify-center w-full h-full top-[-3.125rem]', {
         'rotate-y-180': isReversed
     });
 

@@ -7,7 +7,6 @@ import useDuckiesContract from '../../../hooks/useDuckiesContract';
 import useWallet from '../../../hooks/useWallet';
 import { dispatchAlert } from '../../../features/alerts/alertsSlice';
 import { useAppDispatch } from '../../../app/hooks';
-
 import * as ga from '../../../lib/ga';
 import { DuckiesFAQ } from '../DuckiesFAQ';
 import { supabase } from '../../../lib/SupabaseConnector';
@@ -176,7 +175,7 @@ export const DuckiesLayout: FC<DuckiesLayoutProps> = ({ bounties, faqList }: Duc
     }, [signer, account, bountiesToClaim]);
 
     return (
-        <main className="bg-primary-cta-color-60 pb-[80px] md:pb-[120px]">
+        <main className="bg-primary-cta-color-60 pb-[5rem] md:pb-[7.5rem]">
             <DuckiesHero
                 bountiesToClaim={bountiesToClaim}
                 handleClaimAllBounties={handleClaimAllBounties}
