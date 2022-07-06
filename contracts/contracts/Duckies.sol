@@ -46,7 +46,7 @@ contract Duckies is Initializable, ERC20CappedUpgradeable, PausableUpgradeable, 
     }
 
     function initialize(address issuer) initializer public {
-        __ERC20_init("Yellow Duckies", "DUCKZ");
+        __ERC20_init("Yellow Duckies", "DUCKIES");
         __ERC20Capped_init(_MAX_SUPPLY * 10 ** decimals());
         __Pausable_init();
         __Ownable_init();
@@ -54,7 +54,7 @@ contract Duckies is Initializable, ERC20CappedUpgradeable, PausableUpgradeable, 
         _issuer = issuer;
         setReferralPayouts([500, 125, 80, 50, 20]);
         setBountyPayouts([50, 25, 15, 10, 5]);
-        _mint(msg.sender, 444000000000 * 10 ** decimals());
+        _mint(msg.sender, 888000000000 * 0.2 * 10 ** decimals()); // 888000000000 - total supply, 0.2 - 20%
     }
 
     function decimals() public view virtual override returns (uint8) {
