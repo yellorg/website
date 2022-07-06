@@ -12,6 +12,19 @@ interface DuckiesFAQProps {
 export const DuckiesFAQ = ({ faqList }: DuckiesFAQProps) => {
     const [selectedQuestionIndex, setSelectedQuestionIndex] = React.useState<number>(-1);
 
+    const handleQuestionClick = React.useCallback(
+        (index: number) => {
+            if (selectedQuestionIndex < index && selectedQuestionIndex != -1) {
+                const position = window.pageYOffset - (document.getElementById(`faq-${selectedQuestionIndex}`)?.clientHeight || 0) - 1;
+                window.scrollTo(0, position);
+            }
+            setSelectedQuestionIndex(
+                selectedQuestionIndex == index ? -1 : index
+            );
+        },
+        [selectedQuestionIndex]
+    );
+
     const renderFAQList = React.useMemo(() => {
         if (!faqList?.data?.slices?.length || !faqList.data.slices[0].items) {
             return <></>;
@@ -36,25 +49,25 @@ export const DuckiesFAQ = ({ faqList }: DuckiesFAQProps) => {
             );
 
             const caretClassName = classNames(
-                'transition duration-300',
+                'transition duration-300 w-[40px]',
                 {
                     'rotate-180': isSelected,
                 }
             );
 
             return (
-                <div key={`faq-${index}`} className="group w-full border border-text-color-100 rounded" onClick={() => { setSelectedQuestionIndex(isSelected ? -1 : index) }}>
-                    <div className={questionClassName}>
+                <div key={`faq-${index}`} className="group w-full border border-text-color-100 rounded">
+                    <div className={questionClassName} onClick={() => { handleQuestionClick(index) }}>
                         <div className="w-full flex gap-[12px] items-center">
                             <svg className={caretClassName} width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path fillRule="evenodd" clipRule="evenodd" d="M10.5858 14.5858C11.3668 13.8047 12.6332 13.8047 13.4142 14.5858L20 21.1716L26.5858 14.5858C27.3668 13.8047 28.6332 13.8047 29.4142 14.5858C30.1953 15.3668 30.1953 16.6332 29.4142 17.4142L21.4142 25.4142C20.6332 26.1953 19.3668 26.1953 18.5858 25.4142L10.5858 17.4142C9.80474 16.6332 9.80474 15.3668 10.5858 14.5858Z" fill="#070707"/>
                             </svg>
-                            <span className="text-[20px] leading-[28px] text-text-color-100 font-metro-semibold">
+                            <span className="text-[20px] leading-[28px] text-text-color-100 font-metro-semibold w-[calc(100%-40px)]">
                                 {item.question}
                             </span>
                         </div>
                     </div>
-                    <div className={answerClassName}>
+                    <div className={answerClassName} id={`faq-${index}`}>
                         <div className="px-[24px] pt-[16px] pb-[24px]">
                             <PrismicRichText field={item.answer} components={HtmlSerializer} />
                         </div>
@@ -106,7 +119,7 @@ export const DuckiesFAQ = ({ faqList }: DuckiesFAQProps) => {
                     <div className="text-[20px] leading-[28px] text-text-color-100 font-metro-semibold text-left inline">
                         Can’t find it here? Check out our{' '}
                         <Link href="https://t.me/yellow_org">
-                            <a className="group text-text-color-100 hover:text-text-color-100 prevent-default">
+                            <a target="_blank" className="group text-text-color-100 hover:text-text-color-100 prevent-default">
                                 <span className="underline">
                                     telegram channel
                                 </span>
