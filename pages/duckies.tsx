@@ -35,7 +35,7 @@ const Duckies: FC = ({ bounties, faqList }: any): JSX.Element => {
     return (
         <Web3ReactProvider getLibrary={getLibrary}>
             <ReduxProvider>
-                <div className="flex flex-col min-h-full">
+                <div className="flex flex-col min-h-full test-caching-duckies">
                     <Navbar />
                     <Alerts />
                     <div className="main-wrapper">
