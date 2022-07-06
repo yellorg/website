@@ -116,6 +116,7 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
             const succeed = await switchToMainChain()
             if (succeed) {
                 setAddedMainChain(true)
+                return true
             } else {
                 try {
                     await window?.ethereum?.request({
@@ -131,14 +132,17 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
                         ],
                     });
                     setAddedMainChain(true)
+                    return true
                 } catch (addError: any) {
                     console.error(addError)
                     setAddedMainChain(false)
+                    return false
                 }
             }
         } catch (error: any) {
             console.error(error)
             setAddedMainChain(false)
+            return false
         }
     }, [mainChain, mainChainIdHex, switchToMainChain, setAddedMainChain])
 
@@ -190,7 +194,8 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
             console.warn('alerts.message.wallet.metamask.locked');
         }
 
-        await addOrSwitchToMainChain()
+        const switched = await addOrSwitchToMainChain()
+        if (!switched) return
 
         connectWithProvider(provider).then(() => {
             console.log('removeConnectWalletAlert');
