@@ -14,7 +14,7 @@ export const DuckiesConnectorModalWindow = (props: DuckiesConnectorModalWindowPr
         'opacity-0 hidden': !props.isOpen,
     });
 
-    const modalClass = classnames('bg-body-background-color text-text-color-100 relative transition-all ease-in-out duration-200 py-[18px] px-6 w-[360px] border-2 border-text-color-100', {
+    const modalClass = classnames('bg-body-background-color text-text-color-100 relative transition-all ease-in-out duration-200 py-6 px-6 w-[21.875rem] border-2 border-text-color-100', {
         'opacity-100 visible m-3 scale-100': props.isOpen,
         'opacity-0 hidden': !props.isOpen,
     });
@@ -37,7 +37,7 @@ export const DuckiesConnectorModalWindow = (props: DuckiesConnectorModalWindowPr
                         <div className="text-2xl font-semibold font-gilmer-medium max-w-[80%] text-center">
                             {props.headerContent}
                         </div>
-                        <div onClick={closeModal} className="flex cursor-pointer absolute right-0 top-[10px]">
+                        <div onClick={closeModal} className="flex cursor-pointer absolute right-0 top-2.5">
                             <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M1 13L13 1M1 1L13 13" stroke="#AAAAAA" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                             </svg>

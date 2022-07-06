@@ -610,9 +610,9 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
 
     return (
         <React.Fragment>
-            <div className="flex justify-between pb-[168px] flex-col sm:flex-row pt-[42px] sm:pt-8 duckies-hero">
-                <div className="flex flex-col sm:flex-row mx-auto px-[14px] max-w-md-layout 2xl:max-w-lg-layout-2p">
-                    <div className="flex flex-col justify-start mb-[60px] sm:mb-0">
+            <div className="flex justify-between pb-[10.5rem] flex-col sm:flex-row pt-[2.625rem] sm:pt-8 duckies-hero">
+                <div className="flex flex-col sm:flex-row mx-auto px-3.5 max-w-md-layout 2xl:max-w-lg-layout-2p">
+                    <div className="flex flex-col justify-start mb-[3.75rem] sm:mb-0">
                         <div className="flex justify-center sm:justify-start sm:mb-4">
                             <LazyLoadImage
                                 srcSet={`${'/images/components/duckies/celebration.png'}`}
@@ -623,7 +623,7 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
                             />
                         </div>
                         <div className="flex flex-col justify-start break-words sm:justify-center sm:items-center sm:pb-2">
-                            <div className="text-text-color-100 font-gilmer-bold text-[60px] leading-[64px]">
+                            <div className="text-text-color-100 font-gilmer-bold text-6xl">
                             <div className="py-1">
                                 <svg width="263" height="54" viewBox="0 0 263 54" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M18.24 6H0V48H18.24C30.6 48 38.34 39.12 38.34 27C38.34 14.64 30.48 6 18.24 6ZM18.06 40.56H8.16V13.38H18.06C25.26 13.38 30.06 18.84 30.06 26.82C30.06 34.92 25.26 40.56 18.06 40.56Z" fill="#090909"/>
@@ -643,13 +643,13 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
                                 Web3 reward Token
                             </div>
                         </div>
-                        <div className="flex mt-[32px] flex-col lg:flex-row gap-[12px]">
+                        <div className="flex mt-8 flex-col lg:flex-row gap-3">
                             <div onClick={handleClaimButtonClick} className="w-full lg:w-fit button button--outline button--secondary button--shadow-secondary">
-                                <span className="button__inner !text-[24px] !leading-[32px] !p-[16px] !justify-center">Claim your reward</span>
+                                <span className="button__inner !text-2xl !p-4 !justify-center">Claim your reward</span>
                             </div>
                             <Link href="#earn-more">
                                 <a className="sm:mt-0 w-full lg:w-fit button button--secondary button--shadow-secondary" onClick={handleSendGAEvent}>
-                                    <span className="button__inner !text-[24px] !leading-[32px] !p-[16px] !justify-center">
+                                    <span className="button__inner !text-2xl !p-4 !justify-center">
                                         Earn more
                                     </span>
                                 </a>
@@ -660,35 +660,35 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
                                 <span className="underline pr-1 text-xl">
                                     Read FAQ
                                 </span>
-                                <svg className="inline group-hover:translate-x-1 duration-300 mb-[3.5px]" width="16" height="14" viewBox="0 0 16 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <svg className="inline group-hover:translate-x-1 duration-300 mb-[0.219rem]" width="16" height="14" viewBox="0 0 16 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path fillRule="evenodd" clipRule="evenodd" d="M8.26341 0.963555C8.61488 0.612083 9.18473 0.612083 9.5362 0.963555L14.9362 6.36356C15.2877 6.71503 15.2877 7.28488 14.9362 7.63635L9.5362 13.0363C9.18473 13.3878 8.61488 13.3878 8.26341 13.0363C7.91194 12.6849 7.91194 12.115 8.26341 11.7636L12.127 7.89995L1.69981 7.89995C1.20275 7.89995 0.799805 7.49701 0.799805 6.99995C0.799805 6.50289 1.20275 6.09995 1.69981 6.09995H12.127L8.26341 2.23635C7.91194 1.88488 7.91194 1.31503 8.26341 0.963555Z" fill="#070707"/>
                                 </svg>
                             </a>
                         </Link>
                     </div>
                     <div className="flex pt-20 justify-center sm:justify-end w-full">
-                        <div className="p-[16px] rounded-[50%] w-[300px] h-[300px] bg-primary-cta-color-10 z-[10] border-2 border-primary-cta-layer-color-60 shadow-[-5px_5px_#CC8F18] button--shadow-secondary">
+                        <div className="p-4 rounded-[50%] w-[18.75rem] h-[18.75rem] bg-primary-cta-color-10 z-[10] border-2 border-primary-cta-layer-color-60 shadow-[-0.313rem_0.313rem_#CC8F18] button--shadow-secondary">
                             <div className="flex flex-col items-center justify-center rounded-[50%] h-full bg-primary-cta-color-10 border border-primary-cta-color-90 z-[10]">
                                 <div>
-                                    <div className="flex justify-between items-center mb-[8px]">
-                                        <div className={classNames('uppercase font-gilmer-bold text-primary-cta-layer-color-60', {'text-[24px] leading-[32px]': isReady, 'text-[30px] leading-[40px]': !isReady})}>
+                                    <div className="flex justify-between items-center mb-2">
+                                        <div className={classNames('uppercase font-gilmer-bold text-primary-cta-layer-color-60', {'text-2xl': isReady, 'text-3xl': !isReady})}>
                                             Balance
                                         </div>
-                                        <div onMouseEnter={() => setIsOpenBalancesInfo(true)} onMouseLeave={() => setIsOpenBalancesInfo(false)} className="flex ml-[13px] sm:relative">
+                                        <div onMouseEnter={() => setIsOpenBalancesInfo(true)} onMouseLeave={() => setIsOpenBalancesInfo(false)} className="flex ml-[0.813rem] sm:relative">
                                             <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" className="z-[101] cursor-pointer">
                                                 <path d="M11 14H10V10H9M10 6H10.01M19 10C19 14.9706 14.9706 19 10 19C5.02944 19 1 14.9706 1 10C1 5.02944 5.02944 1 10 1C14.9706 1 19 5.02944 19 10Z" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                                             </svg>
                                             {isOpenBalancesInfo &&
-                                                <div className="z-[100] absolute left-[18px] sm:left-auto right-[18px] sm:right-0 mt-[30px] sm:mt-0 sm:pt-[30px] sm:min-w-[445px] w-[calc(100vw-36px)] sm:w-fit">
-                                                    <div className="bg-text-color-0 border-2 border-text-color-100 rounded flex h-fit flex-col p-[16px]">
-                                                        <h5 className="pb-[8px] mb-0 text-text-color-100 text-[24px] leading-[32px] font-gilmer-medium">Connected wallet info</h5>
+                                                <div className="z-[100] absolute left-[1.125rem] sm:left-auto right-[1.125rem] sm:right-0 mt-[1.875rem] sm:mt-0 sm:pt-[1.875rem] sm:min-w-[27.813rem] w-[calc(100vw-2.25rem)] sm:w-fit">
+                                                    <div className="bg-text-color-0 border-2 border-text-color-100 rounded flex h-fit flex-col p-4">
+                                                        <h5 className="pb-2 mb-0 text-text-color-100 text-2xl font-gilmer-medium">Connected wallet info</h5>
                                                         {account && (
                                                             <React.Fragment>
                                                                 <div className="flex items-center">
-                                                                    <span className="text-[14px] leading-[22px] text-text-color-100 font-metro-semibold">Balance:</span>
-                                                                    <span className="text-[14px] leading-[22px] text-text-color-100 font-metro-regular ml-[3px] flex items-center">
+                                                                    <span className="text-sm text-text-color-100 font-metro-semibold">Balance:</span>
+                                                                    <span className="text-sm text-text-color-100 font-metro-regular ml-[0.188rem] flex items-center">
                                                                         {convertNumberToLiteral(balance ? +balance : 0)}
-                                                                        <svg className="ml-[4px]" width="10" height="14" viewBox="0 0 20 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                        <svg className="ml-1" width="10" height="14" viewBox="0 0 20 28" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                                             <path d="M9.51487 3.11111H0V24.8889H9.51487C15.9624 24.8889 20 20.2844 20 14C20 7.59111 15.8998 3.11111 9.51487 3.11111ZM9.42097 21.0311H4.25665V6.93778H9.42097C13.1768 6.93778 15.6808 9.76889 15.6808 13.9067C15.6808 18.1067 13.1768 21.0311 9.42097 21.0311Z" fill="#000000"/>
                                                                             <path d="M3.92 0H7.04989V6.22222H3.92V0Z" fill="#000000"/>
                                                                             <path d="M3.92 21.7778H7.04989V28H3.92V21.7778Z" fill="#000000"/>
@@ -699,21 +699,21 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
                                                                 </div>
                                                                 {chain && (
                                                                     <div>
-                                                                        <span className="text-[14px] leading-[22px] text-text-color-100 font-metro-semibold">Current network: </span>
-                                                                        <span className="text-[14px] leading-[22px] text-text-color-100 font-metro-regular">{chain.network}</span>
+                                                                        <span className="text-sm text-text-color-100 font-metro-semibold">Current network: </span>
+                                                                        <span className="text-sm text-text-color-100 font-metro-regular">{chain.network}</span>
                                                                     </div>
                                                                 )}
                                                                 <div className="duckies-hero__tooltip-box">
-                                                                    <span className="text-[14px] leading-[22px] text-text-color-100 font-metro-semibold">Current address: </span>
-                                                                    <span className="text-[14px] leading-[22px] text-text-color-100 font-metro-regular">{ENSName || account}</span>
+                                                                    <span className="text-sm text-text-color-100 font-metro-semibold">Current address: </span>
+                                                                    <span className="text-sm text-text-color-100 font-metro-regular">{ENSName || account}</span>
                                                                 </div>
                                                                 <div>
-                                                                    <span className="text-[14px] leading-[22px] text-text-color-100 font-metro-semibold">DUCKZ smart-contract address:</span>
+                                                                    <span className="text-sm text-text-color-100 font-metro-semibold">DUCKZ smart-contract address:</span>
                                                                     <div className="flex">
-                                                                        <span className="text-[13px] leading-[14px] text-text-color-70 font-metro-medium bg-neutral-control-color-20 pl-[10px] flex items-center w-[calc(100%-42px)] rounded-tl-[6px] rounded-bl-[6px] break-all">{appConfig.duckzSmartContractAddress}</span>
-                                                                        <div className={classNames('relative flex justify-center items-center w-[42px] h-[42px] bg-primary-cta-color-60 hover:bg-primary-cta-color-80 rounded-tr-[6px] rounded-br-[6px] cursor-pointer', { '!bg-system-green-20 !hover:bg-system-green-20': isCopyClicked })} onClick={handleCopy}>
+                                                                        <span className="text-xs text-text-color-70 font-metro-medium bg-neutral-control-color-20 pl-2.5 flex items-center w-[calc(100%-2.625rem)] rounded-tl-1.5 rounded-bl-1.5 break-all">{appConfig.duckzSmartContractAddress}</span>
+                                                                        <div className={classNames('relative flex justify-center items-center w-[2.625rem] h-[2.625rem] bg-primary-cta-color-60 hover:bg-primary-cta-color-80 rounded-tr-1.5 rounded-br-1.5 cursor-pointer', { '!bg-system-green-20 !hover:bg-system-green-20': isCopyClicked })} onClick={handleCopy}>
                                                                             {isCopyClicked && (
-                                                                                <div className="absolute bg-text-color-0 border-2 border-text-color-100 rounded text-[14px] leading-[22px] font-metro-regular font-normal text-text-color-100 py-[16px] px-[18px] bottom-[calc(100%+9px)]">
+                                                                                <div className="absolute bg-text-color-0 border-2 border-text-color-100 rounded text-sm font-metro-regular font-normal text-text-color-100 py-4 px-[1.125rem] bottom-[calc(100%+0.563rem)]">
                                                                                     Copied
                                                                                 </div>
                                                                             )}
@@ -733,7 +733,7 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
                                                             </React.Fragment>
                                                         ) || (
                                                             <div>
-                                                                <span className="text-[14px] leading-[22px] text-text-color-100 font-metro-regular">Connect MetaMask to access your balance (Polygon network)</span>
+                                                                <span className="text-sm text-text-color-100 font-metro-regular">Connect MetaMask to access your balance (Polygon network)</span>
                                                             </div>
                                                         )}
                                                     </div>
@@ -743,9 +743,9 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
                                     </div>
                                     {isReady ? (
                                         <div className="flex flex-col items-center justify-center">
-                                            <div className="text-[24px] leading-[32px] text-text-color-100 font-gilmer-medium flex items-center">
+                                            <div className="text-2xl text-text-color-100 font-gilmer-medium flex items-center">
                                                 {convertNumberToLiteral(balance ? +balance : 0)}
-                                                <svg className="ml-[8px]" width="14" height="20" viewBox="0 0 20 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <svg className="ml-2" width="14" height="20" viewBox="0 0 20 28" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                     <path d="M9.51487 3.11111H0V24.8889H9.51487C15.9624 24.8889 20 20.2844 20 14C20 7.59111 15.8998 3.11111 9.51487 3.11111ZM9.42097 21.0311H4.25665V6.93778H9.42097C13.1768 6.93778 15.6808 9.76889 15.6808 13.9067C15.6808 18.1067 13.1768 21.0311 9.42097 21.0311Z" fill="#000000"/>
                                                     <path d="M3.92 0H7.04989V6.22222H3.92V0Z" fill="#000000"/>
                                                     <path d="M3.92 21.7778H7.04989V28H3.92V21.7778Z" fill="#000000"/>
@@ -753,22 +753,22 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
                                                     <path d="M8.61484 21.7778H11.7447V28H8.61484V21.7778Z" fill="#000000"/>
                                                 </svg>
                                             </div>
-                                            <span className="text-[14px] text-text-color-60 font-metro-semibold">
+                                            <span className="text-sm text-text-color-60 font-metro-semibold">
                                                 {ENSName || `${shortenHex(account, 4)}`}
                                             </span>
-                                            <div onClick={handleDisconnect} className="text-center w-1/2 lg:w-full mr-[24px] lg:mr-0 mt-[16px] !mr-0 button button--outline button--secondary button--shadow-secondary">
-                                                <span className="button__inner !py-[6px] !px-[18px] !justify-center">Log out</span>
+                                            <div onClick={handleDisconnect} className="text-center w-1/2 lg:w-full mr-6 lg:mr-0 mt-4 !mr-0 button button--outline button--secondary button--shadow-secondary">
+                                                <span className="button__inner !py-1.5 !px-[1.125rem] !justify-center">Log out</span>
                                             </div>
                                         </div>
                                     ) : (
                                         <div onClick={() => handleMetamask(isMetaMaskInstalled, 'Injected')} className="w-full button button--outline button--secondary button--shadow-secondary">
-                                            <span className="button__inner !py-[6px] !px-[18px] !justify-center">{isMetaMaskInstalled ? 'Connect Metamask' : 'Install Metamask'}</span>
+                                            <span className="button__inner !py-1.5 !px-[1.125rem] !justify-center">{isMetaMaskInstalled ? 'Connect Metamask' : 'Install Metamask'}</span>
                                         </div>
                                     )}
                                 </div>
                             </div>
                         </div>
-                        <div className="p-[6px] md:p-[10px] rounded-[50%] w-[97px] md:w-[174px] h-[97px] md:h-[174px] bg-primary-cta-color-20 mt-[-18px] md:mt-[-24px] ml-[228px] md:ml-[-78px] z-[9] absolute md:relative shadow-[-5px_5px] shadow-primary-cta-color-90">
+                        <div className="p-1.5 md:p-2.5 rounded-[50%] w-[6.063rem] md:w-[10.875rem] h-[6.063rem] md:h-[10.875rem] bg-primary-cta-color-20 mt-[-1.125rem] md:mt-[-1.5rem] ml-[14.25rem] md:ml-[-4.875rem] z-[9] absolute md:relative shadow-[-0.313rem_0.313rem] shadow-primary-cta-color-90">
                             <div className="flex items-center justify-center rounded-[50%] h-full border border-primary-cta-color-90">
                                 <LazyLoadImage
                                     srcSet={`${'/images/components/duckies/duck.png'}`}

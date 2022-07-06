@@ -50,7 +50,7 @@ export const BountyRow: React.FC<BountyProps> = ({
     }, [bounty.status, loading, isLoading, isSingleBountyProcessing]);
 
     const indexClassName = React.useMemo(() => {
-        return classnames('py-1 px-[9.5px] text-base w-7 h-8 flex items-center justify-center font-bold rounded-sm mr-4 bg-neutral-control-color-30', {
+        return classnames('py-1 px-2.5 text-base w-7 h-8 flex items-center justify-center font-bold rounded-sm mr-4 bg-neutral-control-color-30', {
             'bg-primary-cta-color-40': bounty.status === 'claim' && !((loading && isSingleBountyProcessing) || (isLoading && !isSingleBountyProcessing)),
         });
     }, [bounty.status, loading, isLoading, isSingleBountyProcessing]);
@@ -139,10 +139,10 @@ export const BountyRow: React.FC<BountyProps> = ({
                     </div>
                 </div>
                 <div className="flex items-center text-2xl font-gilmer-medium text-text-color-100">
-                    <div className="pr-[10px]">
+                    <div className="pr-2.5">
                         {renderBountyStatus}
                     </div>
-                    <div className="flex items-center justify-end w-[140px]">
+                    <div className="flex items-center justify-end w-36">
                         <span className="mr-1">{convertNumberToLiteral(bounty.value)}</span>
                         <svg width="20" height="28" viewBox="0 0 20 28" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M9.51487 3.11111H0V24.8889H9.51487C15.9624 24.8889 20 20.2844 20 14C20 7.59111 15.8998 3.11111 9.51487 3.11111ZM9.42097 21.0311H4.25665V6.93778H9.42097C13.1768 6.93778 15.6808 9.76889 15.6808 13.9067C15.6808 18.1067 13.1768 21.0311 9.42097 21.0311Z" fill={duckiesColor}/>

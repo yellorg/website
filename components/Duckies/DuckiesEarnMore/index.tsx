@@ -131,11 +131,11 @@ export const DuckiesEarnMore = () => {
     ), [handleMetamask, isMetaMaskInstalled]);
 
     const inputLink = classnames('', {
-        'login-gradient w-full w-[320px] absolute h-[64px]': !isReady,
+        'login-gradient w-full w-[20rem] absolute h-16': !isReady,
     });
 
-    const inputLinkRef = classnames('flex items-center bg-input-background-color border-2 border-text-color-100 rounded mr-4 py-[18px] px-[18px] sm:px-5 w-full max-2-full overflow-x-auto', {
-        'border-r-0 rounded-tr-0 rounded-br-0 left-0 w-[320px] overflow-hidden': !isReady,
+    const inputLinkRef = classnames('flex items-center bg-input-background-color border-2 border-text-color-100 rounded mr-4 py-4 px-4 sm:px-5 w-full max-2-full overflow-x-auto', {
+        'border-r-0 rounded-tr-0 rounded-br-0 left-0 w-[20rem] overflow-hidden': !isReady,
     });
 
     const message = React.useMemo(() => 'Go and claim your DUCKIES tokens (choose Polygon mainnet on your Wallet for tokens minting)!', []);
@@ -262,7 +262,7 @@ export const DuckiesEarnMore = () => {
         return socials.map((social: any, index: number) => {
             return (
                 <div
-                    className="w-[48px] h-[48px] mr-[5px] ml-[5px] last:mr-0 after:!rounded-[50%] before:hidden button button--secondary button--shadow-secondary"
+                    className="w-12 h-12 mr-1.5 ml-1.5 last:mr-0 after:!rounded-[50%] before:hidden button button--secondary button--shadow-secondary"
                     key={`social-${index}`}
                 >
                     <span className="button__inner !bg-transparent !p-0 !w-12 !h-12 !rounded-[50%]" onClick={() => sendGAEvent(social.type)}>
@@ -279,8 +279,8 @@ export const DuckiesEarnMore = () => {
         }
 
         return (
-            <div className="basis-full w-full sm:max-w-[620px]">
-                <div className="relative w-full sm:max-w-[620px] sm:max-h-[620px] pt-[100%]">
+            <div className="basis-full w-full sm:max-w-[38.75rem]">
+                <div className="relative w-full sm:max-w-[38.75rem] sm:max-h-[38.75rem] pt-[100%]">
                     <div className="absolute top-0 bottom-0 left-0 right-0 w-full h-full object-cover object-center">
                         <Image
                             src="/images/referral_hypnoduck_back.png"
@@ -301,11 +301,11 @@ export const DuckiesEarnMore = () => {
     const renderReferrerHeader = React.useMemo(() => {
         if (!isReady) {
             return (
-                <div className="flex flex-col items-left justify-center mb-[36px]">
-                    <div className="text-[60px] leading-[64px] text-text-color-100 font-gilmer-bold pb-[8px] text-center">
+                <div className="flex flex-col items-left justify-center mb-9">
+                    <div className="text-6xl text-text-color-100 font-gilmer-bold pb-2 text-center">
                         Quack to your friends
                     </div>
-                    <div className="text-[24px] leading-[32px] text-text-color-100 font-gilmer-medium text-center">
+                    <div className="text-2xl text-text-color-100 font-gilmer-medium text-center">
                         Share the link to grow your squad and earn more DUCKZ
                     </div>
                 </div>
@@ -313,14 +313,14 @@ export const DuckiesEarnMore = () => {
         }
 
         return (
-            <div className="flex flex-col items-left justify-center mb-[36px]">
-                <div className="block w-fit bg-primary-cta-color-90 text-primary-cta-layer-color-60 py-[4px] px-[14px] font-metro-bold rounded-sm mb-[8px]">
+            <div className="flex flex-col items-left justify-center mb-9">
+                <div className="block w-fit bg-primary-cta-color-90 text-primary-cta-layer-color-60 py-1 px-3.5 font-metro-bold rounded-sm mb-2">
                     REFERRAL
                 </div>
-                <div className="text-[60px] leading-[64px] text-text-color-100 font-gilmer-bold pb-[8px] text-left">
+                <div className="text-6xl text-text-color-100 font-gilmer-bold pb-2 text-left">
                     Quack to your friends 
                 </div>
-                <div className="text-[24px] leading-[32px] text-text-color-100 font-gilmer-medium text-left">
+                <div className="text-2xl text-text-color-100 font-gilmer-medium text-left">
                     Share the link to grow your squad and earn more DUCKZ
                 </div>
             </div>
@@ -342,24 +342,24 @@ export const DuckiesEarnMore = () => {
     }, []);
 
     return (
-        <div className="mx-auto pt-[100px] px-[14px] max-w-md-layout 2xl:max-w-lg-layout" id="earn-more">
-            <div className="flex justify-center items-center gap-[36px] flex-col sm:flex-row">
+        <div className="mx-auto pt-[6.25rem] px-3.5 max-w-md-layout 2xl:max-w-lg-layout" id="earn-more">
+            <div className="flex justify-center items-center gap-9 flex-col sm:flex-row">
                 {renderHypnoduck}
                 <div className="basis-full">
                     {renderReferrerHeader}
                     <div className={classnames('flex w-full justify-center flex-col', { 'items-center': !isReady, 'items-left': isReady })}>
-                        <div className={classnames('flex relative items-center max-w-screen sm:w-auto -mx-[14px] px-[14px] sm:max-w-[700px] mb-[24px] sm:mb-[20px]', { 'w-screen': isReady })}>
+                        <div className={classnames('flex relative items-center max-w-screen sm:w-auto -mx-3.5 px-3.5 sm:max-w-[43.75rem] mb-6 sm:mb-5', { 'w-screen': isReady })}>
                             <div className={inputLinkRef} onClick={handleSendGAEvent} onFocus={handleSendGAEvent}>
-                                <div className={classnames("text-text-color-100 text-[16px] leading-[24px] font-metro-regular font-bold whitespace-nowrap", { 'overflow-hidden': !isReady })}>
+                                <div className={classnames("text-text-color-100 text-base font-metro-regular font-bold whitespace-nowrap", { 'overflow-hidden': !isReady })}>
                                     {`${shareableLinkPrefix}${shareableLink}`}
                                 </div>
                                 <div className={inputLink} />
                             </div>
                             {isReady ? (
                                 <div onClick={() => handleCopy(`${shareableLinkPrefix}${shareableLink}`)} className="button button--outline button--secondary button--shadow-secondary">
-                                    <span className={classnames('button__inner !px-[24px] !py-[14.25px] relative flex justify-center items-center !w-[70px]', { '!bg-system-green-20': isCopyClicked })}>
+                                    <span className={classnames('button__inner !px-6 !py-3.5 relative flex justify-center items-center !w-[4.375rem]', { '!bg-system-green-20': isCopyClicked })}>
                                         {isCopyClicked && (
-                                            <div className="absolute bg-text-color-0 border-2 border-text-color-100 rounded text-[14px] leading-[22px] font-metro-regular font-normal text-text-color-100 py-[16px] px-[18px] bottom-[calc(100%+5px)] ml-[2px]">
+                                            <div className="absolute bg-text-color-0 border-2 border-text-color-100 rounded text-3.5 leading-6 font-metro-regular font-normal text-text-color-100 py-4 px-5 bottom-[calc(100%+0.313rem)] ml-0.5">
                                                 Copied
                                             </div>
                                         )}
@@ -376,12 +376,12 @@ export const DuckiesEarnMore = () => {
                                     </span>
                                 </div>
                             ) : (
-                                <div className="absolute right-[20px]">
+                                <div className="absolute right-5">
                                     <img src="/images/components/duckies/login_eyes.png" alt="login" />
                                 </div>
                             )}
                         </div>
-                        <div className={classnames('flex items-center w-full py-[8px] max-w-full overflow-x-auto', { 'justify-center': !isReady, 'justify-start ml-[-4px]': isReady })}>
+                        <div className={classnames('flex items-center w-full py-2 max-w-full overflow-x-auto', { 'justify-center': !isReady, 'justify-start ml-[-0.25rem]': isReady })}>
                             {isReady ? renderSocials : renderMetamaskButton()}
                         </div>
                     </div>
