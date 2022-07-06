@@ -8,9 +8,10 @@ import UnloginEyes from '../UnloginEyes';
 import Image from 'next/image';
 import { dispatchAlert } from '../../../features/alerts/alertsSlice';
 import { useAppDispatch } from '../../../app/hooks';
-
 import * as ga from '../../../lib/ga';
 import { loginWithProvider } from '../../../lib/SupabaseConnector';
+import ReCAPTCHA from 'react-google-recaptcha';
+import classnames from 'classnames';
 
 interface DuckiesAffiliatesProps {
     bountyItems: BountyItem[];
@@ -43,15 +44,31 @@ export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({
 }: DuckiesAffiliatesProps) => {
     const limit: number = 5;
 
+    let captcha: any = React.useRef();
+
     const [bounties, setBounties] = useState<BountyItem[]>([]);
     const [page, setPage] = useState<number>(1);
     const [payoutsReferral, setPayoutsReferral] = useState<number[]>([]);
     const [payoutsBounty, setPayoutsBounty] = useState<number[]>([]);
     const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
+    const [isCaptchaNotResolved, setIsCaptchaNotResolved] = React.useState<boolean>(true);
 
     const dispatch = useAppDispatch();
     const duckiesContract = useDuckiesContract();
     const { active, account, signer } = useWallet();
+
+    const claimButtonClassName = React.useMemo(() => {
+        return classnames('button__inner', {
+            'cursor-not-allowed': isCaptchaNotResolved,
+        });
+    },[isCaptchaNotResolved]);
+
+    const claimButtonContainerClassName = React.useMemo(() => {
+        return classnames({
+            'px-7 py-1.5 bg-neutral-control-color-40 rounded-sm text-neutral-control-layer-color-40 cursor-not-allowed': isCaptchaNotResolved,
+            'button button--outline button--secondary button--shadow-secondary': !isCaptchaNotResolved,
+        });
+    },[isCaptchaNotResolved]);
 
     const getPayouts = React.useCallback(async() => {
         if (account && signer) {
@@ -107,7 +124,7 @@ export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({
     const handleClaimReward = React.useCallback(async (id: string) => {
         const bountyToClaim = bountyItems.find((item: BountyItem) => item.fid === id);
 
-        if (bountyToClaim && signer) {
+        if (bountyToClaim && signer && isCaptchaNotResolved) {
             setIsLoading(true);
             const { transaction } = await (await fetch(
                 `/api/bountyTx?bountyID=${bountyToClaim.fid}&&account=${account}`
@@ -191,9 +208,13 @@ export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({
     }, []);
 
     const handleClaim = React.useCallback(async (amountToClaim: number) => {
-        setIsLoading(true);
-        await handleClaimAllBounties(amountToClaim);
-        setIsLoading(false);
+        if (!isCaptchaNotResolved) {
+            captcha.reset();
+            setIsCaptchaNotResolved(false);
+            setIsLoading(true);
+            await handleClaimAllBounties(amountToClaim);
+            setIsLoading(false);
+        }
     }, [handleClaimAllBounties, setIsLoading]);
 
     const renderClaimModalBody = React.useMemo(() => {
@@ -225,14 +246,22 @@ export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({
                     List of bounties:
                     {renderBountyTitles}
                 </div>
+                <div>
+                    <ReCAPTCHA
+                        ref={e => {captcha = e}}
+                        sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITEKEY || 'changeme'}
+                        onChange={() => setIsCaptchaNotResolved(false)}
+                        className="mb-5"
+                    />
+                </div>
                 <div className="flex items-center justify-center">
-                    <div className="button button--outline button--secondary button--shadow-secondary" onClick={() => handleClaim(amountToClaim)}>
-                        <span className="button__inner">Claim all</span>
+                    <div className={claimButtonContainerClassName} onClick={() => handleClaim(amountToClaim)}>
+                        <button className={claimButtonClassName} disabled={isCaptchaNotResolved}>Claim all</button>
                     </div>
                 </div>
             </React.Fragment>
         );
-    }, [getBountiesClaimableAmount, handleClaim]);
+    }, [getBountiesClaimableAmount, handleClaim, captcha, isCaptchaNotResolved]);
 
     const renderClaimRewardModalBody = React.useMemo(() => {
         return (

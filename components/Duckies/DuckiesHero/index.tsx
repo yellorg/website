@@ -21,6 +21,8 @@ import chains from '../../../config/chains'
 import * as ga from '../../../lib/ga';
 import classNames from 'classnames';
 import { loginWithProvider } from '../../../lib/SupabaseConnector';
+import ReCAPTCHA from 'react-google-recaptcha';
+import classnames from 'classnames';
 
 interface DuckiesHeroProps {
     bountiesToClaim: string[];
@@ -58,6 +60,9 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
     const [isAddedMainChain, setAddedMainChain] = useState<boolean>(false);
     const [currentMetamaskChain, setCurrentMetamaskChain] = useState<number>(-1);
     const [isCopyClicked, setIsCopyClicked] = useState<boolean>(false);
+    const [isCaptchaNotResolved, setIsCaptchaNotResolved] = React.useState<boolean>(true);
+
+    let captcha: any = React.useRef();
 
     const dispatch = useAppDispatch();
     const duckiesContract = useDuckiesContract();
@@ -80,6 +85,19 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
     const isReady = useMemo(() => {
         return supportedChain && triedToEagerConnect && active && account;
     }, [supportedChain, triedToEagerConnect, active, account]);
+
+    const claimButtonClassName = React.useMemo(() => {
+        return classnames('button__inner', {
+            'cursor-not-allowed': isCaptchaNotResolved,
+        });
+    },[isCaptchaNotResolved]);
+
+    const claimButtonContainerClassName = React.useMemo(() => {
+        return classnames({
+            'px-7 py-1.5 bg-neutral-control-color-40 rounded-sm text-neutral-control-layer-color-40 cursor-not-allowed': isCaptchaNotResolved,
+            'button button--outline button--secondary button--shadow-secondary': !isCaptchaNotResolved,
+        });
+    },[isCaptchaNotResolved]);
 
     const getBalance = React.useCallback(async() => {
         if (account) {
@@ -256,8 +274,11 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
             return;
         }
 
-        if (!isReferralClaimed) {
+        captcha.reset();
+
+        if (!isReferralClaimed && !isCaptchaNotResolved) {
             const token = localStorage.getItem('referral_token');
+            setIsCaptchaNotResolved(false);
 
             if (token && signer && account) {
                 setIsLoading(true);
@@ -443,14 +464,22 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
                     List of bounties:
                     {renderBountyTitles}
                 </div>
+                <div>
+                    <ReCAPTCHA
+                        ref={e => {captcha = e}}
+                        sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITEKEY || 'changeme'}
+                        onChange={() => setIsCaptchaNotResolved(false)}
+                        className="mb-5"
+                    />
+                </div>
                 <div className="flex items-center justify-center">
-                    <div className="button button--outline button--secondary button--shadow-secondary" onClick={() => handleClaimRewards(amountToClaim)}>
-                        <span className="button__inner">Claim all</span>
+                    <div className={claimButtonContainerClassName} onClick={() => handleClaimRewards(amountToClaim)}>
+                        <button className={claimButtonClassName} disabled={isCaptchaNotResolved}>Claim all</button>
                     </div>
                 </div>
             </React.Fragment>
         );
-    }, [isReferralClaimed, getBountiesClaimableAmount, handleClaimRewards]);
+    }, [isReferralClaimed, getBountiesClaimableAmount, handleClaimRewards, captcha, isCaptchaNotResolved]);
 
     const renderClaimRewardModalBody = React.useMemo(() => {
         return (
