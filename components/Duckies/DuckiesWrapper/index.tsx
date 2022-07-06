@@ -203,6 +203,7 @@ export const DuckiesLayout: FC<DuckiesLayoutProps> = ({ bounties, faqList }: Duc
                 isSingleBountyProcessing={isSingleBountyProcessing}
                 setIsSingleBountyProcessing={setIsSingleBountyProcessing}
                 isReferralClaimed={isReferralClaimed}
+                supabaseUser={user}
             />
             <DuckiesEarnMore />
             <DuckiesRedeem />
