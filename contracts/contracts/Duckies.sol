@@ -21,8 +21,7 @@ contract Duckies is Initializable, ERC20CappedUpgradeable, PausableUpgradeable, 
     mapping(address => address[]) private _affiliates;
 
     // Affiliate Payouts
-    uint16[] public _referralPayouts;
-    uint8[] public _bountyPayouts;
+    uint16[] public _payouts;
 
     // Participants
     mapping(address => mapping(string => uint16)) private _bounty;
@@ -52,8 +51,7 @@ contract Duckies is Initializable, ERC20CappedUpgradeable, PausableUpgradeable, 
         __Ownable_init();
 
         _issuer = issuer;
-        setReferralPayouts([500, 125, 80, 50, 20]);
-        setBountyPayouts([50, 25, 15, 10, 5]);
+        setPayouts([500, 125, 80, 50, 20]);
         _mint(msg.sender, 888000000000 * 0.2 * 10 ** decimals()); // 888000000000 - total supply, 0.2 - 20%
     }
 
@@ -95,12 +93,8 @@ contract Duckies is Initializable, ERC20CappedUpgradeable, PausableUpgradeable, 
         _mint(to, amount);
     }
 
-    function setReferralPayouts(uint16[5] memory payouts) public onlyOwner {
-        _referralPayouts = payouts;
-    }
-
-    function setBountyPayouts(uint8[5] memory payouts) public onlyOwner {
-        _bountyPayouts = payouts;
+    function setPayouts(uint16[5] memory payouts) public onlyOwner {
+        _payouts = payouts;
     }
 
     function _beforeTokenTransfer(address from, address to, uint256 amount)
@@ -115,38 +109,19 @@ contract Duckies is Initializable, ERC20CappedUpgradeable, PausableUpgradeable, 
      * @dev Mint referral rewards.
      *
      */
-    function _mintReferralReward(uint amount) private {
+    function _mintReward(uint amount) private {
         require(msg.sender != address(0), "ERC20: reward to the zero address");
         require(amount > uint256(0), "ERC20: amount must be higher than zero");
 
         _mint(msg.sender, amount);
         address currentAddress = _referrers[msg.sender];
 
-        for (uint8 i = 0; i < _referralPayouts.length; i++) {
+        for (uint8 i = 0; i < _payouts.length; i++) {
             if (currentAddress == address(0)) {
                 break;
             }
 
-            uint mintingAmount = amount * _referralPayouts[i] / 100;
-
-            _mint(currentAddress, mintingAmount);
-            currentAddress = _referrers[currentAddress];
-        }
-    }
-
-    function _mintBountyReward(uint amount) private {
-        require(msg.sender != address(0), "ERC20: reward to the zero address");
-        require(amount > uint256(0), "ERC20: amount must be higher than zero");
-
-        _mint(msg.sender, amount);
-        address currentAddress = _referrers[msg.sender];
-
-        for (uint8 i = 0; i < _bountyPayouts.length; i++) {
-            if (currentAddress == address(0)) {
-                break;
-            }
-
-            uint mintingAmount = amount * _bountyPayouts[i] / 100;
+            uint mintingAmount = amount * _payouts[i] / 100;
 
             _mint(currentAddress, mintingAmount);
             currentAddress = _referrers[currentAddress];
@@ -176,15 +151,13 @@ contract Duckies is Initializable, ERC20CappedUpgradeable, PausableUpgradeable, 
 
             _referrers[msg.sender] = _message.ref;
             _affiliates[_message.ref].push(msg.sender);
-            _mintReferralReward(_message.amt);
         } else {
             if (_message.limit != 0) {
                 require(_bounty[msg.sender][_message.id] < _message.limit, "Limit of this bounty is exceeded");
             }
-
-            _mintBountyReward(_message.amt);
         }
 
+        _mintReward(_message.amt);
         _bounty[msg.sender][_message.id]++;
     }
 
@@ -233,12 +206,8 @@ contract Duckies is Initializable, ERC20CappedUpgradeable, PausableUpgradeable, 
         }
     }
 
-    function getReferralPayouts() public view returns (uint16[] memory) {
-        return _referralPayouts;
-    }
-
-    function getBountyPayouts() public view returns (uint8[] memory) {
-        return _bountyPayouts;
+    function getPayouts() public view returns (uint16[] memory) {
+        return _payouts;
     }
 
     function getAffiliatesCount() public view returns (uint8[5] memory)  {
