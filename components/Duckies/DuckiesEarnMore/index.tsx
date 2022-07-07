@@ -18,6 +18,7 @@ export const DuckiesEarnMore = () => {
     const [shareableLink, setShareableLink] = React.useState<string>('');
     const [shareableLinkPrefix, setShareableLinkPrefix] = React.useState('');
     const [isCopyClicked, setIsCopyClicked] = useState<boolean>(false);
+    const [currentMetamaskChain, setCurrentMetamaskChain] = useState<number>(-1);
 
     const isBrowserDefined = isBrowser();
 
@@ -28,6 +29,7 @@ export const DuckiesEarnMore = () => {
         supportedChain,
         isMetaMaskInstalled,
         handleMetamask,
+        mainChain
     } = useMetaMask();
 
     const isReady = useMemo(() => {
@@ -46,6 +48,17 @@ export const DuckiesEarnMore = () => {
             setShareableLink('')
         }
     }, [active, account]);
+
+    useEffect(() => {
+        const handleChainChange = (chainId: string) => {
+            setCurrentMetamaskChain(+chainId);
+        }
+        isBrowser() && window?.ethereum?.on('chainChanged', handleChainChange);
+
+        return () => {
+            isBrowser() && window?.ethereum?.off('chainChanged', handleChainChange);
+        };
+    }, [mainChain, setCurrentMetamaskChain, isBrowser])
 
     useEffect(() => {
         if (!isCopyClicked)
