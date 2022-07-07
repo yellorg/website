@@ -52,7 +52,7 @@ contract Duckies is Initializable, ERC20CappedUpgradeable, PausableUpgradeable, 
 
         _issuer = issuer;
         setPayouts([500, 125, 80, 50, 20]);
-        _mint(msg.sender, 888000000000 * 0.2 * 10 ** decimals()); // 888000000000 - total supply, 0.2 - 20%
+        _mint(msg.sender, _MAX_SUPPLY * 20 / 100 * 10 ** decimals()); // 888000000000 - total supply, 20 / 100 - 20%
     }
 
     function decimals() public view virtual override returns (uint8) {
