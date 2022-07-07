@@ -10,6 +10,7 @@ import { useAppDispatch } from '../../../app/hooks';
 import * as ga from '../../../lib/ga';
 import { DuckiesFAQ } from '../DuckiesFAQ';
 import { supabase } from '../../../lib/SupabaseConnector';
+import { useRouter } from 'next/router';
 
 interface DuckiesLayoutProps {
     bounties: any;
@@ -28,6 +29,8 @@ export const DuckiesLayout: FC<DuckiesLayoutProps> = ({ bounties, faqList }: Duc
 
     const dispatch = useAppDispatch();
     const duckiesContract = useDuckiesContract();
+    const router = useRouter();
+    const query = router.query;
     const { active, account, signer } = useWallet();
     const supabaseUser = supabase.auth.user();
 
@@ -38,6 +41,17 @@ export const DuckiesLayout: FC<DuckiesLayoutProps> = ({ bounties, faqList }: Duc
             setAffiliates(affiliatesCount);
         }
     }, [account, duckiesContract, signer]);
+
+    React.useEffect(() => {
+        if (query.error) {
+            dispatch(dispatchAlert({
+                type: 'error',
+                title: 'Server error',
+                message: query.error_description?.toString() || '',
+            }));
+        }
+        router.replace('/duckies');
+    }, []);
 
     React.useEffect(() => {
         if (supabaseUser && !user) {
