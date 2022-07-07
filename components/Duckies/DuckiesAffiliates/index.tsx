@@ -124,7 +124,7 @@ export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({
     const handleClaimReward = React.useCallback(async (id: string) => {
         const bountyToClaim = bountyItems.find((item: BountyItem) => item.fid === id);
 
-        if (bountyToClaim && signer && isCaptchaNotResolved) {
+        if (bountyToClaim && signer && !isCaptchaNotResolved) {
             setIsLoading(true);
             const { transaction } = await (await fetch(
                 `/api/bountyTx?bountyID=${bountyToClaim.fid}&&account=${account}`
