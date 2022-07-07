@@ -57,7 +57,7 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
     const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
     const [isOpenBalancesInfo, setIsOpenBalancesInfo] = useState<boolean>(false);
     const [balance, setBalance] = useState<number | undefined>(undefined);
-    const [isAddedMainChain, setAddedMainChain] = useState<boolean>(false);
+    const [isSwitchedMainChain, setSwitchedMainChain] = useState<boolean>(false);
     const [currentMetamaskChain, setCurrentMetamaskChain] = useState<number>(-1);
     const [isCopyClicked, setIsCopyClicked] = useState<boolean>(false);
     const [isCaptchaNotResolved, setIsCaptchaNotResolved] = React.useState<boolean>(true);
@@ -133,7 +133,7 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
         try {
             const succeed = await switchToMainChain()
             if (succeed) {
-                setAddedMainChain(true)
+                setSwitchedMainChain(true)
                 return true
             } else {
                 try {
@@ -149,20 +149,21 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
                         },
                         ],
                     });
-                    setAddedMainChain(true)
-                    return true
+                    const switched = await switchToMainChain()
+                    setSwitchedMainChain(switched)
+                    return switched
                 } catch (addError: any) {
                     console.error(addError)
-                    setAddedMainChain(false)
+                    setSwitchedMainChain(false)
                     return false
                 }
             }
         } catch (error: any) {
             console.error(error)
-            setAddedMainChain(false)
+            setSwitchedMainChain(false)
             return false
         }
-    }, [mainChain, mainChainIdHex, switchToMainChain, setAddedMainChain])
+    }, [mainChain, mainChainIdHex, switchToMainChain, setSwitchedMainChain])
 
     useEffect(() => {
         if (!isCopyClicked)
@@ -239,14 +240,14 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
     useEffect(() => {
         const handleChainChange = (chainId: string) => {
             setCurrentMetamaskChain(+chainId);
-            setAddedMainChain(+chainId === mainChain?.chainId);
+            setSwitchedMainChain(+chainId === mainChain?.chainId);
         }
         isBrowser() && window?.ethereum?.on('chainChanged', handleChainChange);
 
         return () => {
             isBrowser() && window?.ethereum?.off('chainChanged', handleChainChange);
         };
-    }, [mainChain, setCurrentMetamaskChain, setAddedMainChain, isBrowser])
+    }, [mainChain, setCurrentMetamaskChain, setSwitchedMainChain, isBrowser])
 
     const handleMetamask = React.useCallback((isMetaMaskInstalled: boolean, id: ProviderWhitelist) => {
         if (isMetaMaskInstalled) {
@@ -377,8 +378,8 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
         }
 
         const added = await switchToMainChain()
-        setAddedMainChain(added)
-    }, [isReady, getBountiesClaimableAmount, isReferralClaimed, switchToMainChain, setAddedMainChain]);
+        setSwitchedMainChain(added)
+    }, [isReady, getBountiesClaimableAmount, isReferralClaimed, switchToMainChain, setSwitchedMainChain]);
 
     const handleSocialAuth = React.useCallback((provider: string) => {
         loginWithProvider(provider);
@@ -394,7 +395,7 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
                     Connect Metamask wallet in order to be able to get Duckies tokens
                 </div>
                 <div className="flex items-center justify-center mb-8">
-                    {isAddedMainChain && (
+                    {isSwitchedMainChain && (
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M5 13L9 17L19 7" stroke="#419E6A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                         </svg>
@@ -403,7 +404,7 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
                         onClick={() => addOrSwitchToMainChain()}
                         className={[
                             'button-link cursor-pointer font-bold text-center underline px-2',
-                            isAddedMainChain ? 'active no-underline' : undefined
+                            isSwitchedMainChain ? 'active no-underline' : undefined
                         ].join(' ')}
                     >
                         <span>Switch to {mainChain?.name?.split(' ')[0]} network</span>
@@ -416,7 +417,7 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
                 </div>
             </div>
         );
-    }, [handleMetamask, isMetaMaskInstalled, isAddedMainChain, addOrSwitchToMainChain, mainChain]);
+    }, [handleMetamask, isMetaMaskInstalled, isSwitchedMainChain, addOrSwitchToMainChain, mainChain]);
 
     const renderLoadingModalBody = React.useMemo(() => {
         return (
