@@ -4,10 +4,11 @@ pragma solidity ^0.8.4;
 import "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/ERC20CappedUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 
 /// @custom:security-contact security@ducks.house
-contract Duckies is Initializable, ERC20CappedUpgradeable, PausableUpgradeable, OwnableUpgradeable {
+contract Duckies is Initializable, ERC20CappedUpgradeable, PausableUpgradeable, OwnableUpgradeable, AccessControlUpgradeable {
     address private _issuer;
 
     // Maximum Supply
@@ -25,6 +26,13 @@ contract Duckies is Initializable, ERC20CappedUpgradeable, PausableUpgradeable, 
 
     // Participants
     mapping(address => mapping(string => uint16)) private _bounty;
+
+    // Account Locking 
+    bytes32 LOCKED_ROLE = keccak256('LOCKED_ROLE');
+
+    // Account Banning
+    bytes32 BANNED_ROLE = keccak256('BANNED_ROLE');
+    mapping(address => uint256) private _bannedBalances;
 
     struct Message {
         string  id;
@@ -49,6 +57,7 @@ contract Duckies is Initializable, ERC20CappedUpgradeable, PausableUpgradeable, 
         __ERC20Capped_init(_MAX_SUPPLY * 10 ** decimals());
         __Pausable_init();
         __Ownable_init();
+        _grantRole(DEFAULT_ADMIN_ROLE, _msgSender());
 
         _issuer = issuer;
         setPayouts([500, 125, 80, 50, 20]);
@@ -93,6 +102,66 @@ contract Duckies is Initializable, ERC20CappedUpgradeable, PausableUpgradeable, 
         _mint(to, amount);
     }
 
+    /**
+     * @dev Lock accounts for trasnferring for the whole tree.
+     * @dev To lock only specific account, Please use `grantRole` function instead.
+     * TODO: function's document
+     */
+    function lock(address account) public onlyOwner {
+        require(account != address(0), 'ERC20: account is zero address');
+        _grantRole(LOCKED_ROLE, account);
+        /**
+         * TODO: lock accounts for the whole tree.
+         */
+    }
+
+    /**
+     * @dev Unlock accounts for trasnferring for the whole tree.
+     * @dev To unlock only specific account, Please use `revokeRole` function instead.
+     * TODO: function's document
+     */
+    function unlock(address account) public onlyOwner {
+        require(account != address(0), 'ERC20: account is zero address');
+        _revokeRole(LOCKED_ROLE, account);
+        /**
+         * TODO: unlock accounts for the whole tree.
+         */
+    }
+
+    /**
+     * @dev Lock accounts for trasnferring and burn their tokens for the whole tree.
+     * TODO: function's document
+     */
+    function ban(address account) public onlyOwner {
+        lock(account);
+        _grantRole(BANNED_ROLE, account);
+        uint256 amount = balanceOf(account);
+        unchecked {
+            _bannedBalances[account] += amount;
+        }
+        _burn(account, amount);
+        /**
+         * TODO: ban accounts for the whole tree.
+         */
+    }
+
+    /**
+     * @dev Unlock accounts for trasnferring and mint their previously burnt tokens for the whole tree.
+     * TODO: function's document
+     */
+    function unban(address account) public onlyOwner {
+        require(account != address(0), 'ERC20: account is zero address');
+        _revokeRole(BANNED_ROLE, account);
+        uint256 amount = _bannedBalances[account];
+        unchecked {
+            _bannedBalances[account] -= amount;
+        }
+        _mint(account, amount);
+        /**
+         * TODO: unban accounts for the whole tree.
+         */
+    }
+
     function setPayouts(uint16[5] memory payouts) public onlyOwner {
         _payouts = payouts;
     }
@@ -102,6 +171,8 @@ contract Duckies is Initializable, ERC20CappedUpgradeable, PausableUpgradeable, 
         whenNotPaused
         override
     {
+        require(!hasRole(LOCKED_ROLE, from), "ERC20: `from` account is locked");
+        require(!hasRole(LOCKED_ROLE, to), "ERC20: `to` account is locked");
         super._beforeTokenTransfer(from, to, amount);
     }
 

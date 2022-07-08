@@ -1097,4 +1097,8 @@ describe("Duckies", function () {
       assert(err);
     }
   });
+
+  /**
+   * TODO: Add locking and banning unit tests
+   */
 });
