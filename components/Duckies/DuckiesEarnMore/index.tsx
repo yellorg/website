@@ -1,6 +1,5 @@
 import classnames from 'classnames';
-import React, { useEffect, useState, useMemo, useRef, useCallback } from 'react';
-import { UnsupportedChainIdError } from '@web3-react/core'
+import React, { useEffect, useState, useMemo } from 'react';
 import { isBrowser } from '../../../helpers/isBrowser';
 import {
     TwitterShareButton,
@@ -9,33 +8,27 @@ import {
     WeiboShareButton,
     FacebookShareButton
 } from 'next-share';
-import MetaMaskOnboarding from '@metamask/onboarding';
 import { useEagerConnect } from '../../../hooks/useEagerConnect';
-import type { ProviderWhitelist } from '../../../hooks/useDApp';
-import useDApp from '../../../hooks/useDApp';
 import useWallet from '../../../hooks/useWallet';
-import { appConfig } from '../../../config/app';
+import useMetaMask from '../../../hooks/useMetaMask';
 import Image from 'next/image';
-
 import * as ga from '../../../lib/ga';
 
 export const DuckiesEarnMore = () => {
-    const [isMetaMaskInstalled, setMetaMaskInstalled] = useState<boolean>(true);
     const [shareableLink, setShareableLink] = React.useState<string>('');
     const [shareableLinkPrefix, setShareableLinkPrefix] = React.useState('');
     const [isCopyClicked, setIsCopyClicked] = useState<boolean>(false);
 
-    const onboarding = useRef<MetaMaskOnboarding>();
-
     const isBrowserDefined = isBrowser();
 
-    const { connectWithProvider } = useDApp();
-    const { active, account, chain } = useWallet();
+    const { active, account } = useWallet();
     const triedToEagerConnect = useEagerConnect();
 
-    const supportedChain = useMemo(() => {
-        return appConfig.blockchain.supportedChainIds.includes(chain?.chainId ?? -1);
-    }, [chain]);
+    const {
+        supportedChain,
+        isMetaMaskInstalled,
+        handleMetamask,
+    } = useMetaMask();
 
     const isReady = useMemo(() => {
         return supportedChain && triedToEagerConnect && active && account;
@@ -62,67 +55,6 @@ export const DuckiesEarnMore = () => {
             setIsCopyClicked(false);
         }, 700);
     }, [isCopyClicked]);
-
-    const handleConnectWallet = useCallback(
-        async (provider: ProviderWhitelist) => {
-            if (!triedToEagerConnect) return
-
-            // Metamask exposes experimental methods under 'ethereum._metamask' property.
-            // 'ethereum._metamask.isUnlocked' may be removed or changed without warning.
-            // There is no other stable solution to detect Metamask 'unlocked' status right now.
-            // Details: https://docs.metamask.io/guide/ethereum-provider.html#ethereum-metamask-isunlocked
-            // Future breaking changes can be found here https://medium.com/metamask
-            const isMetamaskUnlocked = await (window as any)?.ethereum._metamask?.isUnlocked();
-
-            if (!isMetamaskUnlocked) {
-                console.warn('alerts.message.wallet.metamask.locked');
-            }
-
-            connectWithProvider(provider).then(() => {
-                console.log('removeConnectWalletAlert');
-            }).catch(async (error) => {
-                if (
-                    error instanceof UnsupportedChainIdError &&
-                    !error
-                        .toString()
-                        .includes('Supported chain ids are: undefined')
-                ) {
-                    console.log('success');
-                    ga.event({
-                        action: "duckies_connect_modal_connect_success",
-                    });
-                } else {
-                    console.error('handleConnectWallet: sign error');
-                    ga.event({
-                        action: "duckies_connect_modal_connect_fail",
-                    });
-                }
-            })
-        },
-        [connectWithProvider, triedToEagerConnect],
-    )
-
-    useEffect(() => {
-        onboarding.current = new MetaMaskOnboarding();
-        setMetaMaskInstalled(MetaMaskOnboarding.isMetaMaskInstalled());
-    }, [])
-
-    const handleMetamask = React.useCallback((isMetaMaskInstalled: boolean, id: ProviderWhitelist) => {
-        if (isMetaMaskInstalled) {
-            handleConnectWallet(id);
-            ga.event({
-                action: "duckies_connect_metamask_click",
-                params: {
-                    source: 'share',
-                },
-            });
-        } else {
-            onboarding.current?.startOnboarding();
-            ga.event({
-                action: "duckies_hero_metamask_install_click",
-            });
-        }
-    }, [handleConnectWallet, onboarding])
 
     const renderMetamaskButton = React.useCallback(() => (
         <div onClick={() => handleMetamask(isMetaMaskInstalled, 'Injected')} className="button button--outline button--secondary button--shadow-secondary">

@@ -1,13 +1,10 @@
-import { UnsupportedChainIdError } from '@web3-react/core'
-import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import Link from 'next/link';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
-import MetaMaskOnboarding from '@metamask/onboarding';
-import type { ProviderWhitelist } from '../../../hooks/useDApp';
-import useDApp from '../../../hooks/useDApp';
 import useWallet from '../../../hooks/useWallet';
 import { shortenHex } from '../../../utils/utils';
 import { useENSName } from '../../../hooks/useENSName';
+import useMetaMask from '../../../hooks/useMetaMask';
 import { DuckiesConnectorModalWindow } from '../DuckiesConnectModalWindow';
 import { useEagerConnect } from '../../../hooks/useEagerConnect';
 import useDuckiesContract from '../../../hooks/useDuckiesContract';
@@ -17,7 +14,6 @@ import Image from 'next/image';
 import { dispatchAlert } from '../../../features/alerts/alertsSlice';
 import { useAppDispatch } from '../../../app/hooks';
 import { isBrowser } from '../../../helpers';
-import chains from '../../../config/chains'
 import * as ga from '../../../lib/ga';
 import classNames from 'classnames';
 import { loginWithProvider } from '../../../lib/SupabaseConnector';
@@ -53,12 +49,9 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
     setIsReferralClaimed,
     supabaseUser,
 }: DuckiesHeroProps) => {
-    const [isMetaMaskInstalled, setMetaMaskInstalled] = useState<boolean>(true);
     const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
     const [isOpenBalancesInfo, setIsOpenBalancesInfo] = useState<boolean>(false);
     const [balance, setBalance] = useState<number | undefined>(undefined);
-    const [isSwitchedMainChain, setSwitchedMainChain] = useState<boolean>(false);
-    const [currentMetamaskChain, setCurrentMetamaskChain] = useState<number>(-1);
     const [isCopyClicked, setIsCopyClicked] = useState<boolean>(false);
     const [isCaptchaNotResolved, setIsCaptchaNotResolved] = React.useState<boolean>(true);
 
@@ -66,21 +59,19 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
 
     const dispatch = useAppDispatch();
     const duckiesContract = useDuckiesContract();
-    const { connectWithProvider, disconnect } = useDApp();
     const { active, account, chain, signer } = useWallet();
+    const {
+        mainChain,
+        supportedChain,
+        switchToMainChain,
+        addOrSwitchToMainChain,
+        isSwitchedMainChain,
+        isMetaMaskInstalled,
+        handleMetamask,
+        handleDisconnect,
+    } = useMetaMask();
     const ENSName = useENSName(account);
     const triedToEagerConnect = useEagerConnect();
-
-    const onboarding = useRef<MetaMaskOnboarding>();
-    const mainChain = useMemo(() => {
-        return chains.find(chain => chain.chainId === appConfig.blockchain.mainChainId)
-    }, []);
-    const mainChainIdHex = useMemo(() => {
-        return `0x${(mainChain?.chainId!).toString(16)}`
-    }, [mainChain]);
-    const supportedChain = useMemo(() => {
-        return appConfig.blockchain.supportedChainIds.includes(chain?.chainId ?? currentMetamaskChain);
-    }, [chain, currentMetamaskChain]);
 
     const isReady = useMemo(() => {
         return supportedChain && triedToEagerConnect && active && account;
@@ -112,58 +103,6 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
             setBalance(balance / (10 ** decimals));
         }
     }, [account, duckiesContract]);
-
-    const switchToMainChain = useCallback(async() => {
-        try {
-            await window?.ethereum?.request({
-                method: 'wallet_switchEthereumChain',
-                params: [{ chainId: mainChainIdHex }],
-            });
-            return true
-        } catch (switchError: any) {
-            // This error code indicates that the chain has not been added to MetaMask.
-            if (switchError.code === 4902) {
-                return false
-            }
-            throw switchError
-        }
-    }, [mainChainIdHex])
-
-    const addOrSwitchToMainChain = useCallback(async() => {
-        try {
-            const succeed = await switchToMainChain()
-            if (succeed) {
-                setSwitchedMainChain(true)
-                return true
-            } else {
-                try {
-                    await window?.ethereum?.request({
-                        method: 'wallet_addEthereumChain',
-                        params: [
-                        {
-                            chainId: mainChainIdHex,
-                            chainName: mainChain?.name,
-                            rpcUrls: mainChain?.rpc,
-                            nativeCurrency: mainChain?.nativeCurrency,
-                            blockExplorerUrls: mainChain?.explorers?.map(exp => exp.url),
-                        },
-                        ],
-                    });
-                    const switched = await switchToMainChain()
-                    setSwitchedMainChain(switched)
-                    return switched
-                } catch (addError: any) {
-                    console.error(addError)
-                    setSwitchedMainChain(false)
-                    return false
-                }
-            }
-        } catch (error: any) {
-            console.error(error)
-            setSwitchedMainChain(false)
-            return false
-        }
-    }, [mainChain, mainChainIdHex, switchToMainChain, setSwitchedMainChain])
 
     useEffect(() => {
         if (!isCopyClicked)
@@ -203,72 +142,6 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
             getBalance();
         }
     }, [isReady, getBalance]);
-
-    const handleConnectWallet = useCallback(async (provider: ProviderWhitelist) => {
-        if (!triedToEagerConnect) return;
-
-        const isMetamaskUnlocked = await (window as any)?.ethereum._metamask?.isUnlocked();
-
-        if (!isMetamaskUnlocked) {
-            console.warn('alerts.message.wallet.metamask.locked');
-        }
-
-        const switched = await addOrSwitchToMainChain()
-        if (!switched) return
-
-        connectWithProvider(provider).then(() => {
-            console.log('removeConnectWalletAlert');
-        }).catch(async (error) => {
-            if (
-                error instanceof UnsupportedChainIdError &&
-                !error
-                    .toString()
-                    .includes('Supported chain ids are: undefined')
-            ) {
-                console.log('success');
-            } else {
-                console.error('handleConnectWallet: sign error');
-            }
-        });
-    }, [connectWithProvider, triedToEagerConnect, addOrSwitchToMainChain]);
-
-    useEffect(() => {
-        onboarding.current = new MetaMaskOnboarding();
-        setMetaMaskInstalled(MetaMaskOnboarding.isMetaMaskInstalled());
-    }, [])
-
-    useEffect(() => {
-        const handleChainChange = (chainId: string) => {
-            setCurrentMetamaskChain(+chainId);
-            setSwitchedMainChain(+chainId === mainChain?.chainId);
-        }
-        isBrowser() && window?.ethereum?.on('chainChanged', handleChainChange);
-
-        return () => {
-            isBrowser() && window?.ethereum?.off('chainChanged', handleChainChange);
-        };
-    }, [mainChain, setCurrentMetamaskChain, setSwitchedMainChain, isBrowser])
-
-    const handleMetamask = React.useCallback((isMetaMaskInstalled: boolean, id: ProviderWhitelist) => {
-        if (isMetaMaskInstalled) {
-            handleConnectWallet(id);
-            ga.event({
-                action: "duckies_connect_metamask_click",
-                params: {
-                    source: 'hero',
-                },
-            });
-        } else {
-            onboarding.current?.startOnboarding();
-            ga.event({
-                action: "duckies_hero_metamask_install_click",
-            });
-        }
-    }, [handleConnectWallet, onboarding]);
-
-    const handleDisconnect = React.useCallback(() => {
-        disconnect();
-    }, [disconnect]);
 
     const handleClaimRewards = React.useCallback(async (amountToClaim: number) => {
         if (isLoading || isSingleBountyProcessing || (isReferralClaimed && !bountiesToClaim.length)) {
@@ -377,9 +250,8 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
             });
         }
 
-        const added = await switchToMainChain()
-        setSwitchedMainChain(added)
-    }, [isReady, getBountiesClaimableAmount, isReferralClaimed, switchToMainChain, setSwitchedMainChain]);
+        await switchToMainChain()
+    }, [isReady, getBountiesClaimableAmount, isReferralClaimed, switchToMainChain]);
 
     const handleSocialAuth = React.useCallback((provider: string) => {
         loginWithProvider(provider);
