@@ -216,12 +216,13 @@ export const BountyRow: React.FC<BountyProps> = ({
                 <div className="text-text-color-100 text-sm text-center font-metro-regular font-medium mb-6">
                     {bounty.description}
                 </div>
-                <div>
+                <div className="text-center">
                     <ReCAPTCHA
                         ref={e => {captcha = e}}
                         sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITEKEY || 'changeme'}
-                        onChange={() => setIsCaptchaNotResolved(false)}
-                        className="mb-5"
+                        onChange={() => setIsCaptchaNotResolved(!isCaptchaNotResolved)}
+                        className="mb-5 inline-block scale-80 lg:scale-100"
+                        hl="en"
                     />
                 </div>
                 <div className="flex items-center justify-center">
