@@ -8,6 +8,7 @@ import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol"
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 
 /// @custom:security-contact security@ducks.house
+// FIXME: Use "ERC20PresetMinterPauserUpgradeable" instead
 contract Duckies is Initializable, ERC20CappedUpgradeable, PausableUpgradeable, OwnableUpgradeable, AccessControlUpgradeable {
     address private _issuer;
 
@@ -72,6 +73,7 @@ contract Duckies is Initializable, ERC20CappedUpgradeable, PausableUpgradeable, 
      * @dev Destroys `amount` tokens from the caller.
      *
      */
+    // FIXME: Use "ERC20PresetMinterPauserUpgradeable" instead
     function burn(uint256 amount) public onlyOwner {
         _burn(_msgSender(), amount);
     }
@@ -85,19 +87,23 @@ contract Duckies is Initializable, ERC20CappedUpgradeable, PausableUpgradeable, 
      * - the caller must have allowance for ``accounts``'s tokens of at least
      * `amount`.
      */
+    // FIXME: Use "ERC20PresetMinterPauserUpgradeable" instead
     function burnFrom(address account, uint256 amount) public onlyOwner {
         _spendAllowance(account, _msgSender(), amount);
         _burn(account, amount);
     }
 
+    // FIXME: Use "ERC20PresetMinterPauserUpgradeable" instead
     function pause() public onlyOwner {
         _pause();
     }
 
+    // FIXME: Use "ERC20PresetMinterPauserUpgradeable" instead
     function unpause() public onlyOwner {
         _unpause();
     }
 
+    // FIXME: Use "ERC20PresetMinterPauserUpgradeable" instead
     function mint(address to, uint256 amount) public onlyOwner {
         _mint(to, amount);
     }
