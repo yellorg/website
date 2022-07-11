@@ -44,7 +44,7 @@ export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({
 }: DuckiesAffiliatesProps) => {
     const limit: number = 5;
 
-    let captcha: any = React.useRef();
+    let captcha: any = React.useRef<ReCAPTCHA>();
 
     const [bounties, setBounties] = useState<BountyItem[]>([]);
     const [page, setPage] = useState<number>(1);
@@ -212,9 +212,10 @@ export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({
     }, []);
 
     const handleClaim = React.useCallback(async (amountToClaim: number) => {
+        captcha?.current?.reset();
+        setIsCaptchaNotResolved(true);
+
         if (!isCaptchaNotResolved) {
-            captcha.reset();
-            setIsCaptchaNotResolved(false);
             setIsLoading(true);
             await handleClaimAllBounties(amountToClaim);
             setIsLoading(false);
@@ -250,12 +251,13 @@ export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({
                     List of bounties:
                     {renderBountyTitles}
                 </div>
-                <div>
+                <div className="flex justify-center">
                     <ReCAPTCHA
-                        ref={e => {captcha = e}}
+                        ref={captcha}
                         sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITEKEY || 'changeme'}
-                        onChange={() => setIsCaptchaNotResolved(false)}
-                        className="mb-5"
+                        onChange={() => setIsCaptchaNotResolved(!isCaptchaNotResolved)}
+                        className="mb-5 inline-block scale-80 lg:scale-100"
+                        hl="en"
                     />
                 </div>
                 <div className="flex items-center justify-center">
