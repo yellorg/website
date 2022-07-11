@@ -41,7 +41,7 @@ export const BountyRow: React.FC<BountyProps> = ({
     const [loading, setLoading] = React.useState<boolean>(false);
     const [isCaptchaNotResolved, setIsCaptchaNotResolved] = React.useState<boolean>(true);
 
-    let captcha: any = React.useRef(null);
+    let captcha: any = React.useRef<ReCAPTCHA>();
 
     const rowClassName = React.useMemo(() => {
         return classnames('flex w-full items-center justify-between border-b border-color-divider-color-40 px-1 py-2', {
@@ -71,7 +71,7 @@ export const BountyRow: React.FC<BountyProps> = ({
     const duckiesColor = React.useMemo(() => bounty.status === 'claim' ? '#ECAA00' : '#525252', [bounty.status]);
 
     const handleClaimReward = React.useCallback(async () => {
-        captcha.reset();
+        captcha?.current?.reset();
 
         if (!isCaptchaNotResolved) {
             setLoading(true);
@@ -218,7 +218,7 @@ export const BountyRow: React.FC<BountyProps> = ({
                 </div>
                 <div className="flex justify-center">
                     <ReCAPTCHA
-                        ref={e => {captcha = e}}
+                        ref={captcha}
                         sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITEKEY || 'changeme'}
                         onChange={() => setIsCaptchaNotResolved(!isCaptchaNotResolved)}
                         className="mb-5 inline-block scale-80 lg:scale-100"
