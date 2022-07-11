@@ -113,8 +113,8 @@ export const Footer = () => {
                     </div>
                     {renderLinks}
                 </div>
-                <div className="footer__bottom text--center">
-                    <div className="footer__copyright">
+                <div className="text-center">
+                    <div className="text-text-color-60">
                         Copyright © 2022 Yellow, Inc.
                     </div>
                 </div>
