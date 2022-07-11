@@ -1,14 +1,14 @@
 import classnames from 'classnames';
 import React from 'react';
 
-interface DuckiesConnectorModalWindowProps {
+interface DuckiesModalWindowProps {
     isOpen: boolean;
     headerContent: string;
     bodyContent: JSX.Element;
     setIsOpen: (value: boolean) => void;
 };
 
-export const DuckiesConnectorModalWindow = (props: DuckiesConnectorModalWindowProps) => {
+export const DuckiesModalWindow = (props: DuckiesModalWindowProps) => {
     const wrapperClass = classnames('flex items-center justify-center fixed left-0 top-0 min-h-screen transition-all ease-in-out duration-200 w-full z-[999] bg-black/50', {
         'opacity-100 visible': props.isOpen,
         'opacity-0 hidden': !props.isOpen,

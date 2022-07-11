@@ -1,9 +1,6 @@
 import { Html, Head, Main, NextScript } from "next/document";
 
 export default function Document() {
-    console.log('NEXT_PUBLIC_GOOGLE_ANALYTICS', process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS);
-    console.log('NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID', process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID);
-
     return (
         <Html>
             <Head>

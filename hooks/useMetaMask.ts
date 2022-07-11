@@ -80,7 +80,7 @@ export default function useMetaMask() {
             console.error(error)
             return false
         }
-    }, [mainChain, mainChainIdHex, switchToMainChain, setSwitchedMainChain])
+    }, [mainChain, mainChainIdHex, switchToMainChain]);
 
     const handleConnectWallet = useCallback(async (provider: ProviderWhitelist) => {
         if (!triedToEagerConnect) return
@@ -110,9 +110,9 @@ export default function useMetaMask() {
         })
     }, [connectWithProvider, triedToEagerConnect, addOrSwitchToMainChain])
 
-    const handleMetamask = useCallback((isMetaMaskInstalled: boolean, id: ProviderWhitelist) => {
+    const handleMetamask = useCallback(async (isMetaMaskInstalled: boolean, id: ProviderWhitelist) => {
         if (isMetaMaskInstalled) {
-            handleConnectWallet(id)
+            await handleConnectWallet(id)
             ga.event({
                 action: "duckies_connect_metamask_click",
                 params: {
@@ -128,8 +128,8 @@ export default function useMetaMask() {
     }, [handleConnectWallet, onboarding])
 
     const handleDisconnect = useCallback(() => {
-        disconnect()
-    }, [disconnect])
+        disconnect();
+    }, [disconnect]);
 
     useEffect(() => {
         onboarding.current = new MetaMaskOnboarding()
@@ -143,12 +143,13 @@ export default function useMetaMask() {
         }
 
         if (isBrowser()) {
-            window?.ethereum?.on('chainChanged', handleChainChange)
+            isBrowser() && window?.ethereum?.on('chainChanged', handleChainChange);
+
             return () => {
-                window?.ethereum?.off('chainChanged', handleChainChange)
+                isBrowser() && window?.ethereum?.removeListener('chainChanged', handleChainChange)
             }
         }
-        
+
     }, [mainChain, setCurrentMetamaskChain, setSwitchedMainChain, isBrowser])
 
     return {
