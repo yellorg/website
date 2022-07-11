@@ -267,7 +267,14 @@ export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({
                 </div>
             </React.Fragment>
         );
-    }, [getBountiesClaimableAmount, handleClaim, captcha, isCaptchaNotResolved]);
+    }, [
+        getBountiesClaimableAmount,
+        handleClaim,
+        captcha,
+        isCaptchaNotResolved,
+        claimButtonContainerClassName,
+        claimButtonClassName,
+    ]);
 
     const renderClaimRewardModalBody = React.useMemo(() => {
         return (
