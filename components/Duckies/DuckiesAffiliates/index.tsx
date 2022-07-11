@@ -216,7 +216,6 @@ export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({
         setIsCaptchaNotResolved(true);
 
         if (!isCaptchaNotResolved) {
-            setIsCaptchaNotResolved(false);
             setIsLoading(true);
             await handleClaimAllBounties(amountToClaim);
             setIsLoading(false);
