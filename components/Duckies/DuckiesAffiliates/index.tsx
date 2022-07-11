@@ -48,8 +48,7 @@ export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({
 
     const [bounties, setBounties] = useState<BountyItem[]>([]);
     const [page, setPage] = useState<number>(1);
-    const [payoutsReferral, setPayoutsReferral] = useState<number[]>([]);
-    const [payoutsBounty, setPayoutsBounty] = useState<number[]>([]);
+    const [payouts, setPayouts] = useState<number[]>([]);
     const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
     const [isCaptchaNotResolved, setIsCaptchaNotResolved] = React.useState<boolean>(true);
 
@@ -72,11 +71,9 @@ export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({
 
     const getPayouts = React.useCallback(async() => {
         if (account && signer) {
-            const payoutsReferralValues = await duckiesContract?.getReferralPayouts();
-            const payoutsBountyValues = await duckiesContract?.getBountyPayouts();
+            const payoutsValues = await duckiesContract?.getPayouts();
 
-            setPayoutsReferral(payoutsReferralValues);
-            setPayoutsBounty(payoutsBountyValues);
+            setPayouts(payoutsValues);
         }
     }, [account, duckiesContract, signer]);
 
@@ -109,8 +106,7 @@ export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({
                             Level {index + 1}
                         </div>
                         <div className="text-base text-text-color-60 cursor-pointer flex items-center w-fit">
-                            {payoutsReferral?.[index] ? `${payoutsReferral[index]}% commission / ` : ''}
-                            {payoutsBounty?.[index] ? `${payoutsBounty[index]}% bounty` : ''}
+                            {payouts?.[index] ? `${payouts[index]}% commission` : ''}
                         </div>
                     </div>
                     <div className="text-2xl flex items-center font-gilmer-medium text-text-color-100">
@@ -119,7 +115,7 @@ export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({
                 </div>
             );
         });
-    }, [affiliates, payoutsReferral, payoutsBounty]);
+    }, [affiliates, payouts]);
 
     const handleClaimReward = React.useCallback(async (id: string) => {
         const bountyToClaim = bountyItems.find((item: BountyItem) => item.fid === id);
@@ -148,7 +144,15 @@ export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({
             }
             setIsLoading(false);
         }
-    }, [signer, bountyItems, account]);
+    }, [
+        signer,
+        bountyItems,
+        account,
+        isCaptchaNotResolved,
+        dispatch,
+        setIsLoading,
+        setIsRewardsClaimed,
+    ]);
 
     const renderBountySlices = React.useMemo(() => {
         return bounties.map((bounty: BountyItem, index: number) => {
@@ -215,7 +219,7 @@ export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({
             await handleClaimAllBounties(amountToClaim);
             setIsLoading(false);
         }
-    }, [handleClaimAllBounties, setIsLoading]);
+    }, [handleClaimAllBounties, setIsLoading, isCaptchaNotResolved]);
 
     const renderClaimModalBody = React.useMemo(() => {
         const [amountToClaim, bountyTitles]: any = getBountiesClaimableAmount();
