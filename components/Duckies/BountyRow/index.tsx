@@ -71,7 +71,6 @@ export const BountyRow: React.FC<BountyProps> = ({
     const duckiesColor = React.useMemo(() => bounty.status === 'claim' ? '#ECAA00' : '#525252', [bounty.status]);
 
     const handleClaimReward = React.useCallback(async () => {
-        console.log(captcha)
         captcha.reset();
 
         if (!isCaptchaNotResolved) {
