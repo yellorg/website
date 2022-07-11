@@ -1,0 +1,61 @@
+{
+  "id": "bounty",
+  "type": "SharedSlice",
+  "name": "Bounty",
+  "description": "Bounty",
+  "variations": [
+    {
+      "id": "default",
+      "name": "Default",
+      "docURL": "...",
+      "version": "sktwi1xtmkfgx8626",
+      "description": "Bounty",
+      "primary": {},
+      "items": {
+        "field-id": {
+          "type": "Text",
+          "config": {
+            "label": "Field Id",
+            "placeholder": ""
+          }
+        },
+        "title": {
+          "type": "Text",
+          "config": {
+            "label": "Title",
+            "placeholder": ""
+          }
+        },
+        "description": {
+          "type": "Text",
+          "config": {
+            "label": "Description",
+            "placeholder": ""
+          }
+        },
+        "value": {
+          "type": "Number",
+          "config": {
+            "label": "Value",
+            "placeholder": ""
+          }
+        },
+        "limit": {
+          "type": "Number",
+          "config": {
+            "label": "Limit",
+            "placeholder": ""
+          }
+        },
+        "trigger-phrase": {
+          "type": "Text",
+          "config": {
+            "label": "Trigger Phrase",
+            "placeholder": ""
+          }
+        }
+      },
+      "imageUrl": "https://images.prismic.io/slice-machine/621a5ec4-0387-4bc5-9860-2dd46cbc07cd_default_ss.png?auto=compress,format"
+    }
+  ]
+}
