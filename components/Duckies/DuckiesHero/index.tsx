@@ -144,9 +144,6 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
     }, [isReady, getBalance]);
 
     const handleClaimRewards = React.useCallback(async (amountToClaim: number) => {
-        captcha?.current?.reset();
-        setIsCaptchaNotResolved(true);
-
         if (isLoading || isSingleBountyProcessing || (isReferralClaimed && !bountiesToClaim.length)) {
             return;
         }
@@ -203,6 +200,9 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
                 setIsLoading(false);
             }
         }
+
+        captcha?.current?.reset();
+        setIsCaptchaNotResolved(true);
     }, [
         signer,
         account,
@@ -214,6 +214,7 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
         dispatch,
         setIsRewardsClaimed,
         isSingleBountyProcessing,
+        isCaptchaNotResolved,
     ]);
 
     const getBountiesClaimableAmount = React.useCallback(() => {
