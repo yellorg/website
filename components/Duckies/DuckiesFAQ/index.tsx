@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { PrismicRichText } from '@prismicio/react';
 import classNames from 'classnames';
 import HtmlSerializer from '../../../helpers/HtmlSerializer';
+import { useSetMobileDevice } from '../../../hooks/useMobileDevice';
 
 interface DuckiesFAQProps {
     faqList: any
@@ -11,18 +12,23 @@ interface DuckiesFAQProps {
 
 export const DuckiesFAQ = ({ faqList }: DuckiesFAQProps) => {
     const [selectedQuestionIndex, setSelectedQuestionIndex] = React.useState<number>(-1);
+    const isMobile = useSetMobileDevice();
 
     const handleQuestionClick = React.useCallback(
         (index: number) => {
             if (selectedQuestionIndex < index && selectedQuestionIndex != -1) {
+                const elemPosition = (document.getElementById(`faq-${selectedQuestionIndex}`)?.offsetTop || 0);
                 const position = window.pageYOffset - (document.getElementById(`faq-${selectedQuestionIndex}`)?.clientHeight || 0) - 1;
-                window.scrollTo(0, position);
+
+                if (position < elemPosition || !isMobile) {
+                    window.scrollTo(0, position);
+                }
             }
             setSelectedQuestionIndex(
                 selectedQuestionIndex == index ? -1 : index
             );
         },
-        [selectedQuestionIndex]
+        [selectedQuestionIndex, isMobile]
     );
 
     const renderFAQList = React.useMemo(() => {

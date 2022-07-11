@@ -34,7 +34,7 @@ const HtmlSerializer = {
     hyperlink: ({ node, children }: any) => {
         return (
             <Link href={node.data.url}>
-                <a className="text-[18px] leading-[26px] font-metro-semibold text-text-color-100 hover:text-text-color-100 prevent-default underline">
+                <a target="_blank" className="text-[18px] leading-[26px] font-metro-semibold text-text-color-100 hover:text-text-color-100 prevent-default underline">
                     {children}
                 </a>
             </Link>
