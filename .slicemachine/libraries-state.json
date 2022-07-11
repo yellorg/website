@@ -1,6 +1,126 @@
 {
   "slices": {
     "components": {
+      "bounty": {
+        "library": "slices",
+        "id": "bounty",
+        "name": "Bounty",
+        "description": "Bounty",
+        "model": {
+          "id": "bounty",
+          "type": "SharedSlice",
+          "name": "Bounty",
+          "description": "Bounty",
+          "variations": [
+            {
+              "id": "default",
+              "name": "Default",
+              "docURL": "...",
+              "version": "sktwi1xtmkfgx8626",
+              "description": "Bounty",
+              "primary": {},
+              "items": {
+                "field-id": {
+                  "type": "Text",
+                  "config": {
+                    "label": "Field Id",
+                    "placeholder": ""
+                  }
+                },
+                "title": {
+                  "type": "Text",
+                  "config": {
+                    "label": "Title",
+                    "placeholder": ""
+                  }
+                },
+                "description": {
+                  "type": "Text",
+                  "config": {
+                    "label": "Description",
+                    "placeholder": ""
+                  }
+                },
+                "value": {
+                  "type": "Number",
+                  "config": {
+                    "label": "Value",
+                    "placeholder": ""
+                  }
+                },
+                "limit": {
+                  "type": "Number",
+                  "config": {
+                    "label": "Limit",
+                    "placeholder": ""
+                  }
+                },
+                "trigger-phrase": {
+                  "type": "Text",
+                  "config": {
+                    "label": "Trigger Phrase",
+                    "placeholder": ""
+                  }
+                }
+              },
+              "imageUrl": "https://images.prismic.io/slice-machine/621a5ec4-0387-4bc5-9860-2dd46cbc07cd_default_ss.png?auto=compress,format"
+            }
+          ]
+        },
+        "mocks": {
+          "default": {
+            "variation": "default",
+            "name": "Default",
+            "slice_type": "bounty",
+            "items": [
+              {
+                "field-id": "transform cross-platform platforms",
+                "title": "implement back-end systems",
+                "description": "mesh clicks-and-mortar web-readiness",
+                "value": 7009,
+                "limit": 9208,
+                "trigger-phrase": "monetize cutting-edge relationships"
+              },
+              {
+                "field-id": "facilitate dot-com e-services",
+                "title": "cultivate cross-media markets",
+                "description": "synthesize turn-key functionalities",
+                "value": 201,
+                "limit": 708,
+                "trigger-phrase": "integrate real-time web services"
+              },
+              {
+                "field-id": "maximize collaborative mindshare",
+                "title": "orchestrate distributed networks",
+                "description": "implement clicks-and-mortar architectures",
+                "value": 5731,
+                "limit": 7652,
+                "trigger-phrase": "implement cross-platform methodologies"
+              },
+              {
+                "field-id": "empower leading-edge infrastructures",
+                "title": "iterate intuitive ROI",
+                "description": "evolve integrated methodologies",
+                "value": 5844,
+                "limit": 9374,
+                "trigger-phrase": "redefine collaborative ROI"
+              }
+            ],
+            "primary": {}
+          }
+        },
+        "meta": {
+          "fileName": "index",
+          "extension": "js"
+        },
+        "screenshotPaths": {
+          "default": {
+            "path": "/Users/maxmoskalenko/dev/duckies/slices/Bounty/default/preview.png",
+            "width": 1834,
+            "height": 690
+          }
+        }
+      },
       "faq_question": {
         "library": "slices",
         "id": "faq_question",
