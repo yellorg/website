@@ -55,7 +55,7 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
     const [isCopyClicked, setIsCopyClicked] = useState<boolean>(false);
     const [isCaptchaNotResolved, setIsCaptchaNotResolved] = React.useState<boolean>(true);
 
-    let captcha: any = React.useRef();
+    let captcha: any = React.useRef<ReCAPTCHA>();
 
     const dispatch = useAppDispatch();
     const duckiesContract = useDuckiesContract();
@@ -144,15 +144,15 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
     }, [isReady, getBalance]);
 
     const handleClaimRewards = React.useCallback(async (amountToClaim: number) => {
+        captcha?.current?.reset();
+        setIsCaptchaNotResolved(true);
+
         if (isLoading || isSingleBountyProcessing || (isReferralClaimed && !bountiesToClaim.length)) {
             return;
         }
 
-        captcha.reset();
-
         if (!isReferralClaimed && !isCaptchaNotResolved) {
             const token = localStorage.getItem('referral_token');
-            setIsCaptchaNotResolved(false);
 
             if (token && signer && account) {
                 setIsLoading(true);
@@ -337,12 +337,13 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
                     List of bounties:
                     {renderBountyTitles}
                 </div>
-                <div>
+                <div className="flex justify-center">
                     <ReCAPTCHA
-                        ref={e => {captcha = e}}
+                        ref={captcha}
                         sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITEKEY || 'changeme'}
-                        onChange={() => setIsCaptchaNotResolved(false)}
-                        className="mb-5"
+                        onChange={() => setIsCaptchaNotResolved(!isCaptchaNotResolved)}
+                        className="mb-5 inline-block scale-80 lg:scale-100"
+                        hl="en"
                     />
                 </div>
                 <div className="flex items-center justify-center">
