@@ -1,6 +1,7 @@
 import classNames from 'classnames';
 import React from 'react';
 import { countriesArray } from './countriesArray';
+import axios from 'axios';
 
 const SEND_CODE_COOLDOWN_SECONDS = 60;
 
@@ -64,6 +65,8 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
 
         if (e.target.value === '') {
             setIsInputInvalid(true);
+        } else {
+            setIsInputInvalid(false);
         }
     }, []);
 
@@ -72,7 +75,7 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
         setIsDropdownOpen(false);
     }, []);
 
-    const sendCode = React.useCallback(() => {
+    const sendCode = React.useCallback(async () => {
         setIsCodeSended(true);
         setIsSendCodeDisabled(true);
         setCooldownLeft(SEND_CODE_COOLDOWN_SECONDS);
@@ -87,7 +90,11 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
             setIsSendCodeDisabled(false);
         }, SEND_CODE_COOLDOWN_SECONDS * 1000);
 
-        console.log(`Sending to ${selectedPhoneCode}${phoneNumber}`);
+        axios.post(`${window.location.origin}/api/otp/send`, {
+            phoneNumber: selectedPhoneCode + phoneNumber,
+        }).catch(() => {
+            setIsInputInvalid(true);
+        });
     }, [selectedPhoneCode, phoneNumber]);
 
     const renderCountryCodes = React.useMemo(() => {
@@ -188,6 +195,7 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
                     onBlur={() => { setIsInputInFocus(false) }}
                     onChange={handleInputChange}
                     value={phoneNumber}
+                    type="tel"
                 />
                 <div
                     className={cnDropdownButton}

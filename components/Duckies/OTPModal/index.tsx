@@ -3,6 +3,7 @@ import { DuckiesConnectorModalWindow } from '../DuckiesConnectModalWindow';
 import { PhoneInput } from './PhoneInput';
 import { OTPInput } from './OTPInput';
 import { convertNumberToLiteral } from '../../../helpers/convertNumberToLiteral';
+import axios from 'axios';
 
 interface OTPModalProps {
     bounty: string | number;
@@ -15,12 +16,21 @@ export const OTPModal: React.FC<OTPModalProps> = ({
 }: OTPModalProps) => {
     const [isOpen, setIsOpen] = React.useState<boolean>(true);
     const [isSuccess, setIsSuccess] = React.useState<boolean>(false);
+    const [isOtpIncorrect, setIsOtpIncorrect] = React.useState<boolean>(false);
     const [phone, setPhone] = React.useState<string>('');
     const [otp, setOtp] = React.useState<string>('');
 
-    const handleSubmit = React.useCallback(() => {
-        console.log(`Check otp ${otp} and save this phone ${phone}`);
-        setIsSuccess(true);
+    const handleSubmit = React.useCallback(async () => {
+        await axios.post(`${window.location.origin}/api/otp/verify`, {
+            phoneNumber: phone,
+            otp
+        }).then((res: any) => {
+            if (res.data.success) {
+                setIsSuccess(true);                
+            } else {
+                setIsOtpIncorrect(true);
+            }
+        });
     }, [otp, phone]);
 
     const renderBounty = React.useMemo(() => {
@@ -44,7 +54,11 @@ export const OTPModal: React.FC<OTPModalProps> = ({
                 {renderBounty}
                 <span className="text-center text-[14px] leading-[22px] font-metro-medium text-text-color-100">{bountyDescription}</span>
                 <PhoneInput savePhone={setPhone} />
-                <OTPInput saveOtp={setOtp} />
+                <OTPInput
+                    saveOtp={setOtp}
+                    isOtpIncorrect={isOtpIncorrect}
+                    setIsOtpIncorrect={setIsOtpIncorrect}
+                />
                 {otp.length != 6 ? (
                     <div className="bg-neutral-control-color-40 font-metro-bold text-neutral-control-layer-color-40 w-full text-center py-[6px] mt-[8px]">
                         Submit
@@ -59,7 +73,7 @@ export const OTPModal: React.FC<OTPModalProps> = ({
                 )}
             </div>
         );
-    }, [otp, handleSubmit, renderBounty]);
+    }, [otp, handleSubmit, renderBounty, isOtpIncorrect]);
 
     const renderSuccess = React.useMemo(() => {
         return (
@@ -74,8 +88,8 @@ export const OTPModal: React.FC<OTPModalProps> = ({
                     <span className="button__inner">OK</span>
                 </button>
             </div>
-        )
-    }, [renderBounty])
+        );
+    }, [renderBounty]);
 
     return (
         <DuckiesConnectorModalWindow

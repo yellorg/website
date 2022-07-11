@@ -3,17 +3,25 @@ import React from 'react';
 
 interface OTPInputProps {
     saveOtp: any;
-    isError?: boolean;
+    isOtpIncorrect?: boolean;
+    setIsOtpIncorrect?: any;
 };
 
 export const OTPInput: React.FC<OTPInputProps> = ({
     saveOtp,
-    isError,
+    isOtpIncorrect,
+    setIsOtpIncorrect,
 }: OTPInputProps) => {
     const [isOtpInFocus, setIsOtpInFocus] = React.useState<boolean>(false);
     const [focusedIndex, setFocusedIndex] = React.useState<number>(-1);
     const [selectedIndex, setSelectedIndex] = React.useState<number>(-1);
     const [values, setValues] = React.useState<string[]>(Array.from(new Array(6), () => ''))
+
+    React.useEffect(() => {
+        if (isOtpInFocus) {
+            setIsOtpIncorrect(false);
+        }
+    }, [isOtpInFocus]);
 
     React.useEffect(() => {
         saveOtp(values.reduce((prev: string, cur: string) => prev + cur, ''));
@@ -39,14 +47,13 @@ export const OTPInput: React.FC<OTPInputProps> = ({
             setValues(
                 ([] as Array<string>).concat(
                     values.slice(0, focusedIndex),
-                    e.target.value,
+                    e.target.value[0],
                     values.slice(focusedIndex + 1),
                 ),
             );
             setSelectedIndex(focusedIndex + 1 >= values.length ? values.length - 1 : focusedIndex + 1);
         }
     }, [values, focusedIndex]);
-
 
     const handleKeyDown = React.useCallback((e: any) => {
         if (e.key == 'Backspace') {
@@ -76,7 +83,7 @@ export const OTPInput: React.FC<OTPInputProps> = ({
         );
         const cnSingleInput = classNames(
             'bg-input-background-color border border-divider-color-20 rounded-sm p-[11px] shadow-sm',
-            { 'border-system-red-20': isError },
+            { 'border-system-red-20': isOtpIncorrect },
         );
 
         return (
@@ -109,7 +116,7 @@ export const OTPInput: React.FC<OTPInputProps> = ({
                 </div>
             </div>
         );
-    }, [isOtpInFocus, focusedIndex, handleInput, handleKeyDown, isError]);
+    }, [isOtpInFocus, focusedIndex, handleInput, handleKeyDown, isOtpIncorrect]);
 
     const renderInputs = React.useMemo(() => {
         return values.map(renderSingleInput);
