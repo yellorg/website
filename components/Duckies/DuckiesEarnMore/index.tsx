@@ -194,7 +194,7 @@ export const DuckiesEarnMore = () => {
         return socials.map((social: any, index: number) => {
             return (
                 <div
-                    className="w-12 h-12 mr-1.5 ml-1.5 last:mr-0 after:!rounded-[50%] before:hidden button button--secondary button--shadow-secondary"
+                    className="w-12 h-12 mr-1.5 ml-1.5 last:mr-0 after:!rounded-[50%] after:!bottom-[-7px] sm:after:!bottom-[-3px] before:hidden button button--secondary button--shadow-secondary"
                     key={`social-${index}`}
                 >
                     <span className="button__inner !bg-transparent !p-0 !w-12 !h-12 !rounded-[50%]" onClick={() => sendGAEvent(social.type)}>
@@ -313,7 +313,7 @@ export const DuckiesEarnMore = () => {
                                 </div>
                             )}
                         </div>
-                        <div className={classnames('flex items-center w-full py-2 max-w-full overflow-x-auto', { 'justify-center': !isReady, 'justify-start ml-[-0.25rem]': isReady })}>
+                        <div className={classnames('flex items-center w-full max-w-full no-scrollbar', { 'justify-center': !isReady, 'justify-start ml-[-0.25rem]': isReady })}>
                             {isReady ? renderSocials : renderMetamaskButton()}
                         </div>
                     </div>
