@@ -2,6 +2,7 @@ import classNames from 'classnames';
 import React from 'react';
 import { countriesArray } from './countriesArray';
 import axios from 'axios';
+import useWallet from '../../../hooks/useWallet';
 
 const SEND_CODE_COOLDOWN_SECONDS = 60;
 
@@ -23,6 +24,8 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
     const [cooldownLeft, setCooldownLeft] = React.useState<number>(0);
 
     const dropdownRef = React.useRef(null);
+    const { account } = useWallet();
+    
 
     React.useEffect(() => {
         savePhone(`+${selectedPhoneCode}${phoneNumber}`);
@@ -91,11 +94,12 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
         }, SEND_CODE_COOLDOWN_SECONDS * 1000);
 
         axios.post(`${window.location.origin}/api/otp/send`, {
-            phoneNumber: selectedPhoneCode + phoneNumber,
+            phoneNumber: `+${selectedPhoneCode}${phoneNumber}`,
+            address: account,
         }).catch(() => {
             setIsInputInvalid(true);
         });
-    }, [selectedPhoneCode, phoneNumber]);
+    }, [selectedPhoneCode, phoneNumber, account]);
 
     const renderCountryCodes = React.useMemo(() => {
         return countriesArray.filter(countriesFilter).map((country: any, index: number) => (

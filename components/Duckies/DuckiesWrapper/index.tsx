@@ -26,6 +26,7 @@ export const DuckiesLayout: FC<DuckiesLayoutProps> = ({ bounties, faqList }: Duc
     const [isSingleBountyProcessing, setIsSingleBountyProcessing] = React.useState<boolean>(false);
     const [isReferralClaimed, setIsReferralClaimed] = React.useState<boolean>(false);
     const [user, setUser] = React.useState<any>(null);
+    const [questUpdateTrigger, setQuestUpdateTrigger] = React.useState<boolean>(false);
 
     const dispatch = useAppDispatch();
     const duckiesContract = useDuckiesContract();
@@ -58,6 +59,17 @@ export const DuckiesLayout: FC<DuckiesLayoutProps> = ({ bounties, faqList }: Duc
             setUser(supabaseUser);
         }
     }, [supabaseUser, user]);
+
+    React.useEffect(() => {
+        const questUpdater = () => {
+            setQuestUpdateTrigger(!questUpdateTrigger);
+        };
+
+        window.addEventListener('reloadQuest', questUpdater);
+        return () => {
+            window.removeEventListener('reloadQuest', questUpdater);
+        };
+    }, [questUpdateTrigger]);
 
     React.useEffect(() => {
         if (items && isRewardsClaimed) {
@@ -112,6 +124,17 @@ export const DuckiesLayout: FC<DuckiesLayoutProps> = ({ bounties, faqList }: Duc
                         }
                     }
                     break;
+                case 'phone':
+                    const { data } = await supabase
+                        .from('users')
+                        .select('phone_verified')
+                        .eq('address', account)
+                        .single();
+
+                    if (data?.phone_verified) {
+                        status = 'claim';
+                    }
+                    break;
                 default:
             }
 
@@ -128,7 +151,7 @@ export const DuckiesLayout: FC<DuckiesLayoutProps> = ({ bounties, faqList }: Duc
             }
         }
         return 0;
-    }, [duckiesContract, signer, bountyItems, getAffiliatesRuleCompleted]);
+    }, [duckiesContract, signer, bountyItems, getAffiliatesRuleCompleted, questUpdateTrigger]);
 
     React.useEffect(() => {
         if (items) {

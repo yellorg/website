@@ -4,34 +4,44 @@ import { PhoneInput } from './PhoneInput';
 import { OTPInput } from './OTPInput';
 import { convertNumberToLiteral } from '../../../helpers/convertNumberToLiteral';
 import axios from 'axios';
+import useWallet from '../../../hooks/useWallet';
 
 interface OTPModalProps {
     bounty: string | number;
     bountyDescription?: string;
+    isOpen: boolean;
+    setIsOpen: any;
+    isClaimed?: boolean;
 }
 
 export const OTPModal: React.FC<OTPModalProps> = ({
     bounty,
     bountyDescription,
+    isOpen,
+    setIsOpen,
+    isClaimed,
 }: OTPModalProps) => {
-    const [isOpen, setIsOpen] = React.useState<boolean>(true);
-    const [isSuccess, setIsSuccess] = React.useState<boolean>(false);
+    const [isSuccess, setIsSuccess] = React.useState<boolean>(!!isClaimed);
     const [isOtpIncorrect, setIsOtpIncorrect] = React.useState<boolean>(false);
     const [phone, setPhone] = React.useState<string>('');
     const [otp, setOtp] = React.useState<string>('');
 
+    const { account } = useWallet();
+
     const handleSubmit = React.useCallback(async () => {
         await axios.post(`${window.location.origin}/api/otp/verify`, {
             phoneNumber: phone,
-            otp
+            otp,
+            address: account,
         }).then((res: any) => {
             if (res.data.success) {
                 setIsSuccess(true);                
+                window.dispatchEvent(new Event('reloadQuest'));
             } else {
                 setIsOtpIncorrect(true);
             }
         });
-    }, [otp, phone]);
+    }, [otp, phone, account]);
 
     const renderBounty = React.useMemo(() => {
         return (

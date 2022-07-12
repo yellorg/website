@@ -20,7 +20,7 @@
               "description": "Bounty",
               "primary": {},
               "items": {
-                "field-id": {
+                "fid": {
                   "type": "Text",
                   "config": {
                     "label": "Field Id",
@@ -55,7 +55,7 @@
                     "placeholder": ""
                   }
                 },
-                "trigger-phrase": {
+                "triggerPhrase": {
                   "type": "Text",
                   "config": {
                     "label": "Trigger Phrase",
@@ -74,36 +74,20 @@
             "slice_type": "bounty",
             "items": [
               {
-                "field-id": "transform cross-platform platforms",
-                "title": "implement back-end systems",
-                "description": "mesh clicks-and-mortar web-readiness",
-                "value": 7009,
-                "limit": 9208,
-                "trigger-phrase": "monetize cutting-edge relationships"
+                "fid": "cultivate out-of-the-box technologies",
+                "title": "innovate e-business schemas",
+                "description": "transform end-to-end partnerships",
+                "value": 7179,
+                "limit": 2520,
+                "triggerPhrase": "disintermediate bleeding-edge partnerships"
               },
               {
-                "field-id": "facilitate dot-com e-services",
-                "title": "cultivate cross-media markets",
-                "description": "synthesize turn-key functionalities",
-                "value": 201,
-                "limit": 708,
-                "trigger-phrase": "integrate real-time web services"
-              },
-              {
-                "field-id": "maximize collaborative mindshare",
-                "title": "orchestrate distributed networks",
-                "description": "implement clicks-and-mortar architectures",
-                "value": 5731,
-                "limit": 7652,
-                "trigger-phrase": "implement cross-platform methodologies"
-              },
-              {
-                "field-id": "empower leading-edge infrastructures",
-                "title": "iterate intuitive ROI",
-                "description": "evolve integrated methodologies",
-                "value": 5844,
-                "limit": 9374,
-                "trigger-phrase": "redefine collaborative ROI"
+                "fid": "strategize visionary synergies",
+                "title": "productize bricks-and-clicks relationships",
+                "description": "synergize robust users",
+                "value": 7699,
+                "limit": 4045,
+                "triggerPhrase": "redefine back-end bandwidth"
               }
             ],
             "primary": {}

@@ -7,8 +7,7 @@ export default async function handler(
 ) {
     const recipientPhoneNumber = req.body.phoneNumber;
     const recipientOTP = req.body.otp;
-
-    console.log(recipientPhoneNumber, recipientOTP)
+    const recipientAddress = req.body.address;
 
     const { count } = await supabase
         .from('otp')
@@ -18,6 +17,21 @@ export default async function handler(
 
 
     if (count && count != 0) {
+        await supabase.from('otp').delete()
+            .match({
+                phone_number: recipientPhoneNumber,
+                otp: recipientOTP,
+            });
+        
+        await supabase.from('users')
+            .update({
+                phone_verified: true,
+            })
+            .match({
+                address: recipientAddress,
+                phone_number: recipientPhoneNumber,
+            });
+
         return res.status(200).json({ success: true });
     }
 

@@ -96,6 +96,7 @@ export const OTPInput: React.FC<OTPInputProps> = ({
                     }}
                     onBlur={() => {
                         setFocusedIndex(-1);
+                        setSelectedIndex(-1);
                         setIsOtpInFocus(false);
                     }}
                     onClick={() => {setSelectedIndex(index)}}

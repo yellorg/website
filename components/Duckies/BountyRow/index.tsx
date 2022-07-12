@@ -6,6 +6,7 @@ import Image from 'next/image';
 import * as ga from '../../../lib/ga';
 import { loginWithProvider } from '../../../lib/SupabaseConnector';
 import ReCAPTCHA from 'react-google-recaptcha';
+import { OTPModal } from '../OTPModal';
 
 export interface BountyItem {
     fid: string;
@@ -318,6 +319,18 @@ export const BountyRow: React.FC<BountyProps> = ({
     }, [supabaseUser, renderSocialsModalBody, renderClaimModalBody]);
 
     const renderModal = React.useMemo(() => {
+        if (bounty.fid === 'phone-otp') {
+            return (
+                <OTPModal
+                    bounty={bounty.value}
+                    bountyDescription={bounty.description}
+                    isOpen={isOpenShow}
+                    setIsOpen={setIsOpenShow}
+                    isClaimed={bounty.status == 'claimed' || bounty.status == 'claim'}
+                />
+            );
+        }
+
         return (
             <DuckiesConnectorModalWindow
                 isOpen={isOpenShow}
