@@ -4,6 +4,7 @@ import { DuckiesAffiliates} from '../DuckiesAffiliates';
 import { DuckiesEarnMore} from '../DuckiesEarnMore';
 import { DuckiesRedeem} from '../DuckiesRedeem';
 import { DuckiesPrizes } from '../DuckiesPrizes'
+import { DuckiesPrizesList } from '../DuckiesPrizes/defaults';
 import useDuckiesContract from '../../../hooks/useDuckiesContract';
 import useWallet from '../../../hooks/useWallet';
 import { dispatchAlert } from '../../../features/alerts/alertsSlice';
@@ -220,7 +221,7 @@ export const DuckiesLayout: FC<DuckiesLayoutProps> = ({ bounties, faqList }: Duc
                 supabaseUser={user}
             />
             <DuckiesEarnMore />
-            <DuckiesPrizes />
+            <DuckiesPrizes prizes={DuckiesPrizesList} />
             <DuckiesRedeem />
             <DuckiesFAQ
                 faqList={faqList}
