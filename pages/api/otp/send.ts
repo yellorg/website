@@ -12,7 +12,6 @@ function generateOTP() {
      return otp;
 }
 
-
 export default async function handler(
     req: NextApiRequest,
 ) {

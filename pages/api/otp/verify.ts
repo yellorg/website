@@ -16,7 +16,6 @@ export default async function handler(
         .eq('phone_number', recipientPhoneNumber)
         .eq('otp', recipientOTP);
 
-
     if (count && count != 0) {
         await supabase.from('otp').delete()
             .match({

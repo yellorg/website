@@ -6,7 +6,7 @@ import Image from 'next/image';
 const SEND_CODE_COOLDOWN_SECONDS = 60;
 
 interface PhoneInputProps {
-    savePhone: any;
+    savePhone: (value: string) => void;
 };
 
 export const PhoneInput: React.FC<PhoneInputProps> = ({
@@ -18,7 +18,7 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
     const [selectedFlagHref, setSelectedFlagHref] = React.useState<string>('https://cdn-icons-png.flaticon.com/128/197/197591.png');
     const [isInputInFocus, setIsInputInFocus] = React.useState<boolean>(false);
     const [phoneNumber, setPhoneNumber] = React.useState<string>('');
-    const [isCodeSended, setIsCodeSended] = React.useState<boolean>(false);
+    const [isCodeSent, setIsCodeSent] = React.useState<boolean>(false);
     const [isSendCodeDisabled, setIsSendCodeDisabled] = React.useState<boolean>(false);
     const [isInputInvalid, setIsInputInvalid] = React.useState<boolean>(false);
     const [cooldownLeft, setCooldownLeft] = React.useState<number>(0);
@@ -35,14 +35,13 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
         const fetchCountries = async () => {
             fetch(`${window.location.origin}/api/otp/countriesFetch`, {
                 method: 'POST',
-            })
-                .then((res: Response) => res.json())
-                .then((data: any) => {
-                    setCountriesArray(data.countries);
-                    setSelectedPhoneCode(data.countries[0].phone_code);
-                    setSelectedFlagHref(data.countries[0].flag_href);
-                })
-        }
+            }).then((res: Response) => res.json())
+            .then((data: any) => {
+                setCountriesArray(data.countries);
+                setSelectedPhoneCode(data.countries[0].phone_code);
+                setSelectedFlagHref(data.countries[0].flag_href);
+            });
+        };
 
         fetchCountries();
     }, []);
@@ -57,25 +56,23 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
             }
         };
         document.addEventListener('click', handleClickOutside, true);
+
         return () => {
             document.removeEventListener('click', handleClickOutside, true);
         };
     }, []);
 
-    const countriesFilter = React.useCallback(
-        (country: any) => {
-            return (
-                country.full_name
-                    .toLowerCase()
-                    .includes(phoneCodeFilterValue.toLowerCase()) ||
-                country.short_name
-                    .toLowerCase()
-                    .includes(phoneCodeFilterValue.toLowerCase()) ||
-                `+${country.phone_code}`.includes(phoneCodeFilterValue)
-            );
-        },
-        [phoneCodeFilterValue],
-    );
+    const countriesFilter = React.useCallback((country: any) => {
+        return (
+            country.full_name
+                .toLowerCase()
+                .includes(phoneCodeFilterValue.toLowerCase()) ||
+            country.short_name
+                .toLowerCase()
+                .includes(phoneCodeFilterValue.toLowerCase()) ||
+            `+${country.phone_code}`.includes(phoneCodeFilterValue)
+        );
+    }, [phoneCodeFilterValue]);
 
     const handleInputChange = React.useCallback((e: any) => {
         if (/^\d{0,15}$/.test(e?.target?.value || '')) {
@@ -93,13 +90,18 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
         setSelectedPhoneCode(code);
         setIsDropdownOpen(false);
         setSelectedFlagHref(
-            (countriesArray?.find((c: any) => c.phone_code == code) as any)
+            (countriesArray?.find((c: any) => c.phone_code === code) as any)
                 ?.flag_href || ''
         );
     }, [countriesArray]);
 
+    const handleFocus = React.useCallback(() => {
+        setIsInputInFocus(true);
+        setIsInputInvalid(false);
+    }, []);
+
     const sendCode = React.useCallback(async () => {
-        setIsCodeSended(true);
+        setIsCodeSent(true);
         setIsSendCodeDisabled(true);
         setCooldownLeft(SEND_CODE_COOLDOWN_SECONDS);
         let timePassed = 0;
@@ -191,11 +193,8 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
         return classNames(
             'flex justify-center items-center absolute right-[calc(1.5rem+1px)] w-[90px] h-[42px] bg-primary-cta-color-60 disabled:bg-neutral-control-color-40 enabled:hover:bg-primary-cta-color-80',
             {
-                'h-[40px]':
-                    (isSendCodeDisabled ||
-                        isInputInvalid ||
-                        phoneNumber == '') &&
-                    (isDropdownOpen || isInputInFocus),
+                'h-[40px]': (isSendCodeDisabled || isInputInvalid || phoneNumber == '')
+                    && (isDropdownOpen || isInputInFocus),
                 'w-[111px] gap-[3px]': isSendCodeDisabled,
             },
         );
@@ -219,15 +218,15 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
             <div className="flex flex-row rounded-sm shadow-sm items-center">
                 <input
                     className={cnInput}
-                    onFocus={() => { setIsInputInFocus(true); setIsInputInvalid(false) }}
-                    onBlur={() => { setIsInputInFocus(false) }}
+                    onFocus={handleFocus}
+                    onBlur={() => { setIsInputInFocus(false); }}
                     onChange={handleInputChange}
                     value={phoneNumber}
                     type="tel"
                 />
                 <div
                     className={cnDropdownButton}
-                    onClick={() => { setIsDropdownOpen(true) }}
+                    onClick={() => { setIsDropdownOpen(true); }}
                 >
                     <Image src={selectedFlagHref} height={16} width={16} />
                     <span className="text-[14px] leading-[22px] font-metro-semibold text-text-color-90">+{selectedPhoneCode}</span>
@@ -240,10 +239,10 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
                 <button
                     className={cnSendCodeButton}
                     onClick={sendCode}
-                    disabled={isSendCodeDisabled || isInputInvalid || phoneNumber == ''}
+                    disabled={isSendCodeDisabled || isInputInvalid || phoneNumber === ''}
                 >
                     <span className={cnSendCodeLabel}>
-                        {isCodeSended ? 'Resend code' : 'Send code'}
+                        {isCodeSent ? 'Resend code' : 'Send code'}
                     </span>
                     {isSendCodeDisabled && (
                         <span className="group relative flex justify-center items-center">
@@ -251,7 +250,7 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
                                 <path d="M8.08333 9.33333H7.5V7H6.91667M7.5 4.66667H7.50583M12.75 7C12.75 9.89949 10.3995 12.25 7.5 12.25C4.6005 12.25 2.25 9.89949 2.25 7C2.25 4.1005 4.6005 1.75 7.5 1.75C10.3995 1.75 12.75 4.1005 12.75 7Z" stroke="#8E8E8E" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
                             </svg>
                             <div className="absolute hidden group-hover:inline-block p-[16px] bg-text-color-0 border-2 border-text-color-100 rounded w-max">
-                                <span className="">Resend in</span>
+                                <span>Resend in</span>
                                 {' '}
                                 <span>{cooldownLeft}sec</span>
                             </div>

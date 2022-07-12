@@ -326,7 +326,7 @@ export const BountyRow: React.FC<BountyProps> = ({
                     bountyDescription={bounty.description}
                     isOpen={isOpenShow}
                     setIsOpen={setIsOpenShow}
-                    isClaimed={bounty.status == 'claimed' || bounty.status == 'claim'}
+                    isClaimed={bounty.status === 'claimed' || bounty.status === 'claim'}
                 />
             );
         }

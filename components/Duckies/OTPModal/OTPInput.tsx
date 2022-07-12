@@ -2,7 +2,7 @@ import classNames from 'classnames';
 import React from 'react';
 
 interface OTPInputProps {
-    saveOtp: any;
+    saveOtp: (value: string) => void;
     isOtpIncorrect?: boolean;
     setIsOtpIncorrect?: any;
 };
@@ -31,12 +31,14 @@ export const OTPInput: React.FC<OTPInputProps> = ({
         const lastNonNull = values.length - 1 - [...values].reverse().findIndex(value => value !== '');
         if (lastNonNull != values.length && selectedIndex <= lastNonNull && selectedIndex > 0) {
             setFocusedIndex(selectedIndex);
+
             return;
         }
 
         values.some((value: string, index: number) => {
-            if (!value || index == selectedIndex) {
+            if (!value || index === selectedIndex) {
                 setFocusedIndex(index);
+
                 return true;
             }
         });
@@ -56,7 +58,7 @@ export const OTPInput: React.FC<OTPInputProps> = ({
     }, [values, focusedIndex]);
 
     const handleKeyDown = React.useCallback((e: any) => {
-        if (e.key == 'Backspace') {
+        if (e.key === 'Backspace') {
             setValues(
                 ([] as Array<string>).concat(
                     values.slice(0, focusedIndex),
@@ -67,11 +69,11 @@ export const OTPInput: React.FC<OTPInputProps> = ({
             setSelectedIndex(focusedIndex - 1);
         }
 
-        if (e.key == 'ArrowLeft') {
+        if (e.key === 'ArrowLeft') {
             setSelectedIndex(focusedIndex - 1);
         }
 
-        if (e.key == 'ArrowRight') {
+        if (e.key === 'ArrowRight') {
             setSelectedIndex(focusedIndex + 1 >= values.length ? values.length - 1 : focusedIndex + 1);
         }
     }, [values, focusedIndex]);
@@ -79,7 +81,7 @@ export const OTPInput: React.FC<OTPInputProps> = ({
     const renderSingleInput = React.useCallback((value: string, index: number) => {
         const cnSingleInputBox = classNames(
             'relative outline outline-offset-[-1px] outline-primary-cta-color-40 outline-0',
-            { 'outline-1': isOtpInFocus && (focusedIndex == index) },
+            { 'outline-1': isOtpInFocus && (focusedIndex === index) },
         );
         const cnSingleInput = classNames(
             'bg-input-background-color border border-divider-color-20 rounded-sm p-[11px] shadow-sm',

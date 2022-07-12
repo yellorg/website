@@ -53,16 +53,15 @@ export const OTPModal: React.FC<OTPModalProps> = ({
                 otp,
                 address: account,
             }),
-        })
-            .then((res: Response) => res.json())
-            .then((data: any) => {
-                if (data.success) {
-                    setIsSuccess(true);                
-                    window.dispatchEvent(new Event('reloadQuest'));
-                } else {
-                    setIsOtpIncorrect(true);
-                }
-            });
+        }).then((res: Response) => res.json())
+        .then((data: any) => {
+            if (data.success) {
+                setIsSuccess(true);                
+                window.dispatchEvent(new Event('reloadQuest'));
+            } else {
+                setIsOtpIncorrect(true);
+            }
+        });
     }, [otp, phone, account]);
 
     const renderBounty = React.useMemo(() => {
