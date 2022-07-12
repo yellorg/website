@@ -26,8 +26,8 @@ export const DuckiesPrizes = ({ prizes }: DuckiesPrizesProps) => {
                         </div>
                     </div>
                     <div className="flex overflow-visible block">
-                        { prizes.map((prize: DuckiesPrizesList) => 
-                            <div key={`duck-${prize.id}`} className="mr-5">
+                        {prizes.map((prize: DuckiesPrizesList, index) => 
+                            <div key={`redeem-duck-${index}`} className="mr-5">
                                 <Tilt
                                     perspective={500}
                                     scale={0.9}
