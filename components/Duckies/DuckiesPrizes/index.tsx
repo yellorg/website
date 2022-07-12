@@ -44,7 +44,7 @@ export const DuckiesPrizes = ({ prizes }: DuckiesPrizesProps) => {
                                             effect="blur"
                                             threshold={200}
                                         />                  
-                                        { (typeof prize.collection) === 'string' 
+                                        {(typeof prize.collection) === 'string' 
                                             ? <span className="absolute bottom-0 right-0 m-4 font-metro-semibold">{prize.collection}</span> 
                                             : prize.collection
                                         }
