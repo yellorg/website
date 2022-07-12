@@ -1,8 +1,8 @@
 import classNames from 'classnames';
 import React from 'react';
-import { countriesArray } from './countriesArray';
 import axios from 'axios';
 import useWallet from '../../../hooks/useWallet';
+import Image from 'next/image';
 
 const SEND_CODE_COOLDOWN_SECONDS = 60;
 
@@ -15,13 +15,15 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
 }: PhoneInputProps) => {
     const [isDropdownOpen, setIsDropdownOpen] = React.useState<boolean>(false);
     const [phoneCodeFilterValue, setPhoneCodeFilterValue] = React.useState<string>('');
-    const [selectedPhoneCode, setSelectedPhoneCode] = React.useState<string>('1');
+    const [selectedPhoneCode, setSelectedPhoneCode] = React.useState<string>('');
+    const [selectedFlagHref, setSelectedFlagHref] = React.useState<string>('https://cdn-icons-png.flaticon.com/128/197/197591.png');
     const [isInputInFocus, setIsInputInFocus] = React.useState<boolean>(false);
     const [phoneNumber, setPhoneNumber] = React.useState<string>('');
     const [isCodeSended, setIsCodeSended] = React.useState<boolean>(false);
     const [isSendCodeDisabled, setIsSendCodeDisabled] = React.useState<boolean>(false);
     const [isInputInvalid, setIsInputInvalid] = React.useState<boolean>(false);
     const [cooldownLeft, setCooldownLeft] = React.useState<number>(0);
+    const [countriesArray, setCountriesArray] = React.useState([]);
 
     const dropdownRef = React.useRef(null);
     const { account } = useWallet();
@@ -30,6 +32,20 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
     React.useEffect(() => {
         savePhone(`+${selectedPhoneCode}${phoneNumber}`);
     }, [selectedPhoneCode, phoneNumber]);
+
+    React.useEffect(() => {
+        const fetchCountries = async () => {
+            await axios
+                .post(`${window.location.origin}/api/otp/countriesFetch`)
+                .then((res: any) => {
+                    setCountriesArray(res.data.countries);
+                    setSelectedPhoneCode(res.data.countries[0].phone_code);
+                    setSelectedFlagHref(res.data.countries[0].flag_href);
+                });
+        }
+
+        fetchCountries();
+    }, []);
 
     React.useEffect(() => {
         const handleClickOutside = (event: Event) => {
@@ -49,13 +65,13 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
     const countriesFilter = React.useCallback(
         (country: any) => {
             return (
-                country.fullName
+                country.full_name
                     .toLowerCase()
                     .includes(phoneCodeFilterValue.toLowerCase()) ||
-                country.shortName
+                country.short_name
                     .toLowerCase()
                     .includes(phoneCodeFilterValue.toLowerCase()) ||
-                `+${country.phoneCode}`.includes(phoneCodeFilterValue)
+                `+${country.phone_code}`.includes(phoneCodeFilterValue)
             );
         },
         [phoneCodeFilterValue],
@@ -76,7 +92,11 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
     const handleSelectPhoneCode = React.useCallback((code: string) => {
         setSelectedPhoneCode(code);
         setIsDropdownOpen(false);
-    }, []);
+        setSelectedFlagHref(
+            (countriesArray?.find((c: any) => c.phone_code == code) as any)
+                ?.flag_href || ''
+        );
+    }, [countriesArray]);
 
     const sendCode = React.useCallback(async () => {
         setIsCodeSended(true);
@@ -105,18 +125,19 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
         return countriesArray.filter(countriesFilter).map((country: any, index: number) => (
             <div
                 className="flex flex-row cursor-pointer hover:bg-neutral-control-color-20 rounded-md px-[12px] py-[6px] gap-[6px] items-center"
-                onClick={() => { handleSelectPhoneCode(country.phoneCode) }}
+                onClick={() => { handleSelectPhoneCode(country.phone_code) }}
                 key={`country-${index}`}
             >
+                <Image src={country.flag_href} height={24} width={24} />
                 <span className="text-[16px] leading-[22px] text-neutral-control-layer-color-100 font-metro-semibold">
-                    {country.shortName}
+                    {country.short_name}
                 </span>
                 <span className="text-[12px] leading-[16px] text-neutral-control-layer-color-60 font-metro-regular">
-                    +{country.phoneCode}
+                    +{country.phone_code}
                 </span>
             </div>
         ));
-    }, [countriesFilter]);
+    }, [countriesFilter, countriesArray]);
 
     const renderCountryCodeDropdown = React.useMemo(() => {
         return (
@@ -147,7 +168,7 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
 
     const cnInput = React.useMemo(() => {
         return classNames(
-            'py-[10px] px-[98px] w-full leading-[22px] border border-divider-color-20 outline outline-primary-cta-color-60 rounded-sm outline-0 outline-offset-[-2px]',
+            'py-[10px] pl-[108px] pr-[98px] w-full leading-[22px] border border-divider-color-20 outline outline-primary-cta-color-60 rounded-sm outline-0 outline-offset-[-2px]',
             {
                 'outline-2 border-transparent': isDropdownOpen || isInputInFocus,
                 'pr-[119px]': isSendCodeDisabled,
@@ -158,7 +179,7 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
 
     const cnDropdownButton = React.useMemo(() => {
         return classNames(
-            'absolute left-[calc(1.5rem+1px)] w-[90px] h-[42px] border-r border-divider-color-20 flex justify-center items-center gap-[2px] cursor-pointer',
+            'absolute left-[calc(1.5rem+1px)] w-[100px] h-[42px] border-r border-divider-color-20 flex justify-center items-center gap-[2px] cursor-pointer',
             { 'h-[40px]': isDropdownOpen || isInputInFocus },
         );
     }, [isDropdownOpen, isInputInFocus]);
@@ -205,6 +226,7 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
                     className={cnDropdownButton}
                     onClick={() => { setIsDropdownOpen(true) }}
                 >
+                    <Image src={selectedFlagHref} height={16} width={16} />
                     <span className="text-[14px] leading-[22px] font-metro-semibold text-text-color-90">+{selectedPhoneCode}</span>
                     <span>
                         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
