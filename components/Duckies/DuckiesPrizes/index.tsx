@@ -87,11 +87,11 @@ export const DuckiesPrizes = () => {
                                     <div className="flex bottom-0 right-0 m-4 absolute inline-block">
                                         <span className="font-metro-semibold">SWAPPING FOR YELLOW </span>
                                         <LazyLoadImage
-                                        srcSet={`${'/images/components/duckies/yellow-token.png'}`}
-                                        threshold={30}
-                                        width={25}
-                                        height={25}
-                                        className="mx-1"
+                                            srcSet={`${'/images/components/duckies/yellow-token.png'}`}
+                                            threshold={30}
+                                            width={25}
+                                            height={25}
+                                            className="mx-1"
                                         />
                                         <span className="font-metro-semibold">TOKENS</span>
                                     </div>
