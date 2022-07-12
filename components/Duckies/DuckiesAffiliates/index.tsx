@@ -212,14 +212,14 @@ export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({
     }, []);
 
     const handleClaim = React.useCallback(async (amountToClaim: number) => {
-        captcha?.current?.reset();
-        setIsCaptchaNotResolved(true);
-
         if (!isCaptchaNotResolved) {
             setIsLoading(true);
             await handleClaimAllBounties(amountToClaim);
             setIsLoading(false);
         }
+
+        captcha?.current?.reset();
+        setIsCaptchaNotResolved(true);
     }, [handleClaimAllBounties, setIsLoading, isCaptchaNotResolved]);
 
     const renderClaimModalBody = React.useMemo(() => {
