@@ -12,7 +12,7 @@
       "description": "Bounty",
       "primary": {},
       "items": {
-        "field-id": {
+        "fid": {
           "type": "Text",
           "config": {
             "label": "Field Id",
@@ -47,7 +47,7 @@
             "placeholder": ""
           }
         },
-        "trigger-phrase": {
+        "triggerPhrase": {
           "type": "Text",
           "config": {
             "label": "Trigger Phrase",
