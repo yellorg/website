@@ -5,9 +5,10 @@ export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse
 ) {
-    const recipientPhoneNumber = req.body.phoneNumber;
-    const recipientOTP = req.body.otp;
-    const recipientAddress = req.body.address;
+    const props = JSON.parse(req.body);
+    const recipientPhoneNumber = props.phoneNumber;
+    const recipientOTP = props.otp;
+    const recipientAddress = props.address;
 
     const { count } = await supabase
         .from('otp')

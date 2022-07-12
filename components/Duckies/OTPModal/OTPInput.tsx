@@ -15,7 +15,7 @@ export const OTPInput: React.FC<OTPInputProps> = ({
     const [isOtpInFocus, setIsOtpInFocus] = React.useState<boolean>(false);
     const [focusedIndex, setFocusedIndex] = React.useState<number>(-1);
     const [selectedIndex, setSelectedIndex] = React.useState<number>(-1);
-    const [values, setValues] = React.useState<string[]>(Array.from(new Array(6), () => ''))
+    const [values, setValues] = React.useState<string[]>(Array.from(new Array(6), () => ''));
 
     React.useEffect(() => {
         if (isOtpInFocus) {

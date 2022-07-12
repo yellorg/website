@@ -3,8 +3,8 @@ import { DuckiesConnectorModalWindow } from '../DuckiesConnectModalWindow';
 import { PhoneInput } from './PhoneInput';
 import { OTPInput } from './OTPInput';
 import { convertNumberToLiteral } from '../../../helpers/convertNumberToLiteral';
-import axios from 'axios';
 import useWallet from '../../../hooks/useWallet';
+import { supabase } from '../../../lib/SupabaseConnector';
 
 interface OTPModalProps {
     bounty: string | number;
@@ -25,22 +25,44 @@ export const OTPModal: React.FC<OTPModalProps> = ({
     const [isOtpIncorrect, setIsOtpIncorrect] = React.useState<boolean>(false);
     const [phone, setPhone] = React.useState<string>('');
     const [otp, setOtp] = React.useState<string>('');
+    const [verifiedPhone, setVerifiedPhone] = React.useState<string>('');
 
     const { account } = useWallet();
 
+    React.useEffect(() => {
+        const fetchPhone = async () => {
+            const { data } = await supabase
+                .from('users')
+                .select('phone_number')
+                .eq('address', account)
+                .single();
+            
+            setVerifiedPhone(data.phone_number);
+        }
+
+        if (isSuccess) {
+            fetchPhone();
+        }
+    }, [account, isSuccess])
+
     const handleSubmit = React.useCallback(async () => {
-        await axios.post(`${window.location.origin}/api/otp/verify`, {
-            phoneNumber: phone,
-            otp,
-            address: account,
-        }).then((res: any) => {
-            if (res.data.success) {
-                setIsSuccess(true);                
-                window.dispatchEvent(new Event('reloadQuest'));
-            } else {
-                setIsOtpIncorrect(true);
-            }
-        });
+        fetch(`${window.location.origin}/api/otp/verify`, {
+            method: 'POST',
+            body: JSON.stringify({
+                phoneNumber: phone,
+                otp,
+                address: account,
+            }),
+        })
+            .then((res: Response) => res.json())
+            .then((data: any) => {
+                if (data.success) {
+                    setIsSuccess(true);                
+                    window.dispatchEvent(new Event('reloadQuest'));
+                } else {
+                    setIsOtpIncorrect(true);
+                }
+            });
     }, [otp, phone, account]);
 
     const renderBounty = React.useMemo(() => {
@@ -91,6 +113,7 @@ export const OTPModal: React.FC<OTPModalProps> = ({
                 {renderBounty}
                 <span className="text-[16px] leading-[24px] text-text-color-100 font-metro-semibold mt-[12px]">Success!</span>
                 <span className="text-[14px] leading-[22px] text-text-color-100 font-metro-medium">You have verified your phone number.</span>
+                <span className="text-[14px] leading-[22px] text-text-color-100 font-metro-medium">{verifiedPhone}</span>
                 <button
                     className="button button--outline button--secondary button--shadow-secondary mt-[24px]"
                     onClick={() => { setIsOpen(false) }}
@@ -99,7 +122,7 @@ export const OTPModal: React.FC<OTPModalProps> = ({
                 </button>
             </div>
         );
-    }, [renderBounty]);
+    }, [renderBounty, verifiedPhone]);
 
     return (
         <DuckiesConnectorModalWindow

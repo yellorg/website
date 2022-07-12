@@ -16,8 +16,9 @@ function generateOTP() {
 export default async function handler(
     req: NextApiRequest,
 ) {
-    const recipientPhoneNumber = req.body.phoneNumber;
-    const recipientAddress = req.body.address;
+    const props = JSON.parse(req.body);
+    const recipientPhoneNumber = props.phoneNumber;
+    const recipientAddress = props.address;
 
     const otp = generateOTP();
 

@@ -64,8 +64,8 @@ export const DuckiesLayout: FC<DuckiesLayoutProps> = ({ bounties, faqList }: Duc
         const questUpdater = () => {
             setQuestUpdateTrigger(!questUpdateTrigger);
         };
-
         window.addEventListener('reloadQuest', questUpdater);
+
         return () => {
             window.removeEventListener('reloadQuest', questUpdater);
         };
@@ -131,7 +131,9 @@ export const DuckiesLayout: FC<DuckiesLayoutProps> = ({ bounties, faqList }: Duc
                         .eq('address', account)
                         .single();
 
-                    if (data?.phone_verified) {
+                    if (claimedTimes === bounty.limit) {
+                        status = 'claimed';
+                    } else if (data?.phone_verified) {
                         status = 'claim';
                     }
                     break;

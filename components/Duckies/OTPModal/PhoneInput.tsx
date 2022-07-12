@@ -1,6 +1,5 @@
 import classNames from 'classnames';
 import React from 'react';
-import axios from 'axios';
 import useWallet from '../../../hooks/useWallet';
 import Image from 'next/image';
 
@@ -27,7 +26,6 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
 
     const dropdownRef = React.useRef(null);
     const { account } = useWallet();
-    
 
     React.useEffect(() => {
         savePhone(`+${selectedPhoneCode}${phoneNumber}`);
@@ -35,13 +33,15 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
 
     React.useEffect(() => {
         const fetchCountries = async () => {
-            await axios
-                .post(`${window.location.origin}/api/otp/countriesFetch`)
-                .then((res: any) => {
-                    setCountriesArray(res.data.countries);
-                    setSelectedPhoneCode(res.data.countries[0].phone_code);
-                    setSelectedFlagHref(res.data.countries[0].flag_href);
-                });
+            fetch(`${window.location.origin}/api/otp/countriesFetch`, {
+                method: 'POST',
+            })
+                .then((res: Response) => res.json())
+                .then((data: any) => {
+                    setCountriesArray(data.countries);
+                    setSelectedPhoneCode(data.countries[0].phone_code);
+                    setSelectedFlagHref(data.countries[0].flag_href);
+                })
         }
 
         fetchCountries();
@@ -113,9 +113,12 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
             setIsSendCodeDisabled(false);
         }, SEND_CODE_COOLDOWN_SECONDS * 1000);
 
-        axios.post(`${window.location.origin}/api/otp/send`, {
-            phoneNumber: `+${selectedPhoneCode}${phoneNumber}`,
-            address: account,
+        fetch(`${window.location.origin}/api/otp/send`, {
+            method: 'POST',
+            body: JSON.stringify({
+                phoneNumber: `+${selectedPhoneCode}${phoneNumber}`,
+                address: account,
+            }),
         }).catch(() => {
             setIsInputInvalid(true);
         });
