@@ -39,7 +39,7 @@ abstract contract ERC20LockerBannerUpgradeable is Initializable, ContextUpgradea
     }
 
     /**
-     * @dev Lock the account for trasnferring.
+     * @dev Lock the account for transferring.
      */
     function lock(address account) public virtual onlyRole(LOCKER_ROLE) {
         _lock(account);
@@ -51,7 +51,7 @@ abstract contract ERC20LockerBannerUpgradeable is Initializable, ContextUpgradea
     }
 
     /**
-     * @dev Unlock the account for trasnferring.
+     * @dev Unlock the account for transferring.
      */
     function unlock(address account) public onlyRole(LOCKER_ROLE) {
         _unlock(account);

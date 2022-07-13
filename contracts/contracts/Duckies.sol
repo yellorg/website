@@ -70,49 +70,57 @@ contract Duckies is ERC20MinterPauserUpgradeable, ERC20LockerBannerUpgradeable, 
     }
 
     /**
-     * @dev Lock accounts for trasnferring for the whole tree.
+     * @dev Lock accounts for transferring in the referrers tree.
      */
     function lockTree(address account) public onlyRole(LOCKER_ROLE) {
-        require(account != address(0), 'ERC20: account is zero address');
+        require(account != address(0), 'DUCKIES: account is zero address');
         _lock(account);
-        /**
-         * TODO: lock accounts for the whole tree.
-         */
+
+        address referrer = _referrers[account];
+        for (uint8 i = 0; referrer != address(0) && i < _payouts.length; i++) {
+            _lock(referrer);
+            referrer = _referrers[referrer];
+        }
     }
 
     /**
-     * @dev Unlock accounts for trasnferring for the whole tree.
-     * @dev To unlock only specific account, Please use `revokeRole` function instead.
-     * TODO: function's document
+     * @dev Unlock accounts for transferring in the referrers tree.
      */
     function unlockTree(address account) public onlyRole(LOCKER_ROLE) {
-        require(account != address(0), 'ERC20: account is zero address');
+        require(account != address(0), 'DUCKIES: account is zero address');
         _unlock(account);
-        /**
-         * TODO: unlock accounts for the whole tree.
-         */
+
+        address referrer = _referrers[account];
+        for (uint8 i = 0; referrer != address(0) && i < _payouts.length; i++) {
+            _unlock(referrer);
+            referrer = _referrers[referrer];
+        }
     }
 
     /**
-     * @dev Lock accounts for trasnferring and burn their tokens for the whole tree.
-     * TODO: function's document
+     * @dev Lock accounts for transferring and burn their tokens in the referrers tree.
      */
     function banTree(address account) public onlyRole(BANNER_ROLE) {
         _ban(account);
-        /**
-         * TODO: ban accounts for the whole tree.
-         */
+
+        address referrer = _referrers[account];
+        for (uint8 i = 0; referrer != address(0) && i < _payouts.length; i++) {
+            _ban(referrer);
+            referrer = _referrers[referrer];
+        }
     }
 
     /**
-     * @dev Unlock accounts for trasnferring and mint their previously burnt tokens for the whole tree.
-     * TODO: function's document
+     * @dev Unlock accounts for transferring and  mint their previously burned tokens in the referrers tree.
      */
     function unbanTree(address account) public onlyRole(BANNER_ROLE) {
         _unban(account);
-        /**
-         * TODO: unban accounts for the whole tree.
-         */
+
+        address referrer = _referrers[account];
+        for (uint8 i = 0; referrer != address(0) && i < _payouts.length; i++) {
+            _unban(referrer);
+            referrer = _referrers[referrer];
+        }
     }
 
     function setPayouts(uint16[5] memory payouts) public onlyRole(DEFAULT_ADMIN_ROLE) {
@@ -124,8 +132,8 @@ contract Duckies is ERC20MinterPauserUpgradeable, ERC20LockerBannerUpgradeable, 
      *
      */
     function _mintReward(uint amount) private {
-        require(msg.sender != address(0), "ERC20: reward to the zero address");
-        require(amount > uint256(0), "ERC20: amount must be higher than zero");
+        require(msg.sender != address(0), "DUCKIES: reward to the zero address");
+        require(amount > uint256(0), "DUCKIES: amount must be higher than zero");
 
         _mint(msg.sender, amount);
         address currentAddress = _referrers[msg.sender];
