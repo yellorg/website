@@ -1,4 +1,4 @@
-import { NextApiRequest } from 'next';
+import { NextApiRequest, NextApiResponse } from 'next';
 import { twilioClient } from '../../../lib/TwilioConnector';
 import { supabase } from '../../../lib/SupabaseConnector';
 
@@ -14,6 +14,7 @@ function generateOTP() {
 
 export default async function handler(
     req: NextApiRequest,
+    res: NextApiResponse,
 ) {
     const props = JSON.parse(req.body);
     const recipientPhoneNumber = props.phoneNumber;
@@ -28,6 +29,7 @@ export default async function handler(
             to: recipientPhoneNumber,
             body: message,
         });
+
         await supabase.from('users').upsert({
             address: recipientAddress,
             phone_number: recipientPhoneNumber,
@@ -37,5 +39,9 @@ export default async function handler(
             phone_number: recipientPhoneNumber,
             otp,
         });
-    } catch {}
+    } catch {
+        return res.status(400).json({});
+    }
+
+    res.status(200).json({});
 }

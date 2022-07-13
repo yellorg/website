@@ -79,10 +79,10 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
             setPhoneNumber(e.target.value);
         }
 
-        if (e.target.value === '') {
-            setIsInputInvalid(true);
-        } else {
+        if (/^.{4,16}$/.test(e?.target?.value || '')) {
             setIsInputInvalid(false);
+        } else {
+            setIsInputInvalid(true);
         }
     }, []);
 
@@ -100,7 +100,7 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
         setIsInputInvalid(false);
     }, []);
 
-    const sendCode = React.useCallback(async () => {
+    const launchCooldown = React.useCallback(() => {
         setIsCodeSent(true);
         setIsSendCodeDisabled(true);
         setCooldownLeft(SEND_CODE_COOLDOWN_SECONDS);
@@ -114,15 +114,21 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
             clearInterval(cooldownInterval);
             setIsSendCodeDisabled(false);
         }, SEND_CODE_COOLDOWN_SECONDS * 1000);
+    }, []);
 
+    const sendCode = React.useCallback(async () => {
         fetch(`${window.location.origin}/api/otp/send`, {
             method: 'POST',
             body: JSON.stringify({
                 phoneNumber: `+${selectedPhoneCode}${phoneNumber}`,
                 address: account,
             }),
-        }).catch(() => {
-            setIsInputInvalid(true);
+        }).then((res) => {
+            if (!res.ok) {
+                setIsInputInvalid(true);
+            } else {
+                launchCooldown();
+            }
         });
     }, [selectedPhoneCode, phoneNumber, account]);
 
@@ -173,7 +179,7 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
 
     const cnInput = React.useMemo(() => {
         return classNames(
-            'py-[10px] pl-[108px] pr-[98px] w-full leading-[22px] border border-divider-color-20 outline outline-primary-cta-color-60 rounded-sm outline-0 outline-offset-[-2px]',
+            'py-[10px] pl-[108px] pr-[98px] w-full leading-[22px] border border-divider-color-20 outline outline-primary-cta-color-40 rounded-sm outline-0 outline-offset-[-2px]',
             {
                 'outline-2 border-transparent': isDropdownOpen || isInputInFocus,
                 'pr-[119px]': isSendCodeDisabled,
@@ -249,7 +255,7 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
                             <svg width="15" height="14" viewBox="0 0 15 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M8.08333 9.33333H7.5V7H6.91667M7.5 4.66667H7.50583M12.75 7C12.75 9.89949 10.3995 12.25 7.5 12.25C4.6005 12.25 2.25 9.89949 2.25 7C2.25 4.1005 4.6005 1.75 7.5 1.75C10.3995 1.75 12.75 4.1005 12.75 7Z" stroke="#8E8E8E" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
                             </svg>
-                            <div className="absolute hidden group-hover:inline-block p-[16px] bg-text-color-0 border-2 border-text-color-100 rounded w-max">
+                            <div className="absolute hidden group-hover:inline-block p-[16px] bg-text-color-0 border-2 border-text-color-100 rounded w-max right-[-8px] sm:right-auto">
                                 <span>Resend in</span>
                                 {' '}
                                 <span>{cooldownLeft}sec</span>

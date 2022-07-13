@@ -80,8 +80,8 @@ export const OTPInput: React.FC<OTPInputProps> = ({
 
     const renderSingleInput = React.useCallback((value: string, index: number) => {
         const cnSingleInputBox = classNames(
-            'relative outline outline-offset-[-1px] outline-primary-cta-color-40 outline-0',
-            { 'outline-1': isOtpInFocus && (focusedIndex === index) },
+            'relative outline outline-offset-[-2px] outline-primary-cta-color-40 outline-0 rounded-sm first:ml-[1px] last:mr-[1px]',
+            { 'outline-2 shadow-md': isOtpInFocus && (focusedIndex === index) },
         );
         const cnSingleInput = classNames(
             'bg-input-background-color border border-divider-color-20 rounded-sm p-[11px] shadow-sm',
