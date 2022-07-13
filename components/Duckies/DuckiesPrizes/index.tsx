@@ -25,7 +25,7 @@ export const DuckiesPrizes = ({ prizes }: DuckiesPrizesProps) => {
                             Connect your Metamask wallet, prove you are human, claim your rewards in DUCKIES tokens, redeem them for awesome prizes.
                         </div>
                     </div>
-                    <div className="flex items-center flex-col md:flex-row md:overflow-scroll lg:overflow-visible">
+                    <div className="flex items-center flex-col md:flex-row md:overflow-scroll no-scrollbar lg:overflow-visible">
                         {prizes.map((prize: DuckiesPrizesList, index) => 
                             <div key={`redeem-duck-${index}`} className="mb-14 md:mr-5 md:mb-0">
                                 <Tilt
@@ -39,7 +39,7 @@ export const DuckiesPrizes = ({ prizes }: DuckiesPrizesProps) => {
                                     glareBorderRadius="10px"
                                     className="group"
                                 >
-                                    <div className="flex w-[25.5rem] h-[35.813rem] border-2 border-text-color-100 items-center rounded-lg bg-primary-cta-color-80 drop-shadow-[0_4.625rem_2.125rem_rgba(166,87,14,0.24)]">
+                                    <div className="flex w-[25.5rem] h-[35.813rem] border-2 border-text-color-100 items-center rounded-lg bg-primary-cta-color-80 drop-shadow-md lg:drop-shadow-[0_4.625rem_2.125rem_rgba(166,87,14,0.24)]">
                                         <LazyLoadImage
                                             srcSet={`${prize.imgPath}`}
                                             effect="blur"
