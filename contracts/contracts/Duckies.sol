@@ -164,7 +164,7 @@ contract Duckies is ERC20MinterPauserUpgradeable, ERC20LockerBannerUpgradeable, 
     }
 
     // reward method is used to retriave the reward from invitation link or claim the bounty for some bounty task
-    function reward(Message memory _message, bytes memory _sig) public
+    function reward(Message memory _message, bytes memory _sig) public whenNotPaused
     {
         bytes32 messageHash = getMessageHash(_message);
         bytes32 ethSignedMessageHash = getEthSignedMessageHash(messageHash);
