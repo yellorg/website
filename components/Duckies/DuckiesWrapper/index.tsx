@@ -13,6 +13,7 @@ import * as ga from '../../../lib/ga';
 import { DuckiesFAQ } from '../DuckiesFAQ';
 import { supabase } from '../../../lib/SupabaseConnector';
 import { useRouter } from 'next/router';
+import useSocialConnections from '../../../hooks/useSocialConnections';
 
 interface DuckiesLayoutProps {
     bounties: any;
@@ -37,6 +38,8 @@ export const DuckiesLayout: FC<DuckiesLayoutProps> = ({ bounties, faqList }: Duc
     const { active, account, signer } = useWallet();
     const supabaseUser = supabase.auth.user();
 
+    useSocialConnections(user);
+
     const getAffiliates = React.useCallback(async() => {
         if (account && signer) {
             const affiliatesCount = await duckiesContract?.connect(signer).getAffiliatesCount();
@@ -59,6 +62,10 @@ export const DuckiesLayout: FC<DuckiesLayoutProps> = ({ bounties, faqList }: Duc
     React.useEffect(() => {
         if (supabaseUser && !user) {
             setUser(supabaseUser);
+        }
+
+        if (!supabaseUser) {
+            setUser(null);
         }
     }, [supabaseUser, user]);
 
