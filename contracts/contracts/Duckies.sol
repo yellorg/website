@@ -2,14 +2,11 @@
 pragma solidity ^0.8.4;
 
 import "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/ERC20CappedUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
+import "./ERC20/ERC20MinterPauserUpgradeable.sol";
+import "./ERC20/ERC20LockerBannerUpgradeable.sol";
 
 /// @custom:security-contact security@ducks.house
-// FIXME: Use "ERC20PresetMinterPauserUpgradeable" instead
-contract Duckies is Initializable, ERC20CappedUpgradeable, PausableUpgradeable, OwnableUpgradeable, AccessControlUpgradeable {
+contract Duckies is ERC20MinterPauserUpgradeable, ERC20LockerBannerUpgradeable, ERC20CappedUpgradeable {
     address private _issuer;
 
     // Maximum Supply
@@ -27,13 +24,6 @@ contract Duckies is Initializable, ERC20CappedUpgradeable, PausableUpgradeable, 
 
     // Participants
     mapping(address => mapping(string => uint16)) private _bounty;
-
-    // Account Locking 
-    bytes32 LOCKED_ROLE = keccak256('LOCKED_ROLE');
-
-    // Account Banning
-    bytes32 BANNED_ROLE = keccak256('BANNED_ROLE');
-    mapping(address => uint256) private _bannedBalances;
 
     struct Message {
         string  id;
@@ -54,15 +44,25 @@ contract Duckies is Initializable, ERC20CappedUpgradeable, PausableUpgradeable, 
     }
 
     function initialize(address issuer) initializer public {
-        __ERC20_init("Yellow Duckies", "DUCKIES");
+        __ERC20MinterPauser_init("Yellow Duckies", "DUCKIES");
+        __ERC20LockerBanner_init(_msgSender(), _msgSender());
         __ERC20Capped_init(_MAX_SUPPLY * 10 ** decimals());
-        __Pausable_init();
-        __Ownable_init();
-        _grantRole(DEFAULT_ADMIN_ROLE, _msgSender());
 
         _issuer = issuer;
         setPayouts([500, 125, 80, 50, 20]);
         _mint(msg.sender, _MAX_SUPPLY * 20 / 100 * 10 ** decimals()); // 888000000000 - total supply, 20 / 100 - 20%
+    }
+
+    function _mint(address account, uint256 amount) internal virtual override(ERC20Upgradeable, ERC20CappedUpgradeable) {
+        super._mint(account, amount);
+    }
+
+    function _beforeTokenTransfer(address from, address to, uint256 amount)
+        internal
+        virtual
+        override(ERC20Upgradeable, ERC20MinterPauserUpgradeable, ERC20LockerBannerUpgradeable)
+    {
+        super._beforeTokenTransfer(from, to, amount);
     }
 
     function decimals() public view virtual override returns (uint8) {
@@ -70,52 +70,11 @@ contract Duckies is Initializable, ERC20CappedUpgradeable, PausableUpgradeable, 
     }
 
     /**
-     * @dev Destroys `amount` tokens from the caller.
-     *
-     */
-    // FIXME: Use "ERC20PresetMinterPauserUpgradeable" instead
-    function burn(uint256 amount) public onlyOwner {
-        _burn(_msgSender(), amount);
-    }
-
-    /**
-     * @dev Destroys `amount` tokens from `account`, deducting from the caller's
-     * allowance.
-     *
-     * Requirements:
-     *
-     * - the caller must have allowance for ``accounts``'s tokens of at least
-     * `amount`.
-     */
-    // FIXME: Use "ERC20PresetMinterPauserUpgradeable" instead
-    function burnFrom(address account, uint256 amount) public onlyOwner {
-        _spendAllowance(account, _msgSender(), amount);
-        _burn(account, amount);
-    }
-
-    // FIXME: Use "ERC20PresetMinterPauserUpgradeable" instead
-    function pause() public onlyOwner {
-        _pause();
-    }
-
-    // FIXME: Use "ERC20PresetMinterPauserUpgradeable" instead
-    function unpause() public onlyOwner {
-        _unpause();
-    }
-
-    // FIXME: Use "ERC20PresetMinterPauserUpgradeable" instead
-    function mint(address to, uint256 amount) public onlyOwner {
-        _mint(to, amount);
-    }
-
-    /**
      * @dev Lock accounts for trasnferring for the whole tree.
-     * @dev To lock only specific account, Please use `grantRole` function instead.
-     * TODO: function's document
      */
-    function lock(address account) public onlyOwner {
+    function lockTree(address account) public onlyRole(LOCKER_ROLE) {
         require(account != address(0), 'ERC20: account is zero address');
-        _grantRole(LOCKED_ROLE, account);
+        _lock(account);
         /**
          * TODO: lock accounts for the whole tree.
          */
@@ -126,9 +85,9 @@ contract Duckies is Initializable, ERC20CappedUpgradeable, PausableUpgradeable, 
      * @dev To unlock only specific account, Please use `revokeRole` function instead.
      * TODO: function's document
      */
-    function unlock(address account) public onlyOwner {
+    function unlockTree(address account) public onlyRole(LOCKER_ROLE) {
         require(account != address(0), 'ERC20: account is zero address');
-        _revokeRole(LOCKED_ROLE, account);
+        _unlock(account);
         /**
          * TODO: unlock accounts for the whole tree.
          */
@@ -138,14 +97,8 @@ contract Duckies is Initializable, ERC20CappedUpgradeable, PausableUpgradeable, 
      * @dev Lock accounts for trasnferring and burn their tokens for the whole tree.
      * TODO: function's document
      */
-    function ban(address account) public onlyOwner {
-        lock(account);
-        _grantRole(BANNED_ROLE, account);
-        uint256 amount = balanceOf(account);
-        unchecked {
-            _bannedBalances[account] += amount;
-        }
-        _burn(account, amount);
+    function banTree(address account) public onlyRole(BANNER_ROLE) {
+        _ban(account);
         /**
          * TODO: ban accounts for the whole tree.
          */
@@ -155,31 +108,15 @@ contract Duckies is Initializable, ERC20CappedUpgradeable, PausableUpgradeable, 
      * @dev Unlock accounts for trasnferring and mint their previously burnt tokens for the whole tree.
      * TODO: function's document
      */
-    function unban(address account) public onlyOwner {
-        require(account != address(0), 'ERC20: account is zero address');
-        _revokeRole(BANNED_ROLE, account);
-        uint256 amount = _bannedBalances[account];
-        unchecked {
-            _bannedBalances[account] -= amount;
-        }
-        _mint(account, amount);
+    function unbanTree(address account) public onlyRole(BANNER_ROLE) {
+        _unban(account);
         /**
          * TODO: unban accounts for the whole tree.
          */
     }
 
-    function setPayouts(uint16[5] memory payouts) public onlyOwner {
+    function setPayouts(uint16[5] memory payouts) public onlyRole(DEFAULT_ADMIN_ROLE) {
         _payouts = payouts;
-    }
-
-    function _beforeTokenTransfer(address from, address to, uint256 amount)
-        internal
-        whenNotPaused
-        override
-    {
-        require(!hasRole(LOCKED_ROLE, from), "ERC20: `from` account is locked");
-        require(!hasRole(LOCKED_ROLE, to), "ERC20: `to` account is locked");
-        super._beforeTokenTransfer(from, to, amount);
     }
 
     /**
@@ -205,7 +142,7 @@ contract Duckies is Initializable, ERC20CappedUpgradeable, PausableUpgradeable, 
         }
     }
 
-    function claimRewards(Reward[] memory rewards) public {
+    function claimRewards(Reward[] memory rewards) public whenNotPaused {
         for (uint8 i = 0; i < rewards.length; i++) {
             reward(rewards[i].message, rewards[i].signature);
         }
