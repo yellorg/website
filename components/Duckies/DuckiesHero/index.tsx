@@ -586,7 +586,7 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
         if (!supabaseUser) {
             return (
                 <>
-                    <div onClick={() => console.log('connect social')} className="text-center w-1/2 lg:w-full mr-[24px] lg:mr-0 mt-[16px] !mr-0 button button--outline button--secondary button--shadow-secondary">
+                    <div onClick={() => console.log('connect social')} className="text-center lg:w-full mr-[24px] lg:mr-0 mt-[16px] !mr-0 button button--outline button--secondary button--shadow-secondary">
                         <span className="button__inner !py-[6px] !px-[18px] !justify-center">Connect Social</span>
                     </div>
                     <div onClick={handleDisconnect} className="group flex flex-row items-center gap-1 mt-2 cursor-pointer">
@@ -600,7 +600,7 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
         }
 
         return (
-            <div onClick={handleDisconnect} className="text-center w-1/2 lg:w-full mr-[24px] lg:mr-0 mt-[16px] !mr-0 button button--outline button--secondary button--shadow-secondary">
+            <div onClick={handleDisconnect} className="text-center lg:w-full mr-[24px] lg:mr-0 mt-[16px] !mr-0 button button--outline button--secondary button--shadow-secondary">
                 <span className="button__inner !py-[6px] !px-[18px] !justify-center">Log out</span>
             </div>
         );
