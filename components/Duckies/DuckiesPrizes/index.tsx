@@ -36,6 +36,7 @@ export const DuckiesPrizes = ({ prizes }: DuckiesPrizesProps) => {
                                     glareEnable={true} 
                                     glareMaxOpacity={0.3}
                                     gyroscope={true}
+                                    glareBorderRadius="10px"
                                     className="group"
                                 >
                                     <div className="flex w-[25.5rem] h-[35.813rem] border-2 border-text-color-100 items-center rounded-lg bg-primary-cta-color-80 drop-shadow-[0_4.625rem_2.125rem_rgba(166,87,14,0.24)]">
