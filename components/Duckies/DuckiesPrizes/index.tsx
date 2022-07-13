@@ -21,13 +21,13 @@ export const DuckiesPrizes = ({ prizes }: DuckiesPrizesProps) => {
                         <div className="text-text-color-100 font-gilmer-bold text-6xl mb-3">
                             Redeem
                         </div>
-                        <div className="text-text-color-100 font-metro-semibold text-xl mb-9 w-1/2">
+                        <div className="text-text-color-100 font-metro-semibold text-xl mb-9 lg:w-1/2">
                             Connect your Metamask wallet, prove you are human, claim your rewards in DUCKIES tokens, redeem them for awesome prizes.
                         </div>
                     </div>
-                    <div className="flex overflow-visible block">
+                    <div className="flex items-center flex-col md:flex-row md:overflow-scroll lg:overflow-visible">
                         {prizes.map((prize: DuckiesPrizesList, index) => 
-                            <div key={`redeem-duck-${index}`} className="mr-5">
+                            <div key={`redeem-duck-${index}`} className="mb-14 md:mr-5 md:mb-0">
                                 <Tilt
                                     perspective={500}
                                     scale={0.9}
