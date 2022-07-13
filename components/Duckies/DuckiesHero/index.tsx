@@ -478,11 +478,11 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
                 <div className={classNames('flex items-center justify-center rounded-full', { 'bg-primary-cta-color-20': !!supabaseUser })}>
                     <LazyLoadImage
                         srcSet="/images/components/duckies/duckBigEyes.png"
-                        className={classNames('hidden', { 'md:group-hover:block': isReady })}
+                        className={classNames('hidden', { 'group-hover:block': isReady })}
                     />
                     <LazyLoadImage
                         srcSet="/images/components/duckies/duck.png"
-                        className={classNames('block', { 'md:group-hover:hidden': isReady })}
+                        className={classNames('block', { 'group-hover:hidden': isReady })}
                     />
                 </div>
             </div>
@@ -491,14 +491,14 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
 
     const renderDuckBubble = React.useMemo(() => {
         return (
-            <div className="hidden md:group-hover:block">
-                <div className="absolute bg-body-background-color w-[203px] h-[80px] top-[-50%] right-[50%] rounded-[4px] !rounded-br-[0px] flex justify-center items-center shadow-md">
+            <div className="hidden group-hover:block">
+                <div className="absolute bg-body-background-color w-[203px] h-[80px] top-[-100%] md:top-[-50%] right-[50%] rounded-[4px] !rounded-br-[0px] flex justify-center items-center shadow-md">
                     <span className="text-[16px] leading-[24px] text-black font-metro-bold">
                         {(isReady && !supabaseUser) && 'Need to connect socials'}
                         {(isReady && supabaseUser) && 'Secured duck'}
                     </span>
                 </div>
-                <div className="absolute bubble-corner h-[25px] w-[27px] top-[calc(-50%+80px)] right-[50%] z-20" />
+                <div className="absolute bubble-corner h-[25px] w-[27px] top-[calc(-100%+80px)] md:top-[calc(-50%+80px)] right-[50%] z-20" />
             </div>
         )
     }, [isReady, supabaseUser])
@@ -513,11 +513,11 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
                 <>
                     {renderDuckImage}
                     <div className="absolute top-[-2px] z-20 flex justify-center items-center">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <svg className="w-[14px] h-[14px] md:w-[24px] md:h-[24px]" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <circle cx="12" cy="12" r="12" fill="#B01212"/>
                         </svg>
                         <div className="absolute">
-                            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <svg className="w-[8px] h-[8px] md:w-[12px] md:h-[12px]" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M1.5 10.5L10.5 1.5M1.5 1.5L10.5 10.5" stroke="#FFEBEB" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                             </svg>
                         </div>
@@ -560,11 +560,11 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
                     {renderDuckImage}
                 </div>
                 <div className="absolute top-[-2px] z-20 flex justify-center items-center">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <svg className="w-[18px] h-[18px] md:w-[24px] md:h-[24px]" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <circle cx="12" cy="12" r="12" fill="#00632B"/>
                     </svg>
                     <div className="absolute">
-                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <svg className="w-[12px] h-[12px] md:w-[16px] md:h-[16px]" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path fillRule="evenodd" clipRule="evenodd" d="M0.950278 3.499C3.65771 3.46227 6.12453 2.42929 8.00078 0.75C9.87702 2.42929 12.3438 3.46227 15.0513 3.499C15.1496 4.0847 15.2008 4.68638 15.2008 5.30002C15.2008 10.0024 12.1955 14.0028 8.00078 15.4854C3.80609 14.0028 0.800781 10.0024 0.800781 5.30002C0.800781 4.68638 0.851959 4.0847 0.950278 3.499ZM11.4079 6.90709C11.7984 6.51657 11.7984 5.8834 11.4079 5.49288C11.0174 5.10236 10.3842 5.10236 9.99367 5.49288L7.10078 8.38577L6.00788 7.29288C5.61736 6.90236 4.9842 6.90236 4.59367 7.29288C4.20315 7.6834 4.20315 8.31657 4.59367 8.70709L6.39367 10.5071C6.58121 10.6946 6.83556 10.8 7.10078 10.8C7.36599 10.8 7.62035 10.6946 7.80788 10.5071L11.4079 6.90709Z" fill="#E8FCF1"/>
                         </svg>
                     </div>
@@ -779,7 +779,7 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
                                 </div>
                             </div>
                         </div>
-                        <div className={classNames('group p-[6px] md:p-[10px] rounded-[50%] w-[97px] md:w-[174px] h-[97px] md:h-[174px] bg-primary-cta-color-20 mt-[-18px] md:mt-[-24px] ml-[228px] md:ml-[-78px] z-[9] absolute md:relative shadow-[-5px_5px] shadow-primary-cta-color-90 flex justify-center items-center', { 'md:hover:shadow-transparent md:hover:translate-y-[5px]': isReady })}>
+                        <div className={classNames('group p-[6px] md:p-[10px] rounded-[50%] w-[97px] md:w-[174px] h-[97px] md:h-[174px] bg-primary-cta-color-20 mt-[-18px] md:mt-[-24px] ml-[228px] md:ml-[-78px] z-[9] absolute md:relative shadow-[-5px_5px] shadow-primary-cta-color-90 flex justify-center items-center', { 'hover:shadow-transparent hover:translate-y-[5px]': isReady })}>
                             {renderDuck}
                         </div>
                     </div>
