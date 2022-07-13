@@ -6,7 +6,8 @@ import { ethers, upgrades } from "hardhat";
 interface TestContext {
   duckies: Contract;
   owner: SignerWithAddress;
-  others: SignerWithAddress[];
+  signer: SignerWithAddress;
+  accounts: SignerWithAddress[];
   ADMIN_ROLE: string;
   MINTER_ROLE: string;
   PAUSER_ROLE: string;
@@ -14,11 +15,12 @@ interface TestContext {
   BANNER_ROLE: string;
   ACCOUNT_LOCKED_ROLE: string;
   ACCOUNT_BANNED_ROLE: string;
+  reward(account: any, payload?: any): Promise<any>;
 }
 
 describe("Duckies", function () {
   beforeEach(async () => {
-    const [owner, signer, ...others] = await ethers.getSigners();
+    const [owner, signer, ...accounts] = await ethers.getSigners();
 
     const Duckies = await ethers.getContractFactory("Duckies");
 
@@ -28,7 +30,8 @@ describe("Duckies", function () {
     const context: any = this;
     context.duckies = duckies;
     context.owner = owner;
-    context.others = others;
+    context.signer = signer;
+    context.accounts = accounts;
     context.ADMIN_ROLE = ethers.constants.HashZero;
     context.MINTER_ROLE = ethers.utils.id('MINTER_ROLE');
     context.PAUSER_ROLE = ethers.utils.id('PAUSER_ROLE');
@@ -36,6 +39,21 @@ describe("Duckies", function () {
     context.BANNER_ROLE = ethers.utils.id('BANNER_ROLE');
     context.ACCOUNT_LOCKED_ROLE = ethers.utils.id('ACCOUNT_LOCKED_ROLE');
     context.ACCOUNT_BANNED_ROLE = ethers.utils.id('ACCOUNT_BANNED_ROLE');
+    context.reward = async (account: any, payload: any = {}) => {
+      payload = {
+        ref: account.address,
+        amt: 30000,
+        id: "message0",
+        blockExpiration: 1000,
+        limit: 0,
+        ...payload,
+      }
+      const signature = await ethers.provider.send("personal_sign", [
+        await duckies.getMessageHash(payload),
+        signer.address,
+      ])
+      return duckies.connect(account).reward(payload, signature)
+    }
   });
 
   describe("ERC20", () => {
@@ -58,244 +76,232 @@ describe("Duckies", function () {
   });
   
   describe("ERC20MinterPauser", () => {
+    it("should have deployer as ADMIN_ROLE by default", async () => {
+      const { duckies, owner, ADMIN_ROLE }: TestContext = this as any;
+      expect(await duckies.hasRole(ADMIN_ROLE, owner.address)).to.be.true
+    });
+
     it("Should be pausable only by PAUSER_ROLE", async () => {
-      const { duckies, owner, others, PAUSER_ROLE }: TestContext = this as any;
+      const { duckies, owner, accounts, PAUSER_ROLE }: TestContext = this as any;
 
       await duckies.connect(owner).pause()
       await duckies.connect(owner).unpause()
       await expect(
-        duckies.connect(others[0]).pause()
+        duckies.connect(accounts[0]).pause()
       ).to.be.reverted;
-      await duckies.connect(owner).grantRole(PAUSER_ROLE, others[0].address)
-      await duckies.connect(others[0]).pause()
-      await duckies.connect(others[0]).unpause()
+      await duckies.connect(owner).grantRole(PAUSER_ROLE, accounts[0].address)
+      await duckies.connect(accounts[0]).pause()
+      await duckies.connect(accounts[0]).unpause()
     });
     
     it("Should not be transferrable when the contract is paused", async () => {
-      const { duckies, owner, others }: TestContext = this as any;
+      const { duckies, owner, accounts }: TestContext = this as any;
       await duckies.connect(owner).pause();
       await expect(
-        duckies.connect(others[0]).transfer(others[1].address, 0)
+        duckies.connect(accounts[0]).transfer(accounts[1].address, 0)
       ).to.be.reverted;
       await duckies.connect(owner).unpause();
-      await duckies.connect(others[0]).transfer(others[1].address, 0)
+      await duckies.connect(accounts[0]).transfer(accounts[1].address, 0)
     });
 
     it("Should be mintable only by MINTER_ROLE", async () => {
-      const { duckies, owner, others, MINTER_ROLE }: TestContext = this as any;
+      const { duckies, owner, accounts, MINTER_ROLE }: TestContext = this as any;
       const amount = 10
 
       await expect(
-        duckies.connect(owner).mint(others[0].address, amount)
-      ).to.changeTokenBalance(duckies, others[0], amount);
+        duckies.connect(owner).mint(accounts[0].address, amount)
+      ).to.changeTokenBalance(duckies, accounts[0], amount);
 
       await expect(
-        duckies.connect(others[1]).mint(others[2].address, amount)
+        duckies.connect(accounts[1]).mint(accounts[2].address, amount)
       ).to.be.reverted;
-      await duckies.connect(owner).grantRole(MINTER_ROLE, others[1].address)
+      await duckies.connect(owner).grantRole(MINTER_ROLE, accounts[1].address)
       await expect(
-        duckies.connect(others[1]).mint(others[2].address, amount)
-      ).to.changeTokenBalance(duckies, others[2], amount);
+        duckies.connect(accounts[1]).mint(accounts[2].address, amount)
+      ).to.changeTokenBalance(duckies, accounts[2], amount);
     });
   });
   
   describe("ERC20LockerBanner", () => {
     it("Should be lockable only by LOCKER_ROLE", async () => {
-      const { duckies, owner, others, LOCKER_ROLE, ACCOUNT_LOCKED_ROLE }: TestContext = this as any;
+      const { duckies, owner, accounts, LOCKER_ROLE, ACCOUNT_LOCKED_ROLE }: TestContext = this as any;
 
-      await duckies.connect(owner).lock(others[0].address)
-      expect(await duckies.hasRole(ACCOUNT_LOCKED_ROLE, others[0].address)).to.be.true
+      await duckies.connect(owner).lock(accounts[0].address)
+      expect(await duckies.hasRole(ACCOUNT_LOCKED_ROLE, accounts[0].address)).to.be.true
       
-      await duckies.connect(owner).unlock(others[0].address)
-      expect(await duckies.hasRole(ACCOUNT_LOCKED_ROLE, others[0].address)).to.be.false
+      await duckies.connect(owner).unlock(accounts[0].address)
+      expect(await duckies.hasRole(ACCOUNT_LOCKED_ROLE, accounts[0].address)).to.be.false
 
       await expect(
-        duckies.connect(others[1]).lock(others[2].address)
+        duckies.connect(accounts[1]).lock(accounts[2].address)
       ).to.be.reverted;
-      await duckies.connect(owner).grantRole(LOCKER_ROLE, others[1].address)
-      await duckies.connect(others[1]).lock(others[2].address)
-      await duckies.connect(others[1]).unlock(others[2].address)
+      await duckies.connect(owner).grantRole(LOCKER_ROLE, accounts[1].address)
+      await duckies.connect(accounts[1]).lock(accounts[2].address)
+      await duckies.connect(accounts[1]).unlock(accounts[2].address)
     });
     
     it("Should not be transferrable when the account is locked", async () => {
-      const { duckies, owner, others }: TestContext = this as any;
+      const { duckies, owner, accounts }: TestContext = this as any;
       const amount = 10
 
-      await duckies.connect(owner).mint(others[0].address, amount)
+      await duckies.connect(owner).mint(accounts[0].address, amount)
 
-      await duckies.connect(owner).lock(others[0].address)
+      await duckies.connect(owner).lock(accounts[0].address)
       await expect(
-        duckies.connect(others[0]).transfer(others[1].address, amount)
+        duckies.connect(accounts[0]).transfer(accounts[1].address, amount)
       ).to.be.reverted;
       await expect(
-        duckies.connect(others[1]).transfer(others[0].address, amount)
+        duckies.connect(accounts[1]).transfer(accounts[0].address, amount)
       ).to.be.reverted;
 
-      await duckies.connect(owner).unlock(others[0].address)
+      await duckies.connect(owner).unlock(accounts[0].address)
       await expect(
-        duckies.connect(others[0]).transfer(others[1].address, amount)
-      ).to.changeTokenBalances(duckies, [others[0], others[1]], [-amount, amount])
+        duckies.connect(accounts[0]).transfer(accounts[1].address, amount)
+      ).to.changeTokenBalances(duckies, [accounts[0], accounts[1]], [-amount, amount])
       await expect(
-        duckies.connect(others[1]).transfer(others[0].address, amount)
-      ).to.changeTokenBalances(duckies, [others[0], others[1]], [amount, -amount])
+        duckies.connect(accounts[1]).transfer(accounts[0].address, amount)
+      ).to.changeTokenBalances(duckies, [accounts[0], accounts[1]], [amount, -amount])
     });
 
     it("Should be bannable only by BANNER_ROLE", async () => {
-      const { duckies, owner, others, BANNER_ROLE, ACCOUNT_LOCKED_ROLE, ACCOUNT_BANNED_ROLE }: TestContext = this as any;
+      const { duckies, owner, accounts, BANNER_ROLE, ACCOUNT_LOCKED_ROLE, ACCOUNT_BANNED_ROLE }: TestContext = this as any;
       const amount = 10
 
-      await duckies.connect(owner).mint(others[0].address, amount)
+      await duckies.connect(owner).mint(accounts[0].address, amount)
 
-      await duckies.connect(owner).ban(others[0].address)
-      expect(await duckies.hasRole(ACCOUNT_LOCKED_ROLE, others[0].address)).to.be.true
-      expect(await duckies.hasRole(ACCOUNT_BANNED_ROLE, others[0].address)).to.be.true
+      await duckies.connect(owner).ban(accounts[0].address)
+      expect(await duckies.hasRole(ACCOUNT_LOCKED_ROLE, accounts[0].address)).to.be.true
+      expect(await duckies.hasRole(ACCOUNT_BANNED_ROLE, accounts[0].address)).to.be.true
 
-      await duckies.connect(owner).unban(others[0].address)
-      expect(await duckies.hasRole(ACCOUNT_LOCKED_ROLE, others[0].address)).to.be.false
-      expect(await duckies.hasRole(ACCOUNT_BANNED_ROLE, others[0].address)).to.be.false
+      await duckies.connect(owner).unban(accounts[0].address)
+      expect(await duckies.hasRole(ACCOUNT_LOCKED_ROLE, accounts[0].address)).to.be.false
+      expect(await duckies.hasRole(ACCOUNT_BANNED_ROLE, accounts[0].address)).to.be.false
 
       await expect(
-        duckies.connect(others[1]).ban(others[2].address)
+        duckies.connect(accounts[1]).ban(accounts[2].address)
       ).to.be.reverted;
-      await duckies.connect(owner).grantRole(BANNER_ROLE, others[1].address)
-      await duckies.connect(others[1]).ban(others[0].address)
-      await duckies.connect(others[1]).unban(others[0].address)
+      await duckies.connect(owner).grantRole(BANNER_ROLE, accounts[1].address)
+      await duckies.connect(accounts[1]).ban(accounts[0].address)
+      await duckies.connect(accounts[1]).unban(accounts[0].address)
     });
     
     it("Should ban/unban correctly which lock/unlock for transferring and burn/mint their tokens", async () => {
-      const { duckies, owner, others }: TestContext = this as any;
+      const { duckies, owner, accounts }: TestContext = this as any;
       const amount = 10
 
-      await duckies.connect(owner).mint(others[0].address, amount)
+      await duckies.connect(owner).mint(accounts[0].address, amount)
 
       await expect(
-        duckies.connect(owner).ban(others[0].address)
-      ).to.changeTokenBalances(duckies, [others[0]], [-amount])
-      expect(+await duckies.bannedBalanceOf(others[0].address)).to.be.equal(amount)
+        duckies.connect(owner).ban(accounts[0].address)
+      ).to.changeTokenBalances(duckies, [accounts[0]], [-amount])
+      expect(+await duckies.bannedBalanceOf(accounts[0].address)).to.be.equal(amount)
 
-      await duckies.connect(owner).mint(others[0].address, amount)
+      await duckies.connect(owner).mint(accounts[0].address, amount)
 
       await expect(
-        duckies.connect(others[0]).transfer(others[1].address, amount)
+        duckies.connect(accounts[0]).transfer(accounts[1].address, amount)
       ).to.be.reverted
       await expect(
-        duckies.connect(others[1]).transfer(others[0].address, amount)
+        duckies.connect(accounts[1]).transfer(accounts[0].address, amount)
       ).to.be.reverted
 
       await expect(
-        duckies.connect(owner).unban(others[0].address)
-      ).to.changeTokenBalances(duckies, [others[0]], [amount])
-      expect(+await duckies.bannedBalanceOf(others[0].address)).to.be.equal(0)
+        duckies.connect(owner).unban(accounts[0].address)
+      ).to.changeTokenBalances(duckies, [accounts[0]], [amount])
+      expect(+await duckies.bannedBalanceOf(accounts[0].address)).to.be.equal(0)
       await expect(
-        duckies.connect(others[0]).transfer(others[1].address, amount)
-      ).to.changeTokenBalances(duckies, [others[0], others[1]], [-amount, amount])
+        duckies.connect(accounts[0]).transfer(accounts[1].address, amount)
+      ).to.changeTokenBalances(duckies, [accounts[0], accounts[1]], [-amount, amount])
       await expect(
-        duckies.connect(others[1]).transfer(others[0].address, amount)
-      ).to.changeTokenBalances(duckies, [others[0], others[1]], [amount, -amount])
+        duckies.connect(accounts[1]).transfer(accounts[0].address, amount)
+      ).to.changeTokenBalances(duckies, [accounts[0], accounts[1]], [amount, -amount])
 
-      expect(+await duckies.balanceOf(others[0].address)).to.be.equal(2 * amount)
+      expect(+await duckies.balanceOf(accounts[0].address)).to.be.equal(2 * amount)
     });
   });
 
-  describe("Lock and ban referral tree", () => {
-    it("Should be lockTree/unlockTree only by LOCKER_ROLE", async () => {
-      const { duckies, owner, others, LOCKER_ROLE, ACCOUNT_LOCKED_ROLE }: TestContext = this as any;
+  describe("Lock and ban affiliate tree", () => {
+    it("Should be lockTree/unlockTree only by LOCKER_ROLE and its function works properly", async () => {
+      const { duckies, owner, accounts, reward, LOCKER_ROLE, ACCOUNT_LOCKED_ROLE }: TestContext = this as any;
+      const amount = 10
 
-      await duckies.connect(owner).lockTree(others[0].address)
-      expect(await duckies.hasRole(ACCOUNT_LOCKED_ROLE, others[0].address)).to.be.true
+      await reward(accounts[1], { ref: accounts[0].address })
+
+      await duckies.connect(owner).lockTree(accounts[0].address)
+      expect(await duckies.hasRole(ACCOUNT_LOCKED_ROLE, accounts[0].address)).to.be.true
+      expect(await duckies.hasRole(ACCOUNT_LOCKED_ROLE, accounts[1].address)).to.be.true
+      await expect(
+        reward(accounts[2], { ref: accounts[1].address })
+      ).to.be.revertedWith('DUCKIES: referrer(s) is locked')
+      await expect(
+        duckies.connect(accounts[2]).transfer(accounts[1].address, amount)
+      ).to.be.reverted
       
-      await duckies.connect(owner).unlockTree(others[0].address)
-      expect(await duckies.hasRole(ACCOUNT_LOCKED_ROLE, others[0].address)).to.be.false
+      await duckies.connect(owner).unlockTree(accounts[0].address)
+      expect(await duckies.hasRole(ACCOUNT_LOCKED_ROLE, accounts[0].address)).to.be.false
+      expect(await duckies.hasRole(ACCOUNT_LOCKED_ROLE, accounts[1].address)).to.be.false
+      await reward(accounts[2], { ref: accounts[1].address })
 
       await expect(
-        duckies.connect(others[1]).lockTree(others[2].address)
-      ).to.be.reverted;
-      await duckies.connect(owner).grantRole(LOCKER_ROLE, others[1].address)
-      await duckies.connect(others[1]).lockTree(others[2].address)
-      await duckies.connect(others[1]).unlockTree(others[2].address)
+        duckies.connect(accounts[1]).lockTree(accounts[2].address)
+      ).to.be.reverted
+      await duckies.connect(owner).grantRole(LOCKER_ROLE, accounts[1].address)
+      await duckies.connect(accounts[1]).lockTree(accounts[2].address)
+      await duckies.connect(accounts[1]).unlockTree(accounts[2].address)
+
+      await expect(
+        duckies.connect(accounts[1]).transfer(accounts[2].address, amount)
+      ).to.changeTokenBalances(duckies, [accounts[1], accounts[2]], [-amount, amount])
     });
-    
-    /**
-     * TODO: Add lockTre and banTree unit tests
-     */
-    // it("Should not be transferrable when the account is locked", async () => {
-    //   const { duckies, owner, others }: TestContext = this as any;
-    //   const amount = 10
 
-    //   await duckies.connect(owner).mint(others[0].address, amount)
+    it("Should be banTree/unbanTree only by BANNER_ROLE and its function works properly", async () => {
+      const { duckies, owner, accounts, reward, BANNER_ROLE, ACCOUNT_LOCKED_ROLE, ACCOUNT_BANNED_ROLE }: TestContext = this as any;
+      const amount = 10
 
-    //   await duckies.connect(owner).lock(others[0].address)
-    //   await expect(
-    //     duckies.connect(others[0]).transfer(others[1].address, amount)
-    //   ).to.be.reverted;
-    //   await expect(
-    //     duckies.connect(others[1]).transfer(others[0].address, amount)
-    //   ).to.be.reverted;
+      await reward(accounts[1], { ref: accounts[0].address })
+      const balances = await Promise.all([
+        duckies.balanceOf(accounts[0].address),
+        duckies.balanceOf(accounts[1].address),
+      ])
 
-    //   await duckies.connect(owner).unlock(others[0].address)
-    //   await expect(
-    //     duckies.connect(others[0]).transfer(others[1].address, amount)
-    //   ).to.changeTokenBalances(duckies, [others[0], others[1]], [-amount, amount])
-    //   await expect(
-    //     duckies.connect(others[1]).transfer(others[0].address, amount)
-    //   ).to.changeTokenBalances(duckies, [others[0], others[1]], [amount, -amount])
-    // });
+      await duckies.connect(owner).banTree(accounts[0].address)
+      expect(await duckies.hasRole(ACCOUNT_LOCKED_ROLE, accounts[0].address)).to.be.true
+      expect(await duckies.hasRole(ACCOUNT_LOCKED_ROLE, accounts[1].address)).to.be.true
+      expect(await duckies.hasRole(ACCOUNT_BANNED_ROLE, accounts[0].address)).to.be.true
+      expect(await duckies.hasRole(ACCOUNT_BANNED_ROLE, accounts[1].address)).to.be.true
+      await expect(
+        reward(accounts[2], { ref: accounts[1].address })
+      ).to.be.revertedWith('DUCKIES: referrer(s) is locked')
+      await expect(
+        duckies.connect(accounts[2]).transfer(accounts[1].address, amount)
+      ).to.be.reverted
+      expect(+await duckies.bannedBalanceOf(accounts[0].address)).to.be.equal(+balances[0])
+      expect(+await duckies.bannedBalanceOf(accounts[1].address)).to.be.equal(+balances[1])
+      expect(+await duckies.balanceOf(accounts[0].address)).to.be.equal(0)
+      expect(+await duckies.balanceOf(accounts[1].address)).to.be.equal(0)
+      
+      await duckies.connect(owner).unbanTree(accounts[0].address)
+      expect(await duckies.hasRole(ACCOUNT_LOCKED_ROLE, accounts[0].address)).to.be.false
+      expect(await duckies.hasRole(ACCOUNT_LOCKED_ROLE, accounts[1].address)).to.be.false
+      expect(await duckies.hasRole(ACCOUNT_BANNED_ROLE, accounts[0].address)).to.be.false
+      expect(await duckies.hasRole(ACCOUNT_BANNED_ROLE, accounts[1].address)).to.be.false
+      expect(+await duckies.bannedBalanceOf(accounts[0].address)).to.be.equal(0)
+      expect(+await duckies.bannedBalanceOf(accounts[1].address)).to.be.equal(0)
+      expect(+await duckies.balanceOf(accounts[0].address)).to.be.equal(+balances[0])
+      expect(+await duckies.balanceOf(accounts[1].address)).to.be.equal(+balances[1])
 
-    // it("Should be bannable only by BANNER_ROLE", async () => {
-    //   const { duckies, owner, others, BANNER_ROLE, ACCOUNT_LOCKED_ROLE, ACCOUNT_BANNED_ROLE }: TestContext = this as any;
-    //   const amount = 10
+      await reward(accounts[2], { ref: accounts[1].address })
+      await expect(
+        duckies.connect(accounts[1]).banTree(accounts[2].address)
+      ).to.be.reverted
+      await duckies.connect(owner).grantRole(BANNER_ROLE, accounts[1].address)
+      await duckies.connect(accounts[1]).banTree(accounts[2].address)
+      await duckies.connect(accounts[1]).unbanTree(accounts[2].address)
 
-    //   await duckies.connect(owner).mint(others[0].address, amount)
-
-    //   await duckies.connect(owner).ban(others[0].address)
-    //   expect(await duckies.hasRole(ACCOUNT_LOCKED_ROLE, others[0].address)).to.be.true
-    //   expect(await duckies.hasRole(ACCOUNT_BANNED_ROLE, others[0].address)).to.be.true
-
-    //   await duckies.connect(owner).unban(others[0].address)
-    //   expect(await duckies.hasRole(ACCOUNT_LOCKED_ROLE, others[0].address)).to.be.false
-    //   expect(await duckies.hasRole(ACCOUNT_BANNED_ROLE, others[0].address)).to.be.false
-
-    //   await expect(
-    //     duckies.connect(others[1]).ban(others[2].address)
-    //   ).to.be.reverted;
-    //   await duckies.connect(owner).grantRole(BANNER_ROLE, others[1].address)
-    //   await duckies.connect(others[1]).ban(others[0].address)
-    //   await duckies.connect(others[1]).unban(others[0].address)
-    // });
-    
-    // it("Should ban/unban correctly which lock/unlock for transferring and burn/mint their tokens", async () => {
-    //   const { duckies, owner, others }: TestContext = this as any;
-    //   const amount = 10
-
-    //   await duckies.connect(owner).mint(others[0].address, amount)
-
-    //   await expect(
-    //     duckies.connect(owner).ban(others[0].address)
-    //   ).to.changeTokenBalances(duckies, [others[0]], [-amount])
-    //   expect(+await duckies.bannedBalanceOf(others[0].address)).to.be.equal(amount)
-
-    //   await duckies.connect(owner).mint(others[0].address, amount)
-
-    //   await expect(
-    //     duckies.connect(others[0]).transfer(others[1].address, amount)
-    //   ).to.be.reverted
-    //   await expect(
-    //     duckies.connect(others[1]).transfer(others[0].address, amount)
-    //   ).to.be.reverted
-
-    //   await expect(
-    //     duckies.connect(owner).unban(others[0].address)
-    //   ).to.changeTokenBalances(duckies, [others[0]], [amount])
-    //   expect(+await duckies.bannedBalanceOf(others[0].address)).to.be.equal(0)
-    //   await expect(
-    //     duckies.connect(others[0]).transfer(others[1].address, amount)
-    //   ).to.changeTokenBalances(duckies, [others[0], others[1]], [-amount, amount])
-    //   await expect(
-    //     duckies.connect(others[1]).transfer(others[0].address, amount)
-    //   ).to.changeTokenBalances(duckies, [others[0], others[1]], [amount, -amount])
-
-    //   expect(+await duckies.balanceOf(others[0].address)).to.be.equal(2 * amount)
-    // });
+      await expect(
+        duckies.connect(accounts[1]).transfer(accounts[2].address, amount)
+      ).to.changeTokenBalances(duckies, [accounts[1], accounts[2]], [-amount, amount])
+    });
   });
 
   describe("Tokenomic", () => {

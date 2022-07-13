@@ -76,10 +76,11 @@ contract Duckies is ERC20MinterPauserUpgradeable, ERC20LockerBannerUpgradeable, 
         require(account != address(0), 'DUCKIES: account is zero address');
         _lock(account);
 
-        address referrer = _referrers[account];
-        for (uint8 i = 0; referrer != address(0) && i < _payouts.length; i++) {
-            _lock(referrer);
-            referrer = _referrers[referrer];
+        address[] memory affiliates = _affiliates[account];
+        uint256 affiliatesCount = getAffiliatesCount().length;
+        uint256 maxLength = affiliates.length < affiliatesCount ? affiliates.length : affiliatesCount;
+        for (uint256 i = 0; i < maxLength; i++) {
+            _lock(affiliates[i]);
         }
     }
 
@@ -90,10 +91,11 @@ contract Duckies is ERC20MinterPauserUpgradeable, ERC20LockerBannerUpgradeable, 
         require(account != address(0), 'DUCKIES: account is zero address');
         _unlock(account);
 
-        address referrer = _referrers[account];
-        for (uint8 i = 0; referrer != address(0) && i < _payouts.length; i++) {
-            _unlock(referrer);
-            referrer = _referrers[referrer];
+        address[] memory affiliates = _affiliates[account];
+        uint256 affiliatesCount = getAffiliatesCount().length;
+        uint256 maxLength = affiliates.length < affiliatesCount ? affiliates.length : affiliatesCount;
+        for (uint256 i = 0; i < maxLength; i++) {
+            _unlock(affiliates[i]);
         }
     }
 
@@ -103,10 +105,11 @@ contract Duckies is ERC20MinterPauserUpgradeable, ERC20LockerBannerUpgradeable, 
     function banTree(address account) public onlyRole(BANNER_ROLE) {
         _ban(account);
 
-        address referrer = _referrers[account];
-        for (uint8 i = 0; referrer != address(0) && i < _payouts.length; i++) {
-            _ban(referrer);
-            referrer = _referrers[referrer];
+        address[] memory affiliates = _affiliates[account];
+        uint256 affiliatesCount = getAffiliatesCount().length;
+        uint256 maxLength = affiliates.length < affiliatesCount ? affiliates.length : affiliatesCount;
+        for (uint256 i = 0; i < maxLength; i++) {
+            _ban(affiliates[i]);
         }
     }
 
@@ -116,10 +119,11 @@ contract Duckies is ERC20MinterPauserUpgradeable, ERC20LockerBannerUpgradeable, 
     function unbanTree(address account) public onlyRole(BANNER_ROLE) {
         _unban(account);
 
-        address referrer = _referrers[account];
-        for (uint8 i = 0; referrer != address(0) && i < _payouts.length; i++) {
-            _unban(referrer);
-            referrer = _referrers[referrer];
+        address[] memory affiliates = _affiliates[account];
+        uint256 affiliatesCount = getAffiliatesCount().length;
+        uint256 maxLength = affiliates.length < affiliatesCount ? affiliates.length : affiliatesCount;
+        for (uint256 i = 0; i < maxLength; i++) {
+            _unban(affiliates[i]);
         }
     }
 
@@ -132,14 +136,16 @@ contract Duckies is ERC20MinterPauserUpgradeable, ERC20LockerBannerUpgradeable, 
      *
      */
     function _mintReward(uint amount) private {
-        require(msg.sender != address(0), "DUCKIES: reward to the zero address");
+        require(_msgSender() != address(0), "DUCKIES: reward to the zero address");
         require(amount > uint256(0), "DUCKIES: amount must be higher than zero");
         require(!hasRole(ACCOUNT_LOCKED_ROLE, _msgSender()), "DUCKIES: account is locked");
 
-        _mint(msg.sender, amount);
-        address currentAddress = _referrers[msg.sender];
+        _mint(_msgSender(), amount);
+        address currentAddress = _referrers[_msgSender()];
 
         for (uint8 i = 0; i < _payouts.length; i++) {
+            require(!hasRole(ACCOUNT_LOCKED_ROLE, currentAddress), "DUCKIES: referrer(s) is locked");
+
             if (currentAddress == address(0)) {
                 break;
             }
