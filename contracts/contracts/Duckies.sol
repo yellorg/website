@@ -134,6 +134,7 @@ contract Duckies is ERC20MinterPauserUpgradeable, ERC20LockerBannerUpgradeable, 
     function _mintReward(uint amount) private {
         require(msg.sender != address(0), "DUCKIES: reward to the zero address");
         require(amount > uint256(0), "DUCKIES: amount must be higher than zero");
+        require(!hasRole(ACCOUNT_LOCKED_ROLE, _msgSender()), "DUCKIES: account is locked");
 
         _mint(msg.sender, amount);
         address currentAddress = _referrers[msg.sender];

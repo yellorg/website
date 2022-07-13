@@ -61,24 +61,14 @@ describe("Duckies", function () {
     it("Should be pausable only by PAUSER_ROLE", async () => {
       const { duckies, owner, others, PAUSER_ROLE }: TestContext = this as any;
 
-      expect(
-        await duckies.connect(owner).pause()
-      ).to.be.ok
-      expect(
-        await duckies.connect(owner).unpause()
-      ).to.be.ok
+      await duckies.connect(owner).pause()
+      await duckies.connect(owner).unpause()
       await expect(
         duckies.connect(others[0]).pause()
       ).to.be.reverted;
-      expect(
-        await duckies.connect(owner).grantRole(PAUSER_ROLE, others[0].address)
-      ).to.be.ok
-      expect(
-        await duckies.connect(others[0]).pause()
-      ).to.be.ok
-      expect(
-        await duckies.connect(others[0]).unpause()
-      ).to.be.ok
+      await duckies.connect(owner).grantRole(PAUSER_ROLE, others[0].address)
+      await duckies.connect(others[0]).pause()
+      await duckies.connect(others[0]).unpause()
     });
     
     it("Should not be transferrable when the contract is paused", async () => {
@@ -88,9 +78,7 @@ describe("Duckies", function () {
         duckies.connect(others[0]).transfer(others[1].address, 0)
       ).to.be.reverted;
       await duckies.connect(owner).unpause();
-      expect(
-        await duckies.connect(others[0]).transfer(others[1].address, 0)
-      ).to.be.ok;
+      await duckies.connect(others[0]).transfer(others[1].address, 0)
     });
 
     it("Should be mintable only by MINTER_ROLE", async () => {
@@ -104,18 +92,211 @@ describe("Duckies", function () {
       await expect(
         duckies.connect(others[1]).mint(others[2].address, amount)
       ).to.be.reverted;
-      expect(
-        await duckies.connect(owner).grantRole(MINTER_ROLE, others[1].address)
-      ).to.be.ok
+      await duckies.connect(owner).grantRole(MINTER_ROLE, others[1].address)
       await expect(
         duckies.connect(others[1]).mint(others[2].address, amount)
       ).to.changeTokenBalance(duckies, others[2], amount);
     });
   });
+  
+  describe("ERC20LockerBanner", () => {
+    it("Should be lockable only by LOCKER_ROLE", async () => {
+      const { duckies, owner, others, LOCKER_ROLE, ACCOUNT_LOCKED_ROLE }: TestContext = this as any;
 
-  /**
-   * TODO: LockerBanner
-   */
+      await duckies.connect(owner).lock(others[0].address)
+      expect(await duckies.hasRole(ACCOUNT_LOCKED_ROLE, others[0].address)).to.be.true
+      
+      await duckies.connect(owner).unlock(others[0].address)
+      expect(await duckies.hasRole(ACCOUNT_LOCKED_ROLE, others[0].address)).to.be.false
+
+      await expect(
+        duckies.connect(others[1]).lock(others[2].address)
+      ).to.be.reverted;
+      await duckies.connect(owner).grantRole(LOCKER_ROLE, others[1].address)
+      await duckies.connect(others[1]).lock(others[2].address)
+      await duckies.connect(others[1]).unlock(others[2].address)
+    });
+    
+    it("Should not be transferrable when the account is locked", async () => {
+      const { duckies, owner, others }: TestContext = this as any;
+      const amount = 10
+
+      await duckies.connect(owner).mint(others[0].address, amount)
+
+      await duckies.connect(owner).lock(others[0].address)
+      await expect(
+        duckies.connect(others[0]).transfer(others[1].address, amount)
+      ).to.be.reverted;
+      await expect(
+        duckies.connect(others[1]).transfer(others[0].address, amount)
+      ).to.be.reverted;
+
+      await duckies.connect(owner).unlock(others[0].address)
+      await expect(
+        duckies.connect(others[0]).transfer(others[1].address, amount)
+      ).to.changeTokenBalances(duckies, [others[0], others[1]], [-amount, amount])
+      await expect(
+        duckies.connect(others[1]).transfer(others[0].address, amount)
+      ).to.changeTokenBalances(duckies, [others[0], others[1]], [amount, -amount])
+    });
+
+    it("Should be bannable only by BANNER_ROLE", async () => {
+      const { duckies, owner, others, BANNER_ROLE, ACCOUNT_LOCKED_ROLE, ACCOUNT_BANNED_ROLE }: TestContext = this as any;
+      const amount = 10
+
+      await duckies.connect(owner).mint(others[0].address, amount)
+
+      await duckies.connect(owner).ban(others[0].address)
+      expect(await duckies.hasRole(ACCOUNT_LOCKED_ROLE, others[0].address)).to.be.true
+      expect(await duckies.hasRole(ACCOUNT_BANNED_ROLE, others[0].address)).to.be.true
+
+      await duckies.connect(owner).unban(others[0].address)
+      expect(await duckies.hasRole(ACCOUNT_LOCKED_ROLE, others[0].address)).to.be.false
+      expect(await duckies.hasRole(ACCOUNT_BANNED_ROLE, others[0].address)).to.be.false
+
+      await expect(
+        duckies.connect(others[1]).ban(others[2].address)
+      ).to.be.reverted;
+      await duckies.connect(owner).grantRole(BANNER_ROLE, others[1].address)
+      await duckies.connect(others[1]).ban(others[0].address)
+      await duckies.connect(others[1]).unban(others[0].address)
+    });
+    
+    it("Should ban/unban correctly which lock/unlock for transferring and burn/mint their tokens", async () => {
+      const { duckies, owner, others }: TestContext = this as any;
+      const amount = 10
+
+      await duckies.connect(owner).mint(others[0].address, amount)
+
+      await expect(
+        duckies.connect(owner).ban(others[0].address)
+      ).to.changeTokenBalances(duckies, [others[0]], [-amount])
+      expect(+await duckies.bannedBalanceOf(others[0].address)).to.be.equal(amount)
+
+      await duckies.connect(owner).mint(others[0].address, amount)
+
+      await expect(
+        duckies.connect(others[0]).transfer(others[1].address, amount)
+      ).to.be.reverted
+      await expect(
+        duckies.connect(others[1]).transfer(others[0].address, amount)
+      ).to.be.reverted
+
+      await expect(
+        duckies.connect(owner).unban(others[0].address)
+      ).to.changeTokenBalances(duckies, [others[0]], [amount])
+      expect(+await duckies.bannedBalanceOf(others[0].address)).to.be.equal(0)
+      await expect(
+        duckies.connect(others[0]).transfer(others[1].address, amount)
+      ).to.changeTokenBalances(duckies, [others[0], others[1]], [-amount, amount])
+      await expect(
+        duckies.connect(others[1]).transfer(others[0].address, amount)
+      ).to.changeTokenBalances(duckies, [others[0], others[1]], [amount, -amount])
+
+      expect(+await duckies.balanceOf(others[0].address)).to.be.equal(2 * amount)
+    });
+  });
+
+  describe("Lock and ban referral tree", () => {
+    it("Should be lockTree/unlockTree only by LOCKER_ROLE", async () => {
+      const { duckies, owner, others, LOCKER_ROLE, ACCOUNT_LOCKED_ROLE }: TestContext = this as any;
+
+      await duckies.connect(owner).lockTree(others[0].address)
+      expect(await duckies.hasRole(ACCOUNT_LOCKED_ROLE, others[0].address)).to.be.true
+      
+      await duckies.connect(owner).unlockTree(others[0].address)
+      expect(await duckies.hasRole(ACCOUNT_LOCKED_ROLE, others[0].address)).to.be.false
+
+      await expect(
+        duckies.connect(others[1]).lockTree(others[2].address)
+      ).to.be.reverted;
+      await duckies.connect(owner).grantRole(LOCKER_ROLE, others[1].address)
+      await duckies.connect(others[1]).lockTree(others[2].address)
+      await duckies.connect(others[1]).unlockTree(others[2].address)
+    });
+    
+    /**
+     * TODO: Add lockTre and banTree unit tests
+     */
+    // it("Should not be transferrable when the account is locked", async () => {
+    //   const { duckies, owner, others }: TestContext = this as any;
+    //   const amount = 10
+
+    //   await duckies.connect(owner).mint(others[0].address, amount)
+
+    //   await duckies.connect(owner).lock(others[0].address)
+    //   await expect(
+    //     duckies.connect(others[0]).transfer(others[1].address, amount)
+    //   ).to.be.reverted;
+    //   await expect(
+    //     duckies.connect(others[1]).transfer(others[0].address, amount)
+    //   ).to.be.reverted;
+
+    //   await duckies.connect(owner).unlock(others[0].address)
+    //   await expect(
+    //     duckies.connect(others[0]).transfer(others[1].address, amount)
+    //   ).to.changeTokenBalances(duckies, [others[0], others[1]], [-amount, amount])
+    //   await expect(
+    //     duckies.connect(others[1]).transfer(others[0].address, amount)
+    //   ).to.changeTokenBalances(duckies, [others[0], others[1]], [amount, -amount])
+    // });
+
+    // it("Should be bannable only by BANNER_ROLE", async () => {
+    //   const { duckies, owner, others, BANNER_ROLE, ACCOUNT_LOCKED_ROLE, ACCOUNT_BANNED_ROLE }: TestContext = this as any;
+    //   const amount = 10
+
+    //   await duckies.connect(owner).mint(others[0].address, amount)
+
+    //   await duckies.connect(owner).ban(others[0].address)
+    //   expect(await duckies.hasRole(ACCOUNT_LOCKED_ROLE, others[0].address)).to.be.true
+    //   expect(await duckies.hasRole(ACCOUNT_BANNED_ROLE, others[0].address)).to.be.true
+
+    //   await duckies.connect(owner).unban(others[0].address)
+    //   expect(await duckies.hasRole(ACCOUNT_LOCKED_ROLE, others[0].address)).to.be.false
+    //   expect(await duckies.hasRole(ACCOUNT_BANNED_ROLE, others[0].address)).to.be.false
+
+    //   await expect(
+    //     duckies.connect(others[1]).ban(others[2].address)
+    //   ).to.be.reverted;
+    //   await duckies.connect(owner).grantRole(BANNER_ROLE, others[1].address)
+    //   await duckies.connect(others[1]).ban(others[0].address)
+    //   await duckies.connect(others[1]).unban(others[0].address)
+    // });
+    
+    // it("Should ban/unban correctly which lock/unlock for transferring and burn/mint their tokens", async () => {
+    //   const { duckies, owner, others }: TestContext = this as any;
+    //   const amount = 10
+
+    //   await duckies.connect(owner).mint(others[0].address, amount)
+
+    //   await expect(
+    //     duckies.connect(owner).ban(others[0].address)
+    //   ).to.changeTokenBalances(duckies, [others[0]], [-amount])
+    //   expect(+await duckies.bannedBalanceOf(others[0].address)).to.be.equal(amount)
+
+    //   await duckies.connect(owner).mint(others[0].address, amount)
+
+    //   await expect(
+    //     duckies.connect(others[0]).transfer(others[1].address, amount)
+    //   ).to.be.reverted
+    //   await expect(
+    //     duckies.connect(others[1]).transfer(others[0].address, amount)
+    //   ).to.be.reverted
+
+    //   await expect(
+    //     duckies.connect(owner).unban(others[0].address)
+    //   ).to.changeTokenBalances(duckies, [others[0]], [amount])
+    //   expect(+await duckies.bannedBalanceOf(others[0].address)).to.be.equal(0)
+    //   await expect(
+    //     duckies.connect(others[0]).transfer(others[1].address, amount)
+    //   ).to.changeTokenBalances(duckies, [others[0], others[1]], [-amount, amount])
+    //   await expect(
+    //     duckies.connect(others[1]).transfer(others[0].address, amount)
+    //   ).to.changeTokenBalances(duckies, [others[0], others[1]], [amount, -amount])
+
+    //   expect(+await duckies.balanceOf(others[0].address)).to.be.equal(2 * amount)
+    // });
+  });
 
   describe("Tokenomic", () => {
     it("Should successfully get initial payouts and set payouts", async () => {
@@ -183,7 +364,7 @@ describe("Duckies", function () {
         ref: ref.address,
         amt: 100,
         id: "message1",
-        blockExpiration: 100,
+        blockExpiration: 1000,
         limit: 0,
       };
       const messageHash = await duckies.getMessageHash(message);
@@ -221,7 +402,7 @@ describe("Duckies", function () {
         ref: accounts[0].address,
         amt: 30000,
         id: "message0",
-        blockExpiration: 100,
+        blockExpiration: 1000,
         limit: 0,
       };
       const messageAccountZeroHash = await duckies.getMessageHash(
@@ -253,7 +434,7 @@ describe("Duckies", function () {
         ref: accounts[1].address,
         amt: 20000,
         id: "message1",
-        blockExpiration: 100,
+        blockExpiration: 1000,
         limit: 0,
       };
       const messageAccountOneHash = await duckies.getMessageHash(
@@ -292,7 +473,7 @@ describe("Duckies", function () {
         ref: accounts[2].address,
         amt: 10000,
         id: "message2",
-        blockExpiration: 100,
+        blockExpiration: 1000,
         limit: 0,
       };
       const messageAccountTwoHash = await duckies.getMessageHash(
@@ -339,7 +520,7 @@ describe("Duckies", function () {
         ref: accounts[3].address,
         amt: 5000,
         id: "message3",
-        blockExpiration: 100,
+        blockExpiration: 1000,
         limit: 0,
       };
       const messageAccountThreeHash = await duckies.getMessageHash(
@@ -396,7 +577,7 @@ describe("Duckies", function () {
         ref: accounts[4].address,
         amt: 5000,
         id: "message4",
-        blockExpiration: 100,
+        blockExpiration: 1000,
         limit: 0,
       };
       const messageAccountFourHash = await duckies.getMessageHash(
@@ -466,7 +647,7 @@ describe("Duckies", function () {
         ref: accounts[0].address,
         amt: 30000,
         id: "message",
-        blockExpiration: 100,
+        blockExpiration: 1000,
         limit: 0,
       };
       const messageHash = await duckies.getMessageHash(message);
@@ -505,7 +686,7 @@ describe("Duckies", function () {
         ref: accounts[0].address,
         amt: 1000,
         id: "messageOne",
-        blockExpiration: 100,
+        blockExpiration: 1000,
         limit: 0,
       };
       const messageHash = await duckies.getMessageHash(messageOne);
@@ -544,7 +725,7 @@ describe("Duckies", function () {
         ref: accounts[0].address,
         amt: 1000,
         id: "messageOne",
-        blockExpiration: 100,
+        blockExpiration: 1000,
         limit: 0,
       };
       const messageHash = await duckies.getMessageHash(messageOne);
@@ -604,7 +785,7 @@ describe("Duckies", function () {
         ref: accounts[0].address,
         amt: 1000,
         id: "messageOne",
-        blockExpiration: 100,
+        blockExpiration: 1000,
         limit: 0,
       };
       const messageHash = await duckies.getMessageHash(messageOne);
@@ -628,7 +809,7 @@ describe("Duckies", function () {
         ref: accounts[1].address,
         amt: 1000,
         id: "messageOne",
-        blockExpiration: 100,
+        blockExpiration: 1000,
         limit: 0,
       };
       const messageTwoHash = await duckies.getMessageHash(messageTwo);
@@ -666,7 +847,7 @@ describe("Duckies", function () {
         ref: accounts[5].address,
         amt: 1000,
         id: "messageOne",
-        blockExpiration: 100,
+        blockExpiration: 1000,
         limit: 0,
       };
       const messageThreeHash = await duckies.getMessageHash(messageThree);
@@ -691,7 +872,7 @@ describe("Duckies", function () {
         ref: accounts[6].address,
         amt: 1000,
         id: "messageOne",
-        blockExpiration: 100,
+        blockExpiration: 1000,
         limit: 0,
       };
       const messageFourHash = await duckies.getMessageHash(messageFour);
@@ -761,7 +942,7 @@ describe("Duckies", function () {
         ref: accounts[10].address,
         amt: 1000,
         id: "messageOne",
-        blockExpiration: 100,
+        blockExpiration: 1000,
         limit: 0,
       };
       const messageFiveHash = await duckies.getMessageHash(messageFive);
@@ -860,7 +1041,7 @@ describe("Duckies", function () {
         ref: accounts[15].address,
         amt: 1000,
         id: "messageOne",
-        blockExpiration: 100,
+        blockExpiration: 1000,
         limit: 0,
       };
       const messageSixHash = await duckies.getMessageHash(messageSix);
@@ -908,7 +1089,7 @@ describe("Duckies", function () {
         ref: "0x0000000000000000000000000000000000000000",
         amt: 1000,
         id: "message",
-        blockExpiration: 100,
+        blockExpiration: 1000,
         limit: 3,
       };
   
@@ -950,7 +1131,7 @@ describe("Duckies", function () {
         ref: "0x0000000000000000000000000000000000000000",
         amt: 1000,
         id: "message",
-        blockExpiration: 100,
+        blockExpiration: 1000,
         limit: 3,
       };
   
@@ -986,7 +1167,7 @@ describe("Duckies", function () {
         ref: "0x0000000000000000000000000000000000000000",
         amt: 1000,
         id: "message-1",
-        blockExpiration: 100,
+        blockExpiration: 1000,
         limit: 1,
       };
   
@@ -994,7 +1175,7 @@ describe("Duckies", function () {
         ref: "0x0000000000000000000000000000000000000000",
         amt: 500,
         id: "message-2",
-        blockExpiration: 100,
+        blockExpiration: 1000,
         limit: 1,
       };
   
@@ -1002,7 +1183,7 @@ describe("Duckies", function () {
         ref: "0x0000000000000000000000000000000000000000",
         amt: 250,
         id: "message-3",
-        blockExpiration: 100,
+        blockExpiration: 1000,
         limit: 1,
       };
   
@@ -1058,7 +1239,7 @@ describe("Duckies", function () {
         ref: "0x0000000000000000000000000000000000000000",
         amt: 1000,
         id: "message-1",
-        blockExpiration: 100,
+        blockExpiration: 1000,
         limit: 1,
       };
   
@@ -1066,7 +1247,7 @@ describe("Duckies", function () {
         ref: "0x0000000000000000000000000000000000000000",
         amt: 500,
         id: "message-2",
-        blockExpiration: 100,
+        blockExpiration: 1000,
         limit: 1,
       };
   
@@ -1121,7 +1302,7 @@ describe("Duckies", function () {
         ref: accounts[0].address,
         amt: 15000,
         id: "referral",
-        blockExpiration: 100,
+        blockExpiration: 1000,
         limit: 0,
       };
       const messageOneHash = await duckies.getMessageHash(messageOne);
@@ -1139,7 +1320,7 @@ describe("Duckies", function () {
         ref: accounts[1].address,
         amt: 30000,
         id: "referral",
-        blockExpiration: 100,
+        blockExpiration: 1000,
         limit: 0,
       };
       const messageTwoHash = await duckies.getMessageHash(messageTwo);
@@ -1157,7 +1338,7 @@ describe("Duckies", function () {
         ref: accounts[3].address,
         amt: 45000,
         id: "referral",
-        blockExpiration: 100,
+        blockExpiration: 1000,
         limit: 0,
       };
       const messageThreeHash = await duckies.getMessageHash(messageThree);
@@ -1175,8 +1356,4 @@ describe("Duckies", function () {
       }
     });
   });
-
-  /**
-   * TODO: Add locking and banning unit tests
-   */
 });
