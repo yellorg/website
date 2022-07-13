@@ -101,6 +101,8 @@ steps:
         from_secret: next_public_supabase_anon_key_uat
       NEXT_PUBLIC_RECAPTCHA_SITEKEY:
         from_secret: next_public_recaptcha_sitekey_uat
+      NEXT_PUBLIC_METAMASK_PRIVATE_KEY:
+        from_secret: next_public_metamask_private_key_uat
     commands:
       - apk add gettext
       - ./.deploy/install.sh
