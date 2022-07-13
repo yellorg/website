@@ -22,7 +22,7 @@ const UnloginEyes: React.FC<UnloginEyes> = ({ children, paginationComponent, isR
         return supportedChain && triedToEagerConnect && active && account;
     }, [supportedChain, triedToEagerConnect, active, account]);
 
-    const rootClassName = classnames('relative flex flex-col justify-between h-[89%]', {
+    const rootClassName = classnames('relative flex flex-col h-[25.75rem]', {
         'blur-[0.313rem]': !isReady
     });
 
@@ -36,7 +36,7 @@ const UnloginEyes: React.FC<UnloginEyes> = ({ children, paginationComponent, isR
 
 
     return (
-        <div className="relative flex flex-col justify-between h-[89%]">
+        <div className="relative flex flex-col h-[25.75rem]">
             <div className={rootClassName}>
                 {children}
             </div>
