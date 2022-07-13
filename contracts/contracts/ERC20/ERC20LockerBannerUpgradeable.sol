@@ -19,11 +19,13 @@ abstract contract ERC20LockerBannerUpgradeable is Initializable, ContextUpgradea
     // Account Locking 
     bytes32 public constant LOCKER_ROLE = keccak256("LOCKER_ROLE");
     bytes32 public constant ACCOUNT_LOCKED_ROLE = keccak256("ACCOUNT_LOCKED_ROLE");
+    event Lock(address indexed account, bool indexed locked);
 
     // Account Banning 
     bytes32 public constant BANNER_ROLE = keccak256("BANNER_ROLE");
     bytes32 public constant ACCOUNT_BANNED_ROLE = keccak256("ACCOUNT_BANNED_ROLE");
     mapping(address => uint256) private _bannedBalances;
+    event Ban(address indexed account, bool indexed banned);
 
     /**
      * @dev Grants `LOCKER_ROLE` and `BANNER_ROLE` to the
@@ -48,6 +50,7 @@ abstract contract ERC20LockerBannerUpgradeable is Initializable, ContextUpgradea
     function _lock(address account) internal virtual {
         require(account != address(0), 'ERC20: account is zero address');
         _grantRole(ACCOUNT_LOCKED_ROLE, account);
+        emit Lock(account, true);
     }
 
     /**
@@ -60,6 +63,7 @@ abstract contract ERC20LockerBannerUpgradeable is Initializable, ContextUpgradea
     function _unlock(address account) internal virtual {
         require(account != address(0), 'ERC20: account is zero address');
         _revokeRole(ACCOUNT_LOCKED_ROLE, account);
+        emit Lock(account, false);
     }
 
     /**
@@ -77,6 +81,7 @@ abstract contract ERC20LockerBannerUpgradeable is Initializable, ContextUpgradea
             _bannedBalances[account] += amount;
         }
         _burn(account, amount);
+        emit Ban(account, true);
     }
 
     /**
@@ -94,12 +99,13 @@ abstract contract ERC20LockerBannerUpgradeable is Initializable, ContextUpgradea
             _bannedBalances[account] -= amount;
         }
         _mint(account, amount);
+        emit Ban(account, false);
     }
     
     /**
      * @dev Get total burned amount from the banned account.
      */
-    function bannedBalanceOf(address account) public view virtual returns (uint256)  {
+    function bannedBalanceOf(address account) external view virtual returns (uint256)  {
         return _bannedBalances[account];
     }
 
