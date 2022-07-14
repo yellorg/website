@@ -123,7 +123,7 @@ export const DuckiesFAQ = ({ faqList }: DuckiesFAQProps) => {
                         Frequently asked questions
                     </div>
                     <div className="text-xl text-text-color-100 font-metro-semibold text-left inline">
-                        Can’t find it here? Check out our{' '}
+                        Can’t find it here? Chase the duck-riddler in our{' '}
                         <Link href="https://t.me/yellow_org">
                             <a target="_blank" className="group text-text-color-100 hover:text-text-color-100 prevent-default">
                                 <span className="underline">

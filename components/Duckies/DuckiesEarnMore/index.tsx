@@ -242,7 +242,7 @@ export const DuckiesEarnMore: React.FC<DuckiesEarnMoreProps> = ({
                         Quack to your friends
                     </div>
                     <div className="text-2xl text-text-color-100 font-gilmer-medium text-center">
-                        Share the link to grow your squad and earn more DUCKZ
+                        Share the link to grow your team and earn more rewards. Invite the friend with your referral link to get 50k DUCKIES
                     </div>
                 </div>
             );
@@ -257,7 +257,7 @@ export const DuckiesEarnMore: React.FC<DuckiesEarnMoreProps> = ({
                     Quack to your friends
                 </div>
                 <div className="text-2xl text-text-color-100 font-gilmer-medium text-left">
-                    Share the link to grow your squad and earn more DUCKZ
+                    Share the link to grow your team and earn more rewards. Invite the friend with your referral link to get 50k DUCKIES
                 </div>
             </div>
         )
