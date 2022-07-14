@@ -7,5 +7,5 @@ export const appConfig = {
     ],
   },
   alertDisplayTime: '5',
-  duckzSmartContractAddress: '0x7f0F3BEa976d62156A9658155DA5ce97F0E766ea'
+  duckzSmartContractAddress: '0xa455FFf21BEfC44978dDf8761fbbD6c0Cf110EC4'
 }

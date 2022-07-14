@@ -14,7 +14,13 @@ import useMetaMask from '../../../hooks/useMetaMask';
 import Image from 'next/image';
 import * as ga from '../../../lib/ga';
 
-export const DuckiesEarnMore = () => {
+interface DuckiesEarnMoreProps {
+    handleOpenModal: () => void;
+}
+
+export const DuckiesEarnMore: React.FC<DuckiesEarnMoreProps> = ({
+    handleOpenModal,
+}: DuckiesEarnMoreProps) => {
     const [shareableLink, setShareableLink] = React.useState<string>('');
     const [shareableLinkPrefix, setShareableLinkPrefix] = React.useState('');
     const [isCopyClicked, setIsCopyClicked] = useState<boolean>(false);
@@ -24,11 +30,7 @@ export const DuckiesEarnMore = () => {
     const { active, account } = useWallet();
     const triedToEagerConnect = useEagerConnect();
 
-    const {
-        supportedChain,
-        isMetaMaskInstalled,
-        handleMetamask,
-    } = useMetaMask();
+    const { supportedChain } = useMetaMask();
 
     const isReady = useMemo(() => {
         return supportedChain && triedToEagerConnect && active && account;
@@ -57,10 +59,10 @@ export const DuckiesEarnMore = () => {
     }, [isCopyClicked]);
 
     const renderMetamaskButton = React.useCallback(() => (
-        <div onClick={() => handleMetamask(isMetaMaskInstalled, 'Injected')} className="button button--outline button--secondary button--shadow-secondary">
-            <span className="button__inner">{isMetaMaskInstalled ? 'Connect Metamask' : 'Install Metamask'}</span>
+        <div onClick={handleOpenModal} className="button button--outline button--secondary button--shadow-secondary">
+            <span className="button__inner">Connect Metamask</span>
         </div>
-    ), [handleMetamask, isMetaMaskInstalled]);
+    ), [handleOpenModal]);
 
     const inputLink = classnames('', {
         'login-gradient w-full w-[20rem] absolute h-16': !isReady,
@@ -217,12 +219,14 @@ export const DuckiesEarnMore = () => {
                         <Image
                             src="/images/referral_hypnoduck_back.png"
                             layout="fill"
+                            alt="hypnoduck-back"
                         />
                     </div>
                     <div className="absolute top-0 bottom-0 left-0 right-0 w-full h-full object-cover object-center">
                         <Image
                             src="/images/referral_hypnoduck.gif"
                             layout="fill"
+                            alt="hypnoduck"
                         />
                     </div>
                 </div>
@@ -250,7 +254,7 @@ export const DuckiesEarnMore = () => {
                     REFERRAL
                 </div>
                 <div className="text-6xl text-text-color-100 font-gilmer-bold pb-2 text-left">
-                    Quack to your friends 
+                    Quack to your friends
                 </div>
                 <div className="text-2xl text-text-color-100 font-gilmer-medium text-left">
                     Share the link to grow your squad and earn more DUCKZ

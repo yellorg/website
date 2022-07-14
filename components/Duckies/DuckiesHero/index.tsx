@@ -1,94 +1,50 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import useWallet from '../../../hooks/useWallet';
 import { shortenHex } from '../../../utils/utils';
 import { useENSName } from '../../../hooks/useENSName';
 import useMetaMask from '../../../hooks/useMetaMask';
-import { DuckiesConnectorModalWindow } from '../DuckiesConnectModalWindow';
 import { useEagerConnect } from '../../../hooks/useEagerConnect';
 import useDuckiesContract from '../../../hooks/useDuckiesContract';
 import { appConfig } from '../../../config/app';
 import { convertNumberToLiteral } from '../../../helpers/convertNumberToLiteral';
-import Image from 'next/image';
-import { dispatchAlert } from '../../../features/alerts/alertsSlice';
-import { useAppDispatch } from '../../../app/hooks';
-import { isBrowser } from '../../../helpers';
 import * as ga from '../../../lib/ga';
 import classNames from 'classnames';
-import { loginWithProvider } from '../../../lib/SupabaseConnector';
-import ReCAPTCHA from 'react-google-recaptcha';
-import classnames from 'classnames';
+import useBounties from '../../../hooks/useBounties';
 
 interface DuckiesHeroProps {
-    bountiesToClaim: string[];
-    handleClaimAllBounties: (amountToClaim: number) => void;
-    bountyItems: any[];
-    isLoading: boolean;
-    setIsLoading: (value: boolean) => void;
-    isRewardsClaimed: boolean;
-    setIsRewardsClaimed: (value: boolean) => void;
-    affiliates: number[];
-    isSingleBountyProcessing: boolean;
-    isReferralClaimed: boolean;
-    setIsReferralClaimed: (value: boolean) => void;
+    handleOpenModal: () => void;
     supabaseUser: any;
+    bountiesItems: any;
 }
 
 export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
-    bountiesToClaim,
-    handleClaimAllBounties,
-    bountyItems,
-    isLoading,
-    setIsLoading,
-    isRewardsClaimed,
-    setIsRewardsClaimed,
-    affiliates,
-    isSingleBountyProcessing,
-    isReferralClaimed,
-    setIsReferralClaimed,
+    handleOpenModal,
     supabaseUser,
+    bountiesItems,
 }: DuckiesHeroProps) => {
-    const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
-    const [isOpenBalancesInfo, setIsOpenBalancesInfo] = useState<boolean>(false);
-    const [balance, setBalance] = useState<number | undefined>(undefined);
-    const [isCopyClicked, setIsCopyClicked] = useState<boolean>(false);
-    const [isCaptchaNotResolved, setIsCaptchaNotResolved] = React.useState<boolean>(true);
+    const [isOpenBalancesInfo, setIsOpenBalancesInfo] = React.useState<boolean>(false);
+    const [balance, setBalance] = React.useState<number | undefined>(undefined);
+    const [isCopyClicked, setIsCopyClicked] = React.useState<boolean>(false);
 
-    let captcha: any = React.useRef<ReCAPTCHA>();
-
-    const dispatch = useAppDispatch();
     const duckiesContract = useDuckiesContract();
-    const { active, account, chain, signer } = useWallet();
+    const { active, account, chain } = useWallet();
     const {
-        mainChain,
         supportedChain,
-        switchToMainChain,
-        addOrSwitchToMainChain,
-        isSwitchedMainChain,
-        isMetaMaskInstalled,
         handleMetamask,
         handleDisconnect,
     } = useMetaMask();
     const ENSName = useENSName(account);
     const triedToEagerConnect = useEagerConnect();
+    const {
+        isRewardsClaimed,
+        setIsRewardsClaimed,
+    } = useBounties(bountiesItems);
 
-    const isReady = useMemo(() => {
+    const isReady = React.useMemo(() => {
         return supportedChain && triedToEagerConnect && active && account;
     }, [supportedChain, triedToEagerConnect, active, account]);
-
-    const claimButtonClassName = React.useMemo(() => {
-        return classnames('button__inner', {
-            'cursor-not-allowed': isCaptchaNotResolved,
-        });
-    },[isCaptchaNotResolved]);
-
-    const claimButtonContainerClassName = React.useMemo(() => {
-        return classnames({
-            'px-7 py-1.5 bg-neutral-control-color-40 rounded-sm text-neutral-control-layer-color-40 cursor-not-allowed': isCaptchaNotResolved,
-            'button button--outline button--secondary button--shadow-secondary': !isCaptchaNotResolved,
-        });
-    },[isCaptchaNotResolved]);
 
     const getBalance = React.useCallback(async() => {
         if (account) {
@@ -104,7 +60,7 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
         }
     }, [account, duckiesContract]);
 
-    useEffect(() => {
+    React.useEffect(() => {
         if (!isCopyClicked)
             return;
 
@@ -113,364 +69,18 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
         }, 700);
     }, [isCopyClicked]);
 
-    useEffect(() => {
+    React.useEffect(() => {
         if (isRewardsClaimed) {
             getBalance();
             setIsRewardsClaimed(false);
         }
     }, [isRewardsClaimed]);
 
-    useEffect(() => {
-        if (!isReady) {
-            return;
-        }
-
-        (async () => {
-            const token = localStorage.getItem('referral_token');
-            const referralLimit = +await duckiesContract?.getAccountBountyLimit('referral');
-
-            setIsReferralClaimed(!token || referralLimit === 1 || affiliates[0] > 0 || (balance && balance > 0 || false));
-
-            if (referralLimit === 1 || affiliates[0] > 0) {
-                localStorage.removeItem('referral_token');
-            }
-        })();
-    }, [isReady, duckiesContract, isRewardsClaimed, affiliates, balance]);
-
-    useEffect(() => {
+    React.useEffect(() => {
         if (isReady) {
             getBalance();
         }
     }, [isReady, getBalance]);
-
-    const handleClaimRewards = React.useCallback(async (amountToClaim: number) => {
-        if (isLoading || isSingleBountyProcessing || (isReferralClaimed && !bountiesToClaim.length)) {
-            return;
-        }
-
-        if (!isReferralClaimed && !isCaptchaNotResolved) {
-            const token = localStorage.getItem('referral_token');
-
-            if (token && signer && account) {
-                setIsLoading(true);
-
-                try {
-                    const response = await fetch(`/api/tx?token=${token}&account=${account}`);
-
-                    if (response.status !== 400 && response.status !== 500) {
-                        const { transaction } = await response.json();
-
-                        const tx = await signer.sendTransaction(transaction);
-                        await tx.wait();
-                        localStorage.removeItem('referral_token');
-                        dispatch(dispatchAlert({
-                            type: 'success',
-                            title: 'Success',
-                            message: 'You have successfully claimed the reward!',
-                        }));
-                        setIsRewardsClaimed(true);
-                        ga.event({
-                            action: "duckies_claim_success",
-                            params: {
-                                duckies_amount_claim: 10000,
-                            }
-                        });
-                    } else {
-                        localStorage.removeItem('referral_token');
-                        dispatch(dispatchAlert({
-                            type: 'error',
-                            title: 'Error',
-                            message: 'Something went wrong! Please, try again!',
-                        }));
-                    }
-                } catch (error) {
-                    dispatch(dispatchAlert({
-                        type: 'error',
-                        title: 'Error',
-                        message: 'Something went wrong! Please, try again!',
-                    }));
-                }
-
-                setIsLoading(false);
-            }
-        } else {
-            if (bountiesToClaim.length) {
-                setIsLoading(true);
-                await handleClaimAllBounties(amountToClaim);
-                setIsLoading(false);
-            }
-        }
-
-        captcha?.current?.reset();
-        setIsCaptchaNotResolved(true);
-    }, [
-        signer,
-        account,
-        isLoading,
-        setIsLoading,
-        bountiesToClaim,
-        isReferralClaimed,
-        handleClaimAllBounties,
-        dispatch,
-        setIsRewardsClaimed,
-        isSingleBountyProcessing,
-        isCaptchaNotResolved,
-    ]);
-
-    const getBountiesClaimableAmount = React.useCallback(() => {
-        let amountToClaim = 0;
-        let bountyTitles: string[] = [];
-
-        bountiesToClaim.forEach((bountyItem: string) => {
-            const bounty = bountyItems.find(item => item.fid === bountyItem);
-
-            if (bounty) {
-                amountToClaim += bounty.value;
-                bountyTitles.push(bounty.title);
-            }
-        });
-
-        return [amountToClaim as number, bountyTitles as string[]];
-    }, [bountyItems, bountiesToClaim]);
-
-
-    const handleClaimButtonClick = useCallback(async () => {
-        setIsOpenModal(true);
-
-        if (isReady) {
-            const [amountToClaim] = !isReferralClaimed ? [10000, ['Referral reward']] : getBountiesClaimableAmount();
-            ga.event({
-                action: "duckies_hero_claim_click",
-                params: {
-                    duckies_amount_claim: amountToClaim,
-                }
-            });
-        } else {
-            ga.event({
-                action: "duckies_hero_claim_show_auth_click",
-            });
-        }
-
-        await switchToMainChain()
-    }, [isReady, getBountiesClaimableAmount, isReferralClaimed, switchToMainChain]);
-
-    const handleSocialAuth = React.useCallback((provider: string) => {
-        loginWithProvider(provider);
-    }, []);
-
-    const renderMetamaskModalBody = React.useMemo(() => {
-        return (
-            <div className="flex flex-col w-full">
-                <div className="flex justify-center mb-4">
-                    <Image width="156px" height="156px" src="/images/components/duckies/duckMetamask.png" alt="duck-no-rewards" />
-                </div>
-                <div className="text-text-color-100 text-sm text-center font-metro-regular font-medium mb-6">
-                    Connect Metamask wallet in order to be able to get Duckies tokens
-                </div>
-                <div className="flex items-center justify-center mb-8">
-                    {isSwitchedMainChain && (
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M5 13L9 17L19 7" stroke="#419E6A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                        </svg>
-                    )}
-                    <div
-                        onClick={() => addOrSwitchToMainChain()}
-                        className={[
-                            'button-link cursor-pointer font-bold text-center underline px-2',
-                            isSwitchedMainChain ? 'active no-underline' : undefined
-                        ].join(' ')}
-                    >
-                        <span>Switch to {mainChain?.name?.split(' ')[0]} network</span>
-                    </div>
-                </div>
-                <div className="flex items-center justify-center">
-                    <div onClick={() => handleMetamask(isMetaMaskInstalled, 'Injected')} className="button button--outline button--secondary button--shadow-secondary">
-                        <span className="button__inner">{isMetaMaskInstalled ? 'Connect Metamask' : 'Install Metamask'}</span>
-                    </div>
-                </div>
-            </div>
-        );
-    }, [handleMetamask, isMetaMaskInstalled, isSwitchedMainChain, addOrSwitchToMainChain, mainChain]);
-
-    const renderLoadingModalBody = React.useMemo(() => {
-        return (
-            <React.Fragment>
-                <div className="text-text-color-100 text-sm text-center font-metro-regular font-medium mb-6">
-                    In order for the on-chain transaction to be executed please wait a couple of minutes. Time may vary depending on the queue & gas.
-                </div>
-                <div className="flex items-center justify-center">
-                    <span className="animate-spin">
-                        <svg width="38" height="39" viewBox="0 0 38 39" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M38 19.5C38 15.1042 36.4758 10.8445 33.6872 7.44653C30.8986 4.04857 27.018 1.72265 22.7067 0.86508C18.3954 0.00751132 13.9202 0.671353 10.0435 2.7435C6.16676 4.81564 3.12847 8.16787 1.44629 12.229C-0.235892 16.2902 -0.457885 20.8089 0.818133 25.0154C2.09415 29.2219 4.78923 32.8558 8.44416 35.2979C12.0991 37.7401 16.4877 38.8394 20.8623 38.4085C25.2369 37.9777 29.3268 36.0433 32.435 32.935L31.0915 31.5915C28.2941 34.389 24.6132 36.1299 20.6761 36.5177C16.739 36.9054 12.7892 35.9161 9.49975 33.7181C6.21031 31.5202 3.78474 28.2497 2.63632 24.4639C1.4879 20.678 1.6877 16.6111 3.20166 12.9561C4.71562 9.30108 7.45008 6.28407 10.9391 4.41915C14.4282 2.55422 18.4559 1.95676 22.336 2.72857C26.2162 3.50038 29.7087 5.59371 32.2185 8.65187C34.7282 11.71 36.1 15.5438 36.1 19.5H38Z" fill="#F8C100"/>
-                        </svg>
-                    </span>
-                </div>
-            </React.Fragment>
-        );
-    }, []);
-
-    const renderClaimModalBody = React.useMemo(() => {
-        const [amountToClaim, bountyTitles]: any = !isReferralClaimed ? [10000, ['Referral reward']] : getBountiesClaimableAmount();
-        const renderBountyTitles = bountyTitles.map((bountyTitle: any, index: number) => {
-            return (
-                <div key={`bounty-title-${index}`}>&#x2022; {bountyTitle}</div>
-            );
-        });
-
-        return (
-            <React.Fragment>
-                <div className="text-text-color-100 text-base text-center font-metro-regular font-semibold mb-1">
-                    Amount
-                </div>
-                <div className="bg-primary-cta-color-10 w-full flex justify-center py-3 mb-4">
-                    <div className="text-text-color-100 text-2xl font-gilmer-bold flex items-center">
-                        {amountToClaim}
-                        <svg className="ml-3" width="20" height="28" viewBox="0 0 20 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M9.51487 3.11111H0V24.8889H9.51487C15.9624 24.8889 20 20.2844 20 14C20 7.59111 15.8998 3.11111 9.51487 3.11111ZM9.42097 21.0311H4.25665V6.93778H9.42097C13.1768 6.93778 15.6808 9.76889 15.6808 13.9067C15.6808 18.1067 13.1768 21.0311 9.42097 21.0311Z" fill="#ECAA00" />
-                            <path d="M3.92 0H7.04989V6.22222H3.92V0Z" fill="#ECAA00" />
-                            <path d="M3.92 21.7778H7.04989V28H3.92V21.7778Z" fill="#ECAA00" />
-                            <path d="M8.61484 0H11.7447V6.22222H8.61484V0Z" fill="#ECAA00" />
-                            <path d="M8.61484 21.7778H11.7447V28H8.61484V21.7778Z" fill="#ECAA00" />
-                        </svg>
-                    </div>
-                </div>
-                <div className="text-text-color-100 text-sm text-center font-metro-regular font-medium mb-6">
-                    List of bounties:
-                    {renderBountyTitles}
-                </div>
-                <div className="flex justify-center">
-                    <ReCAPTCHA
-                        ref={captcha}
-                        sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITEKEY || 'changeme'}
-                        onChange={() => setIsCaptchaNotResolved(!isCaptchaNotResolved)}
-                        className="mb-5 inline-block scale-80 lg:scale-100"
-                        hl="en"
-                    />
-                </div>
-                <div className="flex items-center justify-center">
-                    <div className={claimButtonContainerClassName} onClick={() => handleClaimRewards(amountToClaim)}>
-                        <button className={claimButtonClassName} disabled={isCaptchaNotResolved}>Claim all</button>
-                    </div>
-                </div>
-            </React.Fragment>
-        );
-    }, [isReferralClaimed, getBountiesClaimableAmount, handleClaimRewards, captcha, isCaptchaNotResolved]);
-
-    const renderClaimRewardModalBody = React.useMemo(() => {
-        return (
-            <div className="flex flex-col w-full">
-                <div className="flex justify-center mb-4">
-                    <Image width="156px" height="156px" src="/images/components/duckies/duckDetective.png" alt="duck-detective" />
-                </div>
-                {(isLoading || isSingleBountyProcessing) ? renderLoadingModalBody : renderClaimModalBody}
-            </div>
-        );
-    }, [isLoading, renderLoadingModalBody, renderClaimModalBody, isSingleBountyProcessing]);
-
-    const renderNoRewardsModalBody = React.useMemo(() => {
-        return (
-            <div className="flex flex-col w-full">
-                <div className="flex justify-center mb-4">
-                    <Image width="156px" height="156px" src="/images/components/duckies/duckNoRewards.png" alt="duck-no-rewards" />
-                </div>
-                <div className="text-text-color-100 text-base text-center font-metro-regular font-semibold mb-1">
-                    Not the right time
-                </div>
-                <div className="text-text-color-100 text-sm text-center font-metro-regular font-medium mb-6">
-                    You have already claimed your current rewards. Invite more people and fulfill more bounties to get more DUCKZ
-                </div>
-                <div className="flex items-center justify-center">
-                    <div className="button button--outline button--secondary button--shadow-secondary" onClick={() => { setIsOpenModal(false); } }>
-                        <span className="button__inner">OK</span>
-                    </div>
-                </div>
-            </div>
-        );
-    }, []);
-
-    const renderModalTitle = React.useMemo(() => {
-        if (!isReady) {
-            return 'Connect Wallet';
-        }
-
-        if (!supabaseUser) {
-            return 'Connect social';
-        }
-
-        return 'Claim reward';
-    }, [isReady, supabaseUser]);
-
-    const renderSocialsModalBody = React.useMemo(() => {
-        return (
-            <div className="flex flex-col w-full p-0.5">
-                <div className="flex justify-center mb-4">
-                    <Image width="156px" height="156px" src="/images/components/duckies/duckDetective.png" alt="duck-detective" />
-                </div>
-                <div className="flex flex-col w-full">
-                    <div className="flex w-full mb-1.5 button socials facebook" onClick={() => handleSocialAuth('facebook')}>
-                        <div className="button__inner">
-                            <div className="absolute left-3">
-                                <svg width="10" height="21" viewBox="0 0 10 21" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M9.47229 10.0923H6.64526C6.64526 14.609 6.64526 20.1686 6.64526 20.1686H2.45615C2.45615 20.1686 2.45615 14.6629 2.45615 10.0923H0.464844V6.53108H2.45615V4.2276C2.45615 2.57785 3.24008 0 6.68375 0L9.78796 0.0118993V3.46887C9.78796 3.46887 7.90164 3.46887 7.53487 3.46887C7.16811 3.46887 6.64666 3.65225 6.64666 4.43898V6.53178H9.83835L9.47229 10.0923Z" fill="white"/>
-                                </svg>
-                            </div>
-                            Connect with Facebook
-                        </div>
-                    </div>
-                    <div className="flex w-full my-1.5 button socials twitter" onClick={() => handleSocialAuth('twitter')}>
-                        <div className="button__inner">
-                            <div className="absolute left-3">
-                                <svg width="20" height="17" viewBox="0 0 20 17" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M17.8668 4.02629C17.8746 4.20209 17.8789 4.37932 17.8789 4.55655C17.8789 9.95281 13.7726 16.1731 6.25955 16.1731C3.9534 16.1731 1.80661 15.4991 0 14.34C0.319445 14.3779 0.644607 14.3972 0.974056 14.3972C2.88787 14.3972 4.64803 13.744 6.04587 12.6492C4.25926 12.6163 2.75066 11.4357 2.23111 9.81274C2.47981 9.85991 2.73636 9.88635 2.99864 9.88635C3.37096 9.88635 3.73257 9.83776 4.07489 9.74414C2.20681 9.36967 0.799684 7.71956 0.799684 5.74C0.799684 5.72285 0.799684 5.70498 0.800399 5.68855C1.35067 5.9937 1.98027 6.17808 2.64918 6.1988C1.55435 5.46772 0.833272 4.2171 0.833272 2.80068C0.833272 2.05174 1.03409 1.34996 1.38569 0.746801C3.39884 3.21803 6.4089 4.84313 9.80202 5.01464C9.73199 4.7152 9.69697 4.40434 9.69697 4.08346C9.69697 1.82877 11.525 0 13.7797 0C14.9546 0 16.0144 0.495961 16.7605 1.28921C17.6917 1.10627 18.5635 0.767525 19.3546 0.298006C19.0473 1.25205 18.402 2.05174 17.5566 2.5577C18.3834 2.45908 19.1724 2.2404 19.9021 1.91524C19.3575 2.73279 18.665 3.45243 17.8668 4.02629Z" fill="white"/>
-                                </svg>
-                            </div>
-                            Connect with Twitter
-                        </div>
-                    </div>
-                    <div className="flex w-full mt-1.5 button socials google" onClick={() => handleSocialAuth('google')}>
-                        <div className="button__inner">
-                            <div className="absolute left-3">
-                                <svg width="22" height="23" viewBox="0 0 22 23" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M21.5774 11.2707C21.5774 10.545 21.5131 9.85611 21.4029 9.18555H11.0229V13.3283H16.9661C16.6998 14.6878 15.919 15.8361 14.7616 16.6168V19.3726H18.3073C20.3833 17.4527 21.5774 14.6235 21.5774 11.2707Z" fill="#4285F4"/>
-                                    <path d="M11.023 22.0459C13.9992 22.0459 16.4886 21.0538 18.3074 19.3728L14.7616 16.6171C13.7696 17.2784 12.5111 17.6826 11.023 17.6826C8.14788 17.6826 5.71365 15.7444 4.841 13.1265H1.18506V15.9649C2.99466 19.5657 6.7149 22.0459 11.023 22.0459Z" fill="#34A853"/>
-                                    <path d="M4.84091 13.1265C4.61126 12.4652 4.49184 11.7579 4.49184 11.023C4.49184 10.2881 4.62045 9.58084 4.84091 8.91946V6.08105H1.18496C0.431731 7.56915 0 9.24096 0 11.023C0 12.805 0.431731 14.4769 1.18496 15.965L4.84091 13.1265Z" fill="#FBBC05"/>
-                                    <path d="M11.023 4.36325C12.6489 4.36325 14.1003 4.92358 15.2485 6.01669L18.39 2.87515C16.4886 1.09311 13.9992 0 11.023 0C6.7149 0 2.99466 2.48016 1.18506 6.08099L4.841 8.91939C5.71365 6.30145 8.14788 4.36325 11.023 4.36325Z" fill="#EA4335"/>
-                                </svg>
-                            </div>
-                            Connect with Google
-                        </div>
-                    </div>
-                </div>
-            </div>
-        );
-    }, [handleSocialAuth]);
-
-    const renderModalBody = React.useMemo(() => {
-        const token = isBrowser() && localStorage.getItem('referral_token');
-
-        if (!isReady) {
-            return renderMetamaskModalBody;
-        }
-
-        if (!supabaseUser) {
-            return renderSocialsModalBody;
-        }
-
-        if ((isReferralClaimed && !bountiesToClaim.length) || (!isReferralClaimed && !token)) {
-            return renderNoRewardsModalBody;
-        }
-
-        return renderClaimRewardModalBody;
-    }, [
-        isReady,
-        isReferralClaimed,
-        bountiesToClaim,
-        renderMetamaskModalBody,
-        renderNoRewardsModalBody,
-        renderClaimRewardModalBody,
-        renderSocialsModalBody,
-        supabaseUser,
-    ]);
 
     const renderDuckImage = React.useMemo(() => {
         return (
@@ -577,8 +187,8 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
     const renderBalanceCircleButton = React.useMemo(() => {
         if (!isReady) {
            return (
-                <div onClick={() => handleMetamask(isMetaMaskInstalled, 'Injected')} className="w-full button button--outline button--secondary button--shadow-secondary">
-                    <span className="button__inner !py-[6px] !px-[18px] !justify-center">{isMetaMaskInstalled ? 'Connect Metamask' : 'Install Metamask'}</span>
+                <div onClick={handleOpenModal} className="w-full button button--outline button--secondary button--shadow-secondary">
+                    <span className="button__inner !py-[6px] !px-[18px] !justify-center">Connect Metamask</span>
                 </div>
            );
         }
@@ -586,7 +196,7 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
         if (!supabaseUser) {
             return (
                 <>
-                    <div onClick={() => console.log('connect social')} className="text-center lg:w-full mr-[24px] lg:mr-0 mt-[16px] !mr-0 button button--outline button--secondary button--shadow-secondary">
+                    <div onClick={handleOpenModal} className="text-center lg:w-full mr-[24px] lg:mr-0 mt-[16px] !mr-0 button button--outline button--secondary button--shadow-secondary">
                         <span className="button__inner !py-[6px] !px-[18px] !justify-center">Connect Social</span>
                     </div>
                     <div onClick={handleDisconnect} className="group flex flex-row items-center gap-1 mt-2 cursor-pointer">
@@ -608,7 +218,6 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
         isReady,
         supabaseUser,
         handleMetamask,
-        isMetaMaskInstalled,
         handleDisconnect,
     ]);
 
@@ -659,7 +268,7 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
                             </div>
                         </div>
                         <div className="flex mt-8 flex-col lg:flex-row gap-3">
-                            <div onClick={handleClaimButtonClick} className="w-full lg:w-fit button button--outline button--secondary button--shadow-secondary">
+                            <div onClick={handleOpenModal} className="w-full lg:w-fit button button--outline button--secondary button--shadow-secondary">
                                 <span className="button__inner !text-2xl !p-4 !justify-center">Claim your reward</span>
                             </div>
                             <Link href="#earn-more">
@@ -785,12 +394,6 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
                     </div>
                 </div>
             </div>
-            <DuckiesConnectorModalWindow
-                bodyContent={renderModalBody}
-                headerContent={renderModalTitle}
-                isOpen={isOpenModal}
-                setIsOpen={setIsOpenModal}
-            />
         </React.Fragment>
     );
 };

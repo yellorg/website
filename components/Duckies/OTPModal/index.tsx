@@ -1,5 +1,5 @@
 import React from 'react';
-import { DuckiesConnectorModalWindow } from '../DuckiesConnectModalWindow';
+import { DuckiesModalWindow } from '../DuckiesModalWindow';
 import { PhoneInput } from './PhoneInput';
 import { OTPInput } from './OTPInput';
 import { convertNumberToLiteral } from '../../../helpers/convertNumberToLiteral';
@@ -36,7 +36,7 @@ export const OTPModal: React.FC<OTPModalProps> = ({
                 .select('phone_number')
                 .eq('address', account)
                 .single();
-            
+
             setVerifiedPhone(data.phone_number);
         }
 
@@ -56,7 +56,7 @@ export const OTPModal: React.FC<OTPModalProps> = ({
         }).then((res: Response) => res.json())
         .then((data: any) => {
             if (data.success) {
-                setIsSuccess(true);                
+                setIsSuccess(true);
                 window.dispatchEvent(new Event('reloadQuest'));
             } else {
                 setIsOtpIncorrect(true);
@@ -124,7 +124,7 @@ export const OTPModal: React.FC<OTPModalProps> = ({
     }, [renderBounty, verifiedPhone]);
 
     return (
-        <DuckiesConnectorModalWindow
+        <DuckiesModalWindow
             isOpen={isOpen}
             headerContent="Phone verification"
             bodyContent={isSuccess ? renderSuccess: renderBody}

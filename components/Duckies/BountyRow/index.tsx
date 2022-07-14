@@ -1,7 +1,7 @@
 import React from 'react';
 import classnames from 'classnames';
 import { convertNumberToLiteral } from '../../../helpers/convertNumberToLiteral';
-import { DuckiesConnectorModalWindow } from '../DuckiesConnectModalWindow';
+import { DuckiesModalWindow } from '../DuckiesModalWindow';
 import Image from 'next/image';
 import * as ga from '../../../lib/ga';
 import { loginWithProvider } from '../../../lib/SupabaseConnector';
@@ -20,7 +20,7 @@ export interface BountyItem {
 
 interface BountyProps {
     bounty: BountyItem;
-    handleClaim: (id: string) => void;
+    handleClaim: (id: string, isCaptchaNotResolved: boolean) => void;
     index: number;
     isLoading: boolean;
     isSingleBountyProcessing: boolean;
@@ -79,7 +79,7 @@ export const BountyRow: React.FC<BountyProps> = ({
             setIsSingleBountyProcessing(true);
             setIsOpenClaim(false);
             setIsCaptchaNotResolved(true);
-            await handleClaim(bounty.fid);
+            await handleClaim(bounty.fid, false);
             setLoading(false);
             setIsSingleBountyProcessing(false)
         }
@@ -332,7 +332,7 @@ export const BountyRow: React.FC<BountyProps> = ({
         }
 
         return (
-            <DuckiesConnectorModalWindow
+            <DuckiesModalWindow
                 isOpen={isOpenShow}
                 headerContent={bounty.title}
                 bodyContent={renderDetailsModalBody}
@@ -351,7 +351,7 @@ export const BountyRow: React.FC<BountyProps> = ({
 
     const renderClaimModal = React.useMemo(() => {
         return (
-            <DuckiesConnectorModalWindow
+            <DuckiesModalWindow
                 isOpen={isOpenClaim}
                 headerContent={renderModalTitle}
                 bodyContent={renderModalBody}
