@@ -39,7 +39,7 @@ export const DuckiesLayout: FC<DuckiesLayoutProps> = ({ bounties, faqList }: Duc
     }, [supportedChain, triedToEagerConnect, active, account]);
 
     const [user, setUser] = React.useState<any>(null);
-    const [userStatus, setUserStatus] = React.useState<any>(null);
+    const [userStatus, setUserStatus] = React.useState<string>('');
 
     const dispatch = useAppDispatch();
     const router = useRouter();
@@ -71,13 +71,12 @@ export const DuckiesLayout: FC<DuckiesLayoutProps> = ({ bounties, faqList }: Duc
 
     const getUserStatus = React.useCallback(async () => {
         if (account) {
-            console.log(account);
             const response = await fetch(`/api/users/me?account=${account}`);
 
             const data = await response.json();
-            setUserStatus(data);
+            setUserStatus(data.userStatus);
         }
-    }, [account]);
+    }, [account, setUserStatus, userStatus]);
 
     React.useEffect(() => {
         if ((isReady && currentModal === 'metamask') || (supabaseUser && currentModal === 'social_auth')) {
@@ -123,7 +122,7 @@ export const DuckiesLayout: FC<DuckiesLayoutProps> = ({ bounties, faqList }: Duc
     }, []);
 
     const renderContent = React.useMemo(() => {
-        if (user?.state !== 'banned') {
+        if (userStatus !== 'banned') {
             return (
                 <div className="bg-primary-cta-color-60 pb-[5rem] md:pb-[7.5rem]">
                     <DuckiesHero
@@ -163,7 +162,7 @@ export const DuckiesLayout: FC<DuckiesLayoutProps> = ({ bounties, faqList }: Duc
         } else {
              return <DuckiesBanned/>
         }
-    },[user, items, handleCloseModal, currentModal, isOpenModal, DuckiesPrizesList, faqList])
+    },[user, items, handleCloseModal, currentModal, isOpenModal, DuckiesPrizesList, faqList, userStatus])
 
     return (
         <main className="bg-primary-cta-color-60 pb-[5rem] md:pb-[7.5rem]">
