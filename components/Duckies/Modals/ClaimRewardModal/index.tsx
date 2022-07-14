@@ -19,6 +19,7 @@ export const ClaimRewardModal: React.FC<ClaimRewardModalProps> = ({
     setIsOpenModal,
 }: ClaimRewardModalProps) => {
     const [isCaptchaNotResolved, setIsCaptchaNotResolved] = React.useState<boolean>(true);
+    const [isComponentLoading, setIsComponentLoading] = React.useState<boolean>(true);
 
     const {
         bountiesToClaim,
@@ -32,6 +33,8 @@ export const ClaimRewardModal: React.FC<ClaimRewardModalProps> = ({
     let captcha: any = React.useRef();
 
     React.useEffect(() => {
+        setIsComponentLoading(false);
+
         return () => {
             captcha?.current?.reset();
         };
@@ -191,6 +194,10 @@ export const ClaimRewardModal: React.FC<ClaimRewardModalProps> = ({
         renderNoRewardsModalBody,
         renderClaimRewardModalBody,
     ]);
+
+    if (isComponentLoading) {
+        return null;
+    }
 
     return (
         <DuckiesModalWindow
