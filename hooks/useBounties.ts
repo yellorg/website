@@ -282,8 +282,8 @@ export default function useBounties(bounties: any) {
     ]);
 
     const getBountiesClaimableAmount = React.useCallback(() => {
-        let amountToClaim = 0;
-        let bountyTitles: string[] = [];
+        let amountToClaim = !isReferralClaimed ? 10000 : 0;
+        let bountyTitles: string[] = !isReferralClaimed ? ['Referral reward'] : [];
 
         bountiesToClaim.forEach((bountyItem: string) => {
             const bounty = bountyItems.find(item => item.fid === bountyItem);
@@ -295,7 +295,7 @@ export default function useBounties(bounties: any) {
         });
 
         return [amountToClaim as number, bountyTitles as string[]];
-    }, [bountyItems, bountiesToClaim]);
+    }, [bountyItems, bountiesToClaim, isReferralClaimed]);
 
     return {
         bountyItems,
