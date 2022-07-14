@@ -22,7 +22,7 @@ export default function Document() {
                     }}
                 />
             </Head>
-            <body>
+            <body className="no-scrollbar">
                 {/* <!-- Google Tag Manager (noscript) --> */}
                 <noscript dangerouslySetInnerHTML={{
                 __html: `
