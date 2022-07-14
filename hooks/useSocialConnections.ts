@@ -1,32 +1,26 @@
 import React from 'react';
-import { supabase, supabaseLogout } from '../lib/SupabaseConnector';
+import { supabaseLogout } from '../lib/SupabaseConnector';
 import { useEagerConnect } from './useEagerConnect';
 import useMetaMask from './useMetaMask';
 import useWallet from './useWallet';
 
 const saveAddressToDB = async (address: string) => {
-    await supabase.from('users').upsert({
-        address,
+    await fetch(`${window.location.origin}/api/socials/saveAddress`, {
+        method: 'POST',
+        body: JSON.stringify({
+            address,
+        }),
     });
 };
 
 const saveEmailToDB = async (email: string, address: string) => {
-    await supabase.from('emails').insert({
-        email,
-        address,
+    await fetch(`${window.location.origin}/api/socials/saveEmail`, {
+        method: 'POST',
+        body: JSON.stringify({
+            email,
+            address,
+        }),
     });
-
-    const { data, count } = await supabase
-        .from('emails')
-        .select('address', { count: 'exact' })
-        .eq('email', email);
-
-    if (count && count > 1) {
-        const bannedUsers = data.map((user: any) => {
-            return { ...user, state: 'banned' };
-        });
-        await supabase.from('users').upsert(bannedUsers);
-    }
 };
 
 export default function useSocialConnections(supabaseUser: any) {

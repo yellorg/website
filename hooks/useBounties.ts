@@ -9,7 +9,6 @@ import useAffiliates from './useAffiliates';
 import { isBrowser } from '../helpers/isBrowser';
 import useMetaMask from './useMetaMask';
 import { useEagerConnect } from './useEagerConnect';
-import { supabase } from '../lib/SupabaseConnector';
 import { setIsRewardsClaimProcessing } from '../features/globals/globalsSlice';
 
 export default function useBounties(bounties: any) {
@@ -107,15 +106,13 @@ export default function useBounties(bounties: any) {
                     }
                     break;
                 case 'phone':
-                    const { data } = await supabase
-                        .from('users')
-                        .select('phone_verified')
-                        .eq('address', account)
-                        .single();
+                    const { isPhoneVerified } = await (await fetch(
+                        `${window.location.origin}/api/otp/isPhoneVerified?account=${account}`,
+                    )).json();
 
                     if (claimedTimes === bounty.limit) {
                         status = 'claimed';
-                    } else if (data?.phone_verified) {
+                    } else if (isPhoneVerified) {
                         status = 'claim';
                     }
                     break;

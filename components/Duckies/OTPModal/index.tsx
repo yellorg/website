@@ -31,13 +31,11 @@ export const OTPModal: React.FC<OTPModalProps> = ({
 
     React.useEffect(() => {
         const fetchPhone = async () => {
-            const { data } = await supabase
-                .from('users')
-                .select('phone_number')
-                .eq('address', account)
-                .single();
+            const { phoneNumber } = await (await fetch(
+                `${window.location.origin}/api/otp/fetchPhoneNumber?account=${account}`,
+            )).json();
 
-            setVerifiedPhone(data.phone_number);
+            setVerifiedPhone(phoneNumber);
         }
 
         if (isSuccess && account) {
