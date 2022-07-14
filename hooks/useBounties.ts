@@ -51,7 +51,7 @@ export default function useBounties(bounties: any) {
     }, [isReady, duckiesContract, isRewardsClaimed, affiliates, referral_token]);
 
     React.useEffect(() => {
-        if (isRewardsClaimed) {
+        if (isRewardsClaimed && account) {
             const newItems = bounties.map((item: any) => {
                 return {
                     ...item,
@@ -61,7 +61,7 @@ export default function useBounties(bounties: any) {
 
             setBountyItems(newItems);
         }
-    }, [isRewardsClaimed, bounties]);
+    }, [isRewardsClaimed, bounties, account]);
 
     React.useEffect(() => {
         if (bounties && account && !bountyItems.length) {
@@ -82,7 +82,6 @@ export default function useBounties(bounties: any) {
             setQuestUpdateTrigger(!questUpdateTrigger);
         };
         window.addEventListener('reloadQuest', questUpdater);
-        console.log('reloadQuest');
 
         return () => {
             window.removeEventListener('reloadQuest', questUpdater);
@@ -196,7 +195,6 @@ export default function useBounties(bounties: any) {
         bountyItems,
         account,
         dispatch,
-        setIsRewardsClaimProcessing,
         setIsRewardsClaimed,
     ]);
 
@@ -211,9 +209,8 @@ export default function useBounties(bounties: any) {
             return;
         }
         dispatch(setIsRewardsClaimProcessing(true));
-        const token = localStorage.getItem('referral_token');
 
-        if (isReferralClaimed && token) {
+        if (isReferralClaimed && referral_token) {
             dispatch(dispatchAlert({
                 type: 'error',
                 title: 'Error',
