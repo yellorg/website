@@ -66,6 +66,20 @@ steps:
         from_secret: next_public_google_tag_manager_id
       NEXT_PUBLIC_GOOGLE_ANALYTICS:
         from_secret: next_public_google_analytics
+      NEXT_PUBLIC_SUPABASE_URL:
+        from_secret: next_public_supabase_url
+      NEXT_PUBLIC_SUPABASE_ANON_KEY:
+        from_secret: next_public_supabase_anon_key
+      NEXT_PUBLIC_RECAPTCHA_SITEKEY:
+        from_secret: next_public_recaptcha_sitekey
+      NEXT_PUBLIC_METAMASK_PRIVATE_KEY:
+        from_secret: next_public_metamask_private_key
+      TWILIO_ACCOUNT_SID:
+        from_secret: twilio_account_sid
+      TWILIO_AUTH_TOKEN:
+        from_secret: twilio_auth_token
+      TWILIO_PHONE_NUMBER:
+        from_secret: twilio_phone_number
     commands:
       - apk add gettext
       - ./.deploy/install.sh
@@ -103,6 +117,12 @@ steps:
         from_secret: next_public_recaptcha_sitekey_uat
       NEXT_PUBLIC_METAMASK_PRIVATE_KEY:
         from_secret: next_public_metamask_private_key_uat
+      TWILIO_ACCOUNT_SID:
+        from_secret: twilio_account_sid_uat
+      TWILIO_AUTH_TOKEN:
+        from_secret: twilio_auth_token_uat
+      TWILIO_PHONE_NUMBER:
+        from_secret: twilio_phone_number_uat
     commands:
       - apk add gettext
       - ./.deploy/install.sh
