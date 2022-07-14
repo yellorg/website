@@ -13,7 +13,6 @@ export default async function handler(
             .select('state')
             .eq('address', userAddress)
             .single();
-        
 
         return res.status(200).json({ userStatus: data?.state });
     } catch (error) {
