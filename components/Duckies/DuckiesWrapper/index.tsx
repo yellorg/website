@@ -82,7 +82,7 @@ export const DuckiesLayout: FC<DuckiesLayoutProps> = ({ bounties, faqList }: Duc
         if ((isReady && currentModal === 'metamask') || (supabaseUser && currentModal === 'social_auth')) {
             handleCloseModal();
         }
-    }, [isReady, supabaseUser, account, currentModal]);
+    }, [isReady, supabaseUser, currentModal]);
 
     React.useEffect(() => {
         if (isReady) {

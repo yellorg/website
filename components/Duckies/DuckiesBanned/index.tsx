@@ -3,7 +3,6 @@ import { useRouter } from 'next/router';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import useMetaMask from '../../../hooks/useMetaMask';
 
-
 export const DuckiesBanned = () => {
     const { handleDisconnect } = useMetaMask();
     const router = useRouter();
