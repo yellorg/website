@@ -24,6 +24,15 @@ export default async function handler(
     const token = jwt.sign({ metamaskAddress: recipientAddress }, process.env.JWT_SECRET || '');
     supabase.auth.setAuth(token);
 
+    const { data } = await supabase
+        .from('users')
+        .select('*')
+        .eq('phone_number', recipientPhoneNumber);
+
+    if (data?.length) {
+        return res.status(403).json({ error: 'This phone number is already taken!' });
+    }
+
     const otp = generateOTP();
 
     const message = `Yellow DUCKZ\nYour verification code is: ${otp.slice(0,3)} ${otp.slice(3)}`;
@@ -43,8 +52,8 @@ export default async function handler(
             phone_number: recipientPhoneNumber,
             otp,
         });
-    } catch {
-        return res.status(400).json({});
+    } catch (error) {
+        return res.status(400).json(error);
     }
 
     res.status(200).json({});
