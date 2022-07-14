@@ -13,7 +13,7 @@ export const DuckiesBanned = () => {
     }, []);
 
     return(
-        <div className="flex bg-primary-cta-color-60 justify-center">
+        <div className="flex bg-primary-cta-color-60 justify-center py-28">
             <div className="flex flex-col w-[35rem] items-center my-20">
                 <LazyLoadImage
                     srcSet="/images/components/duckies/duckMafia.png"

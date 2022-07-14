@@ -31,10 +31,12 @@ export const getServerSideProps = async ({ previewData }: any) => {
 };
 
 const Duckies: FC = ({ bounties, faqList }: any): JSX.Element => {
+
+
     return (
         <Web3ReactProvider getLibrary={getLibrary}>
             <ReduxProvider>
-                <div className="flex flex-col overflow-clip min-h-full test-caching-duckies h-screen">
+                <div className="flex flex-col overflow-clip min-h-screen test-caching-duckies">
                     <Navbar />
                     <Alerts />
                     <div className="h-full">

@@ -219,6 +219,7 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
         supabaseUser,
         handleMetamask,
         handleDisconnect,
+        handleOpenModal,
     ]);
 
     const handleSendGAEvent = React.useCallback(() => {
