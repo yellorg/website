@@ -25,7 +25,7 @@ const getTX = async (token: string, account: string) => {
         id: 'referral',
         ref: (decodedJWT as any).ref as string,
         amt: (decodedJWT as any).amt as number,
-        blockExpiration: currentBlock.number + 12,
+        blockExpiration: currentBlock.number + 24,
         limit: 0,
     };
 
