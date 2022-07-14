@@ -92,9 +92,7 @@ export const ClaimRewardModal: React.FC<ClaimRewardModalProps> = ({
     },[isCaptchaNotResolved]);
 
     const renderClaimModalBody = React.useMemo(() => {
-        const [amountToClaim, bountyTitles]: any = !isReferralClaimed
-            ? [10000, ['Referral reward']]
-            : getBountiesClaimableAmount();
+        const [amountToClaim, bountyTitles]: any = getBountiesClaimableAmount();
 
         const renderBountyTitles = bountyTitles.map((bountyTitle: any, index: number) => {
             return (
