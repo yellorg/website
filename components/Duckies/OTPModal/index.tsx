@@ -24,6 +24,7 @@ export const OTPModal: React.FC<OTPModalProps> = ({
     const [phone, setPhone] = React.useState<string>('');
     const [otp, setOtp] = React.useState<string>('');
     const [verifiedPhone, setVerifiedPhone] = React.useState<string>('');
+    const [isCodeSent, setIsCodeSent] = React.useState<boolean>(false);
 
     const { account } = useWallet();
 
@@ -80,13 +81,17 @@ export const OTPModal: React.FC<OTPModalProps> = ({
             <div className="flex flex-col items-center w-full gap-[16px]">
                 {renderBounty}
                 <span className="text-center text-[14px] leading-[22px] font-metro-medium text-text-color-100">{bountyDescription}</span>
-                <PhoneInput savePhone={setPhone} />
+                <PhoneInput
+                    savePhone={setPhone}
+                    isCodeSent={isCodeSent}
+                    setIsCodeSent={setIsCodeSent}
+                />
                 <OTPInput
                     saveOtp={setOtp}
                     isOtpIncorrect={isOtpIncorrect}
                     setIsOtpIncorrect={setIsOtpIncorrect}
                 />
-                {otp.length != 6 ? (
+                {(otp.length !== 6 || !isCodeSent) ? (
                     <div className="bg-neutral-control-color-40 font-metro-bold text-neutral-control-layer-color-40 w-full text-center py-[6px] mt-[8px]">
                         Submit
                     </div>
