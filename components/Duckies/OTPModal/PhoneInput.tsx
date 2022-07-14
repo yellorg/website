@@ -7,10 +7,14 @@ const SEND_CODE_COOLDOWN_SECONDS = 60;
 
 interface PhoneInputProps {
     savePhone: (value: string) => void;
+    isCodeSent: boolean;
+    setIsCodeSent: (value: boolean) => void;
 };
 
 export const PhoneInput: React.FC<PhoneInputProps> = ({
     savePhone,
+    isCodeSent,
+    setIsCodeSent,
 }: PhoneInputProps) => {
     const [isDropdownOpen, setIsDropdownOpen] = React.useState<boolean>(false);
     const [phoneCodeFilterValue, setPhoneCodeFilterValue] = React.useState<string>('');
@@ -18,7 +22,7 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
     const [selectedFlagHref, setSelectedFlagHref] = React.useState<string>('https://cdn-icons-png.flaticon.com/128/197/197591.png');
     const [isInputInFocus, setIsInputInFocus] = React.useState<boolean>(false);
     const [phoneNumber, setPhoneNumber] = React.useState<string>('');
-    const [isCodeSent, setIsCodeSent] = React.useState<boolean>(false);
+
     const [isSendCodeDisabled, setIsSendCodeDisabled] = React.useState<boolean>(false);
     const [isInputInvalid, setIsInputInvalid] = React.useState<boolean>(false);
     const [cooldownLeft, setCooldownLeft] = React.useState<number>(0);
