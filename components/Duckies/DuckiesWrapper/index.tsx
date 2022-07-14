@@ -160,12 +160,12 @@ export const DuckiesLayout: FC<DuckiesLayoutProps> = ({ bounties, faqList }: Duc
                 </div>
             );
         } else {
-             return <DuckiesBanned/>
+             return <DuckiesBanned />;
         }
     },[user, items, handleCloseModal, currentModal, isOpenModal, DuckiesPrizesList, faqList, userStatus])
 
     return (
-        <main className="bg-primary-cta-color-60 pb-[5rem] md:pb-[7.5rem]">
+        <main className="h-full bg-primary-cta-color-60 pb-[5rem] md:pb-[7.5rem]">
             {renderContent}
         </main>
     );
