@@ -5,6 +5,7 @@ import ReCAPTCHA from 'react-google-recaptcha';
 import classnames from 'classnames';
 import useBounties from '../../../../hooks/useBounties';
 import { useAppSelector } from '../../../../app/hooks';
+import { isBrowser } from '../../../../helpers/isBrowser';
 
 interface ClaimRewardModalProps {
     bounties: any;
@@ -21,7 +22,6 @@ export const ClaimRewardModal: React.FC<ClaimRewardModalProps> = ({
 
     const {
         bountiesToClaim,
-        referral_token,
         handleClaimRewards,
         getBountiesClaimableAmount,
         isReferralClaimed,
@@ -148,11 +148,12 @@ export const ClaimRewardModal: React.FC<ClaimRewardModalProps> = ({
             </React.Fragment>
         );
     }, [
-        isReferralClaimed,
         getBountiesClaimableAmount,
         handleClaimRewards,
         captcha,
         isCaptchaNotResolved,
+        claimButtonContainerClassName,
+        claimButtonClassName,
     ]);
 
     const renderClaimRewardModalBody = React.useMemo(() => {
@@ -177,6 +178,8 @@ export const ClaimRewardModal: React.FC<ClaimRewardModalProps> = ({
     ]);
 
     const renderModalBody = React.useMemo(() => {
+        const referral_token = isBrowser() && localStorage.getItem('referral_token');
+
         if ((isReferralClaimed && !bountiesToClaim.length) || (!isReferralClaimed && !referral_token)) {
             return renderNoRewardsModalBody;
         }
@@ -187,7 +190,6 @@ export const ClaimRewardModal: React.FC<ClaimRewardModalProps> = ({
         bountiesToClaim,
         renderNoRewardsModalBody,
         renderClaimRewardModalBody,
-        referral_token,
     ]);
 
     return (

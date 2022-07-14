@@ -67,7 +67,7 @@ export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({
 
             setBounties(paginationBounties)
         }
-    }, [bountyItems, page])
+    }, [bountyItems, page]);
 
     const renderAffiliateLevels = React.useMemo(() => {
         return affiliates.map((affiliateCount: number, index: number) => {
@@ -110,12 +110,10 @@ export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({
         });
     }, [
         bounties,
-        handleClaimReward,
         page,
         isRewardsClaimProcessing,
         isSingleBountyProcessing,
         supabaseUser,
-        setIsSingleBountyProcessing,
     ]);
 
     const handleClickNextButton = React.useCallback((value: number) => {
