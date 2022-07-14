@@ -32,7 +32,7 @@ const getBountyTransactionObject = async (bountyID: string, account: string) => 
         id: bountyID,
         amt: +bountyToClaim.value * 10 ** decimals,
         limit: bountyToClaim.limit,
-        blockExpiration: currentBlock.number + 12,
+        blockExpiration: currentBlock.number + 24,
         ref: '0x0000000000000000000000000000000000000000',
     };
 

@@ -11,16 +11,15 @@ const provider = new ethers.providers.JsonRpcProvider(process.env.NEXT_PUBLIC_PO
 const contract = new ethers.Contract(contractAddress, DuckiesContractBuild.abi, provider);
 const client = createClient();
 
-const getMessage = async (bountyID: string, bounties: any, decimals: number) => {
+const getMessage = async (bountyID: string, bounties: any, decimals: number, currentBlock: number) => {
     const bountyToClaim = bounties.data.slices[0].items.find((item: any) => item.fid === bountyID);
 
     if (bountyToClaim) {
-        const currentBlock = await (provider as any).getBlock();
         const rewardMessage = {
             id: bountyID,
             ref: '0x0000000000000000000000000000000000000000',
             amt: +bountyToClaim?.value * (10 ** decimals),
-            blockExpiration: currentBlock.number + 12,
+            blockExpiration: currentBlock + 24,
             limit: bountyToClaim?.limit,
         };
         const rewardMessageHash = await contract.getMessageHash(rewardMessage);
@@ -38,11 +37,12 @@ const getMessage = async (bountyID: string, bounties: any, decimals: number) => 
 const getBountyTransactionObject = async (bountiesIDs: string[], account: string) => {
     const bounties = await client.getSingle('bounties');
     const decimals = await contract.decimals();
+    const currentBlock = await (provider as any).getBlock();
 
     let messagesObjectToClaim = [];
 
     for (const bounty of bountiesIDs) {
-        const message = await getMessage(bounty, bounties, decimals);
+        const message = await getMessage(bounty, bounties, decimals, currentBlock.number);
 
         if (message) {
             messagesObjectToClaim.push(message);
