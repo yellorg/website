@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { supabase } from '../../../lib/SupabaseConnector';
+import jwt from 'jsonwebtoken';
 
 export default async function handler(
     req: NextApiRequest,
@@ -9,6 +10,9 @@ export default async function handler(
     const recipientPhoneNumber = props.phoneNumber;
     const recipientOTP = props.otp;
     const recipientAddress = props.address;
+
+    const token = jwt.sign({ metamaskAddress: recipientAddress }, process.env.JWT_SECRET);
+    supabase.auth.setAuth(token);
 
     const { count } = await supabase
         .from('otp')
