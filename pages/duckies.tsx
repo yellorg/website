@@ -34,10 +34,10 @@ const Duckies: FC = ({ bounties, faqList }: any): JSX.Element => {
     return (
         <Web3ReactProvider getLibrary={getLibrary}>
             <ReduxProvider>
-                <div className="flex flex-col overflow-clip min-h-full test-caching-duckies">
+                <div className="flex flex-col overflow-clip min-h-full test-caching-duckies h-screen">
                     <Navbar />
                     <Alerts />
-                    <div className="main-wrapper">
+                    <div className="h-full">
                         <DuckiesHead />
                         <DuckiesLayout bounties={bounties} faqList={faqList} />
                     </div>
