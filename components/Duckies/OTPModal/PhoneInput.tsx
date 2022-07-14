@@ -2,6 +2,8 @@ import classNames from 'classnames';
 import React from 'react';
 import useWallet from '../../../hooks/useWallet';
 import Image from 'next/image';
+import { dispatchAlert } from '../../../features/alerts/alertsSlice';
+import { useAppDispatch } from '../../../app/hooks';
 
 const SEND_CODE_COOLDOWN_SECONDS = 60;
 
@@ -30,6 +32,7 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
 
     const dropdownRef = React.useRef(null);
     const { account } = useWallet();
+    const dispatch = useAppDispatch();
 
     React.useEffect(() => {
         savePhone(`+${selectedPhoneCode}${phoneNumber}`);
@@ -127,12 +130,25 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
                 phoneNumber: `+${selectedPhoneCode}${phoneNumber}`,
                 address: account,
             }),
-        }).then((res) => {
-            if (!res.ok) {
-                setIsInputInvalid(true);
+        })
+        .then(async (res) => {
+            const response = await res.json();
+            if (res.status === 403 && response.error) {
+                dispatch(dispatchAlert({
+                    type: 'error',
+                    title: 'Error',
+                    message: response.error,
+                }));
             } else {
-                launchCooldown();
+                if (!res.ok) {
+                    setIsInputInvalid(true);
+                } else {
+                    launchCooldown();
+                }
             }
+        })
+        .catch((error: any) => {
+            console.log(error);
         });
     }, [selectedPhoneCode, phoneNumber, account]);
 
