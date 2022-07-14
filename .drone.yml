@@ -80,6 +80,8 @@ steps:
         from_secret: twilio_auth_token
       TWILIO_PHONE_NUMBER:
         from_secret: twilio_phone_number
+      JWT_SECRET:
+        from_secret: supabase_jwt_secret_uat
     commands:
       - apk add gettext
       - ./.deploy/install.sh

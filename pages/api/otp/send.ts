@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { twilioClient } from '../../../lib/TwilioConnector';
 import { supabase } from '../../../lib/SupabaseConnector';
+import jwt from 'jsonwebtoken';
 
 function generateOTP() {
     let otp = '';
@@ -19,6 +20,9 @@ export default async function handler(
     const props = JSON.parse(req.body);
     const recipientPhoneNumber = props.phoneNumber;
     const recipientAddress = props.address;
+
+    const token = jwt.sign({ metamaskAddress: recipientAddress }, process.env.JWT_SECRET || '');
+    supabase.auth.setAuth(token);
 
     const otp = generateOTP();
 
