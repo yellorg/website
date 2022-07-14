@@ -17,6 +17,7 @@ export default function useBounties(bounties: any) {
     const [isRewardsClaimed, setIsRewardsClaimed] = React.useState<boolean>(false);
     const [isReferralClaimed, setIsReferralClaimed] = React.useState<boolean>(false);
     const [questUpdateTrigger, setQuestUpdateTrigger] = React.useState<boolean>(false);
+    const [phoneVerified, setIsPhoneVerified] = React.useState<boolean>(false);
 
     const dispatch = useAppDispatch();
     const duckiesContract = useDuckiesContract();
@@ -63,7 +64,7 @@ export default function useBounties(bounties: any) {
     }, [isRewardsClaimed, bounties]);
 
     React.useEffect(() => {
-        if (bounties) {
+        if (bounties && account && !bountyItems.length) {
             const newItems = bounties.map((item: any) => {
                 return {
                     ...item,
@@ -72,6 +73,7 @@ export default function useBounties(bounties: any) {
             });
 
             setBountyItems(newItems);
+            getIsPhoneVerified();
         }
     }, [bounties, account]);
 
@@ -80,11 +82,22 @@ export default function useBounties(bounties: any) {
             setQuestUpdateTrigger(!questUpdateTrigger);
         };
         window.addEventListener('reloadQuest', questUpdater);
+        console.log('reloadQuest');
 
         return () => {
             window.removeEventListener('reloadQuest', questUpdater);
         };
     }, [questUpdateTrigger]);
+
+    const getIsPhoneVerified = React.useCallback(async () => {
+        if (account) {
+            const { isPhoneVerified } = await (await fetch(
+                `${window.location.origin}/api/otp/isPhoneVerified?account=${account}`,
+            )).json();
+
+            setIsPhoneVerified(isPhoneVerified);
+        }
+    }, [account]);
 
     const getClaimedBountyInfo = React.useCallback(async (bounty: any) => {
         if (signer) {
@@ -106,13 +119,9 @@ export default function useBounties(bounties: any) {
                     }
                     break;
                 case 'phone':
-                    const { isPhoneVerified } = await (await fetch(
-                        `${window.location.origin}/api/otp/isPhoneVerified?account=${account}`,
-                    )).json();
-
                     if (claimedTimes === bounty.limit) {
                         status = 'claimed';
-                    } else if (isPhoneVerified) {
+                    } else if (phoneVerified) {
                         status = 'claim';
                     }
                     break;
@@ -132,7 +141,14 @@ export default function useBounties(bounties: any) {
             }
         }
         return 0;
-    }, [duckiesContract, signer, bountyItems, getAffiliatesRuleCompleted, questUpdateTrigger, account]);
+    }, [
+        duckiesContract,
+        signer,
+        bountyItems,
+        getAffiliatesRuleCompleted,
+        questUpdateTrigger,
+        phoneVerified,
+    ]);
 
     React.useEffect(() => {
         if (bountyItems.length) {

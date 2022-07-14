@@ -1,15 +1,12 @@
 import useContract from './useContract';
 import useWallet from './useWallet';
-import { useMemo } from 'react';
 import { ethers } from 'ethers';
 import DuckiesContractBuild from '../contracts/artifacts/contracts/Duckies.sol/Duckies.json';
 
-export default function useDuckiesContract() {
-    const { chain, signer } = useWallet();
+const provider = new ethers.providers.JsonRpcProvider(process.env.NEXT_PUBLIC_POLYGON_URL);
 
-    const provider = useMemo(() => {
-        return new ethers.providers.JsonRpcProvider(process.env.NEXT_PUBLIC_POLYGON_URL);
-    }, [chain]);
+export default function useDuckiesContract() {
+    const { signer } = useWallet();
 
     const duckiesContract = useContract(
         process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || '',
