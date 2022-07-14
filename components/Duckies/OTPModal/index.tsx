@@ -40,7 +40,7 @@ export const OTPModal: React.FC<OTPModalProps> = ({
             setVerifiedPhone(data.phone_number);
         }
 
-        if (isSuccess) {
+        if (isSuccess && account) {
             fetchPhone();
         }
     }, [account, isSuccess])
