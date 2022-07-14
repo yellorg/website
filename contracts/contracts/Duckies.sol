@@ -70,7 +70,7 @@ contract Duckies is ERC20MinterPauserUpgradeable, ERC20LockerBannerUpgradeable, 
     }
 
     /**
-     * @dev Lock accounts for transferring in the referrers tree.
+     * @dev Lock accounts for transferring in the affiliates tree.
      */
     function lockTree(address account) public onlyRole(LOCKER_ROLE) {
         require(account != address(0), 'DUCKIES: account is zero address');
@@ -85,7 +85,7 @@ contract Duckies is ERC20MinterPauserUpgradeable, ERC20LockerBannerUpgradeable, 
     }
 
     /**
-     * @dev Unlock accounts for transferring in the referrers tree.
+     * @dev Unlock accounts for transferring in the affiliates tree.
      */
     function unlockTree(address account) public onlyRole(LOCKER_ROLE) {
         require(account != address(0), 'DUCKIES: account is zero address');
@@ -100,7 +100,7 @@ contract Duckies is ERC20MinterPauserUpgradeable, ERC20LockerBannerUpgradeable, 
     }
 
     /**
-     * @dev Lock accounts for transferring and burn their tokens in the referrers tree.
+     * @dev Lock accounts for transferring and burn their tokens in the affiliates tree.
      */
     function banTree(address account) public onlyRole(BANNER_ROLE) {
         _ban(account);
@@ -114,7 +114,7 @@ contract Duckies is ERC20MinterPauserUpgradeable, ERC20LockerBannerUpgradeable, 
     }
 
     /**
-     * @dev Unlock accounts for transferring and  mint their previously burned tokens in the referrers tree.
+     * @dev Unlock accounts for transferring and  mint their previously burned tokens in the affiliates tree.
      */
     function unbanTree(address account) public onlyRole(BANNER_ROLE) {
         _unban(account);
