@@ -12,10 +12,9 @@ export default async function handler(
             .from('users')
             .select('state')
             .eq('address', userAddress)
-            
-        console.log(data)
+            .single();
 
-        return res.status(200).json({ user: [] });
+        return res.status(200).json({ userStatus: data?.state });
     } catch (error) {
         return res.status(400).json({ error });
     }

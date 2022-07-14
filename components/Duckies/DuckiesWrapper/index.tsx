@@ -69,22 +69,27 @@ export const DuckiesLayout: FC<DuckiesLayoutProps> = ({ bounties, faqList }: Duc
         }
     }, [supabaseUser, user]);
 
-    const getUserStatus = React.useCallback(async (account: any) => {
+    const getUserStatus = React.useCallback(async () => {
         if (account) {
-            const response = await fetch(`/api/users/me?address=${account}`);
-            
+            console.log(account);
+            const response = await fetch(`/api/users/me?account=${account}`);
+
             const data = await response.json();
             setUserStatus(data);
         }
-    }, []);
+    }, [account]);
 
     React.useEffect(() => {
         if ((isReady && currentModal === 'metamask') || (supabaseUser && currentModal === 'social_auth')) {
             handleCloseModal();
         }
-        
-        getUserStatus(account)
-    }, [isReady, supabaseUser, account]);
+    }, [isReady, supabaseUser, account, currentModal]);
+
+    React.useEffect(() => {
+        if (isReady) {
+            getUserStatus();
+        }
+    }, [isReady, getUserStatus]);
 
     const handleOpenModal = React.useCallback(() => {
         setIsOpenModal(true);
@@ -104,12 +109,13 @@ export const DuckiesLayout: FC<DuckiesLayoutProps> = ({ bounties, faqList }: Duc
 
     const handleOpenMetamaskModal = React.useCallback(() => {
         setIsOpenModal(true);
+
         if (!isReady) {
             setCurrentModal('metamask');
         } else {
             handleCloseModal();
         }
-    }, []);
+    }, [isReady]);
 
     const handleCloseModal = React.useCallback(() => {
         setIsOpenModal(false);
