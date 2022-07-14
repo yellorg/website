@@ -39,7 +39,7 @@ export const DuckiesPrizes = ({ prizes }: DuckiesPrizesProps) => {
                                     glareBorderRadius="10px"
                                     className="group"
                                 >
-                                    <div className="flex w-[25.5rem] h-[35.813rem] border-2 border-text-color-100 items-center rounded-lg bg-primary-cta-color-80 drop-shadow-md lg:drop-shadow-[0_4.625rem_2.125rem_rgba(166,87,14,0.24)]">
+                                    <div className="flex w-[25.5rem] h-[35.813rem] border-2 border-text-color-100 items-center rounded-lg bg-primary-cta-color-80 shadow-[0_4.625rem_2.125rem_-2.5rem_rgba(166,87,14,0.24)]">
                                         <LazyLoadImage
                                             srcSet={`${prize.imgPath}`}
                                             effect="blur"
@@ -52,23 +52,23 @@ export const DuckiesPrizes = ({ prizes }: DuckiesPrizesProps) => {
                                         <LazyLoadImage
                                             srcSet={`${'/images/components/duckies/sparkles.gif'}`}
                                             threshold={200}
-                                            className="absolute mix-blend-color-dodge opacity-50 w-full h-full"
+                                            className="absolute rounded-lg pr-1 mix-blend-color-dodge opacity-50 w-full h-full"
                                         />
                                         <LazyLoadImage
                                             srcSet={`${'/images/components/duckies/holo.webp'}`}
                                             threshold={200}
-                                            className="absolute mix-blend-color-dodge opacity-20 w-full h-full"
+                                            className="absolute rounded-lg pr-1 mix-blend-color-dodge opacity-20 w-full h-full"
                                         />
                                         <LazyLoadImage
                                             srcSet={`${'/images/components/duckies/coming-soon.gif'}`}
                                             threshold={200}
-                                            className="absolute bottom-16"
+                                            className="absolute pr-1 bottom-16"
                                         />
                                         <div className="group-hover:hidden w-full h-full absolute">
                                             <LazyLoadImage
                                                 srcSet={`${'/images/components/duckies/coming-soon-static.png'}`}
                                                 threshold={200}
-                                                className="absolute bottom-12"
+                                                className="absolute pr-1 bottom-12"
                                             />
                                         </div>
                                     </div>
