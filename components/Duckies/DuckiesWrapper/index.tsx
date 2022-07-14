@@ -39,6 +39,7 @@ export const DuckiesLayout: FC<DuckiesLayoutProps> = ({ bounties, faqList }: Duc
     }, [supportedChain, triedToEagerConnect, active, account]);
 
     const [user, setUser] = React.useState<any>(null);
+    const [userStatus, setUserStatus] = React.useState<any>(null);
 
     const dispatch = useAppDispatch();
     const router = useRouter();
@@ -68,11 +69,22 @@ export const DuckiesLayout: FC<DuckiesLayoutProps> = ({ bounties, faqList }: Duc
         }
     }, [supabaseUser, user]);
 
+    const getUserStatus = React.useCallback(async (account: any) => {
+        if (account) {
+            const response = await fetch(`/api/users/me?address=${account}`);
+            
+            const data = await response.json();
+            setUserStatus(data);
+        }
+    }, []);
+
     React.useEffect(() => {
         if ((isReady && currentModal === 'metamask') || (supabaseUser && currentModal === 'social_auth')) {
             handleCloseModal();
         }
-    }, [isReady, supabaseUser]);
+        
+        getUserStatus(account)
+    }, [isReady, supabaseUser, account]);
 
     const handleOpenModal = React.useCallback(() => {
         setIsOpenModal(true);
