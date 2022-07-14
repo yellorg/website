@@ -10,7 +10,7 @@ export default async function handler(
     const userEmail = props.email;
     const userAddress = props.address;
 
-    const token = jwt.sign({ metamaskAddress: userAddress }, process.env.JWT_SECRET);
+    const token = jwt.sign({ metamaskAddress: userAddress }, process.env.JWT_SECRET || '');
     supabase.auth.setAuth(token);
 
     try {

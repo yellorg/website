@@ -8,7 +8,7 @@ export default async function handler(
 ) {
     const userAddress = req.query.account;
 
-    const token = jwt.sign({ metamaskAddress: userAddress }, process.env.JWT_SECRET);
+    const token = jwt.sign({ metamaskAddress: userAddress }, process.env.JWT_SECRET || '');
     supabase.auth.setAuth(token);
 
     try {

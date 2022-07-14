@@ -21,7 +21,7 @@ export default async function handler(
     const recipientPhoneNumber = props.phoneNumber;
     const recipientAddress = props.address;
 
-    const token = jwt.sign({ metamaskAddress: recipientAddress }, process.env.JWT_SECRET);
+    const token = jwt.sign({ metamaskAddress: recipientAddress }, process.env.JWT_SECRET || '');
     supabase.auth.setAuth(token);
 
     const otp = generateOTP();
