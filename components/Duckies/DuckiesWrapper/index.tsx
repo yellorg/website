@@ -17,6 +17,7 @@ import { useEagerConnect } from '../../../hooks/useEagerConnect';
 import useWallet from '../../../hooks/useWallet';
 import { DuckiesPrizes } from '../DuckiesPrizes'
 import { DuckiesPrizesList } from '../DuckiesPrizes/defaults';
+import { DuckiesBanned } from '../DuckiesBanned';
 import useBounties from '../../../hooks/useBounties';
 
 interface DuckiesLayoutProps {
@@ -38,6 +39,7 @@ export const DuckiesLayout: FC<DuckiesLayoutProps> = ({ bounties, faqList }: Duc
     }, [supportedChain, triedToEagerConnect, active, account]);
 
     const [user, setUser] = React.useState<any>(null);
+    const [userStatus, setUserStatus] = React.useState<string>('');
 
     const dispatch = useAppDispatch();
     const router = useRouter();
@@ -67,11 +69,26 @@ export const DuckiesLayout: FC<DuckiesLayoutProps> = ({ bounties, faqList }: Duc
         }
     }, [supabaseUser, user]);
 
+    const getUserStatus = React.useCallback(async () => {
+        if (account) {
+            const response = await fetch(`/api/users/me?account=${account}`);
+
+            const data = await response.json();
+            setUserStatus(data.userStatus);
+        }
+    }, [account, setUserStatus, userStatus]);
+
     React.useEffect(() => {
         if ((isReady && currentModal === 'metamask') || (supabaseUser && currentModal === 'social_auth')) {
             handleCloseModal();
         }
-    }, [isReady, supabaseUser]);
+    }, [isReady, supabaseUser, currentModal]);
+
+    React.useEffect(() => {
+        if (isReady) {
+            getUserStatus();
+        }
+    }, [isReady, getUserStatus]);
 
     const handleOpenModal = React.useCallback(() => {
         setIsOpenModal(true);
@@ -91,52 +108,65 @@ export const DuckiesLayout: FC<DuckiesLayoutProps> = ({ bounties, faqList }: Duc
 
     const handleOpenMetamaskModal = React.useCallback(() => {
         setIsOpenModal(true);
+
         if (!isReady) {
             setCurrentModal('metamask');
         } else {
             handleCloseModal();
         }
-    }, []);
+    }, [isReady]);
 
     const handleCloseModal = React.useCallback(() => {
         setIsOpenModal(false);
         setCurrentModal('');
     }, []);
 
+    const renderContent = React.useMemo(() => {
+        if (userStatus !== 'banned') {
+            return (
+                <div className="bg-primary-cta-color-60 pb-[5rem] md:pb-[7.5rem]">
+                    <DuckiesHero
+                        bountiesItems={items}
+                        supabaseUser={user}
+                        handleOpenModal={handleOpenModal}
+                    />
+                    <DuckiesAffiliates
+                        bountyTitle={bounties.data.title}
+                        bountiesItems={items}
+                        supabaseUser={user}
+                        handleOpenModal={handleOpenModal}
+                    />
+                    <DuckiesEarnMore
+                        handleOpenModal={handleOpenMetamaskModal}
+                    />
+                    <DuckiesRedeem />
+                    <DuckiesPrizes prizes={DuckiesPrizesList} />
+                    <DuckiesFAQ
+                        faqList={faqList}
+                    />
+                    <MetamaskConnectModal
+                        isOpenModal={isOpenModal && currentModal === 'metamask'}
+                        setIsOpenModal={handleCloseModal}
+                    />
+                    <SocialAuthModal
+                        isOpenModal={isOpenModal && currentModal === 'social_auth'}
+                        setIsOpenModal={handleCloseModal}
+                    />
+                    <ClaimRewardModal
+                        bounties={items}
+                        isOpenModal={isOpenModal && currentModal !== 'metamask' && currentModal !== 'social_auth'}
+                        setIsOpenModal={handleCloseModal}
+                    />
+                </div>
+            );
+        } else {
+             return <DuckiesBanned/>
+        }
+    },[user, items, handleCloseModal, currentModal, isOpenModal, DuckiesPrizesList, faqList, userStatus])
+
     return (
         <main className="bg-primary-cta-color-60 pb-[5rem] md:pb-[7.5rem]">
-            <DuckiesHero
-                bountiesItems={items}
-                supabaseUser={user}
-                handleOpenModal={handleOpenModal}
-            />
-            <DuckiesAffiliates
-                bountyTitle={bounties.data.title}
-                bountiesItems={items}
-                supabaseUser={user}
-                handleOpenModal={handleOpenModal}
-            />
-            <DuckiesEarnMore
-                handleOpenModal={handleOpenMetamaskModal}
-            />
-            <DuckiesRedeem />
-            <DuckiesPrizes prizes={DuckiesPrizesList} />
-            <DuckiesFAQ
-                faqList={faqList}
-            />
-            <MetamaskConnectModal
-                isOpenModal={isOpenModal && currentModal === 'metamask'}
-                setIsOpenModal={handleCloseModal}
-            />
-            <SocialAuthModal
-                isOpenModal={isOpenModal && currentModal === 'social_auth'}
-                setIsOpenModal={handleCloseModal}
-            />
-            <ClaimRewardModal
-                bounties={items}
-                isOpenModal={isOpenModal && currentModal !== 'metamask' && currentModal !== 'social_auth'}
-                setIsOpenModal={handleCloseModal}
-            />
+            {renderContent}
         </main>
     );
 };
