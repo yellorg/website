@@ -103,10 +103,10 @@ export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({
                 <div className="flex w-full items-center justify-between py-2 border-b border-divider-color-40" key={`affiliate-${index}`}>
                     <div className="flex flex-col font-metro-semibold">
                         <div className="text-xl text-text-color-100">
-                            Level {index + 1}
+                            Level {index + 1} invitees
                         </div>
                         <div className="text-base text-text-color-60 cursor-pointer flex items-center w-fit">
-                            {payouts?.[index] ? `${payouts[index]}% commission` : ''}
+                            {payouts?.[index] ? `${payouts[index]}% bonus` : ''}
                         </div>
                     </div>
                     <div className="text-2xl flex items-center font-gilmer-medium text-text-color-100">
@@ -408,7 +408,7 @@ export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({
                         <div className="mr-6 w-1/4 min-w-[18.75rem]">
                             <div className="h-full border-2 rounded p-6 border-text-color-90 bg-body-background-color">
                                 <div className="font-gilmer-bold text-4xl text-text-color-100">
-                                    Your Squad
+                                    Your Team
                                 </div>
                                 <UnloginEyes>
                                     {renderAffiliateLevels}

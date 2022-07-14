@@ -654,8 +654,8 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
                                     <path d="M16.4682 42H22.415V54H16.4682V42Z" fill="black"/>
                                 </svg>
                             </div>
-                                The Fun and Friendly
-                                Web3 reward Token
+                                <div className="lg:w-[37.5rem]">Crypto collectibles.</div>
+                                <span>The fun and friendly reward token.</span>
                             </div>
                         </div>
                         <div className="flex mt-8 flex-col lg:flex-row gap-3">
@@ -723,7 +723,7 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
                                                                     <span className="text-sm text-text-color-100 font-metro-regular">{ENSName || account}</span>
                                                                 </div>
                                                                 <div>
-                                                                    <span className="text-sm text-text-color-100 font-metro-semibold">DUCKZ smart-contract address:</span>
+                                                                    <span className="text-sm text-text-color-100 font-metro-semibold">DUCKIES smart-contract address:</span>
                                                                     <div className="flex">
                                                                         <span className="text-xs text-text-color-70 font-metro-medium bg-neutral-control-color-20 pl-2.5 flex items-center w-[calc(100%-2.625rem)] rounded-tl-1.5 rounded-bl-1.5 break-all">{appConfig.duckzSmartContractAddress}</span>
                                                                         <div className={classNames('relative flex justify-center items-center w-[2.625rem] h-[2.625rem] bg-primary-cta-color-60 hover:bg-primary-cta-color-80 rounded-tr-1.5 rounded-br-1.5 cursor-pointer', { '!bg-system-green-20 !hover:bg-system-green-20': isCopyClicked })} onClick={handleCopy}>
