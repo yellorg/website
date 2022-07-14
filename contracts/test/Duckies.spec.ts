@@ -302,6 +302,91 @@ describe("Duckies", function () {
         duckies.connect(accounts[1]).transfer(accounts[2].address, amount)
       ).to.changeTokenBalances(duckies, [accounts[1], accounts[2]], [-amount, amount])
     });
+
+    it("Should be banTree/unbanTree correctly when user has 3+ levels of affiliates", async () => {
+      const { duckies, owner, accounts, reward, ACCOUNT_BANNED_ROLE }: TestContext = this as any;
+
+      const tree = [{
+        account: accounts[0],
+        children: [{
+          account: accounts[1],
+          children: [{
+            account: accounts[2],
+          }, {
+            account: accounts[3],
+          }],
+        }, {
+          account: accounts[4],
+          children: [{
+            account: accounts[5],
+          }, {
+            account: accounts[6],
+          }],
+        }],
+      }, {
+        account: accounts[7],
+        children: [{
+          account: accounts[8],
+          children: [{
+            account: accounts[9],
+          }, {
+            account: accounts[10],
+          }],
+        }, {
+          account: accounts[11],
+          children: [{
+            account: accounts[12],
+          }, {
+            account: accounts[13],
+          }],
+        }],
+      }]
+      const getNode = (pathId: string) => pathId.split('').reduce((c: any, level) => (c.children ?? c)[+level - 1], tree)
+
+      await reward(getNode('11').account, { ref: getNode('1').account.address })
+      await reward(getNode('111').account, { ref: getNode('11').account.address })
+      await reward(getNode('112').account, { ref: getNode('11').account.address })
+      await reward(getNode('12').account, { ref: getNode('1').account.address })
+      await reward(getNode('121').account, { ref: getNode('12').account.address })
+      await reward(getNode('122').account, { ref: getNode('12').account.address })
+      await reward(getNode('21').account, { ref: getNode('2').account.address })
+      await reward(getNode('211').account, { ref: getNode('21').account.address })
+      await reward(getNode('212').account, { ref: getNode('21').account.address })
+      await reward(getNode('22').account, { ref: getNode('2').account.address })
+      await reward(getNode('221').account, { ref: getNode('22').account.address })
+      await reward(getNode('222').account, { ref: getNode('22').account.address })
+
+      await duckies.connect(owner).banTree(getNode('1').account.address)
+      expect(await duckies.hasRole(ACCOUNT_BANNED_ROLE, getNode('1').account.address)).to.be.true
+      expect(await duckies.hasRole(ACCOUNT_BANNED_ROLE, getNode('11').account.address)).to.be.true
+      expect(await duckies.hasRole(ACCOUNT_BANNED_ROLE, getNode('112').account.address)).to.be.true
+      expect(await duckies.hasRole(ACCOUNT_BANNED_ROLE, getNode('12').account.address)).to.be.true
+      expect(await duckies.hasRole(ACCOUNT_BANNED_ROLE, getNode('121').account.address)).to.be.true
+      expect(await duckies.hasRole(ACCOUNT_BANNED_ROLE, getNode('2').account.address)).to.be.false
+      expect(await duckies.hasRole(ACCOUNT_BANNED_ROLE, getNode('21').account.address)).to.be.false
+      expect(await duckies.hasRole(ACCOUNT_BANNED_ROLE, getNode('211').account.address)).to.be.false
+
+      await duckies.connect(owner).unbanTree(getNode('11').account.address)
+      expect(await duckies.hasRole(ACCOUNT_BANNED_ROLE, getNode('1').account.address)).to.be.true
+      expect(await duckies.hasRole(ACCOUNT_BANNED_ROLE, getNode('11').account.address)).to.be.false
+      expect(await duckies.hasRole(ACCOUNT_BANNED_ROLE, getNode('112').account.address)).to.be.false
+
+      await duckies.connect(owner).banTree(getNode('1').account.address)
+      expect(await duckies.hasRole(ACCOUNT_BANNED_ROLE, getNode('11').account.address)).to.be.true
+      expect(await duckies.hasRole(ACCOUNT_BANNED_ROLE, getNode('112').account.address)).to.be.true
+
+      await duckies.connect(owner).banTree(getNode('22').account.address)
+      expect(await duckies.hasRole(ACCOUNT_BANNED_ROLE, getNode('2').account.address)).to.be.false
+      expect(await duckies.hasRole(ACCOUNT_BANNED_ROLE, getNode('21').account.address)).to.be.false
+      expect(await duckies.hasRole(ACCOUNT_BANNED_ROLE, getNode('22').account.address)).to.be.true
+      expect(await duckies.hasRole(ACCOUNT_BANNED_ROLE, getNode('222').account.address)).to.be.true
+
+      await duckies.connect(owner).banTree(getNode('2').account.address)
+      expect(await duckies.hasRole(ACCOUNT_BANNED_ROLE, getNode('2').account.address)).to.be.true
+      expect(await duckies.hasRole(ACCOUNT_BANNED_ROLE, getNode('21').account.address)).to.be.true
+      expect(await duckies.hasRole(ACCOUNT_BANNED_ROLE, getNode('22').account.address)).to.be.true
+      expect(await duckies.hasRole(ACCOUNT_BANNED_ROLE, getNode('222').account.address)).to.be.true
+    });
   });
 
   describe("Tokenomic", () => {

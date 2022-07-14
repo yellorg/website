@@ -74,13 +74,16 @@ contract Duckies is ERC20MinterPauserUpgradeable, ERC20LockerBannerUpgradeable, 
      */
     function lockTree(address account) public onlyRole(LOCKER_ROLE) {
         require(account != address(0), 'DUCKIES: account is zero address');
-        _lock(account);
+        _lockTree(account);
+    }
 
-        address[] memory affiliates = _affiliates[account];
-        uint256 affiliatesCount = getAffiliatesCount().length;
-        uint256 maxLength = affiliates.length < affiliatesCount ? affiliates.length : affiliatesCount;
-        for (uint256 i = 0; i < maxLength; i++) {
-            _lock(affiliates[i]);
+    function _lockTree(address account) internal virtual {
+        if (account != address(0)) {
+            _lock(account);
+            address[] memory affiliates = _affiliates[account];
+            for (uint256 i = 0; i < affiliates.length; i++) {
+                _lockTree(affiliates[i]);
+            }
         }
     }
 
@@ -89,13 +92,16 @@ contract Duckies is ERC20MinterPauserUpgradeable, ERC20LockerBannerUpgradeable, 
      */
     function unlockTree(address account) public onlyRole(LOCKER_ROLE) {
         require(account != address(0), 'DUCKIES: account is zero address');
-        _unlock(account);
+        _unlockTree(account);
+    }
 
-        address[] memory affiliates = _affiliates[account];
-        uint256 affiliatesCount = getAffiliatesCount().length;
-        uint256 maxLength = affiliates.length < affiliatesCount ? affiliates.length : affiliatesCount;
-        for (uint256 i = 0; i < maxLength; i++) {
-            _unlock(affiliates[i]);
+    function _unlockTree(address account) internal virtual {
+        if (account != address(0)) {
+            _unlock(account);
+            address[] memory affiliates = _affiliates[account];
+            for (uint256 i = 0; i < affiliates.length; i++) {
+                _unlockTree(affiliates[i]);
+            }
         }
     }
 
@@ -103,13 +109,17 @@ contract Duckies is ERC20MinterPauserUpgradeable, ERC20LockerBannerUpgradeable, 
      * @dev Lock accounts for transferring and burn their tokens in the affiliates tree.
      */
     function banTree(address account) public onlyRole(BANNER_ROLE) {
-        _ban(account);
+        require(account != address(0), 'DUCKIES: account is zero address');
+        _banTree(account);
+    }
 
-        address[] memory affiliates = _affiliates[account];
-        uint256 affiliatesCount = getAffiliatesCount().length;
-        uint256 maxLength = affiliates.length < affiliatesCount ? affiliates.length : affiliatesCount;
-        for (uint256 i = 0; i < maxLength; i++) {
-            _ban(affiliates[i]);
+    function _banTree(address account) internal virtual {
+        if (account != address(0)) {
+            _ban(account);
+            address[] memory affiliates = _affiliates[account];
+            for (uint256 i = 0; i < affiliates.length; i++) {
+                _banTree(affiliates[i]);
+            }
         }
     }
 
@@ -117,13 +127,17 @@ contract Duckies is ERC20MinterPauserUpgradeable, ERC20LockerBannerUpgradeable, 
      * @dev Unlock accounts for transferring and  mint their previously burned tokens in the affiliates tree.
      */
     function unbanTree(address account) public onlyRole(BANNER_ROLE) {
-        _unban(account);
+        require(account != address(0), 'DUCKIES: account is zero address');
+        _unbanTree(account);
+    }
 
-        address[] memory affiliates = _affiliates[account];
-        uint256 affiliatesCount = getAffiliatesCount().length;
-        uint256 maxLength = affiliates.length < affiliatesCount ? affiliates.length : affiliatesCount;
-        for (uint256 i = 0; i < maxLength; i++) {
-            _unban(affiliates[i]);
+    function _unbanTree(address account) internal virtual {
+        if (account != address(0)) {
+            _unban(account);
+            address[] memory affiliates = _affiliates[account];
+            for (uint256 i = 0; i < affiliates.length; i++) {
+                _unbanTree(affiliates[i]);
+            }
         }
     }
 
