@@ -195,6 +195,16 @@ export default function useBounties(bounties: any) {
             return;
         }
         dispatch(setIsRewardsClaimProcessing(true));
+        const token = localStorage.getItem('referral_token');
+
+        if (isReferralClaimed && token) {
+            dispatch(dispatchAlert({
+                type: 'error',
+                title: 'Error',
+                message: 'You already have your referral.',
+            }));
+            localStorage.removeItem('referral_token');
+        }
 
         if (!isReferralClaimed && referral_token) {
             try {
