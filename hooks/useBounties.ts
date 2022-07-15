@@ -101,7 +101,7 @@ export default function useBounties(bounties: any) {
     const getClaimedBountyInfo = React.useCallback(async (bounty: any) => {
         let status = '';
 
-        if (signer) {
+        if (signer && !isRewardsClaimProcessing) {
             const bountyId = bounty.fid.split('-')[0];
             const claimedTimes = await duckiesContract?.connect(signer).getAccountBountyLimit(bounty.fid);
 
@@ -148,6 +148,7 @@ export default function useBounties(bounties: any) {
         getAffiliatesRuleCompleted,
         questUpdateTrigger,
         phoneVerified,
+        isRewardsClaimProcessing,
     ]);
 
     React.useEffect(() => {
