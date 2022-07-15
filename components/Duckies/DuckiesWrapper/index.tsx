@@ -18,7 +18,6 @@ import useWallet from '../../../hooks/useWallet';
 import { DuckiesPrizes } from '../DuckiesPrizes'
 import { DuckiesPrizesList } from '../DuckiesPrizes/defaults';
 import { DuckiesBanned } from '../DuckiesBanned';
-import useBounties from '../../../hooks/useBounties';
 
 interface DuckiesLayoutProps {
     bounties: any;
@@ -76,7 +75,7 @@ export const DuckiesLayout: FC<DuckiesLayoutProps> = ({ bounties, faqList }: Duc
             const data = await response.json();
             setUserStatus(data.userStatus);
         }
-    }, [account, setUserStatus, userStatus]);
+    }, [account, supabaseUser, user, setUserStatus, userStatus]);
 
     React.useEffect(() => {
         if ((isReady && currentModal === 'metamask') || (supabaseUser && currentModal === 'social_auth')) {
