@@ -47,7 +47,7 @@ export default async function handler(
 
     const otp = generateOTP();
 
-    const message = `Yellow Duckies\nYour verification code is: ${otp.slice(0, 3)} ${otp.slice(3)}`;
+    const message = `Yellow DUCKIES\nYour verification code is: ${otp.slice(0,3)} ${otp.slice(3)}`;
     try {
         await twilioClient.messages.create({
             from: process.env.TWILIO_PHONE_NUMBER,
