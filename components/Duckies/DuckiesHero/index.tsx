@@ -6,12 +6,12 @@ import { shortenHex } from '../../../utils/utils';
 import { useENSName } from '../../../hooks/useENSName';
 import useMetaMask from '../../../hooks/useMetaMask';
 import { useEagerConnect } from '../../../hooks/useEagerConnect';
-import useDuckiesContract from '../../../hooks/useDuckiesContract';
 import { appConfig } from '../../../config/app';
 import { convertNumberToLiteral } from '../../../helpers/convertNumberToLiteral';
 import * as ga from '../../../lib/ga';
 import classNames from 'classnames';
 import useBounties from '../../../hooks/useBounties';
+import useDuckiesBalance from '../../../hooks/useDuckiesBalance';
 
 interface DuckiesHeroProps {
     handleOpenModal: () => void;
@@ -25,10 +25,8 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
     bountiesItems,
 }: DuckiesHeroProps) => {
     const [isOpenBalancesInfo, setIsOpenBalancesInfo] = React.useState<boolean>(false);
-    const [balance, setBalance] = React.useState<number | undefined>(undefined);
     const [isCopyClicked, setIsCopyClicked] = React.useState<boolean>(false);
 
-    const duckiesContract = useDuckiesContract();
     const { active, account, chain } = useWallet();
     const {
         supportedChain,
@@ -41,24 +39,11 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
         isRewardsClaimed,
         setIsRewardsClaimed,
     } = useBounties(bountiesItems);
+    const balance = useDuckiesBalance();
 
     const isReady = React.useMemo(() => {
         return supportedChain && triedToEagerConnect && active && account;
     }, [supportedChain, triedToEagerConnect, active, account]);
-
-    const getBalance = React.useCallback(async() => {
-        if (account) {
-            const balance = (await duckiesContract?.balanceOf(account).catch((error: any) => {
-                console.error(error)
-                return '0'
-            })).toString();
-            const decimals = await duckiesContract?.decimals().catch((error: any) => {
-                console.error(error)
-                return '2'
-            });
-            setBalance(balance / (10 ** decimals));
-        }
-    }, [account, duckiesContract]);
 
     React.useEffect(() => {
         if (!isCopyClicked)
@@ -71,16 +56,9 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
 
     React.useEffect(() => {
         if (isRewardsClaimed) {
-            getBalance();
             setIsRewardsClaimed(false);
         }
     }, [isRewardsClaimed]);
-
-    React.useEffect(() => {
-        if (isReady) {
-            getBalance();
-        }
-    }, [isReady, getBalance]);
 
     const renderDuckImage = React.useMemo(() => {
         return (
