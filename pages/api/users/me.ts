@@ -1,11 +1,15 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { supabase } from '../../../lib/SupabaseConnector';
+import jwt from 'jsonwebtoken';
 
 export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse
 ) {
     const userAddress = req.query.account;
+
+    const token = jwt.sign({ metamaskAddress: userAddress }, process.env.JWT_SECRET || '');
+    supabase.auth.setAuth(token);
 
     try {
         let { data } = await supabase
