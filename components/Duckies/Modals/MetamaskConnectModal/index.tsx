@@ -57,6 +57,7 @@ export const MetamaskConnectModal: React.FC<MetamaskConnectModalProps> = ({
         handleMetamask,
         isMetaMaskInstalled,
         mainChain,
+        isSwitchedMainChain,
     ]);
 
     return (
