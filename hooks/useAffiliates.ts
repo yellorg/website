@@ -34,6 +34,8 @@ export default function useAffiliates() {
     React.useEffect(() => {
         if (active && account) {
             getAffiliates();
+        } else {
+            setAffiliates([0, 0, 0, 0, 0]);
         }
     }, [active, account, getAffiliates]);
 

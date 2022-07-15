@@ -99,10 +99,11 @@ export default function useBounties(bounties: any) {
     }, [account]);
 
     const getClaimedBountyInfo = React.useCallback(async (bounty: any) => {
+        let status = '';
+
         if (signer) {
             const bountyId = bounty.fid.split('-')[0];
             const claimedTimes = await duckiesContract?.connect(signer).getAccountBountyLimit(bounty.fid);
-            let status = '';
 
             switch (bountyId) {
                 case 'affiliates':
@@ -126,18 +127,18 @@ export default function useBounties(bounties: any) {
                     break;
                 default:
             }
+        }
 
-            const bountyIndex = bountyItems.findIndex((item => item.fid === bounty.fid));
+        const bountyIndex = bountyItems.findIndex((item => item.fid === bounty.fid));
 
-            if (bountyIndex !== -1 && bountyItems[bountyIndex].status !== status) {
-                const newBountyItems = [...bountyItems];
+        if (bountyIndex !== -1 && bountyItems[bountyIndex].status !== status) {
+            const newBountyItems = [...bountyItems];
 
-                newBountyItems[bountyIndex] = {
-                    ...bounty,
-                    status,
-                }
-                setBountyItems(newBountyItems);
+            newBountyItems[bountyIndex] = {
+                ...bounty,
+                status,
             }
+            setBountyItems(newBountyItems);
         }
         return 0;
     }, [
