@@ -81,7 +81,7 @@ export const ClaimRewardModal: React.FC<ClaimRewardModalProps> = ({
                     Not the right time
                 </div>
                 <div className="text-text-color-100 text-sm text-center font-metro-regular font-medium mb-6">
-                    You have already claimed your current rewards. Invite more people and fulfill more bounties to get more DUCKZ
+                    You have already claimed your current rewards. Invite more people and fulfill more bounties to get more DUCKIES
                 </div>
                 <div className="flex items-center justify-center">
                     <div
