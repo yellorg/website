@@ -27,9 +27,10 @@ export default async function handler(
     const { data } = await supabase
         .from('users')
         .select('*')
-        .eq('phone_number', recipientPhoneNumber);
+        .eq('phone_number', recipientPhoneNumber)
+        .single();
 
-    if (data?.length) {
+    if (data?.address !== recipientAddress) {
         return res.status(403).json({ error: 'This phone number is already taken!' });
     }
 
