@@ -28,6 +28,7 @@ export default async function handler(
         .from('users')
         .select('*')
         .eq('phone_number', recipientPhoneNumber)
+        .eq('phone_verified', true)
         .single();
 
     if (data !== null && data.address !== recipientAddress) {
