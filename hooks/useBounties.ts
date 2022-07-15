@@ -9,14 +9,13 @@ import useAffiliates from './useAffiliates';
 import { isBrowser } from '../helpers/isBrowser';
 import useMetaMask from './useMetaMask';
 import { useEagerConnect } from './useEagerConnect';
-import { setIsRewardsClaimProcessing } from '../features/globals/globalsSlice';
+import { setIsPhoneOtpCompleted, setIsRewardsClaimProcessing } from '../features/globals/globalsSlice';
 
 export default function useBounties(bounties: any) {
     const [isSingleBountyProcessing, setIsSingleBountyProcessing] = React.useState<boolean>(false);
     const [bountyItems, setBountyItems] = React.useState<any[]>([]);
     const [isRewardsClaimed, setIsRewardsClaimed] = React.useState<boolean>(false);
     const [isReferralClaimed, setIsReferralClaimed] = React.useState<boolean>(false);
-    const [questUpdateTrigger, setQuestUpdateTrigger] = React.useState<boolean>(false);
     const [phoneVerified, setIsPhoneVerified] = React.useState<boolean>(false);
 
     const dispatch = useAppDispatch();
@@ -27,6 +26,7 @@ export default function useBounties(bounties: any) {
     const triedToEagerConnect = useEagerConnect();
 
     const isRewardsClaimProcessing = useAppSelector(state => state.globals.isRewardsClaimProcessing);
+    const isPhoneOtpCompleted = useAppSelector(state => state.globals.isPhoneOtpCompleted);
 
     const isReady = React.useMemo(() => {
         return supportedChain && triedToEagerConnect && active && account;
@@ -50,8 +50,18 @@ export default function useBounties(bounties: any) {
         })();
     }, [isReady, duckiesContract, isRewardsClaimed, affiliates, referral_token]);
 
+    const getIsPhoneVerified = React.useCallback(async () => {
+        if (account) {
+            const { isPhoneVerified } = await (await fetch(
+                `${window.location.origin}/api/otp/isPhoneVerified?account=${account}`,
+            )).json();
+
+            setIsPhoneVerified(isPhoneVerified);
+        }
+    }, [account]);
+
     React.useEffect(() => {
-        if (isRewardsClaimed && account) {
+        if (isRewardsClaimed || isPhoneOtpCompleted) {
             const newItems = bounties.map((item: any) => {
                 return {
                     ...item,
@@ -59,9 +69,21 @@ export default function useBounties(bounties: any) {
                 }
             });
 
+            if (isPhoneOtpCompleted) {
+                dispatch(setIsPhoneOtpCompleted(false));
+            }
+
             setBountyItems(newItems);
+            getIsPhoneVerified();
         }
-    }, [isRewardsClaimed, bounties, account]);
+    }, [
+        isRewardsClaimed,
+        bounties,
+        account,
+        isPhoneOtpCompleted,
+        getIsPhoneVerified,
+        dispatch,
+    ]);
 
     React.useEffect(() => {
         if (bounties && account && !bountyItems.length) {
@@ -76,27 +98,6 @@ export default function useBounties(bounties: any) {
             getIsPhoneVerified();
         }
     }, [bounties, account]);
-
-    React.useEffect(() => {
-        const questUpdater = () => {
-            setQuestUpdateTrigger(!questUpdateTrigger);
-        };
-        window.addEventListener('reloadQuest', questUpdater);
-
-        return () => {
-            window.removeEventListener('reloadQuest', questUpdater);
-        };
-    }, [questUpdateTrigger]);
-
-    const getIsPhoneVerified = React.useCallback(async () => {
-        if (account) {
-            const { isPhoneVerified } = await (await fetch(
-                `${window.location.origin}/api/otp/isPhoneVerified?account=${account}`,
-            )).json();
-
-            setIsPhoneVerified(isPhoneVerified);
-        }
-    }, [account]);
 
     const getClaimedBountyInfo = React.useCallback(async (bounty: any) => {
         let status = '';
@@ -146,7 +147,6 @@ export default function useBounties(bounties: any) {
         signer,
         bountyItems,
         getAffiliatesRuleCompleted,
-        questUpdateTrigger,
         phoneVerified,
         isRewardsClaimProcessing,
     ]);
