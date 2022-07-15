@@ -30,7 +30,7 @@ export default async function handler(
         .eq('phone_number', recipientPhoneNumber)
         .single();
 
-    if (data?.address !== recipientAddress) {
+    if (data !== null && data.address !== recipientAddress) {
         return res.status(403).json({ error: 'This phone number is already taken!' });
     }
 

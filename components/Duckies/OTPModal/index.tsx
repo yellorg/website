@@ -3,6 +3,8 @@ import { DuckiesModalWindow } from '../DuckiesModalWindow';
 import { PhoneInput } from './PhoneInput';
 import { OTPInput } from './OTPInput';
 import useWallet from '../../../hooks/useWallet';
+import { setIsPhoneOtpCompleted } from '../../../features/globals/globalsSlice';
+import { useAppDispatch } from '../../../app/hooks';
 
 interface OTPModalProps {
     bounty: string | number;
@@ -27,6 +29,7 @@ export const OTPModal: React.FC<OTPModalProps> = ({
     const [isCodeSent, setIsCodeSent] = React.useState<boolean>(false);
 
     const { account } = useWallet();
+    const dispatch = useAppDispatch();
 
     React.useEffect(() => {
         const fetchPhone = async () => {
@@ -54,12 +57,12 @@ export const OTPModal: React.FC<OTPModalProps> = ({
         .then((data: any) => {
             if (data.success) {
                 setIsSuccess(true);
-                window.dispatchEvent(new Event('reloadQuest'));
+                dispatch(setIsPhoneOtpCompleted(true));
             } else {
                 setIsOtpIncorrect(true);
             }
         });
-    }, [otp, phone, account]);
+    }, [otp, phone, account, dispatch]);
 
     const renderBounty = React.useMemo(() => {
         return (
@@ -105,7 +108,7 @@ export const OTPModal: React.FC<OTPModalProps> = ({
                 )}
             </div>
         );
-    }, [otp, handleSubmit, renderBounty, isOtpIncorrect]);
+    }, [otp, handleSubmit, renderBounty, isOtpIncorrect, isCodeSent, bountyDescription]);
 
     const renderSuccess = React.useMemo(() => {
         return (
@@ -122,7 +125,7 @@ export const OTPModal: React.FC<OTPModalProps> = ({
                 </button>
             </div>
         );
-    }, [renderBounty, verifiedPhone]);
+    }, [renderBounty, verifiedPhone, setIsOpen]);
 
     return (
         <DuckiesModalWindow
