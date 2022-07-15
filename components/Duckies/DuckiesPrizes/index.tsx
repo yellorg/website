@@ -39,7 +39,7 @@ export const DuckiesPrizes = ({ prizes }: DuckiesPrizesProps) => {
                                     glareBorderRadius="10px"
                                     className="group"
                                 >
-                                    <div className="flex w-[25.5rem] h-[35.813rem] border-2 border-text-color-100 items-center rounded-lg bg-primary-cta-color-80 shadow-[0_4.625rem_2.125rem_-2.5rem_rgba(166,87,14,0.24)]">
+                                    <div className="flex w-[25.5rem] h-[35.813rem] min-w-[20rem] min-h-[30rem] lg:w-[28vw] lg:h-[38vw] border-2 border-text-color-100 items-center rounded-lg bg-primary-cta-color-80 shadow-[0_4.625rem_2.125rem_-2.5rem_rgba(166,87,14,0.24)]">
                                         <LazyLoadImage
                                             srcSet={`${prize.imgPath}`}
                                             effect="blur"
