@@ -4,8 +4,9 @@ import { DuckiesModalWindow } from '../../DuckiesModalWindow';
 import ReCAPTCHA from 'react-google-recaptcha';
 import classnames from 'classnames';
 import useBounties from '../../../../hooks/useBounties';
-import { useAppSelector } from '../../../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { isBrowser } from '../../../../helpers/isBrowser';
+import { dispatchAlert } from '../../../../app/store';
 
 interface ClaimRewardModalProps {
     bounties: any;
@@ -31,6 +32,7 @@ export const ClaimRewardModal: React.FC<ClaimRewardModalProps> = ({
     const isRewardsClaimProcessing = useAppSelector(state => state.globals.isRewardsClaimProcessing);
 
     let captcha: any = React.useRef();
+    const dispatch = useAppDispatch();
 
     React.useEffect(() => {
         setIsComponentLoading(false);
@@ -39,6 +41,18 @@ export const ClaimRewardModal: React.FC<ClaimRewardModalProps> = ({
             captcha?.current?.reset();
         };
     }, []);
+
+    React.useEffect(() => {
+        const referralToken = localStorage.getItem('referral_token');
+        if (isReferralClaimed && referralToken && isOpenModal) {
+            dispatch(dispatchAlert({
+                type: 'error',
+                title: 'Error',
+                message: 'You already have your referral.',
+            }));
+            localStorage.removeItem('referral_token');
+        }
+    }, [isReferralClaimed, isOpenModal]);
 
     const renderLoadingModalBody = React.useMemo(() => {
         return (

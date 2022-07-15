@@ -210,15 +210,6 @@ export default function useBounties(bounties: any) {
         }
         dispatch(setIsRewardsClaimProcessing(true));
 
-        if (isReferralClaimed && referral_token) {
-            dispatch(dispatchAlert({
-                type: 'error',
-                title: 'Error',
-                message: 'You already have your referral.',
-            }));
-            localStorage.removeItem('referral_token');
-        }
-
         if (!isReferralClaimed && referral_token) {
             try {
                 const response = await fetch(`/api/tx?token=${referral_token}&account=${account}`);
