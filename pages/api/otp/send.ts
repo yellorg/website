@@ -33,9 +33,19 @@ export default async function handler(
         return res.status(403).json({ error: 'This phone number is already taken!' });
     }
 
+    const { data: confirmedAddress } = await supabase
+        .from('users')
+        .select('*')
+        .eq('address', recipientAddress)
+        .eq('phone_verified', true);
+
+    if (confirmedAddress?.length) {
+        return res.status(403).json({ error: 'You have already verify your phone number!' });
+    }
+
     const otp = generateOTP();
 
-    const message = `Yellow DUCKZ\nYour verification code is: ${otp.slice(0,3)} ${otp.slice(3)}`;
+    const message = `Yellow Duckies\nYour verification code is: ${otp.slice(0, 3)} ${otp.slice(3)}`;
     try {
         await twilioClient.messages.create({
             from: process.env.TWILIO_PHONE_NUMBER,
