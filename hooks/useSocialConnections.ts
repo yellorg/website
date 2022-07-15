@@ -25,6 +25,7 @@ const saveEmailToDB = async (email: string, address: string) => {
 
 export default function useSocialConnections(supabaseUser: any) {
     const [sessionAccount, setSessionAccount] = React.useState<string>('');
+    const [userEmail, setUserEmail] = React.useState<string>(supabaseUser?.email || '');
 
     const { active, account } = useWallet();
     const { supportedChain } = useMetaMask();
@@ -33,6 +34,10 @@ export default function useSocialConnections(supabaseUser: any) {
     const isReady = React.useMemo(() => {
         return supportedChain && triedToEagerConnect && active && account;
     }, [supportedChain, triedToEagerConnect, active, account]);
+
+    React.useEffect(() => {
+        setUserEmail(supabaseUser?.email);
+    }, [supabaseUser?.email]);
 
     React.useEffect(() => {
         if (isReady && account) {
@@ -45,13 +50,14 @@ export default function useSocialConnections(supabaseUser: any) {
             setSessionAccount(account || '');
         } else {
             supabaseLogout();
+            setUserEmail('');
             setSessionAccount(account || '');
         }
     }, [account]);
 
     React.useEffect(() => {
-        if (supabaseUser?.email && account) {
-            saveEmailToDB(supabaseUser.email, account);
+        if (userEmail && sessionAccount) {
+            saveEmailToDB(supabaseUser.email, sessionAccount);
         }
-    }, [supabaseUser, account]);
+    }, [userEmail, sessionAccount]);
 }
