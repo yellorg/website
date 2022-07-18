@@ -78,10 +78,10 @@ export const ClaimRewardModal: React.FC<ClaimRewardModalProps> = ({
                     <Image width="156px" height="156px" src="/images/components/duckies/duckNoRewards.png" alt="duck-no-rewards" />
                 </div>
                 <div className="text-text-color-100 text-base text-center font-metro-regular font-semibold mb-1">
-                    Not the right time
+                    Rewards are unavailable
                 </div>
                 <div className="text-text-color-100 text-sm text-center font-metro-regular font-medium mb-6">
-                    You have already claimed your current rewards. Invite more people and fulfill more bounties to get more DUCKIES
+                    It’s just not the right time. Invite more people to your team and complete more quests to get DUCKIES.
                 </div>
                 <div className="flex items-center justify-center">
                     <div
