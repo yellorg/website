@@ -11,8 +11,7 @@ export const Navbar = () => {
 
     const renderNavItems = React.useMemo(() => {
         return NAV_ITEMS.map((n, i) => {
-            const isPageSection = n.to.indexOf('#') > -1;
-            return isPageSection ? (
+            return (
                 <Link key={i} href={n.to}>
                     <a
                         aria-current="page"
@@ -21,18 +20,13 @@ export const Navbar = () => {
                         {n.label}
                     </a>
                 </Link>
-            ) : (
-                <Link key={i} href={`https://yellow.org${n.to}`}>
-                    <a className="mx-[18px] hidden sm:inline-block relative text-text-color-100 text-[18px] leading-[26px] font-metro-semibold navbar__link">{n.label}</a>
-                </Link>
-            );
+            )
         });
     }, []);
 
     const renderMobileNavItems = React.useMemo(() => {
         return NAV_ITEMS.map((n, i) => {
-            const isPageSection = n.to.indexOf('#') > -1;
-            return isPageSection ? (
+            return (
                 <li key={i} className="menu__list-item">
                     <Link href={n.to}>
                         <a
@@ -43,15 +37,7 @@ export const Navbar = () => {
                         </a>
                     </Link>
                 </li>
-            ) : (
-                <li key={i} className="menu__list-item">
-                    <Link href={`https://yellow.org${n.to}`}>
-                        <a aria-current="page" className="menu__link">
-                            {n.label}
-                        </a>
-                    </Link>
-                </li>
-            );
+            )
         });
     }, []);
 
