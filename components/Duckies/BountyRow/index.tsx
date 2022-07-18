@@ -239,7 +239,7 @@ export const BountyRow: React.FC<BountyProps> = ({
         return (
             <div className="flex flex-col">
                 <div className="text-text-color-100 text-sm text-center font-metro-regular font-medium mb-6">
-                    In order for the on-chain transaction to be executed please wait a couple of minutes. Time may vary depending on the queue & gas.
+                    A tiny amount of MATIC will be charged to cover the network fee. Please wait for the transaction to be completed. Time may vary depending on the Polygon Network congestion.
                 </div>
                 <div className="flex items-center justify-center">
                     <div className="button button--outline button--secondary button--shadow-secondary" onClick={() => setIsOpenClaim(false)}>
