@@ -35,7 +35,6 @@ export const DuckiesPrizes = ({ prizes }: DuckiesPrizesProps) => {
                                     tiltMaxAngleY={15}
                                     glareEnable={true} 
                                     glareMaxOpacity={0.3}
-                                    gyroscope={true}
                                     glareBorderRadius="10px"
                                     className="group"
                                 >
