@@ -32,6 +32,10 @@ export const OTPModal: React.FC<OTPModalProps> = ({
     const dispatch = useAppDispatch();
 
     React.useEffect(() => {
+        setIsSuccess(!!isClaimed);
+    }, [isClaimed]);
+
+    React.useEffect(() => {
         const fetchPhone = async () => {
             const { phoneNumber } = await (await fetch(
                 `${window.location.origin}/api/otp/fetchPhoneNumber?account=${account}`,
