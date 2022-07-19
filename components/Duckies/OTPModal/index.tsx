@@ -6,6 +6,7 @@ import useWallet from '../../../hooks/useWallet';
 import { setIsPhoneOtpCompleted } from '../../../features/globals/globalsSlice';
 import { useAppDispatch } from '../../../app/hooks';
 import jwt from 'jsonwebtoken';
+import { Decimal } from '../../Decimal';
 
 interface OTPModalProps {
     bounty: string | number;
@@ -77,7 +78,9 @@ export const OTPModal: React.FC<OTPModalProps> = ({
     const renderBounty = React.useMemo(() => {
         return (
             <div className="bg-primary-cta-color-10 w-full flex justify-center items-center py-[12px] gap-[8px]">
-                <span className="text-[24px] leading-[32px] font-gilmer-medium text-text-color-100">{+bounty || 0}</span>
+                <span className="text-[24px] leading-[32px] font-gilmer-medium text-text-color-100">
+                    {Decimal.format(+bounty || 0, 0, ',')}
+                </span>
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M10.0895 2.22222H3.33398V17.7778H10.0895C14.6673 17.7778 17.534 14.4889 17.534 10C17.534 5.42222 14.6229 2.22222 10.0895 2.22222ZM10.0229 15.0222H6.35621V4.95556H10.0229C12.6895 4.95556 14.4673 6.97778 14.4673 9.93333C14.4673 12.9333 12.6895 15.0222 10.0229 15.0222Z" fill="#ECAA00"/>
                     <path d="M6.11719 0H8.33941V4.44444H6.11719V0Z" fill="#ECAA00"/>
