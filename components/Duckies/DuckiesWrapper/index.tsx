@@ -18,6 +18,7 @@ import useWallet from '../../../hooks/useWallet';
 import { DuckiesPrizes } from '../DuckiesPrizes'
 import { DuckiesPrizesList } from '../DuckiesPrizes/defaults';
 import { DuckiesBanned } from '../DuckiesBanned';
+import jwt from 'jsonwebtoken';
 
 interface DuckiesLayoutProps {
     bounties: any;
@@ -70,7 +71,12 @@ export const DuckiesLayout: FC<DuckiesLayoutProps> = ({ bounties, faqList }: Duc
 
     const getUserStatus = React.useCallback(async () => {
         if (account) {
-            const response = await fetch(`/api/users/me?account=${account}`);
+            const response = await fetch('/api/users/me', {
+                method: 'POST',
+                body: jwt.sign({
+                    account,
+                }, process.env.NEXT_PUBLIC_JWT_PRIVATE_KEY || ''),
+            });
 
             const data = await response.json();
             setUserStatus(data.userStatus);

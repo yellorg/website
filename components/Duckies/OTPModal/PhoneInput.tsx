@@ -4,6 +4,7 @@ import useWallet from '../../../hooks/useWallet';
 import Image from 'next/image';
 import { dispatchAlert } from '../../../features/alerts/alertsSlice';
 import { useAppDispatch } from '../../../app/hooks';
+import jwt from 'jsonwebtoken';
 
 const SEND_CODE_COOLDOWN_SECONDS = 60;
 
@@ -126,10 +127,10 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
     const sendCode = React.useCallback(async () => {
         fetch(`${window.location.origin}/api/otp/send`, {
             method: 'POST',
-            body: JSON.stringify({
+            body: jwt.sign({
                 phoneNumber: `+${selectedPhoneCode}${phoneNumber}`,
                 address: account,
-            }),
+            }, process.env.NEXT_PUBLIC_JWT_PRIVATE_KEY || ''),
         })
         .then(async (res) => {
             const response = await res.json();

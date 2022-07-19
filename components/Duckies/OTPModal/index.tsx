@@ -5,6 +5,7 @@ import { OTPInput } from './OTPInput';
 import useWallet from '../../../hooks/useWallet';
 import { setIsPhoneOtpCompleted } from '../../../features/globals/globalsSlice';
 import { useAppDispatch } from '../../../app/hooks';
+import jwt from 'jsonwebtoken';
 
 interface OTPModalProps {
     bounty: string | number;
@@ -38,7 +39,12 @@ export const OTPModal: React.FC<OTPModalProps> = ({
     React.useEffect(() => {
         const fetchPhone = async () => {
             const { phoneNumber } = await (await fetch(
-                `${window.location.origin}/api/otp/fetchPhoneNumber?account=${account}`,
+                `${window.location.origin}/api/otp/fetchPhoneNumber`, {
+                    method: 'POST',
+                    body: jwt.sign({
+                        account,
+                    }, process.env.NEXT_PUBLIC_JWT_PRIVATE_KEY || ''),
+                }
             )).json();
 
             setVerifiedPhone(phoneNumber);
@@ -52,11 +58,11 @@ export const OTPModal: React.FC<OTPModalProps> = ({
     const handleSubmit = React.useCallback(async () => {
         fetch(`${window.location.origin}/api/otp/verify`, {
             method: 'POST',
-            body: JSON.stringify({
+            body: jwt.sign({
                 phoneNumber: phone,
                 otp,
                 address: account,
-            }),
+            }, process.env.NEXT_PUBLIC_JWT_PRIVATE_KEY || ''),
         }).then((res: Response) => res.json())
         .then((data: any) => {
             if (data.success) {
