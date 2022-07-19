@@ -1,10 +1,27 @@
-# Advanced Sample Hardhat Project
+# Duckies Contracts
 
-This project demonstrates an advanced Hardhat use case, integrating other tools commonly used alongside Hardhat in the ecosystem.
+## Install
 
-The project comes with a sample contract, a test for that contract, a sample script that deploys that contract, and an example of a task implementation, which simply lists the available accounts. It also comes with a variety of other tools, preconfigured to work with the project code.
+```sh
+npm install
+```
 
-Try running some of the following tasks:
+## Deploy contract
+
+```sh
+PRIVATE_KEY=0x.._DEPLOYER_PRIVATE_KEY \     
+CONTRACT_FACTORY=Duckies \
+CONTRACT_ARGS=0x.._ISSUER_ADDRESS \
+npx hardhat run scripts/deploy-upgradable-contract.ts --network polygonMumbai
+```
+
+## Verify contract
+
+```sh
+npx hardhat verify --network polygonMumbai 0x.._CONTRACT_ADDRESS
+```
+
+## Hardhat commands
 
 ```shell
 npx hardhat accounts

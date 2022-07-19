@@ -39,7 +39,17 @@ const config: HardhatUserConfig = {
     ],
   },
   networks: {
-    matic: {
+    hardhat: {
+      accounts: {
+        mnemonic: 'blue yellow soon open speed web then enable rich work success matrix',
+      },
+    },
+    polygon: {
+      url: process.env.POLYGON_URL || "",
+      accounts:
+        process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
+    },
+    polygonMumbai: {
       url: process.env.POLYGON_URL || "",
       accounts:
         process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
@@ -50,7 +60,10 @@ const config: HardhatUserConfig = {
     currency: "USD",
   },
   etherscan: {
-    apiKey: process.env.POLYGON_API_KEY,
+    apiKey: {
+      polygon: process.env.POLYGON_API_KEY!,
+      polygonMumbai: process.env.POLYGON_API_KEY!,
+    },
   },
 };
 
