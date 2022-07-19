@@ -3,23 +3,24 @@ import { supabaseLogout } from '../lib/SupabaseConnector';
 import { useEagerConnect } from './useEagerConnect';
 import useMetaMask from './useMetaMask';
 import useWallet from './useWallet';
+import jwt from 'jsonwebtoken';
 
 const saveAddressToDB = async (address: string) => {
     await fetch(`${window.location.origin}/api/socials/saveAddress`, {
         method: 'POST',
-        body: JSON.stringify({
+        body: jwt.sign({
             address,
-        }),
+        }, process.env.NEXT_PUBLIC_JWT_PRIVATE_KEY || ''),
     });
 };
 
 const saveEmailToDB = async (email: string, address: string) => {
     await fetch(`${window.location.origin}/api/socials/saveEmail`, {
         method: 'POST',
-        body: JSON.stringify({
+        body: jwt.sign({
             email,
             address,
-        }),
+        }, process.env.NEXT_PUBLIC_JWT_PRIVATE_KEY || ''),
     });
 };
 

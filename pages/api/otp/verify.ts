@@ -1,15 +1,15 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { supabase } from '../../../lib/SupabaseConnector';
 import jwt from 'jsonwebtoken';
+import { withDuckiesSession } from '../../../helpers/withDuckiesSession';
 
-export default async function handler(
+async function handler(
     req: NextApiRequest,
     res: NextApiResponse
 ) {
-    const props = JSON.parse(req.body);
-    const recipientPhoneNumber = props.phoneNumber;
-    const recipientOTP = props.otp;
-    const recipientAddress = props.address;
+    const recipientPhoneNumber = req.body.phoneNumber;
+    const recipientOTP = req.body.otp;
+    const recipientAddress = req.body.address;
 
     const token = jwt.sign({ metamaskAddress: recipientAddress }, process.env.JWT_SECRET || '');
     supabase.auth.setAuth(token);
@@ -41,3 +41,5 @@ export default async function handler(
 
     res.status(200).json({ success: false });
 }
+
+export default withDuckiesSession(handler);

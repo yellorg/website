@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { twilioClient } from '../../../lib/TwilioConnector';
 import { supabase } from '../../../lib/SupabaseConnector';
 import jwt from 'jsonwebtoken';
+import { withDuckiesSession } from '../../../helpers/withDuckiesSession';
 
 function generateOTP() {
     let otp = '';
@@ -13,13 +14,12 @@ function generateOTP() {
      return otp;
 }
 
-export default async function handler(
+async function handler(
     req: NextApiRequest,
     res: NextApiResponse,
 ) {
-    const props = JSON.parse(req.body);
-    const recipientPhoneNumber = props.phoneNumber;
-    const recipientAddress = props.address;
+    const recipientPhoneNumber = req.body.phoneNumber;
+    const recipientAddress = req.body.address;
 
     const token = jwt.sign({ metamaskAddress: recipientAddress }, process.env.JWT_SECRET || '');
     supabase.auth.setAuth(token);
@@ -42,7 +42,7 @@ export default async function handler(
         .eq('phone_verified', true);
 
     if (confirmedAddress?.length) {
-        return res.status(403).json({ error: 'You have already verify your phone number!' });
+        return res.status(403).json({ error: 'You have already verified your phone number!' });
     }
 
     const otp = generateOTP();
@@ -70,3 +70,5 @@ export default async function handler(
 
     res.status(200).json({});
 }
+
+export default withDuckiesSession(handler);

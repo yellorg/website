@@ -10,6 +10,7 @@ import { isBrowser } from '../helpers/isBrowser';
 import useMetaMask from './useMetaMask';
 import { useEagerConnect } from './useEagerConnect';
 import { setIsPhoneOtpCompleted, setIsRewardsClaimProcessing } from '../features/globals/globalsSlice';
+import jwt from 'jsonwebtoken';
 
 export default function useBounties(bounties: any) {
     const [isSingleBountyProcessing, setIsSingleBountyProcessing] = React.useState<boolean>(false);
@@ -59,7 +60,12 @@ export default function useBounties(bounties: any) {
     const getIsPhoneVerified = React.useCallback(async () => {
         if (account) {
             const { isPhoneVerified } = await (await fetch(
-                `${window.location.origin}/api/otp/isPhoneVerified?account=${account}`,
+                `${window.location.origin}/api/otp/isPhoneVerified`, {
+                    method: 'POST',
+                    body: jwt.sign({
+                        account,
+                    }, process.env.NEXT_PUBLIC_JWT_PRIVATE_KEY || ''),
+                }
             )).json();
 
             setIsPhoneVerified(isPhoneVerified);
