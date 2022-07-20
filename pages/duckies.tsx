@@ -31,27 +31,27 @@ export const getServerSideProps = async ({ previewData }: any) => {
 };
 
 const Duckies: FC = ({ bounties, faqList }: any): JSX.Element => {
-    const isUAT = (process.env.NEXT_PUBLIC_IS_UAT || 'false');
+    const displayUatWarningMessage = (process.env.NEXT_PUBLIC_IS_UAT || '') === 'true' ? true : false;
 
     return (
-      <Web3ReactProvider getLibrary={getLibrary}>
-        <ReduxProvider>
-          <div className="flex flex-col overflow-clip min-h-screen test-caching-duckies">
-            <Navbar />
-            <Alerts />
-            <div className="h-full">
-              {isUAT == 'true' &&
-                <div id="uat-zone" className="flex bg-[-moz-element(#uat-zone)] repeat text-sm justify-center bg-primary-cta-color-60 border-y-2 border-text-color-100 font-metro-bold">
-                  WARNING! UAT ZONE!
+        <Web3ReactProvider getLibrary={getLibrary}>
+            <ReduxProvider>
+            <div className="flex flex-col overflow-clip min-h-screen test-caching-duckies">
+                <Navbar />
+                <Alerts />
+                <div className="h-full">
+                {displayUatWarningMessage === true &&
+                    <div id="uat-zone" className="flex bg-[-moz-element(#uat-zone)] repeat text-sm justify-center bg-primary-cta-color-60 border-y-2 border-text-color-100 font-metro-bold">
+                    WARNING! UAT ZONE!
+                    </div>
+                }
+                <DuckiesHead />
+                <DuckiesLayout bounties={bounties} faqList={faqList} />
                 </div>
-              }
-              <DuckiesHead />
-              <DuckiesLayout bounties={bounties} faqList={faqList} />
+                <Footer />
             </div>
-            <Footer />
-          </div>
-        </ReduxProvider>
-      </Web3ReactProvider>
+            </ReduxProvider>
+        </Web3ReactProvider>
     );
 };
 
