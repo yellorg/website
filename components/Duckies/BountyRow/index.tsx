@@ -3,11 +3,11 @@ import classnames from 'classnames';
 import { convertNumberToLiteral } from '../../../helpers/convertNumberToLiteral';
 import { DuckiesModalWindow } from '../DuckiesModalWindow';
 import Image from 'next/image';
-import * as ga from '../../../lib/ga';
 import { loginWithProvider } from '../../../lib/SupabaseConnector';
 import { OTPModal } from '../OTPModal';
 import { Decimal } from '../../Decimal';
 import { Captcha } from '../Captcha';
+import { analytics } from '../../../lib/analitics';
 
 export interface BountyItem {
     fid: string;
@@ -87,11 +87,12 @@ export const BountyRow: React.FC<BountyProps> = ({
 
     const handleSelectBountyId = React.useCallback(() => {
         setIsOpenShow(true);
-        ga.event({
-            action: "duckies_bounty_details_click",
+        analytics({
+            type: 'otherEvent',
+            name: 'duckies_bounty_details_click',
             params: {
                 bounty_id: bounty.fid,
-            }
+            },
         });
     }, [bounty]);
 
@@ -221,7 +222,7 @@ export const BountyRow: React.FC<BountyProps> = ({
                     <Captcha
                         shouldResetCaptcha={shouldResetCaptcha}
                         setShouldResetCaptcha={setShouldResetCaptcha}
-                        handleResolveCaptcha={() => setIsCaptchaNotResolved(!isCaptchaNotResolved)}                        
+                        handleResolveCaptcha={() => setIsCaptchaNotResolved(!isCaptchaNotResolved)}
                     />
                 </div>
                 <div className="flex items-center justify-center">

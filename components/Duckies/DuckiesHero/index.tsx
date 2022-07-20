@@ -8,11 +8,11 @@ import useMetaMask from '../../../hooks/useMetaMask';
 import { useEagerConnect } from '../../../hooks/useEagerConnect';
 import { appConfig } from '../../../config/app';
 import { convertNumberToLiteral } from '../../../helpers/convertNumberToLiteral';
-import * as ga from '../../../lib/ga';
 import classNames from 'classnames';
 import useBounties from '../../../hooks/useBounties';
 import useDuckiesBalance from '../../../hooks/useDuckiesBalance';
 import { Decimal } from '../../Decimal';
+import { analytics } from '../../../lib/analitics';
 
 interface DuckiesHeroProps {
     handleOpenModal: () => void;
@@ -202,8 +202,9 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
     ]);
 
     const handleSendGAEvent = React.useCallback(() => {
-        ga.event({
-            action: "duckies_hero_earn_click",
+        analytics({
+            type: 'otherEvent',
+            name: 'duckies_hero_earn_click',
         });
     }, []);
 
