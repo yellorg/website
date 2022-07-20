@@ -65,10 +65,11 @@ export const Navbar = () => {
     const renderMobileNavItems = React.useMemo(() => {
         return NAV_ITEMS.navTabs.map((n, i) => {
             return (
-                <li key={i} className="pr-2">
+                <li key={i} className="menu__list-item">
                     <Link href={n.to}>
                         <a
                             aria-current="page"
+                            className="menu__link menu__link--active"
                         >
                             {n.label}
                         </a>
