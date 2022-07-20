@@ -18,6 +18,7 @@ async function handler(
         .from('otp')
         .select('*', { count: 'exact', head: true })
         .eq('phone_number', recipientPhoneNumber)
+        .eq('address', recipientAddress)
         .eq('otp', recipientOTP);
 
     if (count && count != 0) {
