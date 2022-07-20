@@ -12,7 +12,7 @@ import { useEagerConnect } from '../../../hooks/useEagerConnect';
 import useWallet from '../../../hooks/useWallet';
 import useMetaMask from '../../../hooks/useMetaMask';
 import Image from 'next/image';
-import * as ga from '../../../lib/ga';
+import { analytics } from '../../../lib/analitics';
 
 interface DuckiesEarnMoreProps {
     handleOpenModal: () => void;
@@ -184,8 +184,9 @@ export const DuckiesEarnMore: React.FC<DuckiesEarnMoreProps> = ({
     }, [isBrowserDefined]);
 
     const sendGAEvent = React.useCallback((type: string) => {
-        ga.event({
-            action: "duckies_share_socials_button_click",
+        analytics({
+            type: 'otherEvent',
+            name: 'duckies_share_socials_button_click',
             params: {
                 social_type: type,
             }
@@ -265,15 +266,17 @@ export const DuckiesEarnMore: React.FC<DuckiesEarnMoreProps> = ({
 
     const handleCopy = React.useCallback((value: string) => {
         navigator.clipboard.writeText(value);
-        ga.event({
-            action: "duckies_share_copy_button_click",
+        analytics({
+            type: 'otherEvent',
+            name: 'duckies_share_copy_button_click',
         });
         setIsCopyClicked(true);
     }, []);
 
     const handleSendGAEvent = React.useCallback(() => {
-        ga.event({
-            action: "duckies_share_input_click",
+        analytics({
+            type: 'otherEvent',
+            name: 'duckies_share_input_click',
         });
     }, []);
 

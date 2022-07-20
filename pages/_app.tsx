@@ -7,16 +7,18 @@ import { PrismicProvider } from '@prismicio/react';
 import { PrismicPreview } from '@prismicio/next';
 import { linkResolver, repositoryName } from '../prismicio';
 import React from 'react';
-
-import * as ga from '../lib/ga';
 import { useRouter } from 'next/router';
+import { analytics } from '../lib/analitics';
 
 function MyApp({ Component, pageProps }: AppProps) {
     const router = useRouter();
 
     React.useEffect(() => {
         const handleRouteChange = (url: string) => {
-            ga.pageview(url);
+            analytics({
+                type: 'pageView',
+                name: url,
+            });
         }
         //When the component is mounted, subscribe to router changes
         //and log those page views

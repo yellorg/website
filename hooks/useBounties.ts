@@ -2,8 +2,6 @@ import React from 'react';
 import { dispatchAlert } from '../features/alerts/alertsSlice';
 import useDuckiesContract from './useDuckiesContract';
 import useWallet from './useWallet';
-
-import * as ga from '../lib/ga';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import useAffiliates from './useAffiliates';
 import { isBrowser } from '../helpers/isBrowser';
@@ -11,6 +9,7 @@ import useMetaMask from './useMetaMask';
 import { useEagerConnect } from './useEagerConnect';
 import { setIsPhoneOtpCompleted, setIsRewardsClaimProcessing } from '../features/globals/globalsSlice';
 import jwt from 'jsonwebtoken';
+import { analytics } from '../lib/analitics';
 
 export default function useBounties(bounties: any) {
     const [isSingleBountyProcessing, setIsSingleBountyProcessing] = React.useState<boolean>(false);
@@ -240,11 +239,12 @@ export default function useBounties(bounties: any) {
                         message: 'You have successfully claimed the reward!',
                     }));
                     setIsRewardsClaimed(true);
-                    ga.event({
-                        action: "duckies_claim_success",
+                    analytics({
+                        type: 'otherEvent',
+                        name: 'duckies_claim_success',
                         params: {
                             duckies_amount_claim: 10000,
-                        }
+                        },
                     });
                 } else {
                     localStorage.removeItem('referral_token');
@@ -276,11 +276,12 @@ export default function useBounties(bounties: any) {
                         message: 'You have successfully claimed the reward!',
                     }));
                     setIsRewardsClaimed(true);
-                    ga.event({
-                        action: "duckies_claim_success",
+                    analytics({
+                        type: 'otherEvent',
+                        name: 'duckies_claim_success',
                         params: {
                             duckies_amount_claim: amountToClaim,
-                        }
+                        },
                     });
                 } catch (error) {
                     dispatch(dispatchAlert({

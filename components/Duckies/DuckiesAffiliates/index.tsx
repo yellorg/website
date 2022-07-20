@@ -4,10 +4,10 @@ import useWallet from '../../../hooks/useWallet';
 import { SimplePagination } from '../../Pagination/SimplePagination';
 import { BountyItem, BountyRow } from '../BountyRow';
 import UnloginEyes from '../UnloginEyes';
-import * as ga from '../../../lib/ga';
 import useBounties from '../../../hooks/useBounties';
 import useAffiliates from '../../../hooks/useAffiliates';
 import { useAppSelector } from '../../../app/hooks';
+import { analytics } from '../../../lib/analitics';
 
 interface DuckiesAffiliatesProps {
     bountyTitle: string;
@@ -119,9 +119,9 @@ export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({
     const handleClickNextButton = React.useCallback((value: number) => {
         setPage(value + 1);
         setBounties([]);
-
-        ga.event({
-            action: "duckies_bounty_next_click",
+        analytics({
+            type: 'otherEvent',
+            name: 'duckies_bounty_next_click',
         });
     }, []);
 
@@ -129,8 +129,9 @@ export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({
         setPage(value - 1);
         setBounties([]);
 
-        ga.event({
-            action: "duckies_bounty_previous_click",
+        analytics({
+            type: 'otherEvent',
+            name: 'duckies_bounty_previous_click',
         });
     }, []);
 
