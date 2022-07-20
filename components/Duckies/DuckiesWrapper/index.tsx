@@ -170,7 +170,7 @@ export const DuckiesLayout: FC<DuckiesLayoutProps> = ({ bounties, faqList }: Duc
     },[user, items, handleCloseModal, handleOpenModal, handleOpenMetamaskModal, currentModal, isOpenModal, DuckiesPrizesList, faqList, userStatus])
 
     return (
-        <main className="h-full bg-primary-cta-color-60 pb-[5rem] md:pb-[7.5rem] overflow-scroll">
+        <main className="h-full bg-primary-cta-color-60 pb-[5rem] md:pb-[7.5rem] overflow-scroll no-scrollbar">
             {renderContent}
         </main>
     );
