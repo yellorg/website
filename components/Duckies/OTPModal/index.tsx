@@ -172,19 +172,7 @@ export const OTPModal: React.FC<OTPModalProps> = ({
             <div className="flex flex-col items-center w-full">
                 <span className="text-base text-text-color-100 font-metro-semibold mb-3">Phone number: {verifiedPhone} was verified.</span>
                 {renderBounty}
-<<<<<<< HEAD
-                <span className="text-[16px] leading-[24px] text-text-color-100 font-metro-semibold mt-[12px]">
-                    Success!
-                </span>
-                <span className="text-[14px] leading-[22px] text-text-color-100 font-metro-medium">
-                    You have verified your phone number.
-                </span>
-                <span className="text-[14px] leading-[22px] text-text-color-100 font-metro-medium">
-                    {verifiedPhone}
-                </span>
-=======
                 <span className="text-base text-center text-text-color-100 font-metro-medium mt-5">Can now be claimed as a reward for completing this quest. </span>
->>>>>>> b221028 (fix(duckies): set proper content for successful otp verification)
                 <button
                     className="button button--outline button--secondary button--shadow-secondary mt-[24px]"
                     onClick={() => { setIsOpen(false) }}
