@@ -5,8 +5,7 @@ import Image from 'next/image';
 import { dispatchAlert } from '../../../features/alerts/alertsSlice';
 import { useAppDispatch } from '../../../app/hooks';
 import jwt from 'jsonwebtoken';
-
-const SEND_CODE_COOLDOWN_SECONDS = 60;
+import { appConfig } from '../../../config/app';
 
 interface PhoneInputProps {
     savePhone: (value: string) => void;
@@ -108,20 +107,21 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
         setIsInputInvalid(false);
     }, []);
 
-    const launchCooldown = React.useCallback(() => {
+    const launchCooldown = React.useCallback((customCooldown?: number) => {
+        const cooldown = customCooldown || appConfig.sendOtpDelay
         setIsCodeSent(true);
         setIsSendCodeDisabled(true);
-        setCooldownLeft(SEND_CODE_COOLDOWN_SECONDS);
+        setCooldownLeft(cooldown);
         let timePassed = 0;
 
         const cooldownInterval = setInterval(() => {
-            setCooldownLeft(SEND_CODE_COOLDOWN_SECONDS - ++timePassed);
+            setCooldownLeft(cooldown - ++timePassed);
         }, 1000);
 
         setTimeout(() => {
             clearInterval(cooldownInterval);
             setIsSendCodeDisabled(false);
-        }, SEND_CODE_COOLDOWN_SECONDS * 1000);
+        }, cooldown * 1000);
     }, []);
 
     const sendCode = React.useCallback(async () => {
@@ -134,12 +134,15 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
         })
         .then(async (res) => {
             const response = await res.json();
-            if (res.status === 403 && response.error) {
+            if (response.error) {
                 dispatch(dispatchAlert({
                     type: 'error',
                     title: 'Error',
                     message: response.error,
                 }));
+                if (response.timeLeft) {
+                    launchCooldown(response.timeLeft);
+                }
             } else {
                 if (!res.ok) {
                     setIsInputInvalid(true);
