@@ -198,7 +198,7 @@ export const ClaimRewardModal: React.FC<ClaimRewardModalProps> = ({
     const renderModalBody = React.useMemo(() => {
         const referral_token = isBrowser() && localStorage.getItem('referral_token');
 
-        if ((isReferralClaimed && !bountiesToClaim.length) || (!isReferralClaimed && !referral_token)) {
+        if (((isReferralClaimed && !bountiesToClaim.length) || (!isReferralClaimed && !referral_token)) && !isRewardsClaimProcessing) {
             return renderNoRewardsModalBody;
         }
 
@@ -208,6 +208,7 @@ export const ClaimRewardModal: React.FC<ClaimRewardModalProps> = ({
         bountiesToClaim,
         renderNoRewardsModalBody,
         renderClaimRewardModalBody,
+        isRewardsClaimProcessing,
     ]);
 
     if (isComponentLoading) {
