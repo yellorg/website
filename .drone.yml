@@ -24,70 +24,70 @@ steps:
         from_secret: quay_repo
       registry: quay.io
 
-  # - name: Helm Deploy Prod
-  #   image: alpine/helm:3.8.2
-  #   environment: &envs
-  #     KUBECONF:
-  #       from_secret: kubeconfig_b64
-  #     KUBECONFIG: /root/.kubeconfig
-  #     KUBECONFIG_B64:
-  #       from_secret: kubeconfig_b64
-  #     QUAY_USER:
-  #       from_secret: quay_username
-  #     QUAY_PASS:
-  #       from_secret: quay_password
-  #     QUAY_REPO:
-  #       from_secret: quay_repo
-  #     PULL_SECRET_NAME:
-  #       from_secret: pull_secret_name
-  #     PULL_SECRET_B64:
-  #       from_secret: pull_secret_b64
-  #     HELM_RELEASE:
-  #       from_secret: helm_release
-  #     HELM_CHART:
-  #       from_secret: helm_chart
-  #     HELM_VERSION:
-  #       from_secret: helm_version
-  #     HELM_NAMESPACE:
-  #       from_secret: helm_namespace
-  #     DOMAIN:
-  #       from_secret: domain
-  #     REDIRECT_FROM_DOMAIN:
-  #       from_secret: redirect_from_domain
-  #     SVC_PORT:
-  #       from_secret: svc_port
-  #     NEXT_PUBLIC_MAIN_CHAIN_ID:
-  #       from_secret: next_public_main_chain_id
-  #     NEXT_PUBLIC_POLYGON_URL:
-  #       from_secret: next_public_polygon_url
-  #     NEXT_PUBLIC_CONTRACT_ADDRESS:
-  #       from_secret: next_public_contact_address
-  #     NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID:
-  #       from_secret: next_public_google_tag_manager_id
-  #     NEXT_PUBLIC_GOOGLE_ANALYTICS:
-  #       from_secret: next_public_google_analytics
-  #     NEXT_PUBLIC_SUPABASE_URL:
-  #       from_secret: next_public_supabase_url
-  #     NEXT_PUBLIC_SUPABASE_ANON_KEY:
-  #       from_secret: next_public_supabase_anon_key
-  #     NEXT_PUBLIC_RECAPTCHA_SITEKEY:
-  #       from_secret: next_public_recaptcha_sitekey
-  #     NEXT_PUBLIC_METAMASK_PRIVATE_KEY:
-  #       from_secret: next_public_metamask_private_key
-  #     TWILIO_ACCOUNT_SID:
-  #       from_secret: twilio_account_sid
-  #     TWILIO_AUTH_TOKEN:
-  #       from_secret: twilio_auth_token
-  #     TWILIO_PHONE_NUMBER:
-  #       from_secret: twilio_phone_number
-  #     JWT_SECRET:
-  #       from_secret: supabase_jwt_secret_uat
-  #   commands:
-  #     - apk add gettext
-  #     - ./.deploy/install.sh
-  #   when:
-  #     branch:
-  #     - master
+  - name: Helm Deploy Prod
+    image: alpine/helm:3.8.2
+    environment: &envs
+      KUBECONF:
+        from_secret: kubeconfig_b64
+      KUBECONFIG: /root/.kubeconfig
+      KUBECONFIG_B64:
+        from_secret: kubeconfig_b64
+      QUAY_USER:
+        from_secret: quay_username
+      QUAY_PASS:
+        from_secret: quay_password
+      QUAY_REPO:
+        from_secret: quay_repo
+      PULL_SECRET_NAME:
+        from_secret: pull_secret_name
+      PULL_SECRET_B64:
+        from_secret: pull_secret_b64
+      HELM_RELEASE:
+        from_secret: helm_release
+      HELM_CHART:
+        from_secret: helm_chart
+      HELM_VERSION:
+        from_secret: helm_version
+      HELM_NAMESPACE:
+        from_secret: helm_namespace
+      DOMAIN:
+        from_secret: domain
+      REDIRECT_FROM_DOMAIN:
+        from_secret: redirect_from_domain
+      SVC_PORT:
+        from_secret: svc_port
+      NEXT_PUBLIC_MAIN_CHAIN_ID:
+        from_secret: next_public_main_chain_id
+      NEXT_PUBLIC_POLYGON_URL:
+        from_secret: next_public_polygon_url
+      NEXT_PUBLIC_CONTRACT_ADDRESS:
+        from_secret: next_public_contact_address
+      NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID:
+        from_secret: next_public_google_tag_manager_id
+      NEXT_PUBLIC_GOOGLE_ANALYTICS:
+        from_secret: next_public_google_analytics
+      NEXT_PUBLIC_SUPABASE_URL:
+        from_secret: next_public_supabase_url
+      NEXT_PUBLIC_SUPABASE_ANON_KEY:
+        from_secret: next_public_supabase_anon_key
+      NEXT_PUBLIC_RECAPTCHA_SITEKEY:
+        from_secret: next_public_recaptcha_sitekey
+      NEXT_PUBLIC_METAMASK_PRIVATE_KEY:
+        from_secret: next_public_metamask_private_key
+      TWILIO_ACCOUNT_SID:
+        from_secret: twilio_account_sid
+      TWILIO_AUTH_TOKEN:
+        from_secret: twilio_auth_token
+      TWILIO_PHONE_NUMBER:
+        from_secret: twilio_phone_number
+      JWT_SECRET:
+        from_secret: supabase_jwt_secret_uat
+    commands:
+      - apk add gettext
+      - ./.deploy/install.sh
+    when:
+      branch:
+      - master
 
   - name: Helm Deploy UAT
     image: alpine/helm:3.8.2
