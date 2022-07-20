@@ -18,9 +18,10 @@ export const DuckiesFAQ = ({ faqList }: DuckiesFAQProps) => {
         (index: number) => {
             if (selectedQuestionIndex < index && selectedQuestionIndex != -1) {
                 const elemPosition = (document.getElementById(`faq-${selectedQuestionIndex}`)?.offsetTop || 0);
-                const position = window.pageYOffset - (document.getElementById(`faq-${selectedQuestionIndex}`)?.clientHeight || 0) - 1;
+                const elemSize = (document.getElementById(`faq-${selectedQuestionIndex}`)?.clientHeight || 0) + 1;
+                const position = window.pageYOffset - elemSize;
 
-                if (position < elemPosition || !isMobile) {
+                if (position < elemPosition && isMobile && window.pageYOffset > elemPosition) {
                     window.scrollTo(0, position);
                 }
             }
