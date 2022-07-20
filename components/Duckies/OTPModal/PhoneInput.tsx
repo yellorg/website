@@ -107,20 +107,21 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
         setIsInputInvalid(false);
     }, []);
 
-    const launchCooldown = React.useCallback(() => {
+    const launchCooldown = React.useCallback((customCooldown?: number) => {
+        const cooldown = customCooldown || appConfig.sendOtpDelay
         setIsCodeSent(true);
         setIsSendCodeDisabled(true);
-        setCooldownLeft(appConfig.sendOtpDelay);
+        setCooldownLeft(cooldown);
         let timePassed = 0;
 
         const cooldownInterval = setInterval(() => {
-            setCooldownLeft(appConfig.sendOtpDelay - ++timePassed);
+            setCooldownLeft(cooldown - ++timePassed);
         }, 1000);
 
         setTimeout(() => {
             clearInterval(cooldownInterval);
             setIsSendCodeDisabled(false);
-        }, appConfig.sendOtpDelay * 1000);
+        }, cooldown * 1000);
     }, []);
 
     const sendCode = React.useCallback(async () => {
@@ -139,6 +140,9 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
                     title: 'Error',
                     message: response.error,
                 }));
+                if (response.timeLeft) {
+                    launchCooldown(response.timeLeft);
+                }
             } else {
                 if (!res.ok) {
                     setIsInputInvalid(true);

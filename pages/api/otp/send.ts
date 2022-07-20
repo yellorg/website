@@ -33,7 +33,10 @@ async function handler(
         .single();
 
     if (sendedOTP && new Date(`${sendedOTP.resendAt}Z`) > new Date()) {
-        return res.status(406).json({ error: 'Please wait a bit before resending otp' });
+        return res.status(406).json({
+            error: 'Please wait a bit before resending otp',
+            timeLeft: Math.ceil((+new Date(`${sendedOTP.resendAt}Z`) - +new Date()) / 1000),
+        });
     }
 
     const { data } = await supabase

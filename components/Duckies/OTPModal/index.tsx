@@ -7,8 +7,8 @@ import { setIsPhoneOtpCompleted } from '../../../features/globals/globalsSlice';
 import { useAppDispatch } from '../../../app/hooks';
 import jwt from 'jsonwebtoken';
 import { Decimal } from '../../Decimal';
-import { appConfig } from '../../../config/app';
 import { dispatchAlert } from '../../../app/store';
+import { Captcha } from '../Captcha';
 
 interface OTPModalProps {
     bounty: string | number;
@@ -31,7 +31,8 @@ export const OTPModal: React.FC<OTPModalProps> = ({
     const [otp, setOtp] = React.useState<string>('');
     const [verifiedPhone, setVerifiedPhone] = React.useState<string>('');
     const [isCodeSent, setIsCodeSent] = React.useState<boolean>(false);
-    const [isSubmitDisabled, setIsSubmitDisabled] = React.useState<boolean>(false);
+    const [isCaptchaResolved, setIsCaptchaResolved] = React.useState<boolean>(false);
+    const [shouldResetCaptcha, setShouldResetCaptcha] = React.useState<boolean>(false);
 
     const { account } = useWallet();
     const dispatch = useAppDispatch();
@@ -60,7 +61,8 @@ export const OTPModal: React.FC<OTPModalProps> = ({
     }, [account, isSuccess])
 
     const handleSubmit = React.useCallback(async () => {
-        setIsSubmitDisabled(true);
+        setShouldResetCaptcha(true);
+        setIsCaptchaResolved(false);
 
         fetch(`${window.location.origin}/api/otp/verify`, {
             method: 'POST',
@@ -84,10 +86,6 @@ export const OTPModal: React.FC<OTPModalProps> = ({
                 setIsOtpIncorrect(true);
             }
         });
-
-        setTimeout(() => {
-            setIsSubmitDisabled(false);
-        }, appConfig.verfiyOtpDelay * 1000);
     }, [otp, phone, account, dispatch]);
 
     const renderBounty = React.useMemo(() => {
@@ -122,7 +120,14 @@ export const OTPModal: React.FC<OTPModalProps> = ({
                     isOtpIncorrect={isOtpIncorrect}
                     setIsOtpIncorrect={setIsOtpIncorrect}
                 />
-                {(otp.length !== 6 || !isCodeSent || isSubmitDisabled) ? (
+                <div className="flex justify-center">
+                    <Captcha
+                        shouldResetCaptcha={shouldResetCaptcha}
+                        setShouldResetCaptcha={setShouldResetCaptcha}
+                        handleResolveCaptcha={() => { setIsCaptchaResolved(true) }}
+                    />
+                </div>
+                {(otp.length !== 6 || !isCodeSent || !isCaptchaResolved) ? (
                     <div className="bg-neutral-control-color-40 font-metro-bold text-neutral-control-layer-color-40 w-full text-center py-[6px] mt-[8px]">
                         Submit
                     </div>
@@ -143,7 +148,7 @@ export const OTPModal: React.FC<OTPModalProps> = ({
         isOtpIncorrect,
         isCodeSent,
         bountyDescription,
-        isSubmitDisabled,
+        isCaptchaResolved,
     ]);
 
     const renderSuccess = React.useMemo(() => {
