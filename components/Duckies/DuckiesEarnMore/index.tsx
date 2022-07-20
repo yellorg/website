@@ -68,7 +68,7 @@ export const DuckiesEarnMore: React.FC<DuckiesEarnMoreProps> = ({
         'login-gradient w-full w-[20rem] absolute h-16': !isReady,
     });
 
-    const inputLinkRef = classnames('flex items-center bg-input-background-color border-2 border-text-color-100 rounded mr-4 py-4 px-4 sm:px-5 w-full max-2-full overflow-x-auto', {
+    const inputLinkRef = classnames('flex items-center bg-input-background-color border-2 border-text-color-100 rounded mr-4 py-4 px-4 sm:px-5 w-full max-2-full overflow-x-auto no-scrollbar', {
         'border-r-0 rounded-tr-0 rounded-br-0 left-0 w-[20rem] overflow-hidden': !isReady,
     });
 
