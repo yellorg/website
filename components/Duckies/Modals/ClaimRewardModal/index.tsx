@@ -1,13 +1,13 @@
 import React from 'react';
 import Image from 'next/image';
 import { DuckiesModalWindow } from '../../DuckiesModalWindow';
-import ReCAPTCHA from 'react-google-recaptcha';
 import classnames from 'classnames';
 import useBounties from '../../../../hooks/useBounties';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { isBrowser } from '../../../../helpers/isBrowser';
 import { dispatchAlert } from '../../../../app/store';
 import { Decimal } from '../../../Decimal';
+import { Captcha } from '../../Captcha';
 
 interface ClaimRewardModalProps {
     bounties: any;
@@ -22,6 +22,7 @@ export const ClaimRewardModal: React.FC<ClaimRewardModalProps> = ({
 }: ClaimRewardModalProps) => {
     const [isCaptchaNotResolved, setIsCaptchaNotResolved] = React.useState<boolean>(true);
     const [isComponentLoading, setIsComponentLoading] = React.useState<boolean>(true);
+    const [shouldResetCaptcha, setShouldResetCaptcha] = React.useState<boolean>(false);
 
     const {
         bountiesToClaim,
@@ -32,14 +33,13 @@ export const ClaimRewardModal: React.FC<ClaimRewardModalProps> = ({
     } = useBounties(bounties);
     const isRewardsClaimProcessing = useAppSelector(state => state.globals.isRewardsClaimProcessing);
 
-    let captcha: any = React.useRef();
     const dispatch = useAppDispatch();
 
     React.useEffect(() => {
         setIsComponentLoading(false);
 
         return () => {
-            captcha?.current?.reset();
+            setShouldResetCaptcha(true);
         };
     }, []);
 
@@ -142,18 +142,16 @@ export const ClaimRewardModal: React.FC<ClaimRewardModalProps> = ({
                     {renderBountyTitles}
                 </div>
                 <div className="flex justify-center">
-                    <ReCAPTCHA
-                        ref={captcha}
-                        sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITEKEY || 'changeme'}
-                        onChange={() => setIsCaptchaNotResolved(false)}
-                        className="mb-5 inline-block scale-80 lg:scale-100"
-                        hl="en"
+                    <Captcha
+                        shouldResetCaptcha={shouldResetCaptcha}
+                        setShouldResetCaptcha={setShouldResetCaptcha}
+                        handleResolveCaptcha={() => setIsCaptchaNotResolved(false)}                        
                     />
                 </div>
                 <div className="flex items-center justify-center">
                     <div
                         className={claimButtonContainerClassName}
-                        onClick={() => handleClaimRewards(amountToClaim, isCaptchaNotResolved, setIsCaptchaNotResolved, captcha)}
+                        onClick={() => handleClaimRewards(amountToClaim, isCaptchaNotResolved, setIsCaptchaNotResolved, setShouldResetCaptcha)}
                     >
                         <button
                             className={claimButtonClassName}
@@ -168,7 +166,7 @@ export const ClaimRewardModal: React.FC<ClaimRewardModalProps> = ({
     }, [
         getBountiesClaimableAmount,
         handleClaimRewards,
-        captcha,
+        shouldResetCaptcha,
         isCaptchaNotResolved,
         claimButtonContainerClassName,
         claimButtonClassName,

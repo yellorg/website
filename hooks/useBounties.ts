@@ -212,7 +212,7 @@ export default function useBounties(bounties: any) {
         setIsRewardsClaimed,
     ]);
 
-    const handleClaimRewards = React.useCallback(async (amountToClaim: number, isCaptchaNotResolved: boolean, setIsCaptchaNotResolved: any, captcha: any) => {
+    const handleClaimRewards = React.useCallback(async (amountToClaim: number, isCaptchaNotResolved: boolean, setIsCaptchaNotResolved: any, setShouldResetCaptcha: (value: boolean) => void) => {
         if (!signer
             || !account
             || isRewardsClaimProcessing
@@ -292,7 +292,7 @@ export default function useBounties(bounties: any) {
             }
         }
 
-        captcha?.current?.reset();
+        setShouldResetCaptcha(true);
         setIsCaptchaNotResolved(true);
         dispatch(setIsRewardsClaimProcessing(false));
     }, [
