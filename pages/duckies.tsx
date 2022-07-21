@@ -40,11 +40,11 @@ const Duckies: FC = ({ bounties, faqList }: any): JSX.Element => {
                     <Navbar />
                     <Alerts />
                     <div className="h-full">
-                        {displayUatWarningMessage === true &&
+                        {displayUatWarningMessage && (
                             <div id="uat-zone" className="flex text-sm justify-center bg-primary-cta-color-60 border-y-2 border-text-color-100 font-metro-bold">
                                 WARNING! UAT ZONE!
                             </div>
-                        }
+                        )}
                         <DuckiesHead />
                         <DuckiesLayout bounties={bounties} faqList={faqList} />
                     </div>
