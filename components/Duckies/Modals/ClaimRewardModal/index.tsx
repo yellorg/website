@@ -146,7 +146,7 @@ export const ClaimRewardModal: React.FC<ClaimRewardModalProps> = ({
         return (
             <React.Fragment>
                 <div className="text-text-color-100 text-base text-center font-metro-regular font-semibold mb-1">
-                    Amount
+                    Count
                 </div>
                 <div className="bg-primary-cta-color-10 w-full flex justify-center py-3 mb-4">
                     <div className="text-text-color-100 text-2xl font-gilmer-bold flex items-center">
@@ -161,7 +161,7 @@ export const ClaimRewardModal: React.FC<ClaimRewardModalProps> = ({
                     </div>
                 </div>
                 <div className="text-text-color-100 text-sm text-center font-metro-regular font-medium mb-6">
-                    List of bounties:
+                    Available rewards:
                     {renderBountyTitles}
                 </div>
                 <div className="flex justify-center mb-5">
