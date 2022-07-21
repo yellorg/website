@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 import { withDuckiesSession } from '../../../helpers/withDuckiesSession';
 
 const hidePhoneNumber = (phone: string) => {
-    return phone.replace(phone.slice(2, -3), (match) => {
+    return phone?.replace(phone.slice(2, -3), (match) => {
         return '*'.repeat(match.length);
     });
 }
@@ -27,6 +27,7 @@ async function handler(
 
         return res.status(200).json({ phoneNumber: hidePhoneNumber(data?.phone_number) });
     } catch (error) {
+        console.log(error);
         return res.status(400).json({ error });
     }
 }

@@ -2,10 +2,10 @@ import React from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
 
 export interface CaptchaProps {
-    shouldResetCaptcha: boolean,
-    setShouldResetCaptcha: (value: boolean) => void,
-    handleResolveCaptcha: () => void,
-    handleExpire?: () => void,
+    shouldResetCaptcha: boolean;
+    setShouldResetCaptcha: (value: boolean) => void;
+    handleResolveCaptcha: () => void;
+    handleExpire?: () => void;
 }
 
 export const Captcha = ({
