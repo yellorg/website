@@ -5,12 +5,14 @@ export interface CaptchaProps {
     shouldResetCaptcha: boolean,
     setShouldResetCaptcha: (value: boolean) => void,
     handleResolveCaptcha: () => void,
+    handleExpire?: () => void,
 }
 
 export const Captcha = ({
     shouldResetCaptcha,
     setShouldResetCaptcha,
     handleResolveCaptcha,
+    handleExpire,
 }: CaptchaProps) => {
     const captchaRef: any = React.useRef();
 
@@ -26,7 +28,8 @@ export const Captcha = ({
             ref={captchaRef}
             sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITEKEY || 'changeme'}
             onChange={handleResolveCaptcha}
-            className="mb-5 inline-block scale-80 lg:scale-100"
+            onExpired={handleExpire}
+            className="inline-block scale-80 lg:scale-100"
             hl="en"
         />
     );
