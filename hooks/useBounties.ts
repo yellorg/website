@@ -35,20 +35,15 @@ export default function useBounties(bounties: any) {
     const referral_token = React.useMemo(() => isBrowser() && localStorage.getItem('referral_token'), []);
 
     React.useEffect(() => {
-        if (!isReady) {
+        if (!isReady || !signer) {
             return;
         }
 
         (async () => {
-            const referralLimit = +await duckiesContract?.getAccountBountyLimit('referral');
-
+            const referralLimit = +await duckiesContract?.connect(signer).getAccountBountyLimit('referral');
             setIsReferralClaimed(!referral_token || referralLimit === 1 || affiliates[0] > 0);
-
-            if (referralLimit === 1 || affiliates[0] > 0) {
-                localStorage.removeItem('referral_token');
-            }
         })();
-    }, [isReady, duckiesContract, isRewardsClaimed, affiliates, referral_token]);
+    }, [isReady, duckiesContract, isRewardsClaimed, affiliates, referral_token, signer]);
 
     const getIsPhoneVerified = React.useCallback(async () => {
         if (account) {
