@@ -45,7 +45,7 @@ export const OTPInput: React.FC<OTPInputProps> = ({
     }, [values, selectedIndex]);
 
     const handleInput = React.useCallback((e: any) => {
-        if (focusedIndex < values.length) {
+        if (focusedIndex < values.length && !isNaN(e.target.value)) {
             setValues(
                 ([] as Array<string>).concat(
                     values.slice(0, focusedIndex),
