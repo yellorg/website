@@ -190,7 +190,7 @@ export const OTPModal: React.FC<OTPModalProps> = ({
     return (
         <DuckiesModalWindow
             isOpen={isOpen}
-            headerContent={isSuccess ? "Ducking amazing!" : "Phone verification"}
+            headerContent={isSuccess ? 'Ducking amazing!' : 'Phone verification'}
             bodyContent={isSuccess ? renderSuccess : renderBody}
             setIsOpen={setIsOpen}
         />
