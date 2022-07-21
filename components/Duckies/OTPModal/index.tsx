@@ -41,6 +41,7 @@ export const OTPModal: React.FC<OTPModalProps> = ({
 
     React.useEffect(() => {
         setShouldResetCaptcha(true);
+        setIsCaptchaResolved(false);
     }, [otp]);
 
     React.useEffect(() => {
