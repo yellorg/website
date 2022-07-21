@@ -62,34 +62,31 @@ export default function useMetaMask() {
 
             if (succeed) {
                 return true;
-            } else {
-                try {
-                    await window?.ethereum?.request({
-                        method: 'wallet_addEthereumChain',
-                        params: [
-                            {
-                                chainId: mainChainIdHex,
-                                chainName: mainChain?.name,
-                                rpcUrls: mainChain?.rpc,
-                                nativeCurrency: mainChain?.nativeCurrency,
-                                blockExplorerUrls: mainChain?.explorers?.map(exp => exp.url),
-                            },
-                        ],
-                    });
-                    await switchToMainChain();
-
-                    return true;
-                } catch (addError: any) {
-                    console.error(addError);
-
-                    return false;
-                }
             }
         } catch (error: any) {
             console.error(error);
-
-            return false;
         }
+
+        try {
+            await window?.ethereum?.request({
+                method: 'wallet_addEthereumChain',
+                params: [
+                    {
+                        chainId: mainChainIdHex,
+                        chainName: mainChain?.name,
+                        rpcUrls: mainChain?.rpc,
+                        nativeCurrency: mainChain?.nativeCurrency,
+                        blockExplorerUrls: mainChain?.explorers?.map(exp => exp.url),
+                    },
+                ],
+            });
+            await switchToMainChain();
+
+            return true;
+        } catch (addError: any) {
+            console.error(addError);
+        }
+        return false;
     }, [mainChain, mainChainIdHex, switchToMainChain]);
 
     const handleConnectWallet = useCallback(async (provider: ProviderWhitelist) => {
