@@ -9,6 +9,8 @@ import chains from '../config/chains';
 import { appConfig } from '../config/app';
 import { isBrowser } from '../helpers';
 import { analytics } from '../lib/analitics';
+import { useSetMobileDevice } from './useMobileDevice';
+import { useRouter } from 'next/router';
 
 export default function useMetaMask() {
     const { connectWithProvider, disconnect } = useDApp();
@@ -19,6 +21,8 @@ export default function useMetaMask() {
     const [currentMetamaskChain, setCurrentMetamaskChain] = useState<number>(-1);
 
     const onboarding = useRef<MetaMaskOnboarding>();
+    const isMobile = useSetMobileDevice();
+    const router = useRouter();
 
     const mainChain = useMemo(() => {
         return chains.find(chain => chain.chainId === appConfig.blockchain.mainChainId);
@@ -126,14 +130,22 @@ export default function useMetaMask() {
                 name: 'duckies_connect_metamask_click',
             });
         } else {
-            onboarding.current?.startOnboarding();
+            if (!isMobile) {
+                onboarding.current?.startOnboarding();
+            } else if(navigator.userAgent.toLowerCase().includes('android')){
+                router.push('https://play.google.com/store/apps/details?id=io.metamask');
+            } else if(navigator.userAgent.toLowerCase().includes('iphone')){
+                router.push('http://itunes.apple.com/lb/app/metamask-blockchain-wallet/id1438144202');
+            } else {
+                onboarding.current?.startOnboarding();
+            }
 
             analytics({
                 type: 'otherEvent',
                 name: 'duckies_hero_metamask_install_click',
             });
         }
-    }, [handleConnectWallet, onboarding]);
+    }, [handleConnectWallet, onboarding, isMobile]);
 
     const handleDisconnect = useCallback(() => {
         disconnect();
