@@ -24,6 +24,7 @@ export const ClaimRewardModal: React.FC<ClaimRewardModalProps> = ({
     const [isCaptchaNotResolved, setIsCaptchaNotResolved] = React.useState<boolean>(true);
     const [isComponentLoading, setIsComponentLoading] = React.useState<boolean>(true);
     const [shouldResetCaptcha, setShouldResetCaptcha] = React.useState<boolean>(false);
+    const [claimAmount, setClaimAmount] = React.useState<string | number | undefined>(0);
 
     const {
         bountiesToClaim,
@@ -31,10 +32,17 @@ export const ClaimRewardModal: React.FC<ClaimRewardModalProps> = ({
         getBountiesClaimableAmount,
         isReferralClaimed,
         isSingleBountyProcessing,
+        isRewardsClaimed,
+        setIsRewardsClaimed,
     } = useBounties(bounties);
     const isRewardsClaimProcessing = useAppSelector(state => state.globals.isRewardsClaimProcessing);
 
     const dispatch = useAppDispatch();
+
+    const handleCloseModal = React.useCallback(() => {
+        setIsOpenModal(false);
+        setIsRewardsClaimed(false);
+    }, []);
 
     React.useEffect(() => {
         setIsComponentLoading(false);
@@ -95,14 +103,14 @@ export const ClaimRewardModal: React.FC<ClaimRewardModalProps> = ({
                 <div className="flex items-center justify-center">
                     <div
                         className="button button--outline button--secondary button--shadow-secondary"
-                        onClick={() => { setIsOpenModal(false); }}
+                        onClick={handleCloseModal}
                     >
                         <span className="button__inner">OK</span>
                     </div>
                 </div>
             </div>
         );
-    }, [setIsOpenModal]);
+    }, []);
 
     const claimButtonContainerClassName = React.useMemo(() => {
         return classnames({
@@ -119,6 +127,7 @@ export const ClaimRewardModal: React.FC<ClaimRewardModalProps> = ({
 
     const renderClaimModalBody = React.useMemo(() => {
         const [amountToClaim, bountyTitles]: any = getBountiesClaimableAmount();
+        setClaimAmount(amountToClaim);
 
         const renderBountyTitles = bountyTitles.map((bountyTitle: any, index: number) => {
             return (
@@ -201,8 +210,50 @@ export const ClaimRewardModal: React.FC<ClaimRewardModalProps> = ({
         renderClaimModalBody,
     ]);
 
+    const renderClaimSuccessModalBody = React.useMemo(() => {
+        return (
+            <div className="flex flex-col w-full">
+                <div className="flex justify-center mb-4">
+                    <Image
+                        width="156px"
+                        height="156px"
+                        src="/images/components/duckies/celebration.png"
+                        alt="duck-detective"
+                    />
+                </div>
+                <div className="text-text-color-100 text-base text-center font-metro-semibold mb-1">
+                    Your reward was claimed successfully!
+                </div>
+                <div className="bg-primary-cta-color-10 w-full flex justify-center py-3 mb-4">
+                    <div className="text-text-color-100 text-2xl font-gilmer-bold flex items-center">
+                        {Decimal.format(claimAmount, 0, ',')}
+                        <svg className="ml-3" width="20" height="28" viewBox="0 0 20 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9.51487 3.11111H0V24.8889H9.51487C15.9624 24.8889 20 20.2844 20 14C20 7.59111 15.8998 3.11111 9.51487 3.11111ZM9.42097 21.0311H4.25665V6.93778H9.42097C13.1768 6.93778 15.6808 9.76889 15.6808 13.9067C15.6808 18.1067 13.1768 21.0311 9.42097 21.0311Z" fill="#ECAA00" />
+                            <path d="M3.92 0H7.04989V6.22222H3.92V0Z" fill="#ECAA00" />
+                            <path d="M3.92 21.7778H7.04989V28H3.92V21.7778Z" fill="#ECAA00" />
+                            <path d="M8.61484 0H11.7447V6.22222H8.61484V0Z" fill="#ECAA00" />
+                            <path d="M8.61484 21.7778H11.7447V28H8.61484V21.7778Z" fill="#ECAA00" />
+                        </svg>
+                    </div>
+                </div>
+                <div className="flex items-center justify-center">
+                    <div
+                        className="button button--outline button--secondary button--shadow-secondary"
+                        onClick={handleCloseModal}
+                    >
+                        <span className="button__inner">OK</span>
+                    </div>
+                </div>
+            </div>
+        )
+    }, [claimAmount]);
+
     const renderModalBody = React.useMemo(() => {
         const referral_token = isBrowser() && localStorage.getItem('referral_token');
+
+        if (isRewardsClaimed) {
+            return renderClaimSuccessModalBody;
+        }
 
         if (((isReferralClaimed && !bountiesToClaim.length) || (!isReferralClaimed && !referral_token)) && !isRewardsClaimProcessing) {
             return renderNoRewardsModalBody;
@@ -214,7 +265,9 @@ export const ClaimRewardModal: React.FC<ClaimRewardModalProps> = ({
         bountiesToClaim,
         renderNoRewardsModalBody,
         renderClaimRewardModalBody,
+        renderClaimSuccessModalBody,
         isRewardsClaimProcessing,
+        isRewardsClaimed,
     ]);
 
     if (isComponentLoading) {
