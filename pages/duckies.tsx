@@ -31,7 +31,8 @@ export const getServerSideProps = async ({ previewData }: any) => {
 };
 
 const Duckies: FC = ({ bounties, faqList }: any): JSX.Element => {
-    const displayUatWarningMessage = (process.env.NEXT_PUBLIC_DEV_MODE || '') === 'true' ? true : false;
+    const displayUatWarningMessage = process.env.NEXT_PUBLIC_DEV_MODE === 'true' ? true : false;
+    console.log(displayUatWarningMessage);
 
     return (
         <Web3ReactProvider getLibrary={getLibrary}>
