@@ -23,6 +23,7 @@ secrets:
   TWILIO_AUTH_TOKEN: "${TWILIO_AUTH_TOKEN}"
   TWILIO_PHONE_NUMBER: "${TWILIO_PHONE_NUMBER}"
   JWT_SECRET: "${JWT_SECRET}"
+  NEXT_PUBLIC_DEV_MODE: "${NEXT_PUBLIC_DEV_MODE}"
 
 externalSecretName: yellow-org-external
 

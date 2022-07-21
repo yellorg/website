@@ -31,7 +31,7 @@ export const getServerSideProps = async ({ previewData }: any) => {
 };
 
 const Duckies: FC = ({ bounties, faqList }: any): JSX.Element => {
-    const displayUatWarningMessage = (process.env.NEXT_PUBLIC_IS_UAT || '') === 'true' ? true : false;
+    const displayUatWarningMessage = (process.env.NEXT_PUBLIC_DEV_MODE || '') === 'true' ? true : false;
 
     return (
         <Web3ReactProvider getLibrary={getLibrary}>
@@ -42,7 +42,7 @@ const Duckies: FC = ({ bounties, faqList }: any): JSX.Element => {
                     <div className="h-full">
                         {displayUatWarningMessage && (
                             <div id="uat-zone" className="flex text-sm justify-center bg-primary-cta-color-60 border-y-2 border-text-color-100 font-metro-bold">
-                                WARNING! UAT ZONE!
+                                WARNING! TEST MODE ZONE!
                             </div>
                         )}
                         <DuckiesHead />
