@@ -119,6 +119,8 @@ steps:
         from_secret: next_public_recaptcha_sitekey_uat
       NEXT_PUBLIC_METAMASK_PRIVATE_KEY:
         from_secret: next_public_metamask_private_key_uat
+      NEXT_PUBLIC_DEV_MODE:
+        from_secret: next_public_dev_mode_uat
       TWILIO_ACCOUNT_SID:
         from_secret: twilio_account_sid_uat
       TWILIO_AUTH_TOKEN:
