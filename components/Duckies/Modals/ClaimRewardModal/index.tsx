@@ -71,6 +71,13 @@ export const ClaimRewardModal: React.FC<ClaimRewardModalProps> = ({
         }
     }, [isReferralClaimed, isOpenModal, dispatch]);
 
+    React.useEffect(() => {
+        if (!isRewardsClaimed) {
+            const [amountToClaim]: any = getBountiesClaimableAmount();
+            setClaimAmount(amountToClaim);
+        }
+    }, [isRewardsClaimed, getBountiesClaimableAmount]);
+
     const renderLoadingModalBody = React.useMemo(() => {
         return (
             <React.Fragment>
@@ -127,7 +134,6 @@ export const ClaimRewardModal: React.FC<ClaimRewardModalProps> = ({
 
     const renderClaimModalBody = React.useMemo(() => {
         const [amountToClaim, bountyTitles]: any = getBountiesClaimableAmount();
-        setClaimAmount(amountToClaim);
 
         const renderBountyTitles = bountyTitles.map((bountyTitle: any, index: number) => {
             return (
