@@ -38,6 +38,10 @@ export const OTPModal: React.FC<OTPModalProps> = ({
     const dispatch = useAppDispatch();
 
     React.useEffect(() => {
+        setShouldResetCaptcha(true);
+    }, [otp]);
+
+    React.useEffect(() => {
         setIsSuccess(!!isClaimed);
     }, [isClaimed]);
 
@@ -88,6 +92,11 @@ export const OTPModal: React.FC<OTPModalProps> = ({
         });
     }, [otp, phone, account, dispatch]);
 
+    const handleResolveCaptcha = React.useCallback(() => {
+        setIsCaptchaResolved(true);
+        setShouldResetCaptcha(false);
+    }, []);
+
     const renderBounty = React.useMemo(() => {
         return (
             <div className="bg-primary-cta-color-10 w-full flex justify-center items-center py-[12px] gap-[8px]">
@@ -120,13 +129,16 @@ export const OTPModal: React.FC<OTPModalProps> = ({
                     isOtpIncorrect={isOtpIncorrect}
                     setIsOtpIncorrect={setIsOtpIncorrect}
                 />
-                <div className="flex justify-center">
-                    <Captcha
-                        shouldResetCaptcha={shouldResetCaptcha}
-                        setShouldResetCaptcha={setShouldResetCaptcha}
-                        handleResolveCaptcha={() => { setIsCaptchaResolved(true) }}
-                    />
-                </div>
+                {otp.length == 6 && (
+                    <div className="flex justify-center">
+                        <Captcha
+                            shouldResetCaptcha={shouldResetCaptcha}
+                            setShouldResetCaptcha={setShouldResetCaptcha}
+                            handleResolveCaptcha={handleResolveCaptcha}
+                            handleExpire={() => { setIsCaptchaResolved(false); }}
+                        />
+                    </div>
+                )}
                 {(otp.length !== 6 || !isCodeSent || !isCaptchaResolved) ? (
                     <div className="bg-neutral-control-color-40 font-metro-bold text-neutral-control-layer-color-40 w-full text-center py-[6px] mt-[8px]">
                         Submit
@@ -149,6 +161,7 @@ export const OTPModal: React.FC<OTPModalProps> = ({
         isCodeSent,
         bountyDescription,
         isCaptchaResolved,
+        shouldResetCaptcha,
     ]);
 
     const renderSuccess = React.useMemo(() => {

@@ -227,7 +227,7 @@ export const BountyRow: React.FC<BountyProps> = ({
                 <div className="text-text-color-100 text-sm text-center font-metro-regular font-medium mb-6">
                     {bounty.description}
                 </div>
-                <div className="flex justify-center">
+                <div className="flex justify-center mb-5">
                     <Captcha
                         shouldResetCaptcha={shouldResetCaptcha}
                         setShouldResetCaptcha={setShouldResetCaptcha}

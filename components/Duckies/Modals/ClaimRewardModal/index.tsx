@@ -149,7 +149,7 @@ export const ClaimRewardModal: React.FC<ClaimRewardModalProps> = ({
                     List of bounties:
                     {renderBountyTitles}
                 </div>
-                <div className="flex justify-center">
+                <div className="flex justify-center mb-5">
                     <Captcha
                         shouldResetCaptcha={shouldResetCaptcha}
                         setShouldResetCaptcha={setShouldResetCaptcha}

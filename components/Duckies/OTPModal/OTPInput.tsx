@@ -46,14 +46,14 @@ export const OTPInput: React.FC<OTPInputProps> = ({
 
     const handleInput = React.useCallback((e: any) => {
         if (focusedIndex < values.length) {
-            setValues(
-                ([] as Array<string>).concat(
-                    values.slice(0, focusedIndex),
-                    e.target.value[0],
-                    values.slice(focusedIndex + 1),
-                ),
+            const newStringValue = e.target.value.replaceAll(/[^\d]/g, '');
+            const newValues = ([] as Array<string>).concat(
+                values.slice(0, focusedIndex),
+                ...newStringValue,
+                values.slice(focusedIndex + newStringValue.length)
             );
-            setSelectedIndex(focusedIndex + 1 >= values.length ? values.length - 1 : focusedIndex + 1);
+            setValues(newValues.slice(0,6));
+            setSelectedIndex(focusedIndex + newStringValue.length >= values.length ? values.length - 1 : focusedIndex + newStringValue.length);
         }
     }, [values, focusedIndex]);
 
