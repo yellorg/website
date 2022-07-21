@@ -2,6 +2,7 @@ import React from 'react';
 import { DuckiesModalWindow } from '../../DuckiesModalWindow';
 import Image from 'next/image';
 import { loginWithProvider } from '../../../../lib/SupabaseConnector';
+import { analytics } from '../../../../lib/analitics';
 
 interface SocialAuthModalProps {
     isOpenModal: boolean;
@@ -14,6 +15,14 @@ export const SocialAuthModal: React.FC<SocialAuthModalProps> = ({
 }: SocialAuthModalProps) => {
     const handleSocialAuth = React.useCallback((provider: string) => {
         loginWithProvider(provider);
+
+        analytics({
+            type: 'otherEvent',
+            name: 'duckies_modal_connect_social',
+            params: {
+                social: provider,
+            }
+        });
     }, []);
 
     const renderModalBody = React.useMemo(() => {

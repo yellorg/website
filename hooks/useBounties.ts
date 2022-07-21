@@ -180,6 +180,13 @@ export default function useBounties(bounties: any) {
         const bountyToClaim = bountyItems.find((item: any) => item.fid === id);
 
         if (bountyToClaim && signer && !isCaptchaNotResolved) {
+            analytics({
+                type: 'otherEvent',
+                name: 'duckies_modal_claim_rewards',
+                params: {
+                    duckies_amount_claim: bountyToClaim.value,
+                },
+            });
             dispatch(setIsRewardsClaimProcessing(true));
             const { transaction } = await (await fetch(
                 `/api/bountyTx?bountyID=${bountyToClaim.fid}&&account=${account}`
@@ -194,12 +201,26 @@ export default function useBounties(bounties: any) {
                     message: 'You have successfully claimed the reward!',
                 }));
                 setIsRewardsClaimed(true);
+                analytics({
+                    type: 'otherEvent',
+                    name: 'duckies_claim_rewards_success',
+                    params: {
+                        duckies_amount_claim: bountyToClaim.value,
+                    },
+                });
             } catch (error) {
                 dispatch(dispatchAlert({
                     type: 'error',
                     title: 'Error',
                     message: 'Something went wrong! Please, try again!',
                 }));
+                analytics({
+                    type: 'otherEvent',
+                    name: 'duckies_error',
+                    params: {
+                        errorMessage: 'Something went wrong during reward claim',
+                    },
+                });
             }
             dispatch(setIsRewardsClaimProcessing(false));
         }
@@ -225,6 +246,13 @@ export default function useBounties(bounties: any) {
 
         if (!isReferralClaimed && referral_token) {
             try {
+                analytics({
+                    type: 'otherEvent',
+                    name: 'duckies_modal_claim_rewards',
+                    params: {
+                        duckies_amount_claim: 10000,
+                    },
+                });
                 const response = await fetch(`/api/tx?token=${referral_token}&account=${account}`);
 
                 if (response.status !== 400 && response.status !== 500) {
@@ -241,7 +269,7 @@ export default function useBounties(bounties: any) {
                     setIsRewardsClaimed(true);
                     analytics({
                         type: 'otherEvent',
-                        name: 'duckies_claim_success',
+                        name: 'duckies_claim_rewards_success',
                         params: {
                             duckies_amount_claim: 10000,
                         },
@@ -253,6 +281,13 @@ export default function useBounties(bounties: any) {
                         title: 'Error',
                         message: 'Something went wrong! Please, try again!',
                     }));
+                    analytics({
+                        type: 'otherEvent',
+                        name: 'duckies_error',
+                        params: {
+                            errorMessage: 'Something went wrong during rewards claim',
+                        },
+                    });
                 }
             } catch (error) {
                 dispatch(dispatchAlert({
@@ -260,9 +295,23 @@ export default function useBounties(bounties: any) {
                     title: 'Error',
                     message: 'Something went wrong! Please, try again!',
                 }));
+                analytics({
+                    type: 'otherEvent',
+                    name: 'duckies_error',
+                    params: {
+                        errorMessage: 'Something went wrong during rewards claim',
+                    },
+                });
             }
         } else {
             if (bountiesToClaim.length) {
+                analytics({
+                    type: 'otherEvent',
+                    name: 'duckies_modal_claim_rewards',
+                    params: {
+                        duckies_amount_claim: amountToClaim,
+                    },
+                });
                 const { transaction } = await (await fetch(
                     `/api/allBountiesTx?bountyIDs=${bountiesToClaim}&account=${account}`
                 )).json();
@@ -278,7 +327,7 @@ export default function useBounties(bounties: any) {
                     setIsRewardsClaimed(true);
                     analytics({
                         type: 'otherEvent',
-                        name: 'duckies_claim_success',
+                        name: 'duckies_claim_rewards_success',
                         params: {
                             duckies_amount_claim: amountToClaim,
                         },
@@ -289,6 +338,13 @@ export default function useBounties(bounties: any) {
                         title: 'Error',
                         message: 'Something went wrong! Please, try again!',
                     }));
+                    analytics({
+                        type: 'otherEvent',
+                        name: 'duckies_error',
+                        params: {
+                            errorMessage: 'Something went wrong during rewards claim',
+                        },
+                    });
                 }
             }
         }

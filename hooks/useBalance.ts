@@ -1,44 +1,52 @@
-import type { ethers } from 'ethers'
-import { BigNumber } from 'ethers'
-import { useEffect, useState } from 'react'
-import useSWR from 'swr'
-import useBlockNumber from './useBlockNumber'
+import type { ethers } from 'ethers';
+import { BigNumber } from 'ethers';
+import { useEffect, useState } from 'react';
+import useSWR from 'swr';
+import { analytics } from '../lib/analitics';
+import useBlockNumber from './useBlockNumber';
 
 export async function getBalance(
-  _: string,
-  provider: any,
-  address: string,
-  __: number,
+    _: string,
+    provider: any,
+    address: string,
+    __: number,
 ): Promise<BigNumber> {
-  return provider.getBalance(address)
+    return provider.getBalance(address);
 }
 
 export default function useBalance(
-  provider: ethers.providers.Web3Provider,
-  address: string,
+    provider: ethers.providers.Web3Provider,
+    address: string,
 ) {
-  const [balance, setBalance] = useState<BigNumber>()
-  const blockNumber = useBlockNumber(100)
+    const [balance, setBalance] = useState<BigNumber>();
+    const blockNumber = useBlockNumber(100);
 
-  const key = ['useBalance', provider, address, blockNumber]
-  const { data: latestBalance, error } = useSWR(
-    key.every((k) => typeof k !== 'undefined') ? key : null,
-    getBalance,
-    {
-      revalidateOnFocus: false,
-      revalidateOnReconnect: false,
-    },
-  )
+    const key = ['useBalance', provider, address, blockNumber];
+    const { data: latestBalance, error } = useSWR(
+        key.every((k) => typeof k !== 'undefined') ? key : null,
+        getBalance,
+        {
+            revalidateOnFocus: false,
+            revalidateOnReconnect: false,
+        },
+    );
 
-  useEffect(() => {
-    if (typeof latestBalance !== 'undefined') {
-      setBalance(latestBalance)
+    useEffect(() => {
+        if (typeof latestBalance !== 'undefined') {
+            setBalance(latestBalance);
+        }
+    }, [latestBalance]);
+
+    if (error) {
+        analytics({
+            type: 'otherEvent',
+            name: 'duckies_error',
+            params: {
+                errorMessage: error.message,
+            }
+        });
+        console.log(`[useBalance] Error:`, error, provider, address, blockNumber);
     }
-  }, [latestBalance])
 
-  if (error) {
-    console.log(`[useBalance] Error:`, error, provider, address, blockNumber)
-  }
-
-  return balance
+    return balance;
 }

@@ -58,11 +58,20 @@ export const DuckiesEarnMore: React.FC<DuckiesEarnMoreProps> = ({
         }, 700);
     }, [isCopyClicked]);
 
+    const handleClickConnectMetamask = React.useCallback(() => {
+        handleOpenModal();
+
+        analytics({
+            type: 'otherEvent',
+            name: 'duckies_connect_metamask_earn_more',
+        });
+    }, [handleOpenModal]);
+
     const renderMetamaskButton = React.useCallback(() => (
-        <div onClick={handleOpenModal} className="button button--outline button--secondary button--shadow-secondary">
+        <div onClick={handleClickConnectMetamask} className="button button--outline button--secondary button--shadow-secondary">
             <span className="button__inner">Connect Metamask</span>
         </div>
-    ), [handleOpenModal]);
+    ), [handleClickConnectMetamask]);
 
     const inputLink = classnames('', {
         'login-gradient w-full w-[20rem] absolute h-16': !isReady,
@@ -183,12 +192,12 @@ export const DuckiesEarnMore: React.FC<DuckiesEarnMoreProps> = ({
         }
     }, [isBrowserDefined]);
 
-    const sendGAEvent = React.useCallback((type: string) => {
+    const handleSocialIconClick = React.useCallback((social: string) => {
         analytics({
             type: 'otherEvent',
-            name: 'duckies_share_socials_button_click',
+            name: 'duckies_referral_link_socials_click',
             params: {
-                social_type: type,
+                social,
             }
         });
     }, []);
@@ -200,13 +209,13 @@ export const DuckiesEarnMore: React.FC<DuckiesEarnMoreProps> = ({
                     className="w-12 h-12 mr-1.5 ml-1.5 last:mr-0 after:!rounded-[50%] after:!bottom-[-7px] sm:after:!bottom-[-3px] before:hidden button button--secondary button--shadow-secondary"
                     key={`social-${index}`}
                 >
-                    <span className="button__inner !bg-transparent !p-0 !w-12 !h-12 !rounded-[50%]" onClick={() => sendGAEvent(social.type)}>
+                    <span className="button__inner !bg-transparent !p-0 !w-12 !h-12 !rounded-[50%]" onClick={() => handleSocialIconClick(social.type)}>
                         {social.icon}
                     </span>
                 </div>
             );
         });
-    }, [socials, sendGAEvent]);
+    }, [socials, handleSocialIconClick]);
 
     const renderHypnoduck = React.useMemo(() => {
         if (!isReady) {
@@ -268,16 +277,9 @@ export const DuckiesEarnMore: React.FC<DuckiesEarnMoreProps> = ({
         navigator.clipboard.writeText(value);
         analytics({
             type: 'otherEvent',
-            name: 'duckies_share_copy_button_click',
+            name: 'duckies_referral_link_copy_click',
         });
         setIsCopyClicked(true);
-    }, []);
-
-    const handleSendGAEvent = React.useCallback(() => {
-        analytics({
-            type: 'otherEvent',
-            name: 'duckies_share_input_click',
-        });
     }, []);
 
     return (
@@ -288,7 +290,7 @@ export const DuckiesEarnMore: React.FC<DuckiesEarnMoreProps> = ({
                     {renderReferrerHeader}
                     <div className={classnames('flex w-full justify-center flex-col', { 'items-center': !isReady, 'items-left': isReady })}>
                         <div className={classnames('flex relative items-center max-w-screen sm:w-auto -mx-3.5 px-3.5 sm:max-w-[43.75rem] mb-6 sm:mb-5', { 'w-screen': isReady })}>
-                            <div className={inputLinkRef} onClick={handleSendGAEvent} onFocus={handleSendGAEvent}>
+                            <div className={inputLinkRef}>
                                 <div className={classnames("text-text-color-100 text-base font-metro-regular font-bold whitespace-nowrap", { 'overflow-hidden': !isReady })}>
                                     {`${shareableLinkPrefix}${shareableLink}`}
                                 </div>

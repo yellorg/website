@@ -83,18 +83,27 @@ export const BountyRow: React.FC<BountyProps> = ({
             setLoading(false);
             setIsSingleBountyProcessing(false)
         }
-    }, [handleClaim, bounty.fid, isCaptchaNotResolved]);
+    }, [handleClaim, bounty.fid, isCaptchaNotResolved, setIsSingleBountyProcessing]);
 
     const handleSelectBountyId = React.useCallback(() => {
         setIsOpenShow(true);
         analytics({
             type: 'otherEvent',
-            name: 'duckies_bounty_details_click',
+            name: 'duckies_bounties_show_more_details_click',
             params: {
                 bounty_id: bounty.fid,
             },
         });
     }, [bounty]);
+
+    const handleClickClaimReward = React.useCallback(() => {
+        setIsOpenClaim(true);
+
+        analytics({
+            type: 'otherEvent',
+            name: 'duckies_bounties_claim_click',
+        });
+    }, []);
 
     const renderBountyStatus = React.useMemo(() => {
         if ((loading && isSingleBountyProcessing) || (bounty.status === 'claim' && isLoading && !isSingleBountyProcessing)) {
@@ -108,7 +117,7 @@ export const BountyRow: React.FC<BountyProps> = ({
         switch (bounty.status) {
             case 'claim':
                 return (
-                    <div onClick={() => setIsOpenClaim(true)} className="button button--outline button--secondary button--shadow-secondary">
+                    <div onClick={handleClickClaimReward} className="button button--outline button--secondary button--shadow-secondary">
                         <span className="button__inner">Claim</span>
                     </div>
                 );
@@ -121,7 +130,7 @@ export const BountyRow: React.FC<BountyProps> = ({
             default:
                 return null;
         }
-    }, [bounty, loading, isLoading, isSingleBountyProcessing]);
+    }, [bounty, loading, isLoading, isSingleBountyProcessing, handleClickClaimReward]);
 
     const renderBounty = React.useMemo(() => {
         return (
@@ -232,7 +241,14 @@ export const BountyRow: React.FC<BountyProps> = ({
                 </div>
             </div>
         );
-    }, [bounty, handleClaimReward, shouldResetCaptcha, isCaptchaNotResolved]);
+    }, [
+        bounty,
+        handleClaimReward,
+        shouldResetCaptcha,
+        isCaptchaNotResolved,
+        claimButtonClassName,
+        claimButtonContainerClassName,
+    ]);
 
     const renderLoadingModalBody = React.useMemo(() => {
         return (
@@ -338,7 +354,7 @@ export const BountyRow: React.FC<BountyProps> = ({
                 setIsOpen={setIsOpenShow}
             />
         );
-    }, [isOpenShow, bounty.title, renderDetailsModalBody]);
+    }, [isOpenShow, renderDetailsModalBody, bounty]);
 
     const renderModalTitle = React.useMemo(() => {
         if (!supabaseUser) {

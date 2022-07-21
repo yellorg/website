@@ -114,6 +114,8 @@ export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({
         isRewardsClaimProcessing,
         isSingleBountyProcessing,
         supabaseUser,
+        handleClaimReward,
+        setIsSingleBountyProcessing,
     ]);
 
     const handleClickNextButton = React.useCallback((value: number) => {
@@ -121,7 +123,7 @@ export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({
         setBounties([]);
         analytics({
             type: 'otherEvent',
-            name: 'duckies_bounty_next_click',
+            name: 'duckies_bounties_table_next_page_click',
         });
     }, []);
 
@@ -131,9 +133,18 @@ export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({
 
         analytics({
             type: 'otherEvent',
-            name: 'duckies_bounty_previous_click',
+            name: 'duckies_bounties_table_prev_page_click',
         });
     }, []);
+
+    const handleClaimAllClick = React.useCallback(() => {
+        handleOpenModal();
+
+        analytics({
+            type: 'otherEvent',
+            name: 'duckies_bounties_claim_all_click',
+        });
+    }, [handleOpenModal]);
 
     return (
         <React.Fragment>
@@ -155,7 +166,7 @@ export const DuckiesAffiliates: React.FC<DuckiesAffiliatesProps> = ({
                                 <div className="font-gilmer-bold text-4xl text-text-color-100 flex justify-between mb-2">
                                     {bountyTitle}
                                     {bountiesToClaim.length > 1 && (
-                                        <div onClick={handleOpenModal} className="button button--outline button--secondary button--shadow-secondary">
+                                        <div onClick={handleClaimAllClick} className="button button--outline button--secondary button--shadow-secondary">
                                             <span className="button__inner">Claim All</span>
                                         </div>
                                     )}

@@ -31,7 +31,6 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
     const { active, account, chain } = useWallet();
     const {
         supportedChain,
-        handleMetamask,
         handleDisconnect,
     } = useMetaMask();
     const ENSName = useENSName(account);
@@ -60,6 +59,66 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
             setIsRewardsClaimed(false);
         }
     }, [isRewardsClaimed]);
+
+    const handleClaimRewardButtonClick = React.useCallback(() => {
+        handleOpenModal();
+
+        analytics({
+            type: 'otherEvent',
+            name: 'duckies_claim_reward_hero',
+            params: {
+                status: isReady ? (supabaseUser ? 'socials connected' : 'metamask connected' ) : 'not logged in',
+            },
+        });
+    }, [isReady, supabaseUser, handleOpenModal]);
+
+    const handleClickConnectMetamask = React.useCallback(() => {
+        handleOpenModal();
+
+        analytics({
+            type: 'otherEvent',
+            name: 'duckies_connect_metamask_hero',
+        });
+    }, [handleOpenModal]);
+
+    const handleClickConnectSocials = React.useCallback(() => {
+        handleOpenModal();
+
+        analytics({
+            type: 'otherEvent',
+            name: 'duckies_connect_socials_hero',
+        });
+    }, [handleOpenModal]);
+
+    const handleClickEarnMore = React.useCallback(() => {
+        analytics({
+            type: 'otherEvent',
+            name: 'duckies_earn_more_button_click',
+        });
+    }, []);
+
+    const handleClickReadFAQ = React.useCallback(() => {
+        analytics({
+            type: 'otherEvent',
+            name: 'duckies_read_faq_click',
+        });
+    }, []);
+
+    const handleHoverInfoIcon = React.useCallback(() => {
+        setIsOpenBalancesInfo(true);
+
+        analytics({
+            type: 'otherEvent',
+            name: 'duckies_balance_info_hover',
+        });
+    }, []);
+
+    const handleHoverDuckImage = React.useCallback(() => {
+        analytics({
+            type: 'otherEvent',
+            name: 'duckies_balance_duck_icon_hover',
+        });
+    }, []);
 
     const renderDuckImage = React.useMemo(() => {
         return (
@@ -99,7 +158,7 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
 
         if (!supabaseUser) {
             return (
-                <>
+                <React.Fragment>
                     {renderDuckImage}
                     <div className="absolute top-[-2px] z-20 flex justify-center items-center">
                         <svg className="w-[14px] h-[14px] md:w-[24px] md:h-[24px]" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -139,12 +198,12 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
                         </svg>
                     </div>
                     {renderDuckBubble}
-                </>
+                </React.Fragment>
             );
         }
 
         return (
-            <>
+            <React.Fragment>
                 <div className="absolute w-[84px] md:w-[161px] h-[84px] md:h-[161px] bg-system-green-10 rounded-full p-1 gradient-green">
                     {renderDuckImage}
                 </div>
@@ -159,14 +218,14 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
                     </div>
                 </div>
                 {renderDuckBubble}
-            </>
+            </React.Fragment>
         );
-    }, [isReady, supabaseUser, renderDuckBubble, renderDuckImage]);
+    }, [isReady, supabaseUser, renderDuckBubble, renderDuckImage, handleHoverDuckImage]);
 
     const renderBalanceCircleButton = React.useMemo(() => {
         if (!isReady) {
            return (
-                <div onClick={handleOpenModal} className="w-full button button--outline button--secondary button--shadow-secondary">
+                <div onClick={handleClickConnectMetamask} className="w-full button button--outline button--secondary button--shadow-secondary">
                     <span className="button__inner !py-[6px] !px-[18px] !justify-center">Connect Metamask</span>
                 </div>
            );
@@ -175,7 +234,7 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
         if (!supabaseUser) {
             return (
                 <>
-                    <div onClick={handleOpenModal} className="text-center lg:w-full mr-[24px] lg:mr-0 mt-[16px] !mr-0 button button--outline button--secondary button--shadow-secondary">
+                    <div onClick={handleClickConnectSocials} className="text-center lg:w-full mr-[24px] lg:mr-0 mt-[16px] !mr-0 button button--outline button--secondary button--shadow-secondary">
                         <span className="button__inner !py-[6px] !px-[18px] !justify-center">Connect Social</span>
                     </div>
                     <div onClick={handleDisconnect} className="group flex flex-row items-center gap-1 mt-2 cursor-pointer">
@@ -196,21 +255,19 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
     }, [
         isReady,
         supabaseUser,
-        handleMetamask,
         handleDisconnect,
-        handleOpenModal,
+        handleClickConnectMetamask,
+        handleClickConnectSocials,
     ]);
-
-    const handleSendGAEvent = React.useCallback(() => {
-        analytics({
-            type: 'otherEvent',
-            name: 'duckies_hero_earn_click',
-        });
-    }, []);
 
     const handleCopy = React.useCallback(() => {
         navigator.clipboard.writeText(appConfig.duckiesSmartContractAddress);
         setIsCopyClicked(true);
+
+        analytics({
+            type: 'otherEvent',
+            name: 'duckies_balance_info_sc_copy',
+        });
     }, []);
 
     return (
@@ -249,11 +306,11 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
                             </div>
                         </div>
                         <div className="flex mt-8 flex-col lg:flex-row gap-3">
-                            <div onClick={handleOpenModal} className="w-full lg:w-fit button button--outline button--secondary button--shadow-secondary">
+                            <div onClick={handleClaimRewardButtonClick} className="w-full lg:w-fit button button--outline button--secondary button--shadow-secondary">
                                 <span className="button__inner !text-2xl !p-4 !justify-center">Claim your reward</span>
                             </div>
                             <Link href="#earn-more">
-                                <a className="sm:mt-0 w-full lg:w-fit button button--secondary button--shadow-secondary" onClick={handleSendGAEvent}>
+                                <a className="sm:mt-0 w-full lg:w-fit button button--secondary button--shadow-secondary" onClick={handleClickEarnMore}>
                                     <span className="button__inner !text-2xl !p-4 !justify-center">
                                         Earn more
                                     </span>
@@ -261,7 +318,7 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
                             </Link>
                         </div>
                         <Link href="#faq">
-                            <a className="group font-metro-bold text-text-color-100 mt-4 hover:text-text-color-100 prevent-default">
+                            <a className="group font-metro-bold text-text-color-100 mt-4 hover:text-text-color-100 prevent-default" onClick={handleClickReadFAQ}>
                                 <span className="underline pr-1 text-xl">
                                     Read FAQ
                                 </span>
@@ -279,7 +336,7 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
                                         <div className={classNames('uppercase font-gilmer-bold text-primary-cta-layer-color-60', {'text-2xl': isReady, 'text-3xl': !isReady})}>
                                             Balance
                                         </div>
-                                        <div onMouseEnter={() => setIsOpenBalancesInfo(true)} onMouseLeave={() => setIsOpenBalancesInfo(false)} className="flex ml-[0.813rem] sm:relative">
+                                        <div onMouseEnter={handleHoverInfoIcon} onMouseLeave={() => setIsOpenBalancesInfo(false)} className="flex ml-[0.813rem] sm:relative">
                                             <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" className="z-[101] cursor-pointer">
                                                 <path d="M11 14H10V10H9M10 6H10.01M19 10C19 14.9706 14.9706 19 10 19C5.02944 19 1 14.9706 1 10C1 5.02944 5.02944 1 10 1C14.9706 1 19 5.02944 19 10Z" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                                             </svg>
@@ -369,7 +426,7 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
                                 </div>
                             </div>
                         </div>
-                        <div className={classNames('group p-[6px] md:p-[10px] rounded-[50%] w-[97px] md:w-[174px] h-[97px] md:h-[174px] bg-primary-cta-color-20 mt-[-18px] md:mt-[-24px] ml-[228px] md:ml-[-78px] z-[9] absolute md:relative shadow-[-5px_5px] shadow-primary-cta-color-90 flex justify-center items-center', { 'hover:shadow-transparent hover:translate-y-[5px]': isReady })}>
+                        <div className={classNames('group p-[6px] md:p-[10px] rounded-[50%] w-[97px] md:w-[174px] h-[97px] md:h-[174px] bg-primary-cta-color-20 mt-[-18px] md:mt-[-24px] ml-[228px] md:ml-[-78px] z-[9] absolute md:relative shadow-[-5px_5px] shadow-primary-cta-color-90 flex justify-center items-center', { 'hover:shadow-transparent hover:translate-y-[5px]': isReady })} onMouseEnter={handleHoverDuckImage}>
                             {renderDuck}
                         </div>
                     </div>

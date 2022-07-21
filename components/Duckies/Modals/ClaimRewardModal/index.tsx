@@ -8,6 +8,7 @@ import { isBrowser } from '../../../../helpers/isBrowser';
 import { dispatchAlert } from '../../../../app/store';
 import { Decimal } from '../../../Decimal';
 import { Captcha } from '../../Captcha';
+import { analytics } from '../../../../lib/analitics';
 
 interface ClaimRewardModalProps {
     bounties: any;
@@ -52,14 +53,21 @@ export const ClaimRewardModal: React.FC<ClaimRewardModalProps> = ({
                 message: 'You already have your referral.',
             }));
             localStorage.removeItem('referral_token');
+            analytics({
+                type: 'otherEvent',
+                name: 'duckies_error',
+                params: {
+                    errorMessage: 'You already have your referral',
+                }
+            });
         }
-    }, [isReferralClaimed, isOpenModal]);
+    }, [isReferralClaimed, isOpenModal, dispatch]);
 
     const renderLoadingModalBody = React.useMemo(() => {
         return (
             <React.Fragment>
                 <div className="text-text-color-100 text-sm text-center font-metro-regular font-medium mb-6">
-                    A tiny amount of MATIC will be charged to cover the network fee. Please wait for the transaction to be completed. Time may vary depending on the Polygon Network congestion.               
+                    A tiny amount of MATIC will be charged to cover the network fee. Please wait for the transaction to be completed. Time may vary depending on the Polygon Network congestion.
                 </div>
                 <div className="flex items-center justify-center">
                     <span className="animate-spin">
@@ -145,7 +153,7 @@ export const ClaimRewardModal: React.FC<ClaimRewardModalProps> = ({
                     <Captcha
                         shouldResetCaptcha={shouldResetCaptcha}
                         setShouldResetCaptcha={setShouldResetCaptcha}
-                        handleResolveCaptcha={() => setIsCaptchaNotResolved(false)}                        
+                        handleResolveCaptcha={() => setIsCaptchaNotResolved(false)}
                     />
                 </div>
                 <div className="flex items-center justify-center">
