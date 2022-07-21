@@ -339,6 +339,7 @@ export const BountyRow: React.FC<BountyProps> = ({
                 <OTPModal
                     bounty={bounty.value}
                     bountyDescription={bounty.description}
+                    bountyStatus={bounty.status}
                     isOpen={isOpenShow}
                     setIsOpen={setIsOpenShow}
                     isClaimed={bounty.status === 'claimed' || bounty.status === 'claim'}
