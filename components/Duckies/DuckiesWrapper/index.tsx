@@ -81,7 +81,7 @@ export const DuckiesLayout: FC<DuckiesLayoutProps> = ({ bounties, faqList }: Duc
             const data = await response.json();
             setUserStatus(data.userStatus);
         }
-    }, [account, supabaseUser, user, setUserStatus, userStatus]);
+    }, [account, setUserStatus]);
 
     React.useEffect(() => {
         if ((isReady && currentModal === 'metamask') || (supabaseUser && currentModal === 'social_auth')) {

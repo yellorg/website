@@ -36,20 +36,24 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
 
     React.useEffect(() => {
         savePhone(`+${selectedPhoneCode}${phoneNumber}`);
-    }, [selectedPhoneCode, phoneNumber]);
+    }, [
+        selectedPhoneCode,
+        phoneNumber,
+        savePhone,
+    ]);
+
+    const fetchCountries = React.useCallback(async () => {
+        fetch(`${window.location.origin}/api/otp/countriesFetch`, {
+            method: 'POST',
+        }).then((res: Response) => res.json())
+        .then((data: any) => {
+            setCountriesArray(data.countries);
+            setSelectedPhoneCode(data.countries[0].phone_code);
+            setSelectedFlagHref(data.countries[0].flag_href);
+        });
+    }, []);
 
     React.useEffect(() => {
-        const fetchCountries = async () => {
-            fetch(`${window.location.origin}/api/otp/countriesFetch`, {
-                method: 'POST',
-            }).then((res: Response) => res.json())
-            .then((data: any) => {
-                setCountriesArray(data.countries);
-                setSelectedPhoneCode(data.countries[0].phone_code);
-                setSelectedFlagHref(data.countries[0].flag_href);
-            });
-        };
-
         fetchCountries();
     }, []);
 

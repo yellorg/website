@@ -50,12 +50,6 @@ export default function useBounties(bounties: any) {
         })();
     }, [isReady, duckiesContract, isRewardsClaimed, affiliates, referral_token]);
 
-    React.useEffect(() => {
-        if (signer) {
-            setIsPhoneVerified(false);
-        }
-    }, [signer]);
-
     const getIsPhoneVerified = React.useCallback(async () => {
         if (account) {
             const { isPhoneVerified } = await (await fetch(
@@ -70,6 +64,12 @@ export default function useBounties(bounties: any) {
             setIsPhoneVerified(isPhoneVerified);
         }
     }, [account]);
+
+    React.useEffect(() => {
+        if (signer && !phoneVerified) {
+            getIsPhoneVerified();
+        }
+    }, [signer, phoneVerified]);
 
     React.useEffect(() => {
         if (isRewardsClaimed || isPhoneOtpCompleted) {
@@ -106,7 +106,6 @@ export default function useBounties(bounties: any) {
             });
 
             setBountyItems(newItems);
-            getIsPhoneVerified();
         }
     }, [bounties, account]);
 

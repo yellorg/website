@@ -45,24 +45,24 @@ export const OTPModal: React.FC<OTPModalProps> = ({
         setIsSuccess(!!isClaimed);
     }, [isClaimed]);
 
+    const fetchPhone = React.useCallback(async () => {
+        const { phoneNumber } = await (await fetch(
+            `${window.location.origin}/api/otp/fetchPhoneNumber`, {
+                method: 'POST',
+                body: jwt.sign({
+                    account,
+                }, process.env.NEXT_PUBLIC_JWT_PRIVATE_KEY || ''),
+            }
+        )).json();
+
+        setVerifiedPhone(phoneNumber);
+    }, []);
+
     React.useEffect(() => {
-        const fetchPhone = async () => {
-            const { phoneNumber } = await (await fetch(
-                `${window.location.origin}/api/otp/fetchPhoneNumber`, {
-                    method: 'POST',
-                    body: jwt.sign({
-                        account,
-                    }, process.env.NEXT_PUBLIC_JWT_PRIVATE_KEY || ''),
-                }
-            )).json();
-
-            setVerifiedPhone(phoneNumber);
-        }
-
         if (isSuccess && account) {
             fetchPhone();
         }
-    }, [account, isSuccess])
+    }, [account, isSuccess]);
 
     const handleSubmit = React.useCallback(async () => {
         setShouldResetCaptcha(true);
@@ -118,7 +118,9 @@ export const OTPModal: React.FC<OTPModalProps> = ({
         return (
             <div className="flex flex-col items-center w-full gap-[16px]">
                 {renderBounty}
-                <span className="text-center text-[14px] leading-[22px] font-metro-medium text-text-color-100">{bountyDescription}</span>
+                <span className="text-center text-[14px] leading-[22px] font-metro-medium text-text-color-100">
+                    {bountyDescription}
+                </span>
                 <PhoneInput
                     savePhone={setPhone}
                     isCodeSent={isCodeSent}
@@ -162,15 +164,22 @@ export const OTPModal: React.FC<OTPModalProps> = ({
         bountyDescription,
         isCaptchaResolved,
         shouldResetCaptcha,
+        handleResolveCaptcha,
     ]);
 
     const renderSuccess = React.useMemo(() => {
         return (
             <div className="flex flex-col items-center w-full">
                 {renderBounty}
-                <span className="text-[16px] leading-[24px] text-text-color-100 font-metro-semibold mt-[12px]">Success!</span>
-                <span className="text-[14px] leading-[22px] text-text-color-100 font-metro-medium">You have verified your phone number.</span>
-                <span className="text-[14px] leading-[22px] text-text-color-100 font-metro-medium">{verifiedPhone}</span>
+                <span className="text-[16px] leading-[24px] text-text-color-100 font-metro-semibold mt-[12px]">
+                    Success!
+                </span>
+                <span className="text-[14px] leading-[22px] text-text-color-100 font-metro-medium">
+                    You have verified your phone number.
+                </span>
+                <span className="text-[14px] leading-[22px] text-text-color-100 font-metro-medium">
+                    {verifiedPhone}
+                </span>
                 <button
                     className="button button--outline button--secondary button--shadow-secondary mt-[24px]"
                     onClick={() => { setIsOpen(false) }}
