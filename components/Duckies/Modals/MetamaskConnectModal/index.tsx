@@ -2,6 +2,7 @@ import React from 'react';
 import Image from 'next/image';
 import { DuckiesModalWindow } from '../../DuckiesModalWindow';
 import useMetaMask from '../../../../hooks/useMetaMask';
+import { analytics } from '../../../../lib/analitics';
 
 interface MetamaskConnectModalProps {
     isOpenModal: boolean;
@@ -19,6 +20,15 @@ export const MetamaskConnectModal: React.FC<MetamaskConnectModalProps> = ({
         handleMetamask,
         isMetaMaskInstalled,
     } = useMetaMask();
+
+    const handleConnectMetamaskClick = React.useCallback(() => {
+        handleMetamask(isMetaMaskInstalled, 'Injected');
+
+        analytics({
+            type: 'otherEvent',
+            name: 'duckies_modal_connect_metamask',
+        });
+    }, [isMetaMaskInstalled, handleMetamask]);
 
     const renderModalBody = React.useMemo(() => {
         return (
@@ -48,7 +58,7 @@ export const MetamaskConnectModal: React.FC<MetamaskConnectModalProps> = ({
                     </div>
                 )}
                 <div className="flex items-center justify-center">
-                    <div onClick={() => handleMetamask(isMetaMaskInstalled, 'Injected')} className="button button--outline button--secondary button--shadow-secondary">
+                    <div onClick={handleConnectMetamaskClick} className="button button--outline button--secondary button--shadow-secondary">
                         <span className="button__inner">{isMetaMaskInstalled ? 'Connect Metamask' : 'Install Metamask'}</span>
                     </div>
                 </div>
@@ -56,10 +66,10 @@ export const MetamaskConnectModal: React.FC<MetamaskConnectModalProps> = ({
         );
     }, [
         addOrSwitchToMainChain,
-        handleMetamask,
         isMetaMaskInstalled,
         mainChain,
         isSwitchedMainChain,
+        handleConnectMetamaskClick,
     ]);
 
     return (

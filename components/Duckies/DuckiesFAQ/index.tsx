@@ -5,6 +5,7 @@ import { PrismicRichText } from '@prismicio/react';
 import classNames from 'classnames';
 import HtmlSerializer from '../../../helpers/HtmlSerializer';
 import { useSetMobileDevice } from '../../../hooks/useMobileDevice';
+import { analytics } from '../../../lib/analitics';
 
 interface DuckiesFAQProps {
     faqList: any
@@ -14,23 +15,40 @@ export const DuckiesFAQ = ({ faqList }: DuckiesFAQProps) => {
     const [selectedQuestionIndex, setSelectedQuestionIndex] = React.useState<number>(-1);
     const isMobile = useSetMobileDevice();
 
-    const handleQuestionClick = React.useCallback(
-        (index: number) => {
-            if (selectedQuestionIndex < index && selectedQuestionIndex != -1) {
-                const elemPosition = (document.getElementById(`faq-${selectedQuestionIndex}`)?.offsetTop || 0);
-                const elemSize = (document.getElementById(`faq-${selectedQuestionIndex}`)?.clientHeight || 0) + 1;
-                const position = window.pageYOffset - elemSize;
+    React.useEffect(() => {
+        if (selectedQuestionIndex !== -1) {
+            const selectedQuestion = faqList.data.slices[0].items[selectedQuestionIndex]
 
-                if (position < elemPosition && isMobile && window.pageYOffset > elemPosition) {
-                    window.scrollTo(0, position);
+            analytics({
+                type: 'otherEvent',
+                name: 'duckies_faq_item_open',
+                params: {
+                    question: selectedQuestion.question,
                 }
+            });
+        }
+    }, [selectedQuestionIndex, faqList.data.slices]);
+
+    const handleQuestionClick = React.useCallback((index: number) => {
+        if (selectedQuestionIndex < index && selectedQuestionIndex !== -1) {
+            const elemPosition = (document.getElementById(`faq-${selectedQuestionIndex}`)?.offsetTop || 0);
+            const elemSize = (document.getElementById(`faq-${selectedQuestionIndex}`)?.clientHeight || 0) + 1;
+            const position = window.pageYOffset - elemSize;
+
+            if (position < elemPosition && isMobile && window.pageYOffset > elemPosition) {
+                window.scrollTo(0, position);
             }
-            setSelectedQuestionIndex(
-                selectedQuestionIndex == index ? -1 : index
-            );
-        },
-        [selectedQuestionIndex, isMobile]
-    );
+        }
+
+        setSelectedQuestionIndex(selectedQuestionIndex === index ? -1 : index);
+    }, [selectedQuestionIndex, isMobile]);
+
+    const handleTelegramLinkClick = React.useCallback(() => {
+        analytics({
+            type: 'otherEvent',
+            name: 'duckies_telegram_channel_click',
+        });
+    }, []);
 
     const renderFAQList = React.useMemo(() => {
         if (!faqList?.data?.slices?.length || !faqList.data.slices[0].items) {
@@ -38,7 +56,7 @@ export const DuckiesFAQ = ({ faqList }: DuckiesFAQProps) => {
         }
 
         return faqList.data.slices[0].items.map((item: any, index: number) => {
-            const isSelected = selectedQuestionIndex == index;
+            const isSelected = selectedQuestionIndex === index;
             const questionClassName = classNames(
                 'p-4 cursor-pointer',
                 {
@@ -82,33 +100,32 @@ export const DuckiesFAQ = ({ faqList }: DuckiesFAQProps) => {
                 </div>
             )
         });
-    }, [faqList, selectedQuestionIndex]);
+    }, [faqList, selectedQuestionIndex, handleQuestionClick]);
 
-    const renderRiddlerDuck = React.useMemo(
-        () => (
-            <div className="basis-full w-full sticky top-[3.875rem]">
-                <div className="flex items-center justify-center">
-                    <div className="absolute z-[10]">
-                        <Image
-                            src="/images/components/duckies/duckRiddler.png"
-                            layout="intrinsic"
-                            width={300}
-                            height={300}
-                        />
-                    </div>
-                    <div>
-                        <Image
-                            src="/images/components/duckies/duckRiddler_back.png"
-                            layout="intrinsic"
-                            width={500}
-                            height={500}
-                        />
-                    </div>
+    const renderRiddlerDuck = React.useMemo(() => (
+        <div className="basis-full w-full sticky top-[3.875rem]">
+            <div className="flex items-center justify-center">
+                <div className="absolute z-[10]">
+                    <Image
+                        src="/images/components/duckies/duckRiddler.png"
+                        layout="intrinsic"
+                        width={300}
+                        height={300}
+                        alt="duckRiddler"
+                    />
+                </div>
+                <div>
+                    <Image
+                        src="/images/components/duckies/duckRiddler_back.png"
+                        layout="intrinsic"
+                        width={500}
+                        height={500}
+                        alt="duckRiddler_back"
+                    />
                 </div>
             </div>
-        ),
-        []
-    );
+        </div>
+    ), []);
 
     return (
         <div id="faq" className="flex flex-col lg:flex-row mx-auto pt-[5.25rem] lg:pt-[6.25rem] px-3.5 max-w-md-layout 2xl:max-w-lg-layout">
@@ -127,7 +144,7 @@ export const DuckiesFAQ = ({ faqList }: DuckiesFAQProps) => {
                         Can’t find it here? Chase the duck-riddler in our{' '}
                         <Link href="https://t.me/yellow_org">
                             <a target="_blank" className="group text-text-color-100 hover:text-text-color-100 prevent-default">
-                                <span className="underline">
+                                <span className="underline" onClick={handleTelegramLinkClick}>
                                     telegram channel
                                 </span>
                                 {' '}
