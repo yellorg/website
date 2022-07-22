@@ -44,17 +44,28 @@ export const BountyRow: React.FC<BountyProps> = ({
 
     let captcha: any = React.useRef<ReCAPTCHA>();
 
+    const isClaimStatus = React.useMemo(() => (
+        bounty.status === 'claim' && !((loading && isSingleBountyProcessing) || (isLoading && !isSingleBountyProcessing))
+    ), [bounty.status, loading, isLoading, isSingleBountyProcessing]);
+
     const rowClassName = React.useMemo(() => {
-        return classnames('flex w-full items-center justify-between border-b border-color-divider-color-40 px-1 py-2', {
-            'bg-primary-cta-color-10': bounty.status === 'claim' && !((loading && isSingleBountyProcessing) || (isLoading && !isSingleBountyProcessing)),
+        return classnames('flex w-full items-center border-b border-color-divider-color-40 px-1', {
+            'bg-primary-cta-color-10': isClaimStatus,
         });
-    }, [bounty.status, loading, isLoading, isSingleBountyProcessing]);
+    }, [isClaimStatus]);
 
     const indexClassName = React.useMemo(() => {
         return classnames('py-1 px-2.5 text-base w-7 h-8 flex items-center justify-center font-bold rounded-sm mr-4 bg-neutral-control-color-30', {
-            'bg-primary-cta-color-40': bounty.status === 'claim' && !((loading && isSingleBountyProcessing) || (isLoading && !isSingleBountyProcessing)),
+            'bg-primary-cta-color-40': isClaimStatus,
         });
-    }, [bounty.status, loading, isLoading, isSingleBountyProcessing]);
+    }, [isClaimStatus]);
+
+    const showMoreClassName = React.useMemo(() => {
+        return classnames('border group-hover:border-primary-cta-color-40 group-hover:bg-primary-cta-color-40 rounded-sm px-2 text-base text-neutral-control-layer-color-90 font-gilmer-bold cursor-pointer w-fit flex items-center hover:text-text-color-100', {
+            'border-neutral-control-color-40 bg-neutral-control-color-40': !isClaimStatus,
+            'border-primary-cta-color-80': isClaimStatus,
+        });
+    }, [isClaimStatus]);
 
     const claimButtonClassName = React.useMemo(() => {
         return classnames('button__inner', {
@@ -125,15 +136,15 @@ export const BountyRow: React.FC<BountyProps> = ({
     const renderBounty = React.useMemo(() => {
         return (
             <div className={rowClassName}>
-                <div className="flex flex-row items-center">
+                <div onClick={handleSelectBountyId} className="group cursor-pointer flex flex-row items-center py-[1.0625rem] w-full">
                     <div className={indexClassName}>
                         {index}
                     </div>
-                    <div>
+                    <div className="flex flex-row gap-3">
                         <div className="text-xl text-text-color-100">
                             {bounty.title}
                         </div>
-                        <div onClick={handleSelectBountyId} className="text-base text-text-color-60 cursor-pointer w-fit flex items-center hover:text-text-color-100">
+                        <div className={showMoreClassName}>
                             <span>Show more details</span>
                             <span className="cr-arrow" />
                         </div>
@@ -164,6 +175,7 @@ export const BountyRow: React.FC<BountyProps> = ({
         duckiesColor,
         indexClassName,
         rowClassName,
+        showMoreClassName,
         handleSelectBountyId,
     ]);
 
