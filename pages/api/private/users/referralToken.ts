@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import jwt from 'jsonwebtoken';
 import { ethers } from 'ethers';
-import DuckiesContractBuild from '../../contracts/artifacts/contracts/Duckies.sol/Duckies.json';
+import DuckiesContractBuild from '../../../../contracts/artifacts/contracts/Duckies.sol/Duckies.json';
 
 const generateJWTWithRef = async (ref: string) => {
     const jwtPrivateKey = process.env.NEXT_PUBLIC_JWT_PRIVATE_KEY || '';

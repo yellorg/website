@@ -1,9 +1,9 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { twilioClient } from '../../../lib/TwilioConnector';
-import { supabase } from '../../../lib/SupabaseConnector';
+import { twilioClient } from '../../../../../lib/TwilioConnector';
+import { supabase } from '../../../../../lib/SupabaseConnector';
 import jwt from 'jsonwebtoken';
-import { withDuckiesSession } from '../../../helpers/withDuckiesSession';
-import { appConfig } from '../../../config/app';
+import { withDuckiesSession } from '../../../../../helpers/withDuckiesSession';
+import { appConfig } from '../../../../../config/app';
 
 function generateOTP() {
     let otp = '';

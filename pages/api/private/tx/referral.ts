@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import jwt from 'jsonwebtoken';
 import { ethers } from 'ethers';
-import DuckiesContractBuild from '../../contracts/artifacts/contracts/Duckies.sol/Duckies.json';
+import DuckiesContractBuild from '../../../../contracts/artifacts/contracts/Duckies.sol/Duckies.json';
 import Web3 from 'web3';
 
 const getTX = async (token: string, account: string) => {

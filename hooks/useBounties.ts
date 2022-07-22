@@ -47,14 +47,12 @@ export default function useBounties(bounties: any) {
 
     const getIsPhoneVerified = React.useCallback(async () => {
         if (account) {
-            const { isPhoneVerified } = await (await fetch(
-                `${window.location.origin}/api/otp/isPhoneVerified`, {
-                    method: 'POST',
-                    body: jwt.sign({
-                        account,
-                    }, process.env.NEXT_PUBLIC_JWT_PRIVATE_KEY || ''),
-                }
-            )).json();
+            const { isPhoneVerified } = await (await fetch('/api/private/users/me', {
+                method: 'POST',
+                body: jwt.sign({
+                    account,
+                }, process.env.NEXT_PUBLIC_JWT_PRIVATE_KEY || ''),
+            })).json();
 
             setIsPhoneVerified(isPhoneVerified);
         }
@@ -183,7 +181,7 @@ export default function useBounties(bounties: any) {
             });
             dispatch(setIsRewardsClaimProcessing(true));
             const { transaction } = await (await fetch(
-                `/api/bountyTx?bountyID=${bountyToClaim.fid}&&account=${account}`
+                `/api/private/tx/bounty?bountyID=${bountyToClaim.fid}&&account=${account}`
             )).json();
 
             try {
@@ -247,7 +245,7 @@ export default function useBounties(bounties: any) {
                         duckies_amount_claim: 10000,
                     },
                 });
-                const response = await fetch(`/api/tx?token=${referral_token}&account=${account}`);
+                const response = await fetch(`/api/private/tx/referral?token=${referral_token}&account=${account}`);
 
                 if (response.status !== 400 && response.status !== 500) {
                     const { transaction } = await response.json();
@@ -307,7 +305,7 @@ export default function useBounties(bounties: any) {
                     },
                 });
                 const { transaction } = await (await fetch(
-                    `/api/allBountiesTx?bountyIDs=${bountiesToClaim}&account=${account}`
+                    `/api/private/tx/bountyAll?bountyIDs=${bountiesToClaim}&account=${account}`
                 )).json();
 
                 try {

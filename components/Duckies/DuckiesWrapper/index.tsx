@@ -71,7 +71,7 @@ export const DuckiesLayout: FC<DuckiesLayoutProps> = ({ bounties, faqList }: Duc
 
     const getUserStatus = React.useCallback(async () => {
         if (account) {
-            const response = await fetch('/api/users/me', {
+            const response = await fetch('/api/private/users/me', {
                 method: 'POST',
                 body: jwt.sign({
                     account,

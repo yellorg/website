@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { supabase } from '../../../lib/SupabaseConnector';
+import { supabase } from '../../../../../lib/SupabaseConnector';
 import jwt from 'jsonwebtoken';
-import { withDuckiesSession } from '../../../helpers/withDuckiesSession';
+import { withDuckiesSession } from '../../../../../helpers/withDuckiesSession';
 
 async function handler(
     req: NextApiRequest,
