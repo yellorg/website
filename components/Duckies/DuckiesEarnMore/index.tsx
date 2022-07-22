@@ -37,7 +37,7 @@ export const DuckiesEarnMore: React.FC<DuckiesEarnMoreProps> = ({
     }, [supportedChain, triedToEagerConnect, active, account]);
 
     const getSharableLink = React.useCallback(async (account: string) => {
-        const response = await fetch(`/api/link?address=${account}`);
+        const response = await fetch(`/api/private/users/referralToken?address=${account}`);
 
         const data = await response.json();
         setShareableLink(data.token);

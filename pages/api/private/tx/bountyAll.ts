@@ -1,8 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { ethers } from 'ethers';
-import DuckiesContractBuild from '../../contracts/artifacts/contracts/Duckies.sol/Duckies.json';
+import DuckiesContractBuild from '../../../../contracts/artifacts/contracts/Duckies.sol/Duckies.json';
 import Web3 from 'web3';
-import { createClient } from '../../prismicio';
+import { createClient } from '../../../../prismicio';
 
 const web3 = new Web3(new Web3.providers.HttpProvider(process.env.NEXT_PUBLIC_POLYGON_URL || ''));
 const privateKey = process.env.NEXT_PUBLIC_METAMASK_PRIVATE_KEY || '';

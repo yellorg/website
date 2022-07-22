@@ -43,10 +43,12 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
     ]);
 
     const fetchCountries = React.useCallback(async () => {
-        fetch(`${window.location.origin}/api/otp/countriesFetch`, {
+        fetch('/api/public/countries', {
             method: 'POST',
-        }).then((res: Response) => res.json())
-        .then((data: any) => {
+        })
+        .then(async (res: Response) => {
+            const data = await res.json();
+
             setCountriesArray(data.countries);
             setSelectedPhoneCode(data.countries[0].phone_code);
             setSelectedFlagHref(data.countries[0].flag_href);
@@ -129,7 +131,7 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
     }, []);
 
     const sendCode = React.useCallback(async () => {
-        fetch(`${window.location.origin}/api/otp/send`, {
+        fetch('/api/private/users/phone/send', {
             method: 'POST',
             body: jwt.sign({
                 phoneNumber: `+${selectedPhoneCode}${phoneNumber}`,

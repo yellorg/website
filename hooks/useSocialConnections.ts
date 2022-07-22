@@ -6,7 +6,7 @@ import useWallet from './useWallet';
 import jwt from 'jsonwebtoken';
 
 const saveAddressToDB = async (address: string) => {
-    await fetch(`${window.location.origin}/api/socials/saveAddress`, {
+    await fetch('/api/private/users/socials/saveAddress', {
         method: 'POST',
         body: jwt.sign({
             address,
@@ -15,7 +15,7 @@ const saveAddressToDB = async (address: string) => {
 };
 
 const saveEmailToDB = async (email: string, address: string) => {
-    await fetch(`${window.location.origin}/api/socials/saveEmail`, {
+    await fetch('/api/private/users/socials/saveEmail', {
         method: 'POST',
         body: jwt.sign({
             email,

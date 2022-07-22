@@ -46,14 +46,12 @@ export const OTPModal: React.FC<OTPModalProps> = ({
     }, [isClaimed]);
 
     const fetchPhone = React.useCallback(async () => {
-        const { phoneNumber } = await (await fetch(
-            `${window.location.origin}/api/otp/fetchPhoneNumber`, {
-                method: 'POST',
-                body: jwt.sign({
-                    account,
-                }, process.env.NEXT_PUBLIC_JWT_PRIVATE_KEY || ''),
-            }
-        )).json();
+        const { phoneNumber } = await (await fetch('/api/private/users/me', {
+            method: 'POST',
+            body: jwt.sign({
+                account,
+            }, process.env.NEXT_PUBLIC_JWT_PRIVATE_KEY || ''),
+        })).json();
 
         setVerifiedPhone(phoneNumber);
     }, []);
@@ -68,15 +66,17 @@ export const OTPModal: React.FC<OTPModalProps> = ({
         setShouldResetCaptcha(true);
         setIsCaptchaResolved(false);
 
-        fetch(`${window.location.origin}/api/otp/verify`, {
+        fetch('/api/private/users/phone/verify', {
             method: 'POST',
             body: jwt.sign({
                 phoneNumber: phone,
                 otp,
                 address: account,
             }, process.env.NEXT_PUBLIC_JWT_PRIVATE_KEY || ''),
-        }).then((res: Response) => res.json())
-        .then((data: any) => {
+        })
+        .then(async (res: Response) => {
+            const data = await res.json();
+
             if (data.error) {
                 dispatch(dispatchAlert({
                     type: 'error',
