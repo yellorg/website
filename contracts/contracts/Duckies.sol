@@ -2,12 +2,11 @@
 pragma solidity ^0.8.4;
 
 import "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/ERC20CappedUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
+import "./ERC20/ERC20MinterPauserUpgradeable.sol";
+import "./ERC20/ERC20LockerBannerUpgradeable.sol";
 
 /// @custom:security-contact security@ducks.house
-contract Duckies is Initializable, ERC20CappedUpgradeable, PausableUpgradeable, OwnableUpgradeable {
+contract Duckies is ERC20MinterPauserUpgradeable, ERC20LockerBannerUpgradeable, ERC20CappedUpgradeable {
     address private _issuer;
 
     // Maximum Supply
@@ -45,14 +44,25 @@ contract Duckies is Initializable, ERC20CappedUpgradeable, PausableUpgradeable, 
     }
 
     function initialize(address issuer) initializer public {
-        __ERC20_init("Yellow Duckies", "DUCKIES");
+        __ERC20MinterPauser_init("Yellow Duckies", "DUCKIES");
+        __ERC20LockerBanner_init(_msgSender(), _msgSender());
         __ERC20Capped_init(_MAX_SUPPLY * 10 ** decimals());
-        __Pausable_init();
-        __Ownable_init();
 
         _issuer = issuer;
         setPayouts([500, 125, 80, 50, 20]);
         _mint(msg.sender, _MAX_SUPPLY * 20 / 100 * 10 ** decimals()); // 888000000000 - total supply, 20 / 100 - 20%
+    }
+
+    function _mint(address account, uint256 amount) internal virtual override(ERC20Upgradeable, ERC20CappedUpgradeable) {
+        super._mint(account, amount);
+    }
+
+    function _beforeTokenTransfer(address from, address to, uint256 amount)
+        internal
+        virtual
+        override(ERC20Upgradeable, ERC20MinterPauserUpgradeable, ERC20LockerBannerUpgradeable)
+    {
+        super._beforeTokenTransfer(from, to, amount);
     }
 
     function decimals() public view virtual override returns (uint8) {
@@ -60,49 +70,79 @@ contract Duckies is Initializable, ERC20CappedUpgradeable, PausableUpgradeable, 
     }
 
     /**
-     * @dev Destroys `amount` tokens from the caller.
-     *
+     * @dev Lock accounts for transferring in the affiliates tree.
      */
-    function burn(uint256 amount) public onlyOwner {
-        _burn(_msgSender(), amount);
+    function lockTree(address account) public onlyRole(LOCKER_ROLE) {
+        require(account != address(0), 'DUCKIES: account is zero address');
+        _lockTree(account);
+    }
+
+    function _lockTree(address account) internal virtual {
+        if (account != address(0)) {
+            _lock(account);
+            address[] memory affiliates = _affiliates[account];
+            for (uint256 i = 0; i < affiliates.length; i++) {
+                _lockTree(affiliates[i]);
+            }
+        }
     }
 
     /**
-     * @dev Destroys `amount` tokens from `account`, deducting from the caller's
-     * allowance.
-     *
-     * Requirements:
-     *
-     * - the caller must have allowance for ``accounts``'s tokens of at least
-     * `amount`.
+     * @dev Unlock accounts for transferring in the affiliates tree.
      */
-    function burnFrom(address account, uint256 amount) public onlyOwner {
-        _spendAllowance(account, _msgSender(), amount);
-        _burn(account, amount);
+    function unlockTree(address account) public onlyRole(LOCKER_ROLE) {
+        require(account != address(0), 'DUCKIES: account is zero address');
+        _unlockTree(account);
     }
 
-    function pause() public onlyOwner {
-        _pause();
+    function _unlockTree(address account) internal virtual {
+        if (account != address(0)) {
+            _unlock(account);
+            address[] memory affiliates = _affiliates[account];
+            for (uint256 i = 0; i < affiliates.length; i++) {
+                _unlockTree(affiliates[i]);
+            }
+        }
     }
 
-    function unpause() public onlyOwner {
-        _unpause();
+    /**
+     * @dev Lock accounts for transferring and burn their tokens in the affiliates tree.
+     */
+    function banTree(address account) public onlyRole(BANNER_ROLE) {
+        require(account != address(0), 'DUCKIES: account is zero address');
+        _banTree(account);
     }
 
-    function mint(address to, uint256 amount) public onlyOwner {
-        _mint(to, amount);
+    function _banTree(address account) internal virtual {
+        if (account != address(0)) {
+            _ban(account);
+            address[] memory affiliates = _affiliates[account];
+            for (uint256 i = 0; i < affiliates.length; i++) {
+                _banTree(affiliates[i]);
+            }
+        }
     }
 
-    function setPayouts(uint16[5] memory payouts) public onlyOwner {
+    /**
+     * @dev Unlock accounts for transferring and  mint their previously burned tokens in the affiliates tree.
+     */
+    function unbanTree(address account) public onlyRole(BANNER_ROLE) {
+        require(account != address(0), 'DUCKIES: account is zero address');
+        _unbanTree(account);
+    }
+
+    function _unbanTree(address account) internal virtual {
+        if (account != address(0)) {
+            _unban(account);
+            address[] memory affiliates = _affiliates[account];
+            for (uint256 i = 0; i < affiliates.length; i++) {
+                _unbanTree(affiliates[i]);
+            }
+        }
+    }
+
+    function setPayouts(uint16[5] memory payouts) public onlyRole(DEFAULT_ADMIN_ROLE) {
         _payouts = payouts;
-    }
-
-    function _beforeTokenTransfer(address from, address to, uint256 amount)
-        internal
-        whenNotPaused
-        override
-    {
-        super._beforeTokenTransfer(from, to, amount);
     }
 
     /**
@@ -110,13 +150,16 @@ contract Duckies is Initializable, ERC20CappedUpgradeable, PausableUpgradeable, 
      *
      */
     function _mintReward(uint amount) private {
-        require(msg.sender != address(0), "ERC20: reward to the zero address");
-        require(amount > uint256(0), "ERC20: amount must be higher than zero");
+        require(_msgSender() != address(0), "DUCKIES: reward to the zero address");
+        require(amount > uint256(0), "DUCKIES: amount must be higher than zero");
+        require(!hasRole(ACCOUNT_LOCKED_ROLE, _msgSender()), "DUCKIES: account is locked");
 
-        _mint(msg.sender, amount);
-        address currentAddress = _referrers[msg.sender];
+        _mint(_msgSender(), amount);
+        address currentAddress = _referrers[_msgSender()];
 
         for (uint8 i = 0; i < _payouts.length; i++) {
+            require(!hasRole(ACCOUNT_LOCKED_ROLE, currentAddress), "DUCKIES: referrer(s) is locked");
+
             if (currentAddress == address(0)) {
                 break;
             }
@@ -128,14 +171,14 @@ contract Duckies is Initializable, ERC20CappedUpgradeable, PausableUpgradeable, 
         }
     }
 
-    function claimRewards(Reward[] memory rewards) public {
+    function claimRewards(Reward[] memory rewards) public whenNotPaused {
         for (uint8 i = 0; i < rewards.length; i++) {
             reward(rewards[i].message, rewards[i].signature);
         }
     }
 
     // reward method is used to retriave the reward from invitation link or claim the bounty for some bounty task
-    function reward(Message memory _message, bytes memory _sig) public
+    function reward(Message memory _message, bytes memory _sig) public whenNotPaused
     {
         bytes32 messageHash = getMessageHash(_message);
         bytes32 ethSignedMessageHash = getEthSignedMessageHash(messageHash);
