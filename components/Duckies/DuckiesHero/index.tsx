@@ -336,10 +336,15 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
                                         <div className={classNames('uppercase font-gilmer-bold text-primary-cta-layer-color-60', {'text-2xl': isReady, 'text-3xl': !isReady})}>
                                             Balance
                                         </div>
-                                        <div onMouseEnter={handleHoverInfoIcon} onMouseLeave={() => setIsOpenBalancesInfo(false)} className="flex ml-[0.813rem] sm:relative">
-                                            <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" className="z-[101] cursor-pointer">
-                                                <path d="M11 14H10V10H9M10 6H10.01M19 10C19 14.9706 14.9706 19 10 19C5.02944 19 1 14.9706 1 10C1 5.02944 5.02944 1 10 1C14.9706 1 19 5.02944 19 10Z" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                                            </svg>
+                                        <div onMouseEnter={handleHoverInfoIcon} onMouseLeave={() => setIsOpenBalancesInfo(false)} className="flex ml-2 sm:relative">
+                                            <div className="z-[101] cursor-pointer bg-primary-cta-color-40 px-2 gap-1 rounded-[0.1875rem] flex items-center">
+                                                <span className="uppercase text-xs leading-6 font-gilmer-bold text-text-color-90">
+                                                    Info
+                                                </span>
+                                                <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M11 14H10V10H9M10 6H10.01M19 10C19 14.9706 14.9706 19 10 19C5.02944 19 1 14.9706 1 10C1 5.02944 5.02944 1 10 1C14.9706 1 19 5.02944 19 10Z" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                                </svg>
+                                            </div>
                                             {isOpenBalancesInfo &&
                                                 <div className="z-[100] absolute left-[1.125rem] sm:left-auto right-[1.125rem] sm:right-0 mt-[1.875rem] sm:mt-0 sm:pt-[1.875rem] sm:min-w-[27.813rem] w-[calc(100vw-2.25rem)] sm:w-fit">
                                                     <div className="bg-text-color-0 border-2 border-text-color-100 rounded flex h-fit flex-col p-4">
@@ -372,8 +377,8 @@ export const DuckiesHero: React.FC<DuckiesHeroProps> = ({
                                                                 <div>
                                                                     <span className="text-sm text-text-color-100 font-metro-semibold">DUCKIES smart-contract address:</span>
                                                                     <div className="flex">
-                                                                        <span className="text-xs text-text-color-70 font-metro-medium bg-neutral-control-color-20 pl-2.5 flex items-center w-[calc(100%-2.625rem)] rounded-tl-1.5 rounded-bl-1.5 break-all">{appConfig.duckiesSmartContractAddress}</span>
-                                                                        <div className={classNames('relative flex justify-center items-center w-[2.625rem] h-[2.625rem] bg-primary-cta-color-60 hover:bg-primary-cta-color-80 rounded-tr-1.5 rounded-br-1.5 cursor-pointer', { '!bg-system-green-20 !hover:bg-system-green-20': isCopyClicked })} onClick={handleCopy}>
+                                                                        <span className="text-xs text-text-color-70 font-metro-medium bg-neutral-control-color-20 pl-2.5 flex items-center w-[calc(100%-2.625rem)] rounded-tl rounded-bl break-all">{appConfig.duckiesSmartContractAddress}</span>
+                                                                        <div className={classNames('relative flex justify-center items-center w-[2.625rem] h-[2.625rem] bg-primary-cta-color-60 hover:bg-primary-cta-color-80 rounded-tr rounded-br cursor-pointer', { '!bg-system-green-20 !hover:bg-system-green-20': isCopyClicked })} onClick={handleCopy}>
                                                                             {isCopyClicked && (
                                                                                 <div className="absolute bg-text-color-0 border-2 border-text-color-100 rounded text-sm font-metro-regular font-normal text-text-color-100 py-4 px-[1.125rem] bottom-[calc(100%+0.563rem)]">
                                                                                     Copied
