@@ -315,6 +315,21 @@ ul {
   background: linear-gradient(to bottom left, #fff 50%, rgba(0,0,0,0) 50%);
 }
 
+.duck-riddler-animation {
+  animation: bounce 4s infinite;
+
+  @keyframes bounce {
+    0%, 100% {
+      transform: translateY(-10%);
+      animation-timing-function: cubic-bezier(0.4, 0, 0.34, 1.01)
+    }
+    50% {
+      transform: translateY(0);
+      animation-timing-function: cubic-bezier(0.4, 0, 0.34, 1.01);
+    }
+  }
+}
+
 @media screen and (min-width: 1440px) {
   .section__main-img {
     max-width: initial;

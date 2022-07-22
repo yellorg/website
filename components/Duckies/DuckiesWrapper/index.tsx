@@ -129,7 +129,7 @@ export const DuckiesLayout: FC<DuckiesLayoutProps> = ({ bounties, faqList }: Duc
     const renderContent = React.useMemo(() => {
         if (userStatus !== 'banned') {
             return (
-                <div className="bg-primary-cta-color-60 pb-[5rem] md:pb-[7.5rem]">
+                <div className="bg-primary-cta-color-60">
                     <DuckiesHero
                         bountiesItems={items}
                         supabaseUser={user}
@@ -170,7 +170,7 @@ export const DuckiesLayout: FC<DuckiesLayoutProps> = ({ bounties, faqList }: Duc
     },[user, items, handleCloseModal, handleOpenModal, handleOpenMetamaskModal, currentModal, isOpenModal, DuckiesPrizesList, faqList, userStatus])
 
     return (
-        <main className="h-full bg-primary-cta-color-60 pb-[5rem] md:pb-[7.5rem] overflow-scroll no-scrollbar">
+        <main className="h-full bg-primary-cta-color-60 pb-[5rem] md:pb-[7.5rem] no-scrollbar">
             {renderContent}
         </main>
     );

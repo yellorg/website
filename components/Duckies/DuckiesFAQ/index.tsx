@@ -105,9 +105,9 @@ export const DuckiesFAQ = ({ faqList }: DuckiesFAQProps) => {
     const renderRiddlerDuck = React.useMemo(() => (
         <div className="basis-full w-full sticky top-[3.875rem]">
             <div className="flex items-center justify-center">
-                <div className="absolute z-[10]">
+                <div className="absolute z-[10] duck-riddler-animation">
                     <Image
-                        src="/images/components/duckies/duckRiddler.png"
+                        src="/images/components/duckies/duckRiddler.svg"
                         layout="intrinsic"
                         width={300}
                         height={300}
