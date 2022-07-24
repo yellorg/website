@@ -132,8 +132,8 @@ export const Navbar = () => {
                             </button>
                         </div>
                         {isSocialsOpen &&
-                            <div className="origin-top-right absolute right-0 mt-4 shadow-lg bg-white focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="menu-button">
-                                <div className="pt-3 pb-2 px-3" role="none">
+                            <div className="origin-top-right rounded-sm absolute right-0 mt-5 shadow-lg bg-white focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="menu-button">
+                                <div className="pt-4 pb-2 px-2" role="none">
                                     {renderSocials}
                                 </div>
                             </div>
