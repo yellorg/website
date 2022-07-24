@@ -59,10 +59,10 @@ export default function useBounties(bounties: any) {
     }, [account]);
 
     React.useEffect(() => {
-        if (signer && !phoneVerified) {
+        if (signer) {
             getIsPhoneVerified();
         }
-    }, [signer, phoneVerified]);
+    }, [signer, phoneVerified, account]);
 
     React.useEffect(() => {
         if (isRewardsClaimed || isPhoneOtpCompleted) {
