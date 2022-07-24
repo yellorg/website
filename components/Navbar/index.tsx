@@ -117,7 +117,7 @@ export const Navbar = () => {
                     {renderNavItems}
                 </div>
                 <div className="flex items-center min-w-0 justify-end">
-                    <div ref={socialsRef} className="relative invisible md:visible inline-block text-center mr-3">
+                    <div ref={socialsRef} className="relative invisible md:visible lg:invisible inline-block text-center mr-3">
                         <div>
                             <button 
                                 type="button" 
@@ -132,12 +132,17 @@ export const Navbar = () => {
                             </button>
                         </div>
                         {isSocialsOpen &&
-                            <div className="origin-top-right absolute right-0 mt-4 shadow-lg bg-white focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="menu-button">
-                                <div className="pt-3 pb-2 px-3" role="none">
+                            <div className="origin-top-right rounded-sm absolute right-0 mt-5 shadow-lg bg-white focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="menu-button">
+                                <div className="pt-4 pb-2 px-2" role="none">
                                     {renderSocials}
                                 </div>
                             </div>
                         }
+                    </div>
+                    <div className="hidden lg:flex items-center justify-center pt-2 inline-block text-center mr-3">
+                        <div className="pt-3 pb-2 px-3" role="none">
+                            {renderSocials}
+                        </div>
                     </div>
                     <a
                         className="button button--secondary"
